@@ -3,79 +3,56 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Get in touch with The Esthetics Hub. Contact us for inquiries, collaborations, or support." />
-  <title>Contact Us | The Esthetics Hub</title>
-  <link rel="stylesheet" href="contact.css" />
+  <meta name="description" content="Contact Esthetics Blog – Get in touch with us for inquiries, collaborations, or feedback." />
+  <title>Contact – Esthetics Blog</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Header -->
+  <!-- HEADER -->
   <header>
-    <nav>
-      <h1><a href="index.html">The Esthetics Hub</a></h1>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="post.html">Blog</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="contact.html" class="active">Contact</a></li>
-      </ul>
-    </nav>
+    <div class="container header-container">
+      <h1 class="logo">Esthetics Blog</h1>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="posts.html">Posts</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html" class="active">Contact</a></li>
+        </ul>
+      </nav>
+      <form class="search-bar" action="search.html" method="GET">
+        <input type="text" name="q" placeholder="Search blog posts..." required />
+        <button type="submit">Search</button>
+      </form>
+    </div>
   </header>
 
-  <!-- Hero -->
-  <section class="about-hero">
-    <img src="images/contact-hero.jpg" alt="Contact background" />
-    <div class="about-hero-text">
+  <!-- CONTACT CONTENT -->
+  <main class="container">
+    <section class="contact-content scroll-trigger">
       <h2>Contact Us</h2>
-      <p>We’d love to hear from you</p>
-    </div>
-  </section>
+      <p>We’d love to hear from you! Use the form below or email us directly.</p>
 
-  <!-- Contact Form -->
-  <section class="about-content scroll-trigger">
-    <h3>Send us a Message</h3>
-    <p>If you have questions, suggestions, or just want to say hello, fill out the form below:</p>
-    
-    <form class="newsletter-form" action="https://formspree.io/f/your-form-id" method="POST">
-      <input type="text" name="name" placeholder="Your Name" required />
-      <input type="email" name="email" placeholder="Your Email" required />
-      <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
-      <button type="submit">Send Message</button>
-    </form>
-  </section>
+      <form class="contact-form" action="https://formspree.io/f/your-form-id" method="POST">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" placeholder="Your name" required />
 
-  <!-- Google Map -->
-  <section class="about-content scroll-trigger">
-    <h3>Our Location</h3>
-    <p>You can find us at:</p>
-    <div style="overflow:hidden; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.1)">
-      <iframe 
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15955.196199258813!2d36.8073085!3d-1.2920659!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f17352bdfb20b%3A0xf28b2c42a6b2bb6c!2sNairobi!5e0!3m2!1sen!2ske!4v1700000000000!5m2!1sen!2ske" 
-        width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy">
-      </iframe>
-    </div>
-  </section>
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="Your email" required />
 
-  <!-- Footer -->
+        <label for="message">Message</label>
+        <textarea id="message" name="message" placeholder="Your message" rows="6" required></textarea>
+
+        <button type="submit">Send Message</button>
+      </form>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
   <footer>
-    <p>&copy; 2025 The Esthetics Hub. All rights reserved.</p>
+    <div class="container">
+      <p>&copy; 2025 Esthetics Blog. All Rights Reserved.</p>
+    </div>
   </footer>
-
-  <!-- Scroll-trigger Animation Script -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const elements = document.querySelectorAll(".scroll-trigger");
-
-      const observer = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("active");
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.2 });
-
-      elements.forEach(el => observer.observe(el));
-    });
-  </script>
 </body>
 </html>
