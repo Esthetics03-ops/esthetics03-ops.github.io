@@ -1,74 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Esthetics Blog – Wellness, Nutrition, and Mindfulness for a Better Life." />
-  <title>Esthetics Blog</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Esthetics Hub | Live Better, Live Longer</title>
+
+  <!-- SEO -->
+  <meta name="description" content="The Esthetics Hub shares research-based insights on nutrition, mental health, and holistic living to help you live better and longer.">
+  <meta name="keywords" content="nutrition, mental health, holistic living, wellness blog, esthetics hub">
+  <meta name="author" content="The Esthetics Hub Team">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="The Esthetics Hub | Live Better, Live Longer">
+  <meta property="og:description" content="Research-based blog on nutrition, mental health, and holistic well-being.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://esthetics03-ops.github.io">
+  <meta property="og:image" content="images/hero.jpg">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="images/favicon.png">
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+
+  <style>
+    /* Floating Ad Styles */
+    .floating-ad {
+      position: fixed;
+      right: 15px;
+      bottom: 15px;
+      width: 300px;
+      max-width: 90%;
+      z-index: 9999;
+      background: #fff;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .floating-ad .close-btn {
+      position: absolute;
+      top: 5px;
+      right: 10px;
+      cursor: pointer;
+      font-size: 18px;
+      font-weight: bold;
+      color: #555;
+    }
+  </style>
 </head>
 <body>
-  <!-- HEADER -->
+  <!-- Header -->
   <header>
-    <div class="container header-container">
-      <h1 class="logo">Esthetics Blog</h1>
-      
-      <!-- NAV -->
-      <nav>
-        <ul class="nav-links">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="posts.html">Posts</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="contact.html">Contact</a></li>
-        </ul>
-      </nav>
-
-      <!-- SEARCH BAR -->
-      <form class="search-bar" action="search.html" method="GET">
-        <input type="text" name="q" placeholder="Search blog posts..." required />
-        <button type="submit">Search</button>
-      </form>
-    </div>
+    <nav>
+      <h1>The Esthetics Hub</h1>
+      <ul>
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="posts.html">Posts</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
   </header>
 
-  <!-- HERO -->
-  <section class="hero scroll-trigger">
-    <div class="container">
-      <h2>Welcome to Esthetics Blog</h2>
-      <p>Discover wellness, nutrition, and mindfulness tips to live better and longer.</p>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-text">
+      <h2>Live Better, Live Longer</h2>
+      <p>Discover simple, science-backed strategies for nutrition, mental health, and holistic living.</p>
+      <a href="posts.html" class="btn">Explore Posts</a>
+    </div>
+    <div class="hero-image">
+      <img src="images/hero.jpg" alt="Healthy lifestyle and wellness" loading="lazy">
     </div>
   </section>
 
-  <!-- MAIN CONTENT -->
-  <main class="container">
-    <section class="posts scroll-trigger">
-      <article class="post-card">
-        <h3><a href="post1.html">The Power of Balanced Nutrition</a></h3>
-        <p>Learn how the right foods can fuel your body and mind for optimal health.</p>
+  <!-- Google Ads Example -->
+  <section class="ads">
+    <h3>Sponsored</h3>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="1234567890"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </section>
+
+  <!-- Featured Posts -->
+  <section class="featured-posts">
+    <h3>Featured Articles</h3>
+    <div class="posts-grid">
+      <article>
+        <img src="images/nutrition.jpg" alt="Fresh fruits and vegetables" loading="lazy">
+        <h4><a href="posts/nutrition-tips.html">10 Nutrition Tips for a Healthier Life</a></h4>
+        <p>Practical dietary strategies backed by science to boost your health and energy.</p>
       </article>
 
-      <article class="post-card">
-        <h3><a href="post2.html">Mindfulness for Stress Relief</a></h3>
-        <p>Practical strategies to reduce stress and boost emotional well-being.</p>
+      <article>
+        <img src="images/mental-health.jpg" alt="Meditation for mental clarity" loading="lazy">
+        <h4><a href="posts/mental-health.html">Managing Stress for Mental Clarity</a></h4>
+        <p>Explore effective ways to reduce stress and enhance your overall well-being.</p>
       </article>
-    </section>
 
-    <!-- NEWSLETTER -->
-    <section class="newsletter scroll-trigger">
-      <h3>Subscribe to Our Newsletter</h3>
-      <p>Stay updated with the latest posts and tips.</p>
-      <form class="newsletter-form" action="https://formspree.io/f/your-form-id" method="POST">
-        <input type="email" name="email" placeholder="Enter your email" required />
-        <button type="submit">Subscribe</button>
-      </form>
-    </section>
-  </main>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="container">
-      <p>&copy; 2025 Esthetics Blog. All Rights Reserved.</p>
+      <article>
+        <img src="images/holistic.jpg" alt="Balanced lifestyle concept" loading="lazy">
+        <h4><a href="posts/holistic-living.html">Holistic Living: Balance Mind, Body, and Soul</a></h4>
+        <p>Learn how to find harmony and balance in today’s busy world.</p>
+      </article>
     </div>
+  </section>
+
+  <!-- Newsletter Section -->
+  <section class="newsletter">
+    <h3>Join Our Community</h3>
+    <p>Subscribe for weekly wellness tips and holistic lifestyle insights.</p>
+    <form action="#" method="post" class="newsletter-form">
+      <input type="email" name="email" placeholder="Enter your email" required>
+      <button type="submit">Subscribe</button>
+    </form>
+  </section>
+
+  <!-- Google Maps Section -->
+  <section class="maps">
+    <h3>Find Us</h3>
+    <p>Visit us at Riva Rori, Red Hill Road, Nairobi.</p>
+    <div style="width:100%;height:400px;">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31910.814751582615!2d36.765!3d-1.286!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f10d7f4f9a3c9%3A0xXXXXXXXXXXXXXXXX!2sRed%20Hill%20Road%2C%20Nairobi!5e0!3m2!1sen!2ske!4v1699999999999"
+        width="100%"
+        height="100%"
+        style="border:0;"
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 The Esthetics Hub. All rights reserved.</p>
+    <p>Contact: <a href="mailto:esthetics03@gmail.com">esthetics03@gmail.com</a> | +254 113 379 488</p>
   </footer>
+
+  <!-- Floating Ad -->
+  <div class="floating-ad" id="floatingAd">
+    <span class="close-btn" onclick="document.getElementById('floatingAd').style.display='none'">&times;</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="9876543210"
+         data-ad-format="rectangle"
+         data-full-width-responsive="true"></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
 </body>
 </html>
