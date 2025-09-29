@@ -1,0 +1,30 @@
+/* nutrition.css - modern article styles */
+:root{
+  --accent:#2a7ae2;
+  --bg:#f9fbff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --max-width:900px;
+}
+*{box-sizing:border-box}
+body{font-family:Inter,ui-sans-serif,system-ui,Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text);line-height:1.7;margin:0}
+.wrap{width:90%;max-width:1200px;margin:0 auto}
+.site-header{background:#fff;border-bottom:1px solid #eef2ff;box-shadow:0 2px 6px rgba(30,41,59,0.03)}
+.site-header .wrap{display:flex;align-items:center;justify-content:space-between;padding:0.8rem 0}
+.brand, .brand:link{font-weight:700;color:var(--accent);text-decoration:none;font-size:1.1rem}
+.top-nav a{margin-left:1rem;color:var(--muted);text-decoration:none}
+.content{padding:2rem 0}
+.post{max-width:var(--max-width);margin:0 auto;background:#fff;padding:1.5rem;border-radius:10px;box-shadow:0 6px 30px rgba(15,23,42,0.04)}
+.post-header h1{margin:0 0 0.4rem;font-size:1.9rem}
+.post .meta{color:var(--muted);font-size:0.95rem;margin-bottom:1rem}
+.hero{width:100%;border-radius:8px;margin:1rem 0;display:block;object-fit:cover;height:360px}
+.toc{background:#f8fafc;padding:1rem;border-radius:8px;margin:1rem 0}
+.toc ul{list-style:none;padding-left:0}
+.toc a{color:var(--accent);text-decoration:none}
+.post section{margin:1rem 0}
+.post h2{color:var(--accent);margin-top:0.6rem}
+.howto{background:linear-gradient(90deg,#fff,#f8fbff);padding:1rem;border-left:4px solid var(--accent);border-radius:6px}
+.post-footer{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem}
+.share button, .share a{background:transparent;border:1px solid var(--accent);color:var(--accent);padding:0.5rem 0.8rem;border-radius:6px;text-decoration:none;cursor:pointer}
+.progress{position:fixed;left:0;top:0;height:4px;background:var(--accent);width:0;z-index:9999}
+@media(max-width:768px){.post{padding:1rem}.hero{height:220px}}
