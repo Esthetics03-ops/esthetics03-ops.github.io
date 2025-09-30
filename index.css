@@ -71,3 +71,79 @@ body{font-family:Inter,system-ui,Segoe UI,Roboto,-apple-system,Arial,sans-serif;
   .hero-text h1{font-size:1.4rem}
   .card img{height:140px}
 }
+/* Section Styling */
+.hotels {
+  padding: 60px 20px;
+  background: #f8f9fa;
+  text-align: center;
+}
+
+.section-title {
+  font-size: 2rem;
+  margin-bottom: 40px;
+  color: #333;
+  font-weight: 700;
+}
+
+/* Hotel Grid */
+.hotel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  justify-content: center;
+}
+
+/* Hotel Card */
+.hotel-card {
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+}
+
+.hotel-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+}
+
+.hotel-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+/* Hotel Info */
+.hotel-info {
+  padding: 20px;
+}
+
+.hotel-info h3 {
+  font-size: 1.25rem;
+  margin-bottom: 10px;
+  color: #2c3e50;
+}
+
+.hotel-info p {
+  font-size: 0.95rem;
+  color: #555;
+  margin-bottom: 15px;
+}
+
+/* Book Button */
+.book-btn {
+  display: inline-block;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #007bff, #00c6ff);
+  color: #fff;
+  font-weight: 600;
+  border-radius: 30px;
+  text-decoration: none;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.book-btn:hover {
+  background: linear-gradient(135deg, #0056b3, #0096c7);
+  transform: scale(1.05);
+  }
