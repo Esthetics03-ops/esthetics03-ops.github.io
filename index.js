@@ -63,3 +63,24 @@ document.addEventListener('DOMContentLoaded', function(){
     });
   });
 });
+// Fade-in effect for hotel cards when scrolling
+const hotelCards = document.querySelectorAll('.hotel-card');
+
+const revealOnScroll = () => {
+  hotelCards.forEach(card => {
+    const rect = card.getBoundingClientRect();
+    if (rect.top < window.innerHeight - 100) {
+      card.classList.add('visible');
+    }
+  });
+};
+
+window.addEventListener('scroll', revealOnScroll);
+
+// Add CSS for fade-in
+document.head.insertAdjacentHTML("beforeend", `
+  <style>
+    .hotel-card { opacity: 0; transform: translateY(40px); transition: all 0.6s ease; }
+    .hotel-card.visible { opacity: 1; transform: translateY(0); }
+  </style>
+`);
