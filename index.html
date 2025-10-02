@@ -1,174 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>The Esthetics Hub — Holistic Living, Nutrition & Mental Health</title>
-  <meta name="description" content="The Esthetics Hub: research-backed advice on nutrition, mental health and holistic living. Read our featured articles and start your wellness journey." />
-  <link rel="stylesheet" href="index.css" />
-  <link rel="icon" href="g1.png" />
-   <!-- SEO Meta -->
-  <meta name="description" content="Discover holistic tips on nutrition, mental health, and balanced living to live a healthier, longer life.">
-  <meta name="keywords" content="nutrition, mental health, holistic living, wellness, The Esthetics Hub, Nairobi wellness">
-  <meta name="author" content="The Esthetics Hub">
-  <!-- Open Graph -->
-  <meta property="og:title" content="The Esthetics Hub — Holistic Living, Nutrition & Mental Health" />
-  <meta property="og:description" content="Research-backed advice on nutrition, mental health and holistic living." />
-  <meta property="og:image" content="images/hero-preview.jpg" />
-  <meta property="og:type" content="website" />
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"WebSite",
-    "name":"The Esthetics Hub",
-    "url":"https://esthetics03-ops.github.io"
-  }
-  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="The Esthetics Hub – Nutrition, mental health & holistic living insights for a healthier, longer life.">
+  <meta name="keywords" content="nutrition tips, stress management, holistic living, mental health, wellness blog">
+  <title>The Esthetics Hub | Live Better & Longer</title>
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="site-header">
-    <div class="wrap">
-      <a class="brand" href="index.html">The Esthetics Hub</a>
-      <nav class="main-nav" aria-label="Main navigation">
-        <a href="index.html" class="active">Home</a>
-        <a href="posts.html">Blog</a>
-        <a href="about.html">About</a>
-        <a href="contact.html">Contact</a>
-      </nav>
-
-      <form class="search-bar" id="searchForm" role="search" aria-label="Search posts">
-        <input id="searchInput" type="search" placeholder="Search posts..." aria-label="Search posts" />
-        <button type="submit" aria-label="Search">Search</button>
-      </form>
-    </div>
+  <!-- Header -->
+  <header class="header">
+    <h1>The Esthetics Hub</h1>
+    <p>Live Better. Live Longer. Live Holistically.</p>
   </header>
 
-  <main class="wrap">
-    <section class="hero">
-      <div class="hero-text">
-        <h1>Holistic Living: Nutrition, Mental Health & Balance</h1>
-        <p>Evidence-backed articles, practical HOW TOs and lifestyle tips to help you feel better every day.</p>
-        <a class="cta" href="posts.html">Browse All Posts</a>
+  <!-- Newsletter Signup -->
+  <section class="newsletter">
+    <h2>Join Our Wellness Newsletter</h2>
+    <p>Get weekly tips on nutrition, stress relief & holistic living.</p>
+    <form action="https://YOUR-MAILCHIMP-LINK" method="post" target="_blank">
+      <input type="email" name="EMAIL" placeholder="Enter your email" required>
+      <button type="submit">Subscribe</button>
+    </form>
+  </section>
+
+  <!-- AdSense Placeholder -->
+  <section class="adsense">
+    <!-- Replace with your AdSense script once approved -->
+    <div class="ad-slot">[AdSense Ad Slot]</div>
+  </section>
+
+  <!-- Blog Section -->
+  <section class="blog">
+    <h2>Latest Articles</h2>
+    <div class="blog-grid">
+      <article>
+        <h3>10 Nutrition Tips for a Healthier Life</h3>
+        <p>Discover simple, science-backed nutrition tips to boost energy and immunity.</p>
+        <a href="nutrition.html" class="cta-btn">Read More</a>
+      </article>
+      <article>
+        <h3>Managing Stress for Mental Clarity</h3>
+        <p>Learn proven techniques to reduce stress and improve focus.</p>
+        <a href="stress.html" class="cta-btn">Read More</a>
+      </article>
+      <article>
+        <h3>Holistic Living: Balance Mind, Body & Soul</h3>
+        <p>Adopt lifestyle habits that nourish your whole self.</p>
+        <a href="holistic.html" class="cta-btn">Read More</a>
+      </article>
+    </div>
+  </section>
+
+  <!-- Affiliate CTA Section -->
+  <section class="affiliate">
+    <h2>Recommended for You</h2>
+    <div class="affiliate-grid">
+      <div class="affiliate-card">
+        <h3>Top Wellness Supplements</h3>
+        <p>Boost your health with carefully chosen natural supplements.</p>
+        <a href="YOUR-AMAZON-AFFILIATE-LINK" target="_blank" class="affiliate-btn">Shop Now</a>
       </div>
-      <div class="hero-image" aria-hidden="true">
-        <img src="eat.jpg" alt="Healthy lifestyle" loading="lazy" />
+      <div class="affiliate-card">
+        <h3>Meditation & Therapy Apps</h3>
+        <p>Reduce stress and improve clarity with Calm & Headspace.</p>
+        <a href="YOUR-APP-AFFILIATE-LINK" target="_blank" class="affiliate-btn">Try Apps</a>
       </div>
-    </section>
-
-    <section class="featured">
-      <h2>Featured Posts</h2>
-      <div class="posts-grid" id="postsGrid">
-        <article class="card" data-title="10 Nutrition Tips for a Healthier Life">
-          <a href="nutrition-tips.html">
-            <img src="health.jpg" alt="Nutrition tips cover" loading="lazy" />
-            <h3>10 Nutrition Tips for a Healthier Life</h3>
-            <p class="excerpt">Practical, science-backed steps you can start today to improve energy, immunity and longevity.</p>
-          </a>
-        </article>
-
-        <article class="card" data-title="Managing Stress for Mental Clarity">
-          <a href="managing-stress.html">
-            <img src="mental-health.jpg" alt="Managing stress" loading="lazy" />
-            <h3>Managing Stress for Mental Clarity</h3>
-            <p class="excerpt">Simple, evidence-based techniques and a short daily practice to reduce stress and sharpen focus.</p>
-          </a>
-        </article>
-
-        <article class="card" data-title="Holistic Living: Balance Mind, Body, and Soul">
-          <a href="holistic-living.html">
-            <img src="parents-day-hero.jpg" alt="Holistic living" loading="lazy" />
-            <h3>Holistic Living: Balance Mind, Body, and Soul</h3>
-            <p class="excerpt">A practical guide to building a balanced routine that supports mind, body and spirit.</p>
-          </a>
-        </article>
-      </div>
-    </section>
-
-    <!-- Google Ads banner (replace ca-pub and slot with your IDs) -->
-    <section class="ads-banner" aria-label="Advertisement">
-      <ins class="adsbygoogle"
-           style="display:block"
-           data-ad-client="ca-pub-1959507280210179"
-           data-ad-slot="1234567890"
-           data-ad-format="auto"
-           data-full-width-responsive="true"></ins>
-    </section>
-
-    <section class="about-preview">
-      <h2>About The Esthetics Hub</h2>
-      <p>We translate research into clear, actionable advice on nutrition, mental health and holistic living so you can build sustainable habits.</p>
-      <a class="secondary" href="about.html">Learn more →</a>
-    </section>
-
-    <section class="contact-preview">
-      <h2>Visit or Contact Us</h2>
-      <p>Located near Red Hill Road, Nairobi — book a consultation or drop us a message.</p>
-      <a class="secondary" href="contact.html">Contact</a>
-    </section>
-    <section class="hotels">
-  <h2 class="section-title">Featured Hotels in Kenya</h2>
-  <div class="hotel-grid">
-    
-    <!-- Hotel Card 1 -->
-    <div class="hotel-card">
-      <img src="real2.jpg" alt="CityBlue Creekside Hotel & Suites">
-      <div class="hotel-info">
-        <h3>CityBlue Creekside Hotel & Suites</h3>
-        <p>Mombasa • Waterfront views with modern suites and dining.</p>        
-        <a href="https://www.booking.com/hotel/ke/cityblue-creekside.en-gb.html?aid=1234567" target="_blank" class="book-btn">Book Now</a>
+      <div class="affiliate-card">
+        <h3>Wellness Retreats in Kenya</h3>
+        <p>Discover holistic retreats and spa hotels with Booking.com.</p>
+        <a href="YOUR-BOOKING-AFFILIATE-LINK" target="_blank" class="affiliate-btn">Explore Retreats</a>
       </div>
     </div>
+  </section>
 
-    <!-- Hotel Card 2 -->
-    <div class="hotel-card">
-      <img src="real.jpg" alt="Diamonds Leisure Beach & Golf Resort">
-      <div class="hotel-info">
-        <h3>Diamonds Leisure Beach & Golf Resort</h3>
-        <p>Diani Beach • Luxury resort with golf, spa & beachfront dining.</p>
-        <a href="YOUR-AFFILIATE-LINK" target="_blank" class="book-btn">Book Now</a>
-      </div>
-    </div>
+  <!-- Booking.com Search Widget -->
+  <section class="booking-widget">
+    <h2>Find Your Next Wellness Getaway</h2>
+    <iframe 
+      src="https://www.booking.com/searchbox.html?aid=YOUR_AID_HERE&lang=en&dest_type=city&dest_id=-2258079" 
+      width="100%" 
+      height="250" 
+      frameborder="0" 
+      scrolling="no"
+      style="border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.15);">
+    </iframe>
+  </section>
 
-    <!-- Hotel Card 3 -->
-    <div class="hotel-card">
-      <img src="images/hotel3.jpg" alt="Best Western Plus Meridian Hotel">
-      <div class="hotel-info">
-        <h3>Best Western Plus Meridian Hotel</h3>
-        <p>Nairobi • Stylish rooms, central location, business-friendly.</p>
-        <a href="YOUR-AFFILIATE-LINK" target="_blank" class="book-btn">Book Now</a>
-      </div>
-    </div>
-
-    <!-- Hotel Card 4 -->
-    <div class="hotel-card">
-      <img src="images/hotel4.jpg" alt="La Maison Royale Hotel">
-      <div class="hotel-info">
-        <h3>La Maison Royale Hotel</h3>
-        <p>Nairobi • Boutique experience with spa, rooftop lounge & dining.</p>
-        <a href="YOUR-AFFILIATE-LINK" target="_blank" class="book-btn">Book Now</a>
-      </div>
-    </div>
-
-  </div>
-    </section>
-
-    <section class="map" aria-label="Our location">
-      <h2>Our Location</h2>
-      <div class="map-wrap">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15955.196199258813!2d36.8073085!3d-1.2920659!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f17352bdfb20b%3A0xf28b2c42a6b2bb6c!2sNairobi!5e0!3m2!1sen!2ske!4v1700000000000!5m2!1sen!2ske" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-      </div>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <div class="wrap">
-      <p>&copy; 2025 The Esthetics Hub. All rights reserved.</p>
-      <p class="small">Designed for wellness — built with care.</p>
-    </div>
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2025 The Esthetics Hub | All Rights Reserved</p>
   </footer>
 
-  <!-- Load AdSense script (place your publisher ID) -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1959507280210179" crossorigin="anonymous"></script>
-  <script src="index.js"></script>
+  <!-- JS -->
+  <script src="script.js"></script>
 </body>
 </html>
