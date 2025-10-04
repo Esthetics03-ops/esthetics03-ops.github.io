@@ -39,22 +39,157 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Header -->
-  <header class="header">
-    <h1>The Esthetics Hub</h1>
-    <p>Live Better. Live Longer. Live Holistically.</p>
-  </header>
-  
-  <!-- Hero Section -->
-  <section class="hero">
-    <img src="https://cdn.pixabay.com/photo/2016/11/29/05/08/food-1869598_1280.jpg" 
-         alt="Healthy Nutrition Background" loading="lazy">
-    <div class="hero-text">
-      <h1>Live Better, Live Longer</h1>
-      <p>Holistic insights on nutrition, mental health, and balanced living.</p>
+<!-- START: Enhanced Header + Nav + Search + Support -->
+<header class="eh-header" role="banner">
+  <div class="eh-header-inner">
+    <div class="eh-brand">
+      <a href="index.html" class="eh-logo-link" aria-label="The Esthetics Hub Home">
+        <img src="/g1.png" alt="The Esthetics Hub logo" class="eh-logo">
+        <div class="eh-title-wrap">
+          <span class="eh-title">The Esthetics Hub</span>
+          <span class="eh-subtitle">Holistic Living • Nutrition • Mental Health</span>
+        </div>
+      </a>
     </div>
-  </section>
 
+    <div class="eh-top-actions">
+      <!-- Social icons with advanced tooltips -->
+      <div class="eh-socials" aria-hidden="false">
+        <a href="https://facebook.com/" class="social-link" data-tooltip-title="Follow on Facebook" target="_blank" rel="noopener">
+          <i class="bi bi-facebook"></i>
+        </a>
+        <a href="https://instagram.com/" class="social-link" data-tooltip-title="Follow on Instagram" target="_blank" rel="noopener">
+          <i class="bi bi-instagram"></i>
+        </a>
+        <a href="https://twitter.com/" class="social-link" data-tooltip-title="Follow on X (Twitter)" target="_blank" rel="noopener">
+          <i class="bi bi-twitter"></i>
+        </a>
+        <a href="mailto:hezmil675@gmail.com" class="social-link" data-tooltip-title="Email us" aria-label="Email">
+          <i class="bi bi-envelope"></i>
+        </a>
+      </div>
+
+      <!-- Search toggle for smaller screens -->
+      <button class="eh-search-toggle" aria-label="Toggle search" aria-expanded="false">
+        <i class="bi bi-search"></i>
+      </button>
+
+      <!-- Mobile nav toggle -->
+      <button class="eh-menu-toggle" aria-label="Open menu" aria-expanded="false">
+        <i class="bi bi-list"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Main nav + search -->
+  <div class="eh-navwrap">
+    <nav class="eh-nav" role="navigation" aria-label="Main">
+      <ul class="eh-menu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li class="eh-dropdown">
+          <button class="eh-dropbtn" aria-expanded="false">Gallery <i class="bi bi-caret-down-fill"></i></button>
+          <div class="eh-dropdown-panel" role="menu">
+            <a href="gallery/photos.html">Photos</a>
+            <a href="gallery/360.html">360 Views</a>
+            <a href="gallery/featured.html">Featured</a>
+          </div>
+        </li>
+        <li class="eh-dropdown">
+          <button class="eh-dropbtn" aria-expanded="false">Videos <i class="bi bi-caret-down-fill"></i></button>
+          <div class="eh-dropdown-panel" role="menu">
+            <a href="videos/tutorials.html">Tutorials</a>
+            <a href="videos/interviews.html">Interviews</a>
+            <a href="videos/highlights.html">Highlights</a>
+          </div>
+        </li>
+        <li class="eh-dropdown">
+          <button class="eh-dropbtn" aria-expanded="false">PDFs <i class="bi bi-caret-down-fill"></i></button>
+          <div class="eh-dropdown-panel" role="menu">
+            <a href="pdfs/guides.pdf" target="_blank">Guides (PDF)</a>
+            <a href="pdfs/research.pdf" target="_blank">Research</a>
+            <a href="pdfs/checklists.pdf" target="_blank">Checklists</a>
+          </div>
+        </li>
+        <li class="eh-dropdown">
+          <button class="eh-dropbtn" aria-expanded="false">Other <i class="bi bi-caret-down-fill"></i></button>
+          <div class="eh-dropdown-panel" role="menu">
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+            <a href="sitemap.xml">Sitemap</a>
+          </div>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Search bar (full optimized client-side search) -->
+    <div class="eh-search" id="site-search">
+      <form id="searchForm" role="search" aria-label="Site search">
+        <input type="search" id="searchInput" name="q" placeholder="Search articles, guides, videos, PDFs..." aria-label="Search site" autocomplete="off">
+        <button type="submit" aria-label="Search"><i class="bi bi-search"></i></button>
+        <button type="button" id="searchClear" title="Clear search" aria-label="Clear search" hidden><i class="bi bi-x-lg"></i></button>
+      </form>
+
+      <!-- live search suggestions / results -->
+      <div id="searchResults" class="search-results" aria-live="polite" role="region"></div>
+    </div>
+  </div>
+</header>
+
+<!-- Support / Donate Section -->
+<section id="support" class="eh-support">
+  <div class="eh-support-inner">
+    <h2>Support The Esthetics Hub</h2>
+    <p>Help us keep research-based wellness content free. Choose a safe payment option below:</p>
+
+    <div class="support-grid">
+      <!-- M-Pesa card -->
+      <div class="support-card">
+        <h3>M-Pesa (Till)</h3>
+        <p><strong>Till Number:</strong> <span class="till">3421580</span></p>
+        <p><strong>Recipient:</strong> The Esthetics Hub</p>
+        <ol>
+          <li>Open your M-Pesa app or USSD.</li>
+          <li>Select PayBill / Till and enter <strong>3421580</strong>.</li>
+          <li>Enter amount and your name as reference.</li>
+          <li>After payment, enter the <em>Transaction ID</em> below to notify us.</li>
+        </ol>
+
+        <label for="mpesaTx">M-Pesa Transaction ID</label>
+        <input id="mpesaTx" type="text" placeholder="Enter transaction ID (e.g. O3K45X123)" aria-label="M-Pesa transaction id">
+
+        <button class="btn btn-primary" id="mpesaNotifyBtn">Notify Us</button>
+        <p class="support-note">We will confirm and publish a thank-you note on request.</p>
+      </div>
+
+      <!-- Secure Card (PayPal / Stripe) -->
+      <div class="support-card">
+        <h3>Card / Online (secure)</h3>
+        <p>We do not accept raw card details on this site. Use one of the secure hosted options below:</p>
+
+        <!-- PayPal placeholder -->
+        <a id="paypalDonate" class="btn btn-outline" href="https://www.paypal.com/paypalme/YOUR_USERNAME" target="_blank" rel="noopener">
+          <i class="bi bi-paypal"></i> Donate with PayPal
+        </a>
+
+        <!-- Stripe placeholder: you should replace data-checkout-url with your server endpoint -->
+        <button id="stripeCheckoutBtn" class="btn btn-primary" data-checkout-url="/.netlify/functions/create-checkout-session">
+          <i class="bi bi-credit-card-2-back"></i> Pay by Card (Stripe)
+        </button>
+
+        <p class="support-note">PayPal opens a secure checkout in a new tab. Stripe requires a back-end — see docs to generate a Checkout Session.</p>
+      </div>
+
+      <!-- Manual / Other -->
+      <div class="support-card">
+        <h3>Other</h3>
+        <p>Bank transfer, in-person donations or corporate sponsorships — contact us:</p>
+        <p><a href="mailto:hezmil675@gmail.com">hezmil675@gmail.com</a> • <a href="tel:+254726834243">+254 726 834243</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- END: Enhanced Header + Nav + Search + Support -->
   
   <!-- AdSense Block -->
   Sponsored
