@@ -5,11 +5,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="The Esthetics Hub – Nutrition, mental health & holistic living insights for a healthier, longer life.">
   <meta name="keywords" content="nutrition tips, stress management, holistic living, mental health, wellness blog">
+  <meta property="og:url" content="https://esthetics03-ops.github.io">
   <title>The Esthetics Hub | Live Better & Longer</title>
   
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Website",
+    "headline": "The Esthetics Hub | Live Better, Live Longer",
+    "description": "Discover holistic tips on nutrition, mental health, and balanced living to live a healthier, longer life.",
+    "author": {
+      "@type": "Owner",
+      "name": "George Kutosi"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "The Esthetics Hub",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://esthetics03-ops.github.io/g1.png"
+      }
+    }
+  }
+  </script>
+
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  
+  <!-- AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1959507280210179"
+          crossorigin="anonymous"></script>
   <!-- CSS -->
   <link rel="stylesheet" href="style.css">
 </head>
@@ -19,22 +44,42 @@
     <h1>The Esthetics Hub</h1>
     <p>Live Better. Live Longer. Live Holistically.</p>
   </header>
+  
+  <!-- Hero Section -->
+  <section class="hero">
+    <img src="https://cdn.pixabay.com/photo/2016/11/29/05/08/food-1869598_1280.jpg" 
+         alt="Healthy Nutrition Background" loading="lazy">
+    <div class="hero-text">
+      <h1>Live Better, Live Longer</h1>
+      <p>Holistic insights on nutrition, mental health, and balanced living.</p>
+    </div>
+  </section>
+
+  
+  <!-- AdSense Block -->
+  Sponsored
+  <section class="ads">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-1959507280210179"
+         data-ad-slot="1234567890"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </section>
+
 
   <!-- Newsletter Signup -->
   <section class="newsletter">
     <h2>Join Our Wellness Newsletter</h2>
     <p>Get weekly tips on nutrition, stress relief & holistic living.</p>
-    <form action="https://YOUR-MAILCHIMP-LINK" method="post" target="_blank">
-      <input type="email" name="EMAIL" placeholder="Enter your email" required>
-      <button type="submit">Subscribe</button>
-    </form>
+  <form class="newsletter-form" action="https://formspree.io/f/your-form-id" method="POST">
+    <input type="email" name="email" placeholder="Enter your email" required />
+    <button type="submit">Subscribe</button>
+  </form>
   </section>
 
-  <!-- AdSense Placeholder -->
-  <section class="adsense">
-    <!-- Replace with your AdSense script once approved -->
-    <div class="ad-slot">[AdSense Ad Slot]</div>
-  </section>
+  
 
   <!-- Blog Section -->
   <section class="blog">
@@ -92,6 +137,18 @@
       style="border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.15);">
     </iframe>
   </section>
+  
+  
+  <!-- Google Maps -->
+  <section class="map-section">
+    <h2>Find Us</h2>
+    <div class="map-container">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1994.341!2d36.8219!3d-1.2921!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f1739c0c5c6df%3A0x9d8a37c3f85b8f6!2sRiva%20Rori%2C%20Red%20Hill%20Road%2C%20Nairobi!5e0!3m2!1sen!2ske!4v1698867333997"
+        width="100%" height="350" style="border:0;" allowfullscreen="" loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+  </section>
 
   <!-- Footer -->
   <footer>
@@ -126,6 +183,6 @@
 </footer>
 
   <!-- JS -->
-  <script src="script.js"></script>
+  <script src="script.js" defer></script>
 </body>
 </html>
