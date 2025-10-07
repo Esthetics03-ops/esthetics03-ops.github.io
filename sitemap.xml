@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://esthetics03-ops.github.io/index.html</loc>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://esthetics03-ops.github.io/blog.html</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://esthetics03-ops.github.io/about.html</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://esthetics03-ops.github.io/contact.html</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://esthetics03-ops.github.io/gallery.html</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://esthetics03-ops.github.io/videos.html</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://esthetics03-ops.github.io/pdfs.html</loc>
+    <priority>0.7</priority>
+  </url>
+</urlset>
