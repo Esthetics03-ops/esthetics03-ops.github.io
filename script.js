@@ -53,9 +53,9 @@ document.addEventListener('DOMContentLoaded', function () {
   /* ---------- Search functionality (client-side) ---------- */
   // Small site: use a JS array. For large sites, generate search-index.json server side.
   const SITE_INDEX = [
-    {title: "10 Nutrition Tips for a Healthier Life", url: "articles/nutrition.html", excerpt: "Practical, science-backed steps to improve energy and immunity."},
-    {title: "Managing Stress for Mental Clarity", url: "articles/stress.html", excerpt: "Evidence-based techniques to reduce stress and improve focus."},
-    {title: "Holistic Living: Balance Mind, Body & Soul", url: "articles/holistic.html", excerpt: "A practical guide to a balanced routine that supports mind and body."}
+    {title: "10 Nutrition Tips for a Healthier Life", url: "nutrition-tips.html", excerpt: "Practical, science-backed steps to improve energy and immunity."},
+    {title: "Managing Stress for Mental Clarity", url: "manage-stress.html", excerpt: "Evidence-based techniques to reduce stress and improve focus."},
+    {title: "Holistic Living: Balance Mind, Body & Soul", url: "holistic-living.html", excerpt: "A practical guide to a balanced routine that supports mind and body."}
     // add more items (title,url,excerpt) or load via fetch('/search-index.json')
   ];
 
