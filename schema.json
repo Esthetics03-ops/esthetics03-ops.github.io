@@ -1,16 +1,17 @@
 {
   "@context": "https://schema.org",
-  "@type": "WebSite",
+  "@type": "LocalBusiness",
   "name": "The Esthetics Hub",
-  "url": "https://esthetics03-ops.github.io",
-  "description": "Holistic wellness, nutrition, and mental health insights.",
-  "publisher": {
-    "@type": "Organization",
-    "name": "The Esthetics Hub",
-    "url": "https://esthetics03-ops.github.io"
+  "image": "https://esthetics03-ops.github.io/g1.png",
+  "telephone": "+254113379488",
+  "email": "esthetics03@gmail.com",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Riva Rori, Red Hill Road"
   },
+  "url": "https://esthetics03-ops.github.io/",
   "sameAs": [
-    "https://www.amazon.com/dp/B08XYZ?tag=theesthetics-20",
-    "https://www.booking.com/index.html?aid=1234567"
+    "https://www.facebook.com/",
+    "https://www.instagram.com/"
   ]
 }
