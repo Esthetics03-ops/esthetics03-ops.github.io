@@ -185,11 +185,17 @@
     <section id="travel-deals" class="affiliate-section">
       <h2><i class="bi bi-geo-alt" aria-hidden="true"></i> Wellness & Travel Deals</h2>
       <p>Discover wellness hotels and retreats — powered by Booking.com.</p>
-      <iframe
-        src="https://www.booking.com/searchbox.html?aid=1234567&lang=en"
-        width="100%" height="250" frameborder="0" scrolling="no"
-        style="border-radius: 15px; box-shadow: 0 6px 20px rgba(0,0,0,0.15);">
-      </iframe>
+      <!-- Booking.com Affiliate Search Widget -->
+<div id="booking-widget"></div>
+<script type="text/javascript">
+  (function(d, sc, u) {
+    var s = d.createElement(sc), p = d.getElementsByTagName(sc)[0];
+    s.type = 'text/javascript';
+    s.async = true;
+    s.src = 'https://www.booking.com/embed/searchbox.js?aid=1234567&lang=en&tmpl=searchbox';
+    p.parentNode.insertBefore(s, p);
+  })(document, 'script');
+</script>
     </section>
 
     <section id="amazon-deals" class="affiliate-section">
