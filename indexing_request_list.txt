@@ -1,0 +1,21 @@
+# Google Search Console Indexing Request List
+# Submit each of these manually in URL Inspection -> Request Indexing
+
+https://esthetics03-ops.github.io/index.html
+https://esthetics03-ops.github.io/nutrition-tips.html
+https://esthetics03-ops.github.io/managing-stress.html
+https://esthetics03-ops.github.io/holistic-living.html
+https://esthetics03-ops.github.io/about.html
+https://esthetics03-ops.github.io/contact.html
+https://esthetics03-ops.github.io/privacy.html
+https://esthetics03-ops.github.io/terms.html
+https://esthetics03-ops.github.io/disclaimer.html
+https://esthetics03-ops.github.io/gallery/photos.html
+https://esthetics03-ops.github.io/gallery/360.html
+https://esthetics03-ops.github.io/gallery/featured.html
+https://esthetics03-ops.github.io/videos/tutorials.html
+https://esthetics03-ops.github.io/videos/interviews.html
+https://esthetics03-ops.github.io/videos/highlights.html
+https://esthetics03-ops.github.io/pdfs/guides.pdf
+https://esthetics03-ops.github.io/pdfs/research.pdf
+https://esthetics03-ops.github.io/pdfs/checklists.pdf

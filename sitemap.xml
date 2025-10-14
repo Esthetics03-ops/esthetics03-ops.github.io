@@ -9,18 +9,12 @@
   <url><loc>https://esthetics03-ops.github.io/privacy.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://esthetics03-ops.github.io/terms.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://esthetics03-ops.github.io/disclaimer.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-
-  <!-- Gallery -->
   <url><loc>https://esthetics03-ops.github.io/gallery/photos.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://esthetics03-ops.github.io/gallery/360.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://esthetics03-ops.github.io/gallery/featured.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-
-  <!-- Videos -->
   <url><loc>https://esthetics03-ops.github.io/videos/tutorials.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://esthetics03-ops.github.io/videos/interviews.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
   <url><loc>https://esthetics03-ops.github.io/videos/highlights.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
-
-  <!-- PDFs -->
   <url><loc>https://esthetics03-ops.github.io/pdfs/guides.pdf</loc><changefreq>monthly</changefreq><priority>0.3</priority></url>
   <url><loc>https://esthetics03-ops.github.io/pdfs/research.pdf</loc><changefreq>monthly</changefreq><priority>0.3</priority></url>
   <url><loc>https://esthetics03-ops.github.io/pdfs/checklists.pdf</loc><changefreq>monthly</changefreq><priority>0.3</priority></url>
