@@ -1,3 +1,15 @@
+function trapFocus(modal) {
+  const focusable = modal.querySelectorAll('a, button, input, textarea, [tabindex]:not([tabindex="-1"])');
+  const first = focusable[0], last = focusable[focusable.length - 1];
+  modal.addEventListener('keydown', function(e){
+    if(e.key === 'Tab'){
+      if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+      else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+    }
+  });
+  first && first.focus();
+}
+
 // Optimized script.js — preserves your original behavior, improves performance & accessibility
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -308,3 +320,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
 });
 
+if (window.innerWidth > 360) {
+  setTimeout(showModal, 5000);
+}
+
+if (!sessionStorage.getItem('bookingSeen')) {
+  setTimeout(function(){ showModal(); sessionStorage.setItem('bookingSeen','1'); }, 5000);
+}
