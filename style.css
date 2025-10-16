@@ -1,3 +1,7 @@
+.hero { position: relative; overflow: hidden; }
+.hero-img { width:100%; height:auto; display:block; }
+.hero-overlay { position:absolute; left:0; top:0; right:0; bottom:0; display:flex;flex-direction:column;justify-content:center;align-items:center;color:#fff; background:linear-gradient(rgba(75,107,70,0.45), rgba(75,107,70,0.15)); }
+
 /* Improved and validated style.css based on the original */
 :root{
   --primary-color:#4b6b46;
@@ -42,7 +46,9 @@ body{margin:0;font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, '
 .footer-bottom{text-align:center;padding:12px;background:var(--primary-color);color:var(--white);margin-top:20px;}
 @media (max-width:900px){.card-grid{grid-template-columns:repeat(2,1fr);} .amazon-cards{grid-template-columns:1fr;} .eh-nav .eh-menu{display:none;} .eh-nav .eh-menu.mobile-active{display:flex;flex-direction:column;gap:8px;background:var(--white);position:absolute;top:64px;right:16px;padding:12px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,0.06);}}
 @media (max-width:480px){.card-grid{grid-template-columns:1fr;} .eh-header-inner{padding:10px;} .hero{padding:36px 12px;} .eh-title{font-size:1rem;}}
-
+@media (max-width:420px){
+  .modal-content{ width: calc(100% - 32px); margin: 0 16px; padding:18px; }
+}
 
 /* ============================================
    The Esthetics Hub - style.css
