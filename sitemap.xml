@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://esthetics03-ops.github.io/</loc>
-    <priority>1.0</priority>
-  </url>
+  <url><loc>https://esthetics03-ops.github.io/</loc></url>
+  <url><loc>https://esthetics03-ops.github.io/posts.html</loc></url>
+  <url><loc>https://esthetics03-ops.github.io/nutrition-tips.html</loc></url>
+  <url><loc>https://esthetics03-ops.github.io/managing-stress.html</loc></url>
+  <url><loc>https://esthetics03-ops.github.io/holistic-living.html</loc></url>
+  <url><loc>https://esthetics03-ops.github.io/contact.html</loc></url>
 </urlset>
