@@ -40,7 +40,7 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
-
+<link rel="preload" href="https://fonts.gstatic.com/…/Inter.woff2" as="font" type="font/woff2" crossorigin>
   <!-- AdSense -->
   <script data-ad-client="ca-pub-1959507280210179" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 </head>
@@ -70,7 +70,7 @@
 
     <!-- Navigation -->
     <nav class="eh-nav">
-      <ul class="eh-menu"><i class="bi bi-menu" aria-hidden="true"></i>
+      <ul class="eh-menu">
         <li><a href="index.html">Home</a></li>
         <li><a href="posts.html">Blog</a></li>
         <li class="eh-dropdown">
@@ -111,13 +111,20 @@
 
   <!-- MAIN -->
   <main>
-    <section class="hero">
-      <div class="hero-inner">      
-        <h1>Welcome to The Esthetics Hub</h1>
-        <p>Live better. Live longer. Evidence-based guidance on nutrition, mental health, and holistic living.</p>
-      </div>
-    </section>
-
+   <!-- Replace your background hero usage with an inline image + overlay -->
+<section class="hero" aria-label="Welcome section">
+  <div class="hero-inner">
+    <picture>
+      <source srcset="g1.webp" type="image/webp">
+      <img src="g1.png" alt="The Esthetics Hub logo and background" class="hero-img" width="1200" height="600" loading="lazy">
+    </picture>
+    <div class="hero-overlay">
+      <h1>Welcome to The Esthetics Hub</h1>
+      <p>Live better. Live longer...</p>
+    </div>
+  </div>
+</section>
+    
     <section class="adsense-slot">
       <ins class="adsbygoogle"
         style="display:block"
