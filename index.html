@@ -239,5 +239,58 @@
        </a>
 
   <script src="script.js" defer></script>
+  <script>
+(function() {
+  console.log("🔍 AdSense Diagnostic Started...");
+  
+  // 1️⃣ Check AdSense script load
+  const adScript = document.querySelector('script[src*="pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"]');
+  if (adScript) {
+    console.log("✅ AdSense script tag found:", adScript.src);
+  } else {
+    console.warn("❌ AdSense script not found in this page. Check <head> placement.");
+  }
+
+  // 2️⃣ Check ads.txt
+  fetch('/ads.txt')
+    .then(res => {
+      if (res.ok) {
+        console.log("✅ ads.txt found and accessible");
+        return res.text();
+      } else {
+        throw new Error("ads.txt not reachable");
+      }
+    })
+    .then(text => {
+      if (text.includes('pub-1959507280210179')) {
+        console.log("✅ Publisher ID verified in ads.txt");
+      } else {
+        console.warn("⚠️ ads.txt found but Publisher ID missing");
+      }
+    })
+    .catch(err => console.error("❌ ads.txt check failed:", err));
+
+  // 3️⃣ Check AdSense DOM elements
+  const adSlots = document.querySelectorAll('ins.adsbygoogle');
+  if (adSlots.length > 0) {
+    console.log(`✅ Found ${adSlots.length} AdSense slot(s) on this page.`);
+  } else {
+    console.warn("⚠️ No <ins class='adsbygoogle'> elements found. Add ad units or enable Auto Ads.");
+  }
+
+  // 4️⃣ Test ad load after short delay
+  setTimeout(() => {
+    const adFrames = [...document.querySelectorAll('iframe[src*="googlesyndication"]')];
+    if (adFrames.length > 0) {
+      console.log(`✅ ${adFrames.length} ad frame(s) detected — AdSense serving is active.`);
+    } else {
+      console.warn("⚠️ No ad frames detected — AdSense may still be under review or blocked by policy/adblocker.");
+    }
+  }, 8000);
+
+  // 5️⃣ Final status log
+  window.addEventListener('load', () => console.log("✅ Page fully loaded, AdSense diagnostic complete."));
+})();
+    </script>
 </body>
 </html>
