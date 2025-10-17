@@ -1,329 +1,115 @@
-function trapFocus(modal) {
-  const focusable = modal.querySelectorAll('a, button, input, textarea, [tabindex]:not([tabindex="-1"])');
-  const first = focusable[0], last = focusable[focusable.length - 1];
-  modal.addEventListener('keydown', function(e){
-    if(e.key === 'Tab'){
-      if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
-      else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
-    }
-  });
-  first && first.focus();
-}
-
-// Optimized script.js — preserves your original behavior, improves performance & accessibility
 document.addEventListener('DOMContentLoaded', function () {
-
-  // Helper: delegate click outside
-  function closeAllDropdowns() {
-    document.querySelectorAll('.eh-dropdown-panel').forEach(function(p){ p.style.display = 'none'; p.setAttribute('aria-hidden','true'); });
-    document.querySelectorAll('.eh-dropbtn').forEach(function(b){ b.setAttribute('aria-expanded','false'); });
-  }
 
   // Dropdown toggles
   document.querySelectorAll('.eh-dropbtn').forEach(function(btn){
     btn.addEventListener('click', function(e){
       e.stopPropagation();
       const parent = btn.closest('.eh-dropdown');
-      if(!parent) return;
       const panel = parent.querySelector('.eh-dropdown-panel');
       const expanded = btn.getAttribute('aria-expanded') === 'true';
-      closeAllDropdowns();
+      // close others
+      document.querySelectorAll('.eh-dropdown-panel').forEach(p => { if(p !== panel) p.style.display = 'none'; });
+      document.querySelectorAll('.eh-dropbtn').forEach(b => { if(b !== btn) b.setAttribute('aria-expanded','false'); });
       if(!expanded){
         panel.style.display = 'block';
-        panel.setAttribute('aria-hidden','false');
         btn.setAttribute('aria-expanded','true');
+      } else {
+        panel.style.display = 'none';
+        btn.setAttribute('aria-expanded','false');
       }
     });
   });
 
-  // Close when clicking outside
+  // close dropdowns clicking outside
   document.addEventListener('click', function(ev){
-    if(!ev.target.closest('.eh-dropdown')) closeAllDropdowns();
-  }, {passive:true});
+    if(!ev.target.closest('.eh-dropdown')){
+      document.querySelectorAll('.eh-dropdown-panel').forEach(p => p.style.display = 'none');
+      document.querySelectorAll('.eh-dropbtn').forEach(b => b.setAttribute('aria-expanded','false'));
+    }
+  });
 
-  // Mobile menu toggle
+  // mobile menu toggle
   const menuToggle = document.querySelector('.eh-menu-toggle');
   if(menuToggle){
     menuToggle.addEventListener('click', function(){
       const menu = document.querySelector('.eh-menu');
       const expanded = menuToggle.getAttribute('aria-expanded') === 'true';
-      if(menu){
-        if(expanded){
-          menu.style.display = 'none';
-          menu.classList.remove('mobile-active');
-        } else {
-          menu.style.display = 'flex';
-          menu.classList.add('mobile-active');
-        }
-        menuToggle.setAttribute('aria-expanded', (!expanded).toString());
+      if(!expanded){
+        menu.classList.add('mobile-active'); menu.style.display='flex';
+        menuToggle.setAttribute('aria-expanded','true');
+      } else {
+        menu.classList.remove('mobile-active'); menu.style.display='none';
+        menuToggle.setAttribute('aria-expanded','false');
       }
-    });
+    }, {passive:true});
   }
 
-  // SEARCH (client-side small index)
-  const SITE_INDEX = [
-    {title: "10 Nutrition Tips for a Healthier Life", url: "nutrition-tips.html", excerpt: "Practical, science-backed steps to improve energy and immunity."},
-    {title: "Managing Stress for Mental Clarity", url: "managing-stress.html", excerpt: "Evidence-based techniques to reduce stress and improve focus."},
-    {title: "Holistic Living: Balance Mind, Body & Soul", url: "holistic-living.html", excerpt: "A practical guide to a balanced routine that supports mind and body."}
-  ];
-
-  const searchForm = document.getElementById('searchForm');
-  const searchInput = document.getElementById('searchInput');
-  const searchResults = document.getElementById('searchResults');
-  const searchClear = document.getElementById('searchClear');
-
-  function renderResults(results){
-    if(!results || !results.length){
-      searchResults.innerHTML = '<div class="result"><p>No results found.</p></div>';
-      searchResults.style.display = 'block';
-      return;
+  // Accessibility: focus trapping for modals
+  function trapFocus(modal){
+    const focusable = modal.querySelectorAll('a, button, input, textarea, [tabindex]:not([tabindex="-1"])');
+    if(!focusable.length) return;
+    const first = focusable[0], last = focusable[focusable.length -1];
+    function keyHandler(e){
+      if(e.key === 'Tab'){
+        if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+        else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+      }
+      if(e.key === 'Escape'){ closeModal(modal); }
     }
-    searchResults.innerHTML = results.map(function(r){
-      return '<div class="result"><a href="'+r.url+'">'+r.title+'</a><p>'+r.excerpt+'</p></div>';
-    }).join('');
-    searchResults.style.display = 'block';
+    modal.addEventListener('keydown', keyHandler);
+    modal._focusHandler = keyHandler;
+    first.focus();
   }
 
-  function runSearch(q){
-    const ql = (q || '').trim().toLowerCase();
-    if(!ql){
-      if(searchResults) searchResults.style.display = 'none';
-      if(searchClear) searchClear.hidden = true;
-      return;
+  function closeModal(modal){
+    if(!modal) return;
+    modal.style.display = 'none';
+    modal.setAttribute('aria-hidden','true');
+    if(modal._focusHandler) modal.removeEventListener('keydown', modal._focusHandler);
+  }
+
+  // showModal used by rich-results test; define it
+  function showModal(){
+    const modal = document.getElementById('bookingModal');
+    if(modal){
+      modal.style.display = 'flex';
+      modal.setAttribute('aria-hidden','false');
+      trapFocus(modal);
     }
-    if(searchClear) searchClear.hidden = false;
-    const results = SITE_INDEX.map(function(item){
-      var titleScore = item.title.toLowerCase().includes(ql) ? 2 : 0;
-      var excerptScore = item.excerpt.toLowerCase().includes(ql) ? 1 : 0;
-      return Object.assign({}, item, {score: titleScore + excerptScore});
-    }).filter(function(i){ return i.score > 0; }).sort(function(a,b){ return b.score - a.score; });
-    renderResults(results);
+  }
+  // expose showModal globally (some tools expect it)
+  window.showModal = showModal;
+
+  // auto show booking modal after 5s (every page load)
+  setTimeout(function(){ showModal(); }, 5000);
+
+  const closeBooking = document.getElementById('closeBookingModal');
+  if(closeBooking){
+    closeBooking.addEventListener('click', function(){ const modal = document.getElementById('bookingModal'); closeModal(modal); });
   }
 
-  if(searchForm){
-    searchForm.addEventListener('submit', function(e){ e.preventDefault(); runSearch(searchInput.value); });
-    if(searchInput) searchInput.addEventListener('input', function(){ runSearch(searchInput.value); });
-    if(searchClear) searchClear.addEventListener('click', function(){ if(searchInput) searchInput.value=''; if(searchClear) searchClear.hidden=true; if(searchResults) searchResults.style.display='none'; });
+  // support modal handlers
+  const openSupport = document.getElementById('openSupportModal');
+  const supportModal = document.getElementById('supportModal');
+  const closeSupport = document.getElementById('closeSupportModal');
+  if(openSupport && supportModal){
+    openSupport.addEventListener('click', function(){ supportModal.style.display='flex'; supportModal.setAttribute('aria-hidden','false'); trapFocus(supportModal); });
+  }
+  if(closeSupport){
+    closeSupport.addEventListener('click', function(){ closeModal(supportModal); });
   }
 
-  // Keyboard shortcut: focus search on pressing '/'
-  document.addEventListener('keydown', function(e){
-    if(e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA'){
-      var el = document.getElementById('searchInput');
-      if(el){ e.preventDefault(); el.focus(); }
-    }
-  }, {passive:true});
-
-  // Tooltips for social icons
-  var tooltipEl = null;
-  document.querySelectorAll('.social-link').forEach(function(el){
-    el.addEventListener('mouseenter', function(){
-      var title = el.getAttribute('data-tooltip-title') || el.title || '';
-      if(!title) return;
-      tooltipEl = document.createElement('div');
-      tooltipEl.className = 'tooltip-custom';
-      tooltipEl.innerHTML = '<strong>'+title+'</strong>';
-      document.body.appendChild(tooltipEl);
-      var r = el.getBoundingClientRect();
-      tooltipEl.style.left = (r.left + (r.width/2)) + 'px';
-      tooltipEl.style.top = (r.top - 8) + 'px';
-      tooltipEl.style.transform = 'translate(-50%, -100%)';
-      tooltipEl.style.opacity = '1';
-    });
-    el.addEventListener('mouseleave', function(){
-      if(tooltipEl){ tooltipEl.remove(); tooltipEl = null; }
-    });
-  });
-
-  // Support modal behavior
-  var openModalBtn = document.getElementById('openSupportModal');
-  var modal = document.getElementById('supportModal');
-  var closeModalBtn = document.getElementById('closeModal');
-  function openModal(){ if(modal){ modal.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; modal.focus(); } }
-  function closeModal(){ if(modal){ modal.setAttribute('aria-hidden','true'); document.body.style.overflow='auto'; } }
-  if(openModalBtn) openModalBtn.addEventListener('click', openModal);
-  if(closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
-  if(modal) modal.addEventListener('click', function(e){ if(e.target === modal) closeModal(); });
-  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeModal(); }, {passive:true});
-
-  // M-Pesa notify
-  var mpesaBtn = document.getElementById('mpesaNotifyBtn');
+  // mpesa notify
+  const mpesaBtn = document.getElementById('mpesaNotifyBtn');
   if(mpesaBtn){
     mpesaBtn.addEventListener('click', function(){
-      var tx = document.getElementById('mpesaTx').value.trim();
-      if(!tx){
-        // better UX than alert - use inline message if possible
-        alert('Please enter your M-Pesa transaction ID so we can confirm your donation (example: O3K45X123).');
-        return;
-      }
-      alert('Thanks — we received your M-Pesa Transaction ID: ' + tx + '\nWe will verify and respond by email.');
-    });
-  }
-
-  // Stripe / PayPal placeholders
-  var stripeBtn = document.getElementById('stripeCheckoutBtn');
-  if(stripeBtn){
-    stripeBtn.addEventListener('click', function(){
-      var url = stripeBtn.getAttribute('data-checkout-url');
-      if(!url){
-        alert('Stripe checkout endpoint not configured. Replace data-checkout-url with your server endpoint that creates a Checkout Session.');
-        return;
-      }
-      window.location = url;
-    });
-  }
-
-  // Lazy-load images
-  document.querySelectorAll('img').forEach(function(img){ if(!img.getAttribute('loading')) img.setAttribute('loading','lazy'); });
-
-});
-
-
-/* ============================================
-   The Esthetics Hub - script.js
-   Handles:
-   - Dropdown menus
-   - Mobile navigation toggle
-   - Search functionality
-   - Tooltips
-   - M-Pesa donation modal
-   - Floating WhatsApp chat link
-   ============================================ */
-
-document.addEventListener('DOMContentLoaded', function () {
-
-  /* ---------- Dropdown toggles ---------- */
-  document.querySelectorAll('.eh-dropbtn').forEach(function (btn) {
-    btn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      const panel = btn.nextElementSibling;
-      const expanded = btn.getAttribute('aria-expanded') === 'true';
-
-      document.querySelectorAll('.eh-dropdown-panel').forEach(p => p.style.display = 'none');
-      document.querySelectorAll('.eh-dropbtn').forEach(b => b.setAttribute('aria-expanded', 'false'));
-
-      if (!expanded) {
-        panel.style.display = 'block';
-        btn.setAttribute('aria-expanded', 'true');
-      }
-    });
-  });
-
-  // Close dropdowns when clicking outside
-  document.addEventListener('click', function (e) {
-    if (!e.target.closest('.eh-dropdown')) {
-      document.querySelectorAll('.eh-dropdown-panel').forEach(p => p.style.display = 'none');
-      document.querySelectorAll('.eh-dropbtn').forEach(b => b.setAttribute('aria-expanded', 'false'));
-    }
-  });
-
-  /* ---------- Mobile menu toggle ---------- */
-  const menuToggle = document.querySelector('.eh-menu-toggle');
-  const menu = document.querySelector('.eh-menu');
-
-  if (menuToggle) {
-    menuToggle.addEventListener('click', function () {
-      const expanded = menuToggle.getAttribute('aria-expanded') === 'true';
-      menuToggle.setAttribute('aria-expanded', (!expanded).toString());
-      menu.classList.toggle('active');
-    });
-  }
-
-  /* ---------- Search functionality ---------- */
-  const searchForm = document.getElementById('searchForm');
-  const searchInput = document.getElementById('searchInput');
-  const searchResults = document.getElementById('searchResults');
-  const searchClear = document.getElementById('searchClear');
-
-  const SITE_INDEX = [
-    { title: "10 Nutrition Tips for a Healthier Life", url: "nutrition-tips.html", excerpt: "Improve energy and immunity with science-backed nutrition steps." },
-    { title: "Managing Stress for Mental Clarity", url: "managing-stress.html", excerpt: "Evidence-based techniques to reduce stress and improve focus." },
-    { title: "Holistic Living: Balance Mind, Body & Soul", url: "holistic-living.html", excerpt: "A guide to holistic health and balance for modern life." }
-  ];
-
-  function renderResults(results) {
-    if (!results.length) {
-      searchResults.innerHTML = '<div class="result"><p>No results found.</p></div>';
-    } else {
-      searchResults.innerHTML = results
-        .map(r => `<div class="result"><a href="${r.url}">${r.title}</a><p>${r.excerpt}</p></div>`)
-        .join('');
-    }
-    searchResults.style.display = 'block';
-  }
-
-  function runSearch(query) {
-    const q = query.trim().toLowerCase();
-    if (!q) {
-      searchResults.style.display = 'none';
-      searchClear.hidden = true;
-      return;
-    }
-    searchClear.hidden = false;
-    const results = SITE_INDEX.filter(i =>
-      i.title.toLowerCase().includes(q) || i.excerpt.toLowerCase().includes(q)
-    );
-    renderResults(results);
-  }
-
-  if (searchForm) {
-    searchForm.addEventListener('submit', e => {
-      e.preventDefault();
-      runSearch(searchInput.value);
-    });
-    searchInput.addEventListener('input', () => runSearch(searchInput.value));
-    searchClear.addEventListener('click', () => {
-      searchInput.value = '';
-      searchResults.style.display = 'none';
-      searchClear.hidden = true;
-    });
-  }
-
-  /* ---------- M-Pesa notification ---------- */
-  const mpesaBtn = document.getElementById('mpesaNotifyBtn');
-  if (mpesaBtn) {
-    mpesaBtn.addEventListener('click', function () {
       const tx = document.getElementById('mpesaTx').value.trim();
-      if (!tx) {
-        alert('Please enter your M-Pesa transaction ID (e.g., O3K45X123).');
-        return;
-      }
-      alert('Thank you! We’ve received your M-Pesa Transaction ID: ' + tx + '. We’ll verify and email you shortly.');
+      if(!tx){ alert('Please enter your M-Pesa transaction ID (e.g., O3K45X123).'); return; }
+      alert('Thanks — we received your M-Pesa Transaction ID: ' + tx + '\\nWe will verify and respond by email.');
     });
   }
 
-  /* ---------- Floating WhatsApp Chat ---------- */
-  const whatsappLink = document.createElement('a');
-  whatsappLink.href = "https://chat.whatsapp.com/BmBFZe4Xu7g73QBstg256C?mode=ems_copy_t";
-  whatsappLink.className = "whatsapp-float";
-  whatsappLink.target = "_blank";
-  whatsappLink.innerHTML = '<i class="bi bi-whatsapp"></i>';
-  document.body.appendChild(whatsappLink);
-
-  /* ---------- Lazy-load images ---------- */
-  document.querySelectorAll('img').forEach(img => {
-    if (!img.hasAttribute('loading')) img.setAttribute('loading', 'lazy');
-  });
-
-  /* ---------- Auto reload AdSense (optional) ---------- */
-  if (window.adsbygoogle) {
-    setInterval(() => {
-      document.querySelectorAll('.adsbygoogle').forEach(ad => {
-        try {
-          (adsbygoogle = window.adsbygoogle || []).push({});
-        } catch (err) {
-          console.warn('AdSense reload skipped:', err);
-        }
-      });
-    }, 120000); // every 2 minutes
-  }
+  // lazy-load images
+  document.querySelectorAll('img').forEach(img => { if(!img.getAttribute('loading')) img.setAttribute('loading','lazy'); });
 
 });
-
-if (window.innerWidth > 360) {
-  setTimeout(showModal, 5000);
-}
-
-if (!sessionStorage.getItem('bookingSeen')) {
-  setTimeout(function(){ showModal(); sessionStorage.setItem('bookingSeen','1'); }, 5000);
-}
