@@ -26,15 +26,86 @@
 
   <!-- Structured Data (Organization) -->
   <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"Organization",
-    "name":"The Esthetics Hub",
-    "url":"https://esthetics03-ops.github.io/",
-    "logo":"https://esthetics03-ops.github.io/g1.png",
-    "contactPoint":[{"@type":"ContactPoint","contactType":"Customer Service","telephone":"+254113379488","email":"esthetics03@gmail.com"}]
-  }
-  </script>
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://esthetics03-ops.github.io/#organization",
+      "name": "The Esthetics Hub",
+      "url": "https://esthetics03-ops.github.io/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://esthetics03-ops.github.io/g1.png"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+254113379488",
+        "email": "esthetics03@gmail.com",
+        "contactType": "Customer Support"
+      },
+      "sameAs": [
+        "https://www.facebook.com/",
+        "https://www.instagram.com/",
+        "https://twitter.com/"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://esthetics03-ops.github.io/#website",
+      "url": "https://esthetics03-ops.github.io/",
+      "name": "The Esthetics Hub",
+      "publisher": {
+        "@id": "https://esthetics03-ops.github.io/#organization"
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://esthetics03-ops.github.io/?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://esthetics03-ops.github.io/#webpage",
+      "url": "https://esthetics03-ops.github.io/",
+      "name": "The Esthetics Hub — Live Better, Live Longer",
+      "description": "Research-based insights on holistic living, nutrition, and mental health.",
+      "inLanguage": "en",
+      "isPartOf": {
+        "@id": "https://esthetics03-ops.github.io/#website"
+      },
+      "publisher": {
+        "@id": "https://esthetics03-ops.github.io/#organization"
+      }
+    },
+    {
+      "@type": "ItemList",
+      "@id": "https://esthetics03-ops.github.io/#article-list",
+      "name": "Latest Articles",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "url": "https://esthetics03-ops.github.io/nutrition-tips.html",
+          "name": "10 Nutrition Tips for a Healthier Life"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "url": "https://esthetics03-ops.github.io/managing-stress.html",
+          "name": "Managing Stress for Mental Clarity"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "url": "https://esthetics03-ops.github.io/holistic-living.html",
+          "name": "Holistic Living: Balance Mind, Body & Soul"
+        }
+      ]
+    }
+  ]
+}
+</script>
 
   <!-- AdSense -->
   <script data-ad-client="ca-pub-1959507280210179" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
