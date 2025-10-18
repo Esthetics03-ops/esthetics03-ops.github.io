@@ -1,3 +1,13 @@
+function showModal(){
+  const modal = document.getElementById('bookingModal');
+  if(modal){
+    modal.style.display = 'flex';
+    modal.setAttribute('aria-hidden','false');
+    trapFocus(modal);
+  }
+}
+window.showModal = showModal;
+
 document.addEventListener('DOMContentLoaded', function () {
 
   // Dropdown toggles
