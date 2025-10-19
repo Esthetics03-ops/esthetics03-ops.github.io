@@ -20,6 +20,11 @@ html {
 }
 
 /* Hero image overlay animation */
+img {
+  max-width: 100%; /* Ensures the image never exceeds the width of its parent container */
+  height: auto;    /* Maintains the image's aspect ratio, preventing distortion */
+  display: block;  /* Removes extra space below the image, common with inline elements */
+}
 .about-hero-text {
   position: absolute;
   top: 50%;
