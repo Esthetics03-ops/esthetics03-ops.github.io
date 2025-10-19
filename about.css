@@ -1,5 +1,11 @@
 /* --- Existing styles remain as before --- */
-
+body {
+  background-image: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  background-attachment: fixed;
+}
 /* Smooth scrolling across site */
 html {
   scroll-behavior: smooth;
