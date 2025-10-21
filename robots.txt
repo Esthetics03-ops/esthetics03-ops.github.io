@@ -1,3 +1,9 @@
+# robots.txt for The Esthetics Hub
 User-agent: *
 Allow: /
+
+# Disallow unnecessary system paths (optional)
+Disallow: /cgi-bin/
+Disallow: /tmp/
+
 Sitemap: https://esthetics03-ops.github.io/sitemap.xml
