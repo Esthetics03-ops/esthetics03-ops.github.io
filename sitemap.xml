@@ -1,29 +1,127 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- Main pages -->
   <url>
     <loc>https://esthetics03-ops.github.io/</loc>
     <lastmod>2025-10-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
+
   <url>
-    <loc>https://esthetics03-ops.github.io/nutrition-tips.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
+    <loc>https://esthetics03-ops.github.io/about.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
   </url>
-  <url>
-    <loc>https://esthetics03-ops.github.io/managing-stress.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://esthetics03-ops.github.io/holistic-living.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
+
   <url>
     <loc>https://esthetics03-ops.github.io/contact.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
+
+  <!-- Blog Articles -->
+  <url>
+    <loc>https://esthetics03-ops.github.io/nutrition-tips.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://esthetics03-ops.github.io/managing-stress.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://esthetics03-ops.github.io/holistic-living.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://esthetics03-ops.github.io/posts.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Gallery -->
+  <url>
+    <loc>https://esthetics03-ops.github.io/gallery/photos.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://esthetics03-ops.github.io/gallery/360.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://esthetics03-ops.github.io/gallery/featured.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Videos -->
+  <url>
+    <loc>https://esthetics03-ops.github.io/videos/tutorials.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://esthetics03-ops.github.io/videos/interviews.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://esthetics03-ops.github.io/videos/highlights.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- PDFs -->
+  <url>
+    <loc>https://esthetics03-ops.github.io/pdfs/guides.pdf</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://esthetics03-ops.github.io/pdfs/research.pdf</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://esthetics03-ops.github.io/pdfs/checklists.pdf</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Policy Pages -->
+  <url>
+    <loc>https://esthetics03-ops.github.io/privacy.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+
+  <url>
+    <loc>https://esthetics03-ops.github.io/terms.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+
+  <url>
+    <loc>https://esthetics03-ops.github.io/disclaimer.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+
 </urlset>
