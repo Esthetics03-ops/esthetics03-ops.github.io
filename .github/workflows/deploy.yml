@@ -1,9 +1,9 @@
-name: 🚀 Deploy to GitHub Pages
+name: 🌍 Auto Deploy to GitHub Pages + Firebase Hosting
 
 on:
   push:
     branches:
-      - main  # or master if that's your default branch
+      - main  # Triggers deployment whenever you push to main
 
 permissions:
   contents: read
@@ -11,7 +11,7 @@ permissions:
   id-token: write
 
 jobs:
-  build:
+  build-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,13 +24,22 @@ jobs:
           node-version: 20
 
       - name: 📦 Install dependencies
-        run: npm ci || npm install
+        run: npm ci || npm install || echo "No dependencies to install"
 
       - name: 🏗️ Build project
-        run: npm run build || echo "No build step"
+        run: npm run build || echo "No build step required"
 
+      # --- 🚀 Deploy to GitHub Pages ---
       - name: 🚀 Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./  # or ./dist if you build to a folder
+          publish_dir: ./  # Root directory since your files are at the top level
+
+      # --- 🔥 Deploy to Firebase Hosting ---
+      - name: 🔥 Deploy to Firebase Hosting
+        uses: w9jds/firebase-action@v13
+        with:
+          args: deploy --only hosting
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
