@@ -3,106 +3,122 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Learn more about The Esthetics Hub – our story, mission, vision, and how we help people live better and longer." />
-  <title>About Us | The Esthetics Hub</title>
-  
-    <link rel="stylesheet" href="about.css" />
+  <title>About Us | The Esthetics Hub — Live Better, Live Longer</title>
+  <meta name="description" content="Discover The Esthetics Hub — inspiring wellness, balance, and longevity through research-backed insights on holistic living." />
+  <link rel="icon" href="g1.png" type="image/png" />
+  <link rel="stylesheet" href="about.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
 
+  <!-- Google AdSense -->
+  <meta name="google-adsense-account" content="ca-pub-1959507280210179" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1959507280210179" crossorigin="anonymous"></script>
+
+  <!-- Google Analytics (GA4) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXX');
+  </script>
 </head>
+
 <body>
-  <!-- Header -->
-  <header>
-    <nav>
-      <h1><a href="index.html">The Esthetics Hub</a></h1>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="post.html">Blog</a></li>
-        <li><a href="about.html" class="active">About</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
-    </nav>
+  <header class="eh-header">
+    <div class="header-inner">
+      <div class="logo-wrap">
+        <img src="g1.png" alt="The Esthetics Hub Logo" class="logo" />
+        <h1>The Esthetics Hub</h1>
+      </div>
+      <nav class="nav">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="posts.html">Blog</a></li>
+          <li><a href="gallery/photos.html">Gallery</a></li>
+          <li><a href="videos/tutorials.html">Videos</a></li>
+          <li><a href="pdfs/guides.pdf" target="_blank">PDFs</a></li>
+          <li><a href="about.html" class="active">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
   </header>
 
-  <!-- Hero -->
-  <section class="about-hero">
-    <img src="green3.jpg" alt="Wellness and lifestyle background" />
-    <div class="about-hero-text">
+  <main class="about-content">
+    <section class="about-intro">
       <h2>About Us</h2>
-      <p>Inspiring wellness, balance, and longevity through knowledge.</p>
+      <p class="subtitle">Inspiring wellness, balance, and longevity through knowledge.</p>
+    </section>
+
+    <section class="about-story">
+      <h3>Our Story</h3>
+      <p>
+        The Esthetics Hub was created with one goal in mind: to empower people to live better and longer by sharing
+        research-backed insights on nutrition, mental health, and holistic living. What began as a simple passion
+        project has grown into a trusted source for wellness enthusiasts worldwide.
+      </p>
+    </section>
+
+    <section class="about-mission">
+      <h3>Our Mission</h3>
+      <p>
+        We aim to enlighten, educate, and motivate our readers to make positive lifestyle changes that last a lifetime.
+        By focusing on accessible, practical advice, we help our community move closer to their health and happiness
+        goals every day.
+      </p>
+    </section>
+
+    <section class="about-vision">
+      <h3>Our Vision</h3>
+      <p>
+        To become a global platform for holistic well-being – a place where people can learn, connect, and grow toward a healthier future.
+      </p>
+
+      <ul class="focus-list">
+        <li>Science-backed health and nutrition advice</li>
+        <li>Mindfulness and mental well-being practices</li>
+        <li>Inspiration for everyday living</li>
+      </ul>
+    </section>
+
+    <section class="subscribe">
+      <h3>Stay Connected</h3>
+      <p>Join our community to receive wellness tips, research insights, and lifestyle inspiration directly in your inbox.</p>
+      <form class="subscribe-form">
+        <input type="email" placeholder="Enter your email" required />
+        <button type="submit" class="btn-primary">Subscribe</button>
+      </form>
+    </section>
+
+    <section class="socials">
+      <h3>Follow Us</h3>
+      <div class="social-icons">
+        <a href="https://facebook.com/" class="facebook" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+        <a href="https://instagram.com/" class="instagram" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+        <a href="https://twitter.com/" class="twitter" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
+        <a href="mailto:esthetics03@gmail.com" class="email" aria-label="Email"><i class="bi bi-envelope"></i></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <h4>The Esthetics Hub</h4>
+        <p>Live better, live longer — one mindful choice at a time.</p>
+      </div>
+
+      <div class="footer-contact">
+        <p>
+          <i class="bi bi-envelope"></i> <a href="mailto:esthetics03@gmail.com">esthetics03@gmail.com</a><br />
+          <i class="bi bi-telephone"></i> <a href="tel:+254113379488">+254 113 379488</a>
+        </p>
+      </div>
     </div>
-  </section>
-
-  <!-- Our Story -->
-  <section class="about-content scroll-trigger">
-    <h3>Our Story</h3>
-    <p>
-      The Esthetics Hub was created with one goal in mind: to empower people to
-      live better and longer by sharing research-backed insights on nutrition,
-      mental health, and holistic living. What began as a simple passion
-      project has grown into a trusted source for wellness enthusiasts worldwide.
-    </p>
-  </section>
-
-  <!-- Our Mission -->
-  <section class="about-content scroll-trigger">
-    <h3>Our Mission</h3>
-    <p>
-      We aim to enlighten, educate, and motivate our readers to make positive
-      lifestyle changes that last a lifetime. By focusing on accessible,
-      practical advice, we help our community move closer to their health and
-      happiness goals every day.
-    </p>
-  </section>
-
-  <!-- Our Vision -->
-  <section class="about-content scroll-trigger">
-    <h3>Our Vision</h3>
-    <p>
-      To become a global platform for holistic well-being – a place where
-      people can learn, connect, and grow toward a healthier future.
-    </p>
-    <ul>
-      <li>Science-backed health and nutrition advice</li>
-      <li>Mindfulness and mental well-being practices</li>
-      <li>Inspiration for everyday living</li>
-    </ul>
-  </section>
-
-  <!-- Call to Action -->
-  <section class="about-cta scroll-trigger">
-    <h3>Stay Connected</h3>
-    <p>
-      Join our community to receive wellness tips, research insights, and
-      lifestyle inspiration directly in your inbox.
-    </p>
-    <form class="newsletter-form">
-      <input type="email" placeholder="Enter your email" required />
-      <button type="submit">Subscribe</button>
-    </form>
-  </section>
-
-  <!-- Footer -->
-  <footer>
-    <p>&copy; 2025 The Esthetics Hub. All rights reserved.</p>
-    <p>Contact: <a href="mailto:esthetics03@gmail.com">esthetics03@gmail.com</a> +254113379488</p>
+    <div class="footer-bottom">
+      <p>&copy; 2025 The Esthetics Hub. All Rights Reserved.</p>
+    </div>
   </footer>
-  
-  <!-- Scroll-trigger Animation Script -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const elements = document.querySelectorAll(".scroll-trigger");
-
-      const observer = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("active");
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.2 });
-
-      elements.forEach(el => observer.observe(el));
-    });
-  </script>
 </body>
-</html>
+  </html>
