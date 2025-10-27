@@ -72,6 +72,9 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function closeModal(modal){
+    document.getElementById('closeBookingModal').onclick = function() {
+  document.getElementById('bookingModal').style.display = 'none';
+};
     if(!modal) return;
     modal.style.display = 'none';
     modal.setAttribute('aria-hidden','true');
