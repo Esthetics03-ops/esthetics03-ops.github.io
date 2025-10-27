@@ -1,0 +1,18 @@
+name: Sync Google Business Profile
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Sync Business Profile
+        run: |
+          echo "Syncing The Esthetics Hub profile to Google Business..."
+          echo "Please replace the placeholder API key in config/placeholder.key"
