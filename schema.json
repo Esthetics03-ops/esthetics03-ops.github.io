@@ -1,17 +1,33 @@
+
 {
   "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  "name": "The Esthetics Hub",
-  "image": "https://esthetics03-ops.github.io/g1.png",
-  "telephone": "+254113379488",
-  "email": "esthetics03@gmail.com",
-  "address": {
-    "@type": "PostalAddress",
-    "addressLocality": "Riva Rori"
-  },
-  "url": "https://esthetics03-ops.github.io/",
-  "sameAs": [
-    "https://www.facebook.com/",
-    "https://www.instagram.com/"
+  "@graph": [
+    {
+      "@type": "Organization",
+      "name": "The Esthetics Hub",
+      "url": "https://esthetics03-ops.github.io",
+      "logo": "https://esthetics03-ops.github.io/assets/img/logo.png",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+254113379488",
+        "contactType": "Customer Service",
+        "email": "esthetics03@gmail.com"
+      }
+    },
+    {
+      "@type": "Article",
+      "headline": "Holistic Living: Balance Mind, Body, and Soul",
+      "author": "The Esthetics Hub",
+      "publisher": {
+        "@type": "Organization",
+        "name": "The Esthetics Hub",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://esthetics03-ops.github.io/assets/img/logo.png"
+        }
+      },
+      "url": "https://esthetics03-ops.github.io/articles/holistic-living.html",
+      "datePublished": "2025-10-29"
+    }
   ]
 }
