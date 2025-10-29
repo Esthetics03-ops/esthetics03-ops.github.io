@@ -1,15 +1,15 @@
 # robots.txt for The Esthetics Hub
 
-# Allow all crawlers
-User-agent: *
-Allow: /
-
-# Explicitly allow AdSense crawler
+# Allow AdSense crawler
 User-agent: Mediapartners-Google
 Allow: /
 
 # Allow regular Googlebot for SEO
 User-agent: Googlebot
+Allow: /
+
+# Allow all other crawlers
+User-agent: *
 Allow: /
 
 # Disallow unnecessary system paths (optional)
