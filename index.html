@@ -339,14 +339,23 @@
   <h2 style="text-align:center; margin-top:40px;">Sponsored</h2>
 <!-- AdSense Responsive Banner -->
 <ins class="adsbygoogle"
-     style="display:block"
+     style="display:block; text-align:center; margin:20px auto;"
      data-ad-client="ca-pub-1959507280210179"
-     data-ad-slot="3278904561"
+     data-ad-slot="1234567890"
      data-ad-format="auto"
      data-full-width-responsive="true"></ins>
 
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
+<<script>
+  // Wait until AdSense script is loaded before pushing
+  function loadAds() {
+    if (window.adsbygoogle && window.adsbygoogle.push) {
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    } else {
+      // Retry after a short delay if not ready
+      setTimeout(loadAds, 500);
+    }
+  }
+  document.addEventListener('DOMContentLoaded', loadAds);
 </script>
 </section>
 
