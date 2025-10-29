@@ -41,6 +41,14 @@
 
  <!-- Global Site Tag (gtag.js) - Google Analytics -->
 <script src="analytics.js" defer></script> 
+    <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
   <!-- Structured Data (Organization) -->
 <script type="application/ld+json">
 {
@@ -162,6 +170,10 @@
       <ul class="eh-menu" id="mainMenu">
         <li><a href="index.html">Home</a></li>
         <li><a href="posts.html">Blog</a></li>
+         <li><a href="privacy.html">Privacy</a></li>
+        <li><a href="cta.html">Get Involved</a></li>
+      
+        
         <li class="eh-dropdown">
           <button class="eh-dropbtn" aria-expanded="false">Gallery <i class="bi bi-caret-down-fill" aria-hidden="true"></i></button>
           <div class="eh-dropdown-panel" role="menu" aria-hidden="true">
