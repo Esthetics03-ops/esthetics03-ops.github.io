@@ -8,24 +8,14 @@ Allow: /
 User-agent: Mediapartners-Google
 Allow: /
 
-# Disallow unnecessary system paths (optional)
-Disallow: /cgi-bin/
-Disallow: /tmp/
-
-# Sitemap location
-Sitemap: https://esthetics03-ops.github.io/sitemap.xml
-# Allow all Google crawlers, including AdSense
-User-agent: Mediapartners-Google
-Allow: /
-
 # Allow regular Googlebot for SEO
 User-agent: Googlebot
 Allow: /
 
-# Allow all other bots (optional, can restrict if needed)
-User-agent: *
+# Disallow unnecessary system paths (optional)
+Disallow: /cgi-bin/
+Disallow: /tmp/
 Disallow: /private/
-Allow: /
 
-# Sitemap (optional, improves SEO)
+# Sitemap location
 Sitemap: https://esthetics03-ops.github.io/sitemap.xml
