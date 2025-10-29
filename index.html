@@ -143,6 +143,18 @@
   ]
 }
 </script>
+  <!-- ✅ Lazy-load AdSense rendering -->
+<script>
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 600 && !window.adsLoaded) {
+      (adsbygoogle = window.adsbygoogle || []).push({});
+      window.adsLoaded = true; // Prevent multiple triggers
+    }
+  });
+</script>
+
+</body>
+</html>
 
   <!-- AdSense -->
   <script data-ad-client="ca-pub-1959507280210179" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
