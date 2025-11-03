@@ -11,3 +11,4 @@ for (const file of fs.readdirSync(dir)) {
       .toFile(`${dir}/${file}.webp`);
   }
 }
+console.log("✅ Images converted to WebP");
