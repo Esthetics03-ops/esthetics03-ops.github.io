@@ -1,47 +1,65 @@
-name: Auto Deploy to GitHub Pages + Firebase Hosting
+name: Build and Deploy to GitHub Pages
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
+  workflow_dispatch:
 
 permissions:
   contents: read
   pages: write
   id-token: write
 
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
 jobs:
-  build_and_deploy:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      # Install Node (if using JS build tools)
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "18"
+          node-version: '18'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       - name: Build site
         run: npm run build
-        # Adjust above build command if you use a different tool (hugo, jekyll, etc.)
 
-      # Upload artifact for GitHub Pages
-      - name: Upload artifact for GitHub Pages
-        uses: actions/upload-pages-artifact@v1
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
         with:
-          path: ./build   # <-- CHANGE this to your build output (e.g., ./public or ./dist)
+          name: site-dist-${{ github.run_id }}
+          path: ./dist
+          if-no-files-found: error
+          include-hidden-files: true
+          
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
 
-      - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v1
-
-      - name: Deploy to Firebase Hosting
-        uses: FirebaseExtended/action-hosting-deploy@v0
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
         with:
-          repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}  # base64-encoded JSON
-          projectId: your-firebase-project-id
-          # channelId: live   # optional: use a preview channel or 'live' for production
+          name: site-dist-${{ github.run_id }}
+          path: ./dist
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload to GitHub Pages
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: ./dist
+
+      - name: Deploy
+        uses: actions/deploy-pages@v4
