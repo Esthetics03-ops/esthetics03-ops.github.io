@@ -1,0 +1,36 @@
+name: Lighthouse CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+jobs:
+  lhci:
+    name: Lighthouse Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install Dependencies
+        run: |
+          npm ci || npm install
+          npm install -g @lhci/cli@0.12.x
+
+      # If your site needs to be built — uncomment this block:
+      # - name: Build site
+      #   run: npm run build
+
+      # For GitHub Pages static URL
+      - name: Run Lighthouse CI
+        run: |
+          lhci autorun \
+          --collect.url=https://esthetics03-ops.github.io \
+          --upload.target=temporary-public-storage
