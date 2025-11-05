@@ -41,6 +41,7 @@ We will regularly review and update our security policy to ensure it remains eff
 Contact Us
 
 If you have any questions or concerns about our security policy, please contact us at mailto:security@esthetics03-ops.github.io.
+Call +254113379488
 
 Commitment to Security
 
