@@ -37,6 +37,18 @@ crossorigin="anonymous"></script>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>The Esthetics Hub | Holistic Wellness & Lifestyle — Live Better, Live Longer</title>
+ <title>The Esthetics Hub — Live Better, Live Longer</title>
+<meta name="description" content="Evidence-based nutrition, mental wellness, and healthy lifestyle insights to help you live longer and feel better every day.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="canonical" href="https://esthetics03-ops.github.io/" />
+<meta name="robots" content="index, follow">
+
+<!-- Social sharing -->
+<meta property="og:title" content="The Esthetics Hub — Live Better, Live Longer">
+<meta property="og:description" content="Holistic wellness, nutrition & mental clarity insights for long-life health.">
+<meta property="og:url" content="https://esthetics03-ops.github.io/">
+<meta property="og:type" content="website"> 
   <meta name="description" content="Research-based insights on holistic living, nutrition, and mental health."/>
   <meta name="description" content="Explore research-based insights on nutrition, mental health, and holistic living from The Esthetics Hub." />
   <meta name="google-adsense-account" content="ca-pub-1959507280210179"/>
@@ -56,6 +68,38 @@ crossorigin="anonymous"></script>
   <input id="search-input" placeholder="Search the blog…" aria-label="Search articles">
   <div id="search-results" role="list"></div>
 </div>
+
+  <script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "Organization",
+ "name": "The Esthetics Hub",
+ "url": "https://esthetics03-ops.github.io/",
+ "logo": "https://esthetics03-ops.github.io/logo.png",
+ "sameAs": [
+   "https://www.instagram.com/theestheticshub",
+   "https://www.youtube.com/@theestheticshub"
+ ]
+}
+  </script>
+
+  <script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "Article",
+ "headline": "TITLE OF THE ARTICLE",
+ "description": "Short summary of article.",
+ "datePublished": "2025-01-01",
+ "author": {
+   "@type": "Person",
+   "name": "The Esthetics Hub"
+ },
+ "publisher": {
+   "@type": "Organization",
+   "name": "The Esthetics Hub"
+ }
+}
+  </script>
 
 <script src="/assets/js/search.js" defer></script>
   <!-- Open Graph -->
@@ -414,12 +458,14 @@ crossorigin="anonymous"></script>
   <a class="cta-button" href="posts.html">Start Your Wellness Journey</a>
 </section>
 
-<section class="lead-magnet">
-  <h2>Free: 14-Day Mind & Body Reset Guide</h2>
-  <form>
-    <input type="email" placeholder="Enter your email">
-    <button>Get My Free Guide</button>
-  </form>
+<section class="lead-cta">
+ <h2>Free 14-Day Wellness Reset</h2>
+ <p>Daily nutrition & mental clarity steps delivered to your inbox.</p>
+
+ <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+   <input type="email" name="email" placeholder="Enter your email" required>
+   <button type="submit">Get Free Guide</button>
+ </form>
 </section>
 
     <!-- ✅ Visible AdSense Ad Block -->
@@ -601,6 +647,8 @@ View wellness travel deals on Booking.com
     <a href="privacy.html">Privacy Policy</a> |
     <a href="cookies.html">Cookie Policy</a>
   </p></div>
+
+    <p><em>This site contains affiliate links. We may earn a small commission at no extra cost to you.</em></p>
     <!-- Footer Ad -->
     <ins class="adsbygoogle"
          style="display:block; text-align:center;"
@@ -613,6 +661,21 @@ View wellness travel deals on Booking.com
 
   <a href="https://chat.whatsapp.com/BmBFZe4Xu7g73QBstg256C?mode=ems_copy_t" class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp"><i class="bi bi-whatsapp" aria-hidden="true"></i>
        </a>
+  
+  <div id="cookieBox" style="position:fixed;bottom:0;width:100%;padding:10px;background:#222;color:#fff;text-align:center;z-index:1000;">
+This site uses cookies to improve your experience.
+<button onclick="acceptCookies()" style="margin-left:10px;">Okay</button>
+</div>
+
+<script>
+function acceptCookies() {
+ document.getElementById("cookieBox").style.display="none";
+ localStorage.setItem("cookieConsent", "yes");
+}
+if(localStorage.getItem("cookieConsent")==="yes"){
+ document.getElementById("cookieBox").style.display="none";
+}
+</script>
 
   <script src="script.js" defer></script>
   <script>
@@ -675,5 +738,16 @@ window.addEventListener('scroll', function() {
   }
 });
   </script>
+  <script>
+document.querySelectorAll('a[href*="amazon"]').forEach(link => {
+ link.addEventListener('click', () => {
+   gtag('event', 'affiliate_click', {
+     'event_category': 'Affiliate',
+     'event_label': link.href
+   });
+ });
+});
+  </script>
+  <script defer src="main.js"></script>
 </body>
 </html>
