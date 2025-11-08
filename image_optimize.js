@@ -1,0 +1,1 @@
+// JavaScript to convert images to WebP and lazy-load

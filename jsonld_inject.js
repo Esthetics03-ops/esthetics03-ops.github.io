@@ -1,0 +1,1 @@
+// JavaScript to inject JSON-LD dynamically
