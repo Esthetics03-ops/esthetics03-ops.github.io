@@ -1,21 +1,3 @@
-# robots.txt for The Esthetics Hub
-
-# Allow AdSense crawler
-User-agent: Mediapartners-Google
-Allow: /
-
-# Allow regular Googlebot for SEO
-User-agent: Googlebot
-Allow: /
-
-# Allow all other crawlers
 User-agent: *
 Allow: /
-
-# Disallow unnecessary system paths
-Disallow: /cgi-bin/
-Disallow: /tmp/
-Disallow: /private/
-
-# Sitemap location
 Sitemap: https://esthetics03-ops.github.io/sitemap.xml
