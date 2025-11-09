@@ -185,6 +185,25 @@ let monetizationSources = [
 
 let cumulativeEarnings = {today:19.60,week:67.55,month:248.45,lifetime:1044.50};
 
+// Previous values for smooth animation
+let prevAdsense = 0, prevAffiliate = 0, prevDonations = 0, prevTotal = 0;
+
+// Animate number helper
+function animateValue(id, start, end, duration) {
+    const obj = document.getElementById(id);
+    const range = end - start;
+    let startTime = null;
+    function step(timestamp) {
+        if (!startTime) startTime = timestamp;
+        const progress = Math.min((timestamp - startTime) / duration, 1);
+        const value = (start + range * progress).toFixed(2);
+        obj.textContent = `$${value}`;
+        if (progress < 1) window.requestAnimationFrame(step);
+    }
+    window.requestAnimationFrame(step);
+}
+
+// Render dashboard function
 function renderDashboard() {
     const now = new Date();
     document.getElementById("timestamp").textContent = `Last updated: ${now.toLocaleTimeString()} • Auto-refreshes every 1 minute`;
@@ -213,21 +232,27 @@ function renderDashboard() {
                       <tr><td>Lifetime Estimate</td><td>$${cumulativeEarnings.lifetime} USD</td></tr>`;
     document.getElementById("cumulative-earnings").innerHTML = earnBody;
 
-    // Update new live monetisation summary
-    const adsense = monetizationSources[0].base[0];
+    // Update new live monetisation summary with smooth animation
+    const adsense = +monetizationSources[0].base[0];
     const affiliate = (+monetizationSources[1].base[0] + +monetizationSources[2].base[0]).toFixed(2);
-    const donations = monetizationSources[3].base[0];
+    const donations = +monetizationSources[3].base[0];
     const total = (+adsense + +affiliate + +donations).toFixed(2);
 
-    document.getElementById("adsense-earnings").textContent = `$${adsense}`;
-    document.getElementById("affiliate-earnings").textContent = `$${affiliate}`;
-    document.getElementById("donation-earnings").textContent = `$${donations}`;
-    document.getElementById("total-earnings").textContent = `$${total}`;
+    animateValue('adsense-earnings', prevAdsense, adsense, 800);
+    animateValue('affiliate-earnings', prevAffiliate, +affiliate, 800);
+    animateValue('donation-earnings', prevDonations, donations, 800);
+    animateValue('total-earnings', prevTotal, +total, 800);
+
+    prevAdsense = adsense;
+    prevAffiliate = +affiliate;
+    prevDonations = donations;
+    prevTotal = +total;
 }
 
+// Initial render and auto-refresh
 renderDashboard();
-setInterval(renderDashboard,60000); // refresh every 60s
+setInterval(renderDashboard,60000);
 </script>
 
 </body>
-    </html>
+  </html>
