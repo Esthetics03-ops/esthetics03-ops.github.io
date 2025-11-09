@@ -45,6 +45,19 @@
 <!-- ✅ AdSense Verification -->
 <meta name="google-adsense-account" content="ca-pub-1959507280210179">
 
+  <script>
+async function runLiveMonetisation() {
+  const response = await fetch('https://api.estheticshub.live/monetisation?refresh=true');
+  const data = await response.json();
+  document.getElementById('revenue-today').innerText = `$${data.today.toFixed(2)}`;
+  document.getElementById('monthly-revenue').innerText = `$${data.month.toFixed(2)}`;
+  document.getElementById('yearly-revenue').innerText = `$${data.year.toFixed(2)}`;
+  document.getElementById('total-balance').innerText = `$${data.total.toFixed(2)}`;
+}
+setInterval(runLiveMonetisation, 60000); // auto-refresh every minute
+runLiveMonetisation();
+    </script>
+
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
