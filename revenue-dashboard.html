@@ -252,10 +252,9 @@ function renderDashboard() {
 // Initial render and auto-refresh
 renderDashboard();
 setInterval(renderDashboard,60000);
-</script>
-  
+
   <!-- 🔄 Auto-refresh Script -->
-  <script>
+  
     document.getElementById("year").textContent = new Date().getFullYear();
 
     const sources = [
@@ -309,7 +308,10 @@ setInterval(renderDashboard,60000);
 
     renderTables();
     setInterval(renderTables, 60000); // Refresh every 60s
-  </script>
 
+  
+</script>
+  
+  
 </body>
   </html>
