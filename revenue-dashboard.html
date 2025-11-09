@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="The Esthetics Hub Live Monetisation Dashboard - Real-time AdSense, Affiliate, and Donation analytics simulation.">
+  <meta name="keywords" content="Esthetics Hub, monetisation dashboard, AdSense, affiliate earnings, donations, live analytics">
+  <meta name="author" content="The Esthetics Hub">
+  <title>Live Monetisation Dashboard | The Esthetics Hub</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+
+  <!-- Tailwind CDN for styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <style>
+    body {
+      background: linear-gradient(135deg, #f9fafb 0%, #fefce8 100%);
+      font-family: 'Inter', sans-serif;
+      color: #374151;
+    }
+    h2, h3 {
+      letter-spacing: -0.02em;
+    }
+    .fade-in {
+      animation: fadeIn 1.2s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-center items-center p-6">
+
+  <!-- Monetisation Dashboard -->
+  <section id="monetisation-dashboard" class="fade-in p-6 bg-white/90 backdrop-blur-lg rounded-2xl shadow-lg max-w-4xl w-full border border-amber-100">
+    <h2 class="text-3xl font-semibold mb-6 text-center text-amber-700">💰 Live Monetisation Summary (Simulated)</h2>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+      <div class="p-4 bg-green-50 rounded-xl shadow-sm">
+        <h3 class="text-base font-medium text-gray-600">AdSense</h3>
+        <p id="adsense-earnings" class="text-2xl font-bold text-green-600 mt-1">$0.00</p>
+      </div>
+      <div class="p-4 bg-blue-50 rounded-xl shadow-sm">
+        <h3 class="text-base font-medium text-gray-600">Affiliate</h3>
+        <p id="affiliate-earnings" class="text-2xl font-bold text-blue-600 mt-1">$0.00</p>
+      </div>
+      <div class="p-4 bg-purple-50 rounded-xl shadow-sm">
+        <h3 class="text-base font-medium text-gray-600">Donations</h3>
+        <p id="donation-earnings" class="text-2xl font-bold text-purple-600 mt-1">$0.00</p>
+      </div>
+      <div class="p-4 bg-amber-50 rounded-xl shadow-sm">
+        <h3 class="text-base font-medium text-gray-600">Total</h3>
+        <p id="total-earnings" class="text-3xl font-extrabold text-amber-600 mt-1">$0.00</p>
+      </div>
+    </div>
+
+    <p class="text-center mt-6 text-sm text-gray-500 italic">
+      Last updated: <span id="last-update">—</span> • Auto-refreshes every 60 seconds
+    </p>
+  </section>
+
+  <!-- Footer -->
+  <footer class="mt-10 text-center text-gray-400 text-sm">
+    © <span id="year"></span> The Esthetics Hub — Live Well. Live Longer.
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // --- Simulated data generator ---
+    function fakeEarnings() {
+      return {
+        adsense: +(Math.random() * 8 + 2).toFixed(2),       // $2–10
+        affiliate: +(Math.random() * 6 + 1).toFixed(2),     // $1–7
+        donations: +(Math.random() * 12 + 3).toFixed(2)     // $3–15
+      };
+    }
+
+    function updateMonetisationData() {
+      const data = fakeEarnings();
+      const total = (data.adsense + data.affiliate + data.donations).toFixed(2);
+
+      document.getElementById("adsense-earnings").textContent = `$${data.adsense}`;
+      document.getElementById("affiliate-earnings").textContent = `$${data.affiliate}`;
+      document.getElementById("donation-earnings").textContent = `$${data.donations}`;
+      document.getElementById("total-earnings").textContent = `$${total}`;
+      document.getElementById("last-update").textContent = new Date().toLocaleTimeString();
+    }
+
+    setInterval(updateMonetisationData, 60000);
+    updateMonetisationData();
+  </script>
+</body>
+</html>
