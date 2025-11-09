@@ -1,129 +1,161 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- ✅ Meta & SEO -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="The Esthetics Hub Live Monetisation Dashboard – real-time AdSense, Affiliate, and Donation analytics simulation.">
-  <meta name="keywords" content="Esthetics Hub, wellness, monetisation dashboard, AdSense, affiliate, donations, analytics">
+  <meta name="description" content="Live Monetisation Simulation for The Esthetics Hub – real-time tracking of AdSense, Affiliate, and Donation performance.">
   <meta name="author" content="The Esthetics Hub">
   <link rel="canonical" href="https://esthetics03-ops.github.io/revenue-dashboard.html">
-  <meta property="og:title" content="Live Monetisation Dashboard | The Esthetics Hub">
-  <meta property="og:description" content="Track simulated AdSense, affiliate, and donation earnings – live updates every minute.">
+  <meta property="og:title" content="💰 Live Monetisation Simulation | The Esthetics Hub">
+  <meta property="og:description" content="Track simulated AdSense, Affiliate, and Donation earnings in real time. Updated live with insights and performance analytics.">
+  <meta property="og:image" content="https://esthetics03-ops.github.io/assets/dashboard-preview.jpg">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://esthetics03-ops.github.io/revenue-dashboard.html">
-  <meta property="og:image" content="https://esthetics03-ops.github.io/assets/preview-dashboard.jpg">
   <meta name="theme-color" content="#fef3c7">
+  <title>💰 Live Monetisation Simulation | The Esthetics Hub</title>
 
-  <title>Live Monetisation Dashboard | The Esthetics Hub</title>
-  <link rel="icon" href="favicon.png" type="image/png">
-
-  <!-- ✅ TailwindCSS CDN -->
   <script src="https://cdn.tailwindcss.com?plugins=typography,forms"></script>
-
-  <!-- ✅ Preload Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
   <style>
-    body {
-      background: linear-gradient(135deg, #fafaf9 0%, #fef9c3 100%);
-      font-family: 'Inter', sans-serif;
-      color: #374151;
-      transition: background 0.3s ease-in-out;
-    }
-    h2, h3 { letter-spacing: -0.02em; }
-    .fade-in { animation: fadeIn 0.9s ease-in-out; }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(12px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      * { animation-duration: 0s !important; transition-duration: 0s !important; }
-    }
+    body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg,#fffdf6 0%,#fef9c3 100%); color:#374151; }
+    h2,h3{letter-spacing:-0.02em;}
+    table { width:100%; border-collapse:collapse; margin-top:1rem; }
+    th,td { padding:0.75rem; border-bottom:1px solid #f3f4f6; text-align:left; }
+    th { background:#fef3c7; font-weight:600; color:#92400e; }
+    tr:hover { background:#fff7ed; transition:0.3s; }
+    .fade-in { animation:fadeIn 0.9s ease-in-out; }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(12px);} to{opacity:1;transform:translateY(0);} }
   </style>
-
-  <!-- ✅ JSON-LD Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "The Esthetics Hub",
-    "url": "https://esthetics03-ops.github.io/",
-    "logo": "https://esthetics03-ops.github.io/favicon.png",
-    "sameAs": [
-      "https://www.facebook.com/TheEstheticsHub",
-      "https://www.instagram.com/TheEstheticsHub"
-    ]
-  }
-  </script>
 </head>
 
-<body class="min-h-screen flex flex-col justify-center items-center p-6">
-  <!-- 🪶 Dashboard -->
-  <main id="dashboard" role="main" class="fade-in p-6 bg-white/90 backdrop-blur-lg rounded-2xl shadow-xl max-w-4xl w-full border border-amber-100">
-    <h2 class="text-3xl font-semibold mb-6 text-center text-amber-700">💰 Live Monetisation Summary (Simulated)</h2>
+<body class="min-h-screen flex flex-col items-center p-6">
+  <main class="fade-in bg-white/95 backdrop-blur-lg shadow-xl rounded-2xl p-8 max-w-5xl w-full border border-amber-100">
+    <h2 class="text-3xl font-semibold text-center text-amber-700 mb-2">💰 Live Monetisation Simulation – The Esthetics Hub</h2>
+    <p id="timestamp" class="text-center text-gray-600 mb-6"></p>
 
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-      <section aria-label="AdSense Earnings" class="p-4 bg-green-50 rounded-xl shadow-sm">
-        <h3 class="text-base font-medium text-gray-600">AdSense</h3>
-        <p id="adsense-earnings" class="text-2xl font-bold text-green-600 mt-1">$0.00</p>
+    <!-- Source Metrics Table -->
+    <h3 class="text-xl font-semibold text-amber-800 mt-6 mb-2">Revenue Sources</h3>
+    <div class="overflow-x-auto">
+      <table class="text-sm md:text-base">
+        <thead>
+          <tr>
+            <th>Source</th>
+            <th>Metric</th>
+            <th>Today</th>
+            <th>This Week</th>
+            <th>Month-to-Date</th>
+          </tr>
+        </thead>
+        <tbody id="metrics-table"></tbody>
+      </table>
+    </div>
+
+    <!-- Cumulative Earnings -->
+    <h3 class="text-xl font-semibold text-amber-800 mt-8 mb-2">🔹 Cumulative Live Earnings</h3>
+    <div class="overflow-x-auto">
+      <table class="text-sm md:text-base">
+        <thead>
+          <tr>
+            <th>Period</th>
+            <th>Total Earnings</th>
+          </tr>
+        </thead>
+        <tbody id="earnings-table"></tbody>
+      </table>
+    </div>
+
+    <!-- Performance Insights -->
+    <h3 class="text-xl font-semibold text-amber-800 mt-8 mb-3">⚙️ Performance Insights</h3>
+    <div class="grid md:grid-cols-2 gap-6">
+      <section class="bg-amber-50 p-4 rounded-xl border border-amber-100 shadow-sm">
+        <h4 class="font-semibold text-amber-700 mb-2">Top Performing Blog Pages</h4>
+        <ul class="list-disc list-inside text-gray-700">
+          <li>Mindful Nutrition for Longevity</li>
+          <li>Sleep, Focus & Balance: The Mental Reset Plan</li>
+        </ul>
       </section>
 
-      <section aria-label="Affiliate Earnings" class="p-4 bg-blue-50 rounded-xl shadow-sm">
-        <h3 class="text-base font-medium text-gray-600">Affiliate</h3>
-        <p id="affiliate-earnings" class="text-2xl font-bold text-blue-600 mt-1">$0.00</p>
-      </section>
-
-      <section aria-label="Donation Earnings" class="p-4 bg-purple-50 rounded-xl shadow-sm">
-        <h3 class="text-base font-medium text-gray-600">Donations</h3>
-        <p id="donation-earnings" class="text-2xl font-bold text-purple-600 mt-1">$0.00</p>
-      </section>
-
-      <section aria-label="Total Earnings" class="p-4 bg-amber-50 rounded-xl shadow-sm">
-        <h3 class="text-base font-medium text-gray-600">Total</h3>
-        <p id="total-earnings" class="text-3xl font-extrabold text-amber-600 mt-1">$0.00</p>
+      <section class="bg-amber-50 p-4 rounded-xl border border-amber-100 shadow-sm">
+        <h4 class="font-semibold text-amber-700 mb-2">Traffic Channels</h4>
+        <ul class="list-disc list-inside text-gray-700">
+          <li>Organic Search: 64%</li>
+          <li>Social (Pinterest, Instagram): 20%</li>
+          <li>Direct/Referral: 16%</li>
+        </ul>
       </section>
     </div>
 
-    <p class="text-center mt-6 text-sm text-gray-500 italic">
-      Last updated: <span id="last-update">—</span> • Auto-refreshes every 60 seconds
-    </p>
+    <div class="bg-green-50 p-4 mt-6 rounded-xl border border-green-100 shadow-sm">
+      <h4 class="font-semibold text-green-700 mb-2">Revenue Composition</h4>
+      <ul class="list-disc list-inside text-gray-700">
+        <li>AdSense → 24%</li>
+        <li>Affiliates (Amazon + Booking) → 21%</li>
+        <li>Donations → 55%</li>
+      </ul>
+      <p class="mt-3 text-sm text-gray-600">RPM (Revenue per 1,000 views): ~$4.25</p>
+      <p class="text-sm text-gray-600">Predicted Monthly Payout: ≈ <strong>$355 ± 5%</strong></p>
+    </div>
   </main>
 
-  <!-- Footer -->
   <footer class="mt-10 text-center text-gray-400 text-sm">
     © <span id="year"></span> The Esthetics Hub — Live Well. Live Longer.
   </footer>
 
-  <!-- ✅ JS Optimized for async execution -->
-  <script defer>
+  <!-- 🔄 Auto-refresh Script -->
+  <script>
     document.getElementById("year").textContent = new Date().getFullYear();
 
-    const $ = id => document.getElementById(id);
+    const sources = [
+      { name: "Google AdSense", metric: "Pageviews ~1,620", base: [4.75, 30.10, 132.20] },
+      { name: "Amazon Affiliate", metric: "82 clicks", base: [2.65, 16.20, 68.40] },
+      { name: "Booking.com Affiliate", metric: "3 bookings", base: [1.80, 6.75, 20.25] },
+      { name: "Donations (PayPal + M-Pesa)", metric: "4 transactions", base: [10.40, 14.50, 27.60] }
+    ];
 
-    function fakeEarnings() {
-      return {
-        adsense: +(Math.random() * 8 + 2).toFixed(2),
-        affiliate: +(Math.random() * 6 + 1).toFixed(2),
-        donations: +(Math.random() * 12 + 3).toFixed(2)
-      };
+    const earnings = { today: 19.60, week: 67.55, month: 248.45, lifetime: 1044.50 };
+
+    function renderTables() {
+      const metricsBody = document.getElementById("metrics-table");
+      const earningsBody = document.getElementById("earnings-table");
+      const now = new Date();
+
+      // Update timestamp
+      document.getElementById("timestamp").textContent =
+        `Last updated: ${now.toLocaleTimeString()} • Auto-refreshes every 1 minute`;
+
+      // Random simulation update (+/- small range)
+      sources.forEach(s => {
+        s.base = s.base.map(v => +(v + (Math.random() * 0.3 - 0.15)).toFixed(2));
+      });
+
+      const rows = sources.map(s => `
+        <tr>
+          <td>${s.name}</td>
+          <td>${s.metric}</td>
+          <td>$${s.base[0]}</td>
+          <td>$${s.base[1]}</td>
+          <td>$${s.base[2]}</td>
+        </tr>
+      `).join('');
+      metricsBody.innerHTML = rows;
+
+      // Update cumulative earnings with mild growth
+      earnings.today = +(earnings.today + Math.random() * 0.1).toFixed(2);
+      earnings.week = +(earnings.week + Math.random() * 0.25).toFixed(2);
+      earnings.month = +(earnings.month + Math.random() * 0.6).toFixed(2);
+      earnings.lifetime = +(earnings.lifetime + Math.random() * 0.9).toFixed(2);
+
+      const earnRows = `
+        <tr><td>Today</td><td>$${earnings.today} USD</td></tr>
+        <tr><td>This Week</td><td>$${earnings.week} USD</td></tr>
+        <tr><td>Month-to-Date</td><td>$${earnings.month} USD</td></tr>
+        <tr><td>Lifetime Estimate</td><td>$${earnings.lifetime} USD</td></tr>
+      `;
+      earningsBody.innerHTML = earnRows;
     }
 
-    function updateMonetisationData() {
-      const { adsense, affiliate, donations } = fakeEarnings();
-      const total = (adsense + affiliate + donations).toFixed(2);
-
-      $("adsense-earnings").textContent = `$${adsense}`;
-      $("affiliate-earnings").textContent = `$${affiliate}`;
-      $("donation-earnings").textContent = `$${donations}`;
-      $("total-earnings").textContent = `$${total}`;
-      $("last-update").textContent = new Date().toLocaleTimeString();
-    }
-
-    updateMonetisationData();
-    setInterval(updateMonetisationData, 60000);
+    renderTables();
+    setInterval(renderTables, 60000); // Refresh every 60s
   </script>
 </body>
-          </html>
+  </html>
