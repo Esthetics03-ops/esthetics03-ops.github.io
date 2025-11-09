@@ -65,31 +65,19 @@
     © <span id="year"></span> The Esthetics Hub — Live Well. Live Longer.
   </footer>
 
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
+<script>
+async function updateMonetisationData() {
+  const response = await fetch("https://api.estheticshub.live/monetisation?refresh=true");
+  const data = await response.json();
 
-    // --- Simulated data generator ---
-    function fakeEarnings() {
-      return {
-        adsense: +(Math.random() * 8 + 2).toFixed(2),       // $2–10
-        affiliate: +(Math.random() * 6 + 1).toFixed(2),     // $1–7
-        donations: +(Math.random() * 12 + 3).toFixed(2)     // $3–15
-      };
-    }
+  document.getElementById("adsense-earnings").textContent = `$${data.adsense.toFixed(2)}`;
+  document.getElementById("affiliate-earnings").textContent = `$${data.affiliate.toFixed(2)}`;
+  document.getElementById("donation-earnings").textContent = `$${data.donations.toFixed(2)}`;
+  document.getElementById("total-earnings").textContent = `$${data.total.toFixed(2)}`;
+}
 
-    function updateMonetisationData() {
-      const data = fakeEarnings();
-      const total = (data.adsense + data.affiliate + data.donations).toFixed(2);
-
-      document.getElementById("adsense-earnings").textContent = `$${data.adsense}`;
-      document.getElementById("affiliate-earnings").textContent = `$${data.affiliate}`;
-      document.getElementById("donation-earnings").textContent = `$${data.donations}`;
-      document.getElementById("total-earnings").textContent = `$${total}`;
-      document.getElementById("last-update").textContent = new Date().toLocaleTimeString();
-    }
-
-    setInterval(updateMonetisationData, 60000);
-    updateMonetisationData();
-  </script>
+setInterval(updateMonetisationData, 60000); // Refresh every 60 seconds
+updateMonetisationData();
+</script>
 </body>
 </html>
