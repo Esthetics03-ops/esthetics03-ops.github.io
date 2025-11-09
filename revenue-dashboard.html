@@ -232,7 +232,24 @@ function renderDashboard() {
                       <tr><td>Lifetime Estimate</td><td>$${cumulativeEarnings.lifetime} USD</td></tr>`;
     document.getElementById("cumulative-earnings").innerHTML = earnBody;
 
-    
+    // Update new live monetisation summary with smooth animation
+    const adsense = +monetizationSources[0].base[0];
+    const affiliate = (+monetizationSources[1].base[0] + +monetizationSources[2].base[0]).toFixed(2);
+    const donations = +monetizationSources[3].base[0];
+    const total = (+adsense + +affiliate + +donations).toFixed(2);
+
+    animateValue('adsense-earnings', prevAdsense, adsense, 800);
+    animateValue('affiliate-earnings', prevAffiliate, +affiliate, 800);
+    animateValue('donation-earnings', prevDonations, donations, 800);
+    animateValue('total-earnings', prevTotal, +total, 800);
+
+    prevAdsense = adsense;
+    prevAffiliate = +affiliate;
+    prevDonations = donations;
+    prevTotal = +total;
+}
+
+  
 async function updateMonetisationData() {
   const response = await fetch("https://api.estheticshub.live/monetisation?refresh=true");
   const data = await response.json();
@@ -245,6 +262,12 @@ async function updateMonetisationData() {
 
 setInterval(updateMonetisationData, 60000); // Refresh every 60 seconds
 updateMonetisationData();
+
+
+// Initial render and auto-refresh
+renderDashboard();
+setInterval(renderDashboard,60000);
 </script>
+
 </body>
   </html>
