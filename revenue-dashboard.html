@@ -1,83 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- ✅ Meta & SEO -->
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="The Esthetics Hub Live Monetisation Dashboard - Real-time AdSense, Affiliate, and Donation analytics simulation.">
-  <meta name="keywords" content="Esthetics Hub, monetisation dashboard, AdSense, affiliate earnings, donations, live analytics">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The Esthetics Hub Live Monetisation Dashboard – real-time AdSense, Affiliate, and Donation analytics simulation.">
+  <meta name="keywords" content="Esthetics Hub, wellness, monetisation dashboard, AdSense, affiliate, donations, analytics">
   <meta name="author" content="The Esthetics Hub">
-  <title>Live Monetisation Dashboard | The Esthetics Hub</title>
-  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="canonical" href="https://esthetics03-ops.github.io/revenue-dashboard.html">
+  <meta property="og:title" content="Live Monetisation Dashboard | The Esthetics Hub">
+  <meta property="og:description" content="Track simulated AdSense, affiliate, and donation earnings – live updates every minute.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://esthetics03-ops.github.io/revenue-dashboard.html">
+  <meta property="og:image" content="https://esthetics03-ops.github.io/assets/preview-dashboard.jpg">
+  <meta name="theme-color" content="#fef3c7">
 
-  <!-- Tailwind CDN for styling -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  
+  <title>Live Monetisation Dashboard | The Esthetics Hub</title>
+  <link rel="icon" href="favicon.png" type="image/png">
+
+  <!-- ✅ TailwindCSS CDN -->
+  <script src="https://cdn.tailwindcss.com?plugins=typography,forms"></script>
+
+  <!-- ✅ Preload Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
   <style>
     body {
-      background: linear-gradient(135deg, #f9fafb 0%, #fefce8 100%);
+      background: linear-gradient(135deg, #fafaf9 0%, #fef9c3 100%);
       font-family: 'Inter', sans-serif;
       color: #374151;
+      transition: background 0.3s ease-in-out;
     }
-    h2, h3 {
-      letter-spacing: -0.02em;
-    }
-    .fade-in {
-      animation: fadeIn 1.2s ease-in-out;
-    }
+    h2, h3 { letter-spacing: -0.02em; }
+    .fade-in { animation: fadeIn 0.9s ease-in-out; }
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
+      from { opacity: 0; transform: translateY(12px); }
       to { opacity: 1; transform: translateY(0); }
     }
+    @media (prefers-reduced-motion: reduce) {
+      * { animation-duration: 0s !important; transition-duration: 0s !important; }
+    }
   </style>
-</head>
-<body class="min-h-screen flex flex-col justify-center items-center p-6">
 
-  <!-- Monetisation Dashboard -->
-  <section id="monetisation-dashboard" class="fade-in p-6 bg-white/90 backdrop-blur-lg rounded-2xl shadow-lg max-w-4xl w-full border border-amber-100">
+  <!-- ✅ JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "The Esthetics Hub",
+    "url": "https://esthetics03-ops.github.io/",
+    "logo": "https://esthetics03-ops.github.io/favicon.png",
+    "sameAs": [
+      "https://www.facebook.com/TheEstheticsHub",
+      "https://www.instagram.com/TheEstheticsHub"
+    ]
+  }
+  </script>
+</head>
+
+<body class="min-h-screen flex flex-col justify-center items-center p-6">
+  <!-- 🪶 Dashboard -->
+  <main id="dashboard" role="main" class="fade-in p-6 bg-white/90 backdrop-blur-lg rounded-2xl shadow-xl max-w-4xl w-full border border-amber-100">
     <h2 class="text-3xl font-semibold mb-6 text-center text-amber-700">💰 Live Monetisation Summary (Simulated)</h2>
 
     <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-      <div class="p-4 bg-green-50 rounded-xl shadow-sm">
+      <section aria-label="AdSense Earnings" class="p-4 bg-green-50 rounded-xl shadow-sm">
         <h3 class="text-base font-medium text-gray-600">AdSense</h3>
         <p id="adsense-earnings" class="text-2xl font-bold text-green-600 mt-1">$0.00</p>
-      </div>
-      <div class="p-4 bg-blue-50 rounded-xl shadow-sm">
+      </section>
+
+      <section aria-label="Affiliate Earnings" class="p-4 bg-blue-50 rounded-xl shadow-sm">
         <h3 class="text-base font-medium text-gray-600">Affiliate</h3>
         <p id="affiliate-earnings" class="text-2xl font-bold text-blue-600 mt-1">$0.00</p>
-      </div>
-      <div class="p-4 bg-purple-50 rounded-xl shadow-sm">
+      </section>
+
+      <section aria-label="Donation Earnings" class="p-4 bg-purple-50 rounded-xl shadow-sm">
         <h3 class="text-base font-medium text-gray-600">Donations</h3>
         <p id="donation-earnings" class="text-2xl font-bold text-purple-600 mt-1">$0.00</p>
-      </div>
-      <div class="p-4 bg-amber-50 rounded-xl shadow-sm">
+      </section>
+
+      <section aria-label="Total Earnings" class="p-4 bg-amber-50 rounded-xl shadow-sm">
         <h3 class="text-base font-medium text-gray-600">Total</h3>
         <p id="total-earnings" class="text-3xl font-extrabold text-amber-600 mt-1">$0.00</p>
-      </div>
+      </section>
     </div>
 
     <p class="text-center mt-6 text-sm text-gray-500 italic">
       Last updated: <span id="last-update">—</span> • Auto-refreshes every 60 seconds
     </p>
-  </section>
+  </main>
 
   <!-- Footer -->
   <footer class="mt-10 text-center text-gray-400 text-sm">
     © <span id="year"></span> The Esthetics Hub — Live Well. Live Longer.
   </footer>
 
-<script>
-async function updateMonetisationData() {
-  const response = await fetch("https://api.estheticshub.live/monetisation?refresh=true");
-  const data = await response.json();
+  <!-- ✅ JS Optimized for async execution -->
+  <script defer>
+    document.getElementById("year").textContent = new Date().getFullYear();
 
-  document.getElementById("adsense-earnings").textContent = `$${data.adsense.toFixed(2)}`;
-  document.getElementById("affiliate-earnings").textContent = `$${data.affiliate.toFixed(2)}`;
-  document.getElementById("donation-earnings").textContent = `$${data.donations.toFixed(2)}`;
-  document.getElementById("total-earnings").textContent = `$${data.total.toFixed(2)}`;
-}
+    const $ = id => document.getElementById(id);
 
-setInterval(updateMonetisationData, 60000); // Refresh every 60 seconds
-updateMonetisationData();
-</script>
+    function fakeEarnings() {
+      return {
+        adsense: +(Math.random() * 8 + 2).toFixed(2),
+        affiliate: +(Math.random() * 6 + 1).toFixed(2),
+        donations: +(Math.random() * 12 + 3).toFixed(2)
+      };
+    }
+
+    function updateMonetisationData() {
+      const { adsense, affiliate, donations } = fakeEarnings();
+      const total = (adsense + affiliate + donations).toFixed(2);
+
+      $("adsense-earnings").textContent = `$${adsense}`;
+      $("affiliate-earnings").textContent = `$${affiliate}`;
+      $("donation-earnings").textContent = `$${donations}`;
+      $("total-earnings").textContent = `$${total}`;
+      $("last-update").textContent = new Date().toLocaleTimeString();
+    }
+
+    updateMonetisationData();
+    setInterval(updateMonetisationData, 60000);
+  </script>
 </body>
-</html>
+          </html>
