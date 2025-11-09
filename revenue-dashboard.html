@@ -252,66 +252,7 @@ function renderDashboard() {
 // Initial render and auto-refresh
 renderDashboard();
 setInterval(renderDashboard,60000);
-
-  <!-- 🔄 Auto-refresh Script -->
-  
-    document.getElementById("year").textContent = new Date().getFullYear();
-
-    const sources = [
-      { name: "Google AdSense", metric: "Pageviews ~1,620", base: [4.75, 30.10, 132.20] },
-      { name: "Amazon Affiliate", metric: "82 clicks", base: [2.65, 16.20, 68.40] },
-      { name: "Booking.com Affiliate", metric: "3 bookings", base: [1.80, 6.75, 20.25] },
-      { name: "Donations (PayPal + M-Pesa)", metric: "4 transactions", base: [10.40, 14.50, 27.60] }
-    ];
-
-    const earnings = { today: 19.60, week: 67.55, month: 248.45, lifetime: 1044.50 };
-
-    function renderTables() {
-      const metricsBody = document.getElementById("metrics-table");
-      const earningsBody = document.getElementById("earnings-table");
-      const now = new Date();
-
-      // Update timestamp
-      document.getElementById("timestamp").textContent =
-        `Last updated: ${now.toLocaleTimeString()} • Auto-refreshes every 1 minute`;
-
-      // Random simulation update (+/- small range)
-      sources.forEach(s => {
-        s.base = s.base.map(v => +(v + (Math.random() * 0.3 - 0.15)).toFixed(2));
-      });
-
-      const rows = sources.map(s => `
-        <tr>
-          <td>${s.name}</td>
-          <td>${s.metric}</td>
-          <td>$${s.base[0]}</td>
-          <td>$${s.base[1]}</td>
-          <td>$${s.base[2]}</td>
-        </tr>
-      `).join('');
-      metricsBody.innerHTML = rows;
-
-      // Update cumulative earnings with mild growth
-      earnings.today = +(earnings.today + Math.random() * 0.1).toFixed(2);
-      earnings.week = +(earnings.week + Math.random() * 0.25).toFixed(2);
-      earnings.month = +(earnings.month + Math.random() * 0.6).toFixed(2);
-      earnings.lifetime = +(earnings.lifetime + Math.random() * 0.9).toFixed(2);
-
-      const earnRows = `
-        <tr><td>Today</td><td>$${earnings.today} USD</td></tr>
-        <tr><td>This Week</td><td>$${earnings.week} USD</td></tr>
-        <tr><td>Month-to-Date</td><td>$${earnings.month} USD</td></tr>
-        <tr><td>Lifetime Estimate</td><td>$${earnings.lifetime} USD</td></tr>
-      `;
-      earningsBody.innerHTML = earnRows;
-    }
-
-    renderTables();
-    setInterval(renderTables, 60000); // Refresh every 60s
-
-  
 </script>
-  
-  
+
 </body>
   </html>
