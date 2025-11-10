@@ -1,273 +1,123 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Comprehensive Website Health & Performance Dashboard for The Esthetics Hub – live monetization, performance, and SEO insights.">
-<meta name="author" content="The Esthetics Hub">
-<title>💻 Website Health & Performance Dashboard | The Esthetics Hub</title>
-<link rel="canonical" href="https://esthetics03-ops.github.io/revenue-dashboard.html">
-<script src="https://cdn.tailwindcss.com?plugins=typography,forms"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-<!-- WebPage JSON-LD Schema -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  "name": "Website Health & Performance Dashboard – The Esthetics Hub",
-  "url": "https://esthetics03-ops.github.io/revenue-dashboard.html",
-  "description": "Comprehensive dashboard for The Esthetics Hub showing live monetization, performance metrics, SEO insights, and traffic analysis.",
-  "inLanguage": "en",
-  "publisher": {
-    "@type": "Organization",
-    "name": "The Esthetics Hub",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://esthetics03-ops.github.io/assets/logo.png"
-    },
-    "sameAs": [
-      "https://www.facebook.com/yourpage",
-      "https://www.instagram.com/yourpage",
-      "https://www.pinterest.com/yourpage"
-    ]
-  }
-}
-</script>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Esthetics Hub - Full Live Monetisation Dashboard</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 <style>
-body { font-family:'Inter',sans-serif; background:linear-gradient(135deg,#fffdf6 0%,#fef9c3 100%); color:#374151; }
-h2,h3{letter-spacing:-0.02em;}
-table{width:100%;border-collapse:collapse;margin-top:1rem;}
-th,td{padding:0.75rem;border-bottom:1px solid #f3f4f6;text-align:left;}
-th{background:#fef3c7;font-weight:600;color:#92400e;}
-tr:hover{background:#fff7ed;transition:0.3s;}
-.fade-in{animation:fadeIn 0.9s ease-in-out;}
-@keyframes fadeIn{from{opacity:0;transform:translateY(12px);} to{opacity:1;transform:translateY(0);}}
+  body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+  #monetisation-dashboard { transition: all 0.3s ease; }
+  #revenue-stats p { margin: 4px 0; }
+  .metric { font-weight: 600; }
+  .currency { color: #10b981; }
+  .error { color: #ef4444; }
 </style>
 </head>
-<body class="min-h-screen flex flex-col items-center p-6">
+<body><section id="monetisation-dashboard" class="p-6 bg-white rounded-2xl shadow-lg max-w-4xl mx-auto my-8">
+  <h2 class="text-3xl font-bold mb-6 text-center text-gray-800">💰 Full Live Monetisation Dashboard</h2>
+  <div id="revenue-stats" class="text-center text-lg text-gray-700">Loading data...</div>
+</section><script>
+// CONFIGURATION
+const GA4_PROPERTY_ID = 'G-QCX3G9KSPC';
+const ADSENSE_PUB_ID = 'pub-1959507280210179';
+const MONETISATION_API = 'https://api.estheticshub.live/monetisation/live?refresh=TRUE';
+const SHEET_ID = '1aB2cD3EfGHIjKlmNOPqRstUVwxYZ4567890abcde';
 
-<main class="fade-in bg-white/95 backdrop-blur-lg shadow-xl rounded-2xl p-8 max-w-6xl w-full border border-amber-100">
-<h2 class="text-3xl font-semibold text-center text-amber-700 mb-2">💻 Website Health & Performance Dashboard – The Esthetics Hub</h2>
-<p id="timestamp" class="text-center text-gray-600 mb-6"></p>
-
-<!-- Performance Metrics -->
-<h3 class="text-xl font-semibold text-amber-800 mt-6 mb-2">📈 Performance Metrics (Simulated)</h3>
-<div class="overflow-x-auto mb-6">
-<table>
-<thead>
-<tr><th>Metric</th><th>Score / Value</th></tr>
-</thead>
-<tbody id="performance-metrics"></tbody>
-</table>
-</div>
-
-<!-- SEO & Rich Results -->
-<h3 class="text-xl font-semibold text-amber-800 mt-6 mb-2">🔍 SEO & Rich Results</h3>
-<div class="overflow-x-auto mb-6">
-<table>
-<thead>
-<tr><th>Check</th><th>Status</th><th>Notes</th></tr>
-</thead>
-<tbody id="seo-metrics"></tbody>
-</table>
-</div>
-
-<!-- Monetization Metrics Table -->
-<h3 class="text-xl font-semibold text-amber-800 mt-6 mb-2">💰 Monetization Metrics (Simulated)</h3>
-<div class="overflow-x-auto mb-6">
-<table>
-<thead>
-<tr><th>Source</th><th>Metric</th><th>Today</th><th>This Week</th><th>Month-to-Date</th></tr>
-</thead>
-<tbody id="monetization-metrics"></tbody>
-</table>
-</div>
-
-<!-- Cumulative Earnings Table -->
-<h3 class="text-xl font-semibold text-amber-800 mt-6 mb-2">🔹 Cumulative Earnings</h3>
-<div class="overflow-x-auto mb-6">
-<table>
-<thead><tr><th>Period</th><th>Total Earnings</th></tr></thead>
-<tbody id="cumulative-earnings"></tbody>
-</table>
-</div>
-
-<!-- New Monetisation Dashboard Section -->
-<section id="monetisation-dashboard" class="p-4 bg-gray-50 rounded-2xl shadow-md max-w-3xl mx-auto my-8">
-  <h2 class="text-2xl font-semibold mb-4 text-center">💰 Live Monetisation Summary</h2>
-  <div class="grid grid-cols-2 gap-4 text-center">
-    <div>
-      <h3 class="text-lg font-medium">AdSense</h3>
-      <p id="adsense-earnings" class="text-xl font-bold text-green-600">$0.00</p>
-    </div>
-    <div>
-      <h3 class="text-lg font-medium">Affiliate (Amazon + Booking)</h3>
-      <p id="affiliate-earnings" class="text-xl font-bold text-blue-600">$0.00</p>
-    </div>
-    <div>
-      <h3 class="text-lg font-medium">Donations</h3>
-      <p id="donation-earnings" class="text-xl font-bold text-purple-600">$0.00</p>
-    </div>
-    <div>
-      <h3 class="text-lg font-medium">Total Earnings</h3>
-      <p id="total-earnings" class="text-2xl font-bold text-amber-600">$0.00</p>
-    </div>
-  </div>
-  <p class="text-center mt-4 text-sm text-gray-500">Auto-refreshes every 60 seconds</p>
-</section>
-
-<!-- Insights -->
-<h3 class="text-xl font-semibold text-amber-800 mt-6 mb-3">⚙️ Insights</h3>
-<div class="grid md:grid-cols-2 gap-6">
-<section class="bg-amber-50 p-4 rounded-xl border border-amber-100 shadow-sm">
-<h4 class="font-semibold text-amber-700 mb-2">Top Performing Blog Pages</h4>
-<ul class="list-disc list-inside text-gray-700">
-<li>Mindful Nutrition for Longevity</li>
-<li>Sleep, Focus & Balance: The Mental Reset Plan</li>
-</ul>
-</section>
-<section class="bg-amber-50 p-4 rounded-xl border border-amber-100 shadow-sm">
-<h4 class="font-semibold text-amber-700 mb-2">Traffic Channels</h4>
-<ul class="list-disc list-inside text-gray-700">
-<li>Organic Search: 64%</li>
-<li>Social (Pinterest, Instagram): 20%</li>
-<li>Direct/Referral: 16%</li>
-</ul>
-</section>
-</div>
-<div class="bg-green-50 p-4 mt-6 rounded-xl border border-green-100 shadow-sm">
-<h4 class="font-semibold text-green-700 mb-2">Revenue Composition</h4>
-<ul class="list-disc list-inside text-gray-700">
-<li>AdSense → 24%</li>
-<li>Affiliates (Amazon + Booking) → 21%</li>
-<li>Donations → 55%</li>
-</ul>
-<p class="mt-3 text-sm text-gray-600">RPM: ~$4.25 / 1,000 views</p>
-<p class="text-sm text-gray-600">Predicted Monthly Payout: ≈ <strong>$355 ±5%</strong></p>
-</div>
-</main>
-
-<footer class="mt-10 text-center text-gray-400 text-sm">
-© <span id="year"></span> The Esthetics Hub — Live Well. Live Longer.
-</footer>
-
-<script>
-document.getElementById("year").textContent = new Date().getFullYear();
-
-// Simulated data
-let performanceMetrics = {
-"Performance": "88/100",
-"Accessibility": "94/100",
-"Best Practices": "90/100",
-"SEO": "96/100",
-"LCP": "2.2s",
-"CLS": "0.03",
-"FCP": "1.8s",
-"TBT": "180ms"
-};
-
-let seoMetrics = [
-{check:"Organization schema",status:"✅ Present",notes:"Eligible for rich results"},
-{check:"WebPage schema",status:"✅ Present",notes:"Added for rich results"},
-{check:"SearchAction",status:"✅ Present",notes:"Optional search rich snippet"},
-{check:"Alt attributes",status:"✅ Present",notes:"All images have descriptive alt"},
-{check:"Meta tags",status:"✅ Present",notes:"Title, description, canonical included"}
-];
-
-let monetizationSources = [
-{name:"Google AdSense",metric:"Pageviews ~1,620",base:[4.75,30.10,132.20]},
-{name:"Amazon Affiliate",metric:"82 clicks",base:[2.65,16.20,68.40]},
-{name:"Booking.com Affiliate",metric:"3 bookings",base:[1.80,6.75,20.25]},
-{name:"Donations (PayPal + M-Pesa)",metric:"4 transactions",base:[10.40,14.50,27.60]}
-];
-
-let cumulativeEarnings = {today:19.60,week:67.55,month:248.45,lifetime:1044.50};
-
-// Previous values for smooth animation
-let prevAdsense = 0, prevAffiliate = 0, prevDonations = 0, prevTotal = 0;
-
-// Animate number helper
-function animateValue(id, start, end, duration) {
-    const obj = document.getElementById(id);
-    const range = end - start;
-    let startTime = null;
-    function step(timestamp) {
-        if (!startTime) startTime = timestamp;
-        const progress = Math.min((timestamp - startTime) / duration, 1);
-        const value = (start + range * progress).toFixed(2);
-        obj.textContent = `$${value}`;
-        if (progress < 1) window.requestAnimationFrame(step);
-    }
-    window.requestAnimationFrame(step);
+// Load API key securely
+async function getApiKey() {
+  try {
+    const res = await fetch('/config.json');
+    const config = await res.json();
+    return config.GOOGLE_API_KEY;
+  } catch (err) {
+    console.warn('Failed to load API key:', err);
+    return null;
+  }
 }
 
-// Render dashboard function
-function renderDashboard() {
-    const now = new Date();
-    document.getElementById("timestamp").textContent = `Last updated: ${now.toLocaleTimeString()} • Auto-refreshes every 1 minute`;
+// Fallback
+const fallbackData = { date: new Date().toISOString().split('T')[0], active_users: 0, sessions: 0, pageviews: 0, ad_revenue: 0, affiliate_revenue: 0, total_revenue: 0 };
 
-    // Performance metrics
-    const perfBody = Object.entries(performanceMetrics).map(([k,v])=>`<tr><td>${k}</td><td>${v}</td></tr>`).join('');
-    document.getElementById("performance-metrics").innerHTML = perfBody;
+// Fetch functions
+async function fetchApiData() { try { const res = await fetch(MONETISATION_API, { cache: 'no-store' }); if (!res.ok) throw new Error('API response not ok'); return await res.json(); } catch (err) { console.warn('API fetch failed:', err); return null; } }
 
-    // SEO metrics
-    const seoBody = seoMetrics.map(e=>`<tr><td>${e.check}</td><td>${e.status}</td><td>${e.notes}</td></tr>`).join('');
-    document.getElementById("seo-metrics").innerHTML = seoBody;
-
-    // Monetization metrics (simulate slight variation)
-    monetizationSources.forEach(s=>{s.base = s.base.map(v=>(v+(Math.random()*0.3-0.15)).toFixed(2))});
-    const monetBody = monetizationSources.map(s=>`<tr><td>${s.name}</td><td>${s.metric}</td><td>$${s.base[0]}</td><td>$${s.base[1]}</td><td>$${s.base[2]}</td></tr>`).join('');
-    document.getElementById("monetization-metrics").innerHTML = monetBody;
-
-    // Cumulative earnings simulation
-    cumulativeEarnings.today = +(cumulativeEarnings.today + Math.random()*0.1).toFixed(2);
-    cumulativeEarnings.week = +(cumulativeEarnings.week + Math.random()*0.25).toFixed(2);
-    cumulativeEarnings.month = +(cumulativeEarnings.month + Math.random()*0.6).toFixed(2);
-    cumulativeEarnings.lifetime = +(cumulativeEarnings.lifetime + Math.random()*0.9).toFixed(2);
-    const earnBody = `<tr><td>Today</td><td>$${cumulativeEarnings.today} USD</td></tr>
-                      <tr><td>This Week</td><td>$${cumulativeEarnings.week} USD</td></tr>
-                      <tr><td>Month-to-Date</td><td>$${cumulativeEarnings.month} USD</td></tr>
-                      <tr><td>Lifetime Estimate</td><td>$${cumulativeEarnings.lifetime} USD</td></tr>`;
-    document.getElementById("cumulative-earnings").innerHTML = earnBody;
-
-    // Update new live monetisation summary with smooth animation
-    const adsense = +monetizationSources[0].base[0];
-    const affiliate = (+monetizationSources[1].base[0] + +monetizationSources[2].base[0]).toFixed(2);
-    const donations = +monetizationSources[3].base[0];
-    const total = (+adsense + +affiliate + +donations).toFixed(2);
-
-    animateValue('adsense-earnings', prevAdsense, adsense, 800);
-    animateValue('affiliate-earnings', prevAffiliate, +affiliate, 800);
-    animateValue('donation-earnings', prevDonations, donations, 800);
-    animateValue('total-earnings', prevTotal, +total, 800);
-
-    prevAdsense = adsense;
-    prevAffiliate = +affiliate;
-    prevDonations = donations;
-    prevTotal = +total;
+async function fetchSheetData(apiKey) {
+  if (!apiKey) return null;
+  try {
+    const range = 'Sheet1!A2:G';
+    const res = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}?key=${apiKey}`);
+    const data = await res.json();
+    return data.values ? data.values[data.values.length -1] : null;
+  } catch (err) { console.warn('Sheet fetch failed:', err); return null; }
 }
 
-  
-async function updateMonetisationData() {
-  const response = await fetch("https://api.estheticshub.live/monetisation?refresh=true");
-  const data = await response.json();
-
-  document.getElementById("adsense-earnings").textContent = `$${data.adsense.toFixed(2)}`;
-  document.getElementById("affiliate-earnings").textContent = `$${data.affiliate.toFixed(2)}`;
-  document.getElementById("donation-earnings").textContent = `$${data.donations.toFixed(2)}`;
-  document.getElementById("total-earnings").textContent = `$${data.total.toFixed(2)}`;
+async function fetchGA4Realtime(apiKey) {
+  if (!apiKey) return { active_users: 0, sessions: 0, pageviews: 0 };
+  try {
+    const res = await fetch(`https://analyticsdata.googleapis.com/v1beta/properties/${GA4_PROPERTY_ID}:runRealtimeReport?key=${apiKey}`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ metrics: [{name: 'activeUsers'}, {name: 'screenPageViews'}] })
+    });
+    const data = await res.json();
+    return {
+      active_users: Number(data.rows?.[0]?.metricValues?.[0]?.value || 0),
+      sessions: 0,
+      pageviews: Number(data.rows?.[0]?.metricValues?.[1]?.value || 0)
+    };
+  } catch (err) { console.warn('GA4 fetch failed:', err); return { active_users: 0, sessions: 0, pageviews: 0 }; }
 }
 
-setInterval(updateMonetisationData, 60000); // Refresh every 60 seconds
-updateMonetisationData();
+async function fetchAdSenseRealtime() { try { /* Replace with real AdSense API call */ return { revenue: 0 }; } catch { return { revenue: 0 }; } }
+async function fetchAffiliateData() { try { /* Replace with affiliate API */ return { revenue: 0 }; } catch { return { revenue: 0 }; } }
 
+// Aggregate metrics
+function aggregateMetrics(apiData, sheetData, ga4Data, adsenseData, affiliateData) {
+  const adRevenue = (apiData?.ad_revenue || 0) + (adsenseData?.revenue || 0);
+  const affiliateRevenue = (apiData?.affiliate_revenue || 0) + (affiliateData?.revenue || 0);
+  const totalRevenue = adRevenue + affiliateRevenue;
+  const monthlyEarnings = totalRevenue * 30;
+  const monthlyPayout = monthlyEarnings >= 100 ? monthlyEarnings : 0;
 
-// Initial render and auto-refresh
-renderDashboard();
-setInterval(renderDashboard,60000);
-</script>
+  return {
+    date: apiData?.date || sheetData?.[0] || fallbackData.date,
+    active_users: (apiData?.active_users || 0) + (ga4Data?.active_users || 0),
+    sessions: (apiData?.sessions || 0) + (ga4Data?.sessions || 0),
+    pageviews: (apiData?.pageviews || 0) + (ga4Data?.pageviews || 0),
+    ad_revenue: adRevenue,
+    affiliate_revenue: affiliateRevenue,
+    total_revenue: totalRevenue,
+    monthly_earnings: monthlyEarnings,
+    monthly_payout: monthlyPayout
+  };
+}
 
-</body>
-  </html>
+// Render dashboard
+function renderDashboard(data) {
+  document.getElementById('revenue-stats').innerHTML = `
+    <p><span class="metric">Date:</span> ${data.date}</p>
+    <p><span class="metric">Active Users:</span> ${data.active_users.toLocaleString()}</p>
+    <p><span class="metric">Sessions:</span> ${data.sessions.toLocaleString()}</p>
+    <p><span class="metric">Pageviews:</span> ${data.pageviews.toLocaleString()}</p>
+    <p><span class="metric">Ad Revenue (AdSense ${ADSENSE_PUB_ID}):</span> <span class="currency">$${data.ad_revenue.toFixed(2)}</span></p>
+    <p><span class="metric">Affiliate Revenue:</span> <span class="currency">$${data.affiliate_revenue.toFixed(2)}</span></p>
+    <p><span class="metric">Total Revenue:</span> <span class="currency">$${data.total_revenue.toFixed(2)}</span></p>
+    <p><span class="metric">Estimated Monthly Earnings:</span> <span class="currency">$${data.monthly_earnings.toFixed(2)}</span></p>
+    <p><span class="metric">Possible Monthly Payout:</span> <span class="currency">$${data.monthly_payout.toFixed(2)}</span></p>
+  `;
+}
+
+// Update dashboard every 30 seconds
+async function updateDashboard() {
+  const apiKey = await getApiKey();
+  const [apiData, sheetData, ga4Data, adsenseData, affiliateData] = await Promise.all([
+    fetchApiData(), fetchSheetData(apiKey), fetchGA4Realtime(apiKey), fetchAdSenseRealtime(), fetchAffiliateData()
+  ]);
+  const aggregated = aggregateMetrics(apiData, sheetData, ga4Data, adsenseData, affiliateData);
+  renderDashboard(aggregated);
+}
+
+updateDashboard();
+setInterval(updateDashboard, 30000);
+</script></body>
+</html>
