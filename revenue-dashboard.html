@@ -3,148 +3,189 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Esthetics Hub - Live Revenue Dashboard</title>
+<title>The Esthetics Hub - Full Revenue Dashboard</title>
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
   body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
-  #monetisation-dashboard { transition: all 0.3s ease; }
-  #revenue-stats p { margin: 4px 0; }
   .metric { font-weight: 600; }
   .currency { color: #10b981; }
-  .error { color: #ef4444; }
 </style>
 </head>
 <body>
 
-<section id="monetisation-dashboard" class="p-6 bg-white rounded-2xl shadow-lg max-w-4xl mx-auto my-8">
-  <h2 class="text-3xl font-bold mb-6 text-center text-gray-800">💰 Live Revenue Dashboard</h2>
-  <div id="revenue-stats" class="text-center text-lg text-gray-700">Loading live data...</div>
+<section class="max-w-6xl mx-auto my-8 p-6 bg-white rounded-2xl shadow-lg">
+  <h1 class="text-3xl font-bold text-center mb-6">💰 Full Revenue Dashboard</h1>
+
+  <!-- Metrics -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+    <div class="p-4 bg-gray-50 rounded-lg shadow">
+      <p class="metric">Active Users</p>
+      <p id="active-users" class="text-2xl font-bold">0</p>
+    </div>
+    <div class="p-4 bg-gray-50 rounded-lg shadow">
+      <p class="metric">Sessions</p>
+      <p id="sessions" class="text-2xl font-bold">0</p>
+    </div>
+    <div class="p-4 bg-gray-50 rounded-lg shadow">
+      <p class="metric">Pageviews</p>
+      <p id="pageviews" class="text-2xl font-bold">0</p>
+    </div>
+  </div>
+
+  <!-- Revenue -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+    <div class="p-4 bg-gray-50 rounded-lg shadow">
+      <p class="metric">Total Ad Revenue</p>
+      <p id="ad-revenue" class="text-2xl currency">$0</p>
+    </div>
+    <div class="p-4 bg-gray-50 rounded-lg shadow">
+      <p class="metric">Total Affiliate Revenue</p>
+      <p id="affiliate-revenue" class="text-2xl currency">$0</p>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+    <div class="p-4 bg-gray-50 rounded-lg shadow">
+      <p class="metric">Total Revenue</p>
+      <p id="total-revenue" class="text-2xl currency">$0</p>
+    </div>
+    <div class="p-4 bg-gray-50 rounded-lg shadow">
+      <p class="metric">Monthly Possible Payout</p>
+      <p id="monthly-payout" class="text-2xl currency">$0</p>
+    </div>
+  </div>
+
+  <!-- 30-Day Revenue Chart -->
+  <canvas id="revenue-chart" height="150"></canvas>
 </section>
 
 <script>
-// CONFIGURATION
-const GA4_PROPERTY_ID = 'G-QCX3G9KSPC';
+const GA4_PROPERTIES = ['G-QCX3G9KSPC', 'G-PSW1MY7HB4'];
 const ADSENSE_PUB_ID = 'pub-1959507280210179';
 const MONETISATION_API = 'https://api.estheticshub.live/monetisation/live?refresh=TRUE';
 const SHEET_ID = '1aB2cD3EfGHIjKlmNOPqRstUVwxYZ4567890abcde';
 
-// Securely load API keys from local config.json
-async function getApiKey() {
-  try {
-    const res = await fetch('/config.json');
-    const config = await res.json();
-    return config.GOOGLE_API_KEY;
-  } catch (err) {
-    console.warn('Failed to load API key:', err);
-    return null;
-  }
+let chart;
+
+// Load config
+async function getConfig() {
+  const res = await fetch('/config.json');
+  return await res.json();
 }
 
 // Fetch functions
-async function fetchApiData() {
-  try {
-    const res = await fetch(MONETISATION_API, { cache: 'no-store' });
-    return await res.json();
-  } catch {
-    return { active_users: 0, sessions: 0, pageviews: 0, ad_revenue: 0, affiliate_revenue: 0, date: new Date().toISOString().split('T')[0] };
+async function fetchGA4Multi(apiKey) {
+  let totalUsers = 0, totalPageviews = 0;
+  for (const prop of GA4_PROPERTIES) {
+    try {
+      const res = await fetch(`https://analyticsdata.googleapis.com/v1beta/properties/${prop}:runRealtimeReport?key=${apiKey}`, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ metrics: [{name: 'activeUsers'},{name:'screenPageViews'}] })
+      });
+      const data = await res.json();
+      totalUsers += Number(data.rows?.[0]?.metricValues?.[0]?.value || 0);
+      totalPageviews += Number(data.rows?.[0]?.metricValues?.[1]?.value || 0);
+    } catch {}
   }
+  return { active_users: totalUsers, sessions: 0, pageviews: totalPageviews };
+}
+
+async function fetchApiData() {
+  try { const res = await fetch(MONETISATION_API, { cache:'no-store' }); return await res.json(); } 
+  catch { return { active_users:0, sessions:0, pageviews:0, ad_revenue:0, affiliate_revenue:0, date: new Date().toISOString().split('T')[0] }; }
 }
 
 async function fetchSheetData(apiKey) {
-  if (!apiKey) return null;
   try {
     const range = 'Sheet1!A2:G';
     const res = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}?key=${apiKey}`);
     const data = await res.json();
-    return data.values ? data.values[data.values.length -1] : null;
-  } catch { return null; }
+    return data.values || [];
+  } catch { return []; }
 }
 
-async function fetchGA4Realtime(apiKey) {
-  if (!apiKey) return { active_users: 0, sessions: 0, pageviews: 0 };
+async function fetchAdSenseRealtime(apiKey) {
   try {
-    const res = await fetch(`https://analyticsdata.googleapis.com/v1beta/properties/${GA4_PROPERTY_ID}:runRealtimeReport?key=${apiKey}`, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ metrics: [{name: 'activeUsers'}, {name: 'screenPageViews'}] })
-    });
+    const today = new Date().toISOString().split('T')[0];
+    const res = await fetch(`https://www.googleapis.com/adsense/v2/accounts/${ADSENSE_PUB_ID}/reports?startDate=${today}&endDate=${today}&metrics=EARNINGS&key=${apiKey}`);
     const data = await res.json();
-    return {
-      active_users: Number(data.rows?.[0]?.metricValues?.[0]?.value || 0),
-      sessions: 0,
-      pageviews: Number(data.rows?.[0]?.metricValues?.[1]?.value || 0)
-    };
-  } catch { return { active_users: 0, sessions: 0, pageviews: 0 }; }
+    return { revenue: Number(data.totals?.EARNINGS||0) };
+  } catch { return { revenue:0 }; }
 }
 
-async function fetchAdSenseRealtime() {
+async function fetchAffiliateData(affiliateKey) {
   try {
-    // Replace this placeholder with AdSense Management API call
-    return { revenue: 0 };
-  } catch { return { revenue: 0 }; }
+    const res = await fetch('https://api.youraffiliateplatform.com/revenue/today', { headers:{'Authorization':'Bearer '+affiliateKey} });
+    const data = await res.json();
+    return { revenue: Number(data.revenue_today) };
+  } catch { return { revenue:0 }; }
 }
 
-async function fetchAffiliateData() {
-  try {
-    // Replace this placeholder with your affiliate API call
-    return { revenue: 0 };
-  } catch { return { revenue: 0 }; }
-}
-
-// Aggregate metrics
-function aggregateMetrics(apiData, sheetData, ga4Data, adsenseData, affiliateData) {
-  const adRevenue = Number(apiData.ad_revenue) + Number(adsenseData.revenue);
-  const affiliateRevenue = Number(apiData.affiliate_revenue) + Number(affiliateData.revenue);
+// Aggregate
+function aggregate(apiData, sheetData, ga4Data, adsenseData, affiliateData) {
+  const adRevenue = Number(apiData.ad_revenue)+Number(adsenseData.revenue);
+  const affiliateRevenue = Number(apiData.affiliate_revenue)+Number(affiliateData.revenue);
   const totalRevenue = adRevenue + affiliateRevenue;
-  const monthlyEarnings = totalRevenue * 30;
-  const monthlyPayout = monthlyEarnings >= 100 ? monthlyEarnings : 0;
-
-  return {
-    date: apiData.date,
-    active_users: (apiData.active_users || 0) + (ga4Data.active_users || 0),
-    sessions: (apiData.sessions || 0) + (ga4Data.sessions || 0),
-    pageviews: (apiData.pageviews || 0) + (ga4Data.pageviews || 0),
-    ad_revenue: adRevenue,
-    affiliate_revenue: affiliateRevenue,
-    total_revenue: totalRevenue,
-    monthly_earnings: monthlyEarnings,
-    monthly_payout: monthlyPayout
-  };
+  const monthlyPayout = totalRevenue*30>=100?totalRevenue*30:0;
+  return { ...ga4Data, ad_revenue: adRevenue, affiliate_revenue: affiliateRevenue, total_revenue: totalRevenue, monthly_payout, date: apiData.date };
 }
 
-// Render dashboard
-function renderDashboard(data) {
-  document.getElementById('revenue-stats').innerHTML = `
-    <p><span class="metric">Date:</span> ${data.date}</p>
-    <p><span class="metric">Active Users:</span> ${data.active_users.toLocaleString()}</p>
-    <p><span class="metric">Sessions:</span> ${data.sessions.toLocaleString()}</p>
-    <p><span class="metric">Pageviews:</span> ${data.pageviews.toLocaleString()}</p>
-    <p><span class="metric">Ad Revenue (AdSense ${ADSENSE_PUB_ID}):</span> <span class="currency">$${data.ad_revenue.toFixed(2)}</span></p>
-    <p><span class="metric">Affiliate Revenue:</span> <span class="currency">$${data.affiliate_revenue.toFixed(2)}</span></p>
-    <p><span class="metric">Total Revenue:</span> <span class="currency">$${data.total_revenue.toFixed(2)}</span></p>
-    <p><span class="metric">Estimated Monthly Earnings:</span> <span class="currency">$${data.monthly_earnings.toFixed(2)}</span></p>
-    <p><span class="metric">Possible Monthly Payout:</span> <span class="currency">$${data.monthly_payout.toFixed(2)}</span></p>
-  `;
+// Render metrics
+function renderMetrics(data) {
+  document.getElementById('active-users').innerText = data.active_users.toLocaleString();
+  document.getElementById('sessions').innerText = data.sessions.toLocaleString();
+  document.getElementById('pageviews').innerText = data.pageviews.toLocaleString();
+  document.getElementById('ad-revenue').innerText = '$'+data.ad_revenue.toFixed(2);
+  document.getElementById('affiliate-revenue').innerText = '$'+data.affiliate_revenue.toFixed(2);
+  document.getElementById('total-revenue').innerText = '$'+data.total_revenue.toFixed(2);
+  document.getElementById('monthly-payout').innerText = '$'+data.monthly_payout.toFixed(2);
 }
 
-// Full live update
+// Render 30-Day Revenue Chart
+function renderChart(labels, adData, affiliateData, totalData) {
+  if(chart) chart.destroy();
+  const ctx = document.getElementById('revenue-chart').getContext('2d');
+  chart = new Chart(ctx, {
+    type:'line',
+    data:{ labels, datasets:[
+      { label:'Ad Revenue', data:adData, borderColor:'#10b981', fill:false },
+      { label:'Affiliate Revenue', data:affiliateData, borderColor:'#3b82f6', fill:false },
+      { label:'Total Revenue', data:totalData, borderColor:'#f59e0b', fill:false }
+    ]},
+    options:{ responsive:true, plugins:{ legend:{ position:'top' } }, scales:{ y:{ beginAtZero:true } } }
+  });
+}
+
+// Update dashboard
 async function updateDashboard() {
-  const apiKey = await getApiKey();
-  const [apiData, sheetData, ga4Data, adsenseData, affiliateData] = await Promise.all([
+  const config = await getConfig();
+  const [apiData, sheetRows, ga4Data, adsenseData, affiliateData] = await Promise.all([
     fetchApiData(),
-    fetchSheetData(apiKey),
-    fetchGA4Realtime(apiKey),
-    fetchAdSenseRealtime(),
-    fetchAffiliateData()
+    fetchSheetData(config?.GOOGLE_API_KEY),
+    fetchGA4Multi(config?.GOOGLE_API_KEY),
+    fetchAdSenseRealtime(config?.GOOGLE_API_KEY),
+    fetchAffiliateData(config?.AFFILIATE_API_KEY)
   ]);
-  const aggregated = aggregateMetrics(apiData, sheetData, ga4Data, adsenseData, affiliateData);
-  renderDashboard(aggregated);
+
+  const aggregated = aggregate(apiData, sheetRows, ga4Data, adsenseData, affiliateData);
+  renderMetrics(aggregated);
+
+  // Prepare 30-day historical chart from sheet or API
+  const last30 = sheetRows.slice(-30);
+  const labels = last30.map(r => r[0] || 'N/A');
+  const adData = last30.map(r => Number(r[1] || 0));
+  const affiliateDataArr = last30.map(r => Number(r[2] || 0));
+  const totalData = last30.map(r => adData.map((v,i)=>v + affiliateDataArr[i])[i]);
+
+  renderChart(labels, adData, affiliateDataArr, totalData);
 }
 
-// Initial run + auto-refresh every 30s
+// Initial + refresh every 30s
 updateDashboard();
-setInterval(updateDashboard, 30000);
+setInterval(updateDashboard,30000);
 </script>
 
 </body>
-</html>
+  </html>
