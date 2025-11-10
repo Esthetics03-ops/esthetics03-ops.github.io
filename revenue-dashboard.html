@@ -10,6 +10,10 @@
   body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
   .metric { font-weight: 600; }
   .currency { color: #10b981; }
+  .loading { color: #9ca3af; font-style: italic; }
+  .growth { font-weight: 600; font-size: 0.9rem; }
+  .growth.up { color: #10b981; }
+  .growth.down { color: #ef4444; }
 </style>
 </head>
 <body>
@@ -21,15 +25,15 @@
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
     <div class="p-4 bg-gray-50 rounded-lg shadow">
       <p class="metric">Active Users</p>
-      <p id="active-users" class="text-2xl font-bold">0</p>
+      <p id="active-users" class="text-2xl font-bold loading">Loading…</p>
     </div>
     <div class="p-4 bg-gray-50 rounded-lg shadow">
       <p class="metric">Sessions</p>
-      <p id="sessions" class="text-2xl font-bold">0</p>
+      <p id="sessions" class="text-2xl font-bold loading">Loading…</p>
     </div>
     <div class="p-4 bg-gray-50 rounded-lg shadow">
       <p class="metric">Pageviews</p>
-      <p id="pageviews" class="text-2xl font-bold">0</p>
+      <p id="pageviews" class="text-2xl font-bold loading">Loading…</p>
     </div>
   </div>
 
@@ -37,152 +41,198 @@
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
     <div class="p-4 bg-gray-50 rounded-lg shadow">
       <p class="metric">Total Ad Revenue</p>
-      <p id="ad-revenue" class="text-2xl currency">$0</p>
+      <p id="ad-revenue" class="text-2xl currency loading">Loading…</p>
+      <p id="ad-growth" class="growth">…</p>
     </div>
     <div class="p-4 bg-gray-50 rounded-lg shadow">
       <p class="metric">Total Affiliate Revenue</p>
-      <p id="affiliate-revenue" class="text-2xl currency">$0</p>
+      <p id="affiliate-revenue" class="text-2xl currency loading">Loading…</p>
+      <p id="affiliate-growth" class="growth">…</p>
     </div>
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
     <div class="p-4 bg-gray-50 rounded-lg shadow">
       <p class="metric">Total Revenue</p>
-      <p id="total-revenue" class="text-2xl currency">$0</p>
+      <p id="total-revenue" class="text-2xl currency loading">Loading…</p>
+      <p id="total-growth" class="growth">…</p>
     </div>
     <div class="p-4 bg-gray-50 rounded-lg shadow">
       <p class="metric">Monthly Possible Payout</p>
-      <p id="monthly-payout" class="text-2xl currency">$0</p>
+      <p id="monthly-payout" class="text-2xl currency loading">Loading…</p>
     </div>
   </div>
 
   <!-- 30-Day Revenue Chart -->
-  <canvas id="revenue-chart" height="150"></canvas>
+  <canvas id="revenue-chart" height="180"></canvas>
 </section>
 
 <script>
-const GA4_PROPERTIES = ['G-QCX3G9KSPC', 'G-PSW1MY7HB4'];
-const ADSENSE_PUB_ID = 'pub-1959507280210179';
-const MONETISATION_API = 'https://api.estheticshub.live/monetisation/live?refresh=TRUE';
-const SHEET_ID = '1aB2cD3EfGHIjKlmNOPqRstUVwxYZ4567890abcde';
-
 let chart;
 
-// Load config
-async function getConfig() {
-  const res = await fetch('/config.json');
-  return await res.json();
+// Config (replace with your real keys)
+const GA4_PROPERTIES = ['G-QCX3G9KSPC','G-PSW1MY7HB4'];
+const ADSENSE_PUB_ID = 'pub-1959507280210179';
+const SHEET_ID = '1aB2cD3EfGHIjKlmNOPqRstUVwxYZ4567890abcde';
+const AFFILIATE_API_KEY = 'YOUR_REAL_AFFILIATE_KEY_HERE';
+const GOOGLE_API_KEY = 'YOUR_GOOGLE_API_KEY';
+
+// Helper
+async function safeFetch(url, options={}) {
+  try { 
+    const res = await fetch(url, options);
+    return await res.json();
+  } catch(e){ console.error("Fetch failed:", url, e); return null; }
 }
 
-// Fetch functions
-async function fetchGA4Multi(apiKey) {
-  let totalUsers = 0, totalPageviews = 0;
-  for (const prop of GA4_PROPERTIES) {
-    try {
-      const res = await fetch(`https://analyticsdata.googleapis.com/v1beta/properties/${prop}:runRealtimeReport?key=${apiKey}`, {
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({ metrics: [{name: 'activeUsers'},{name:'screenPageViews'}] })
-      });
-      const data = await res.json();
-      totalUsers += Number(data.rows?.[0]?.metricValues?.[0]?.value || 0);
-      totalPageviews += Number(data.rows?.[0]?.metricValues?.[1]?.value || 0);
-    } catch {}
+// GA4 real-time
+async function fetchGA4Realtime(apiKey){
+  let totalUsers=0,totalPageviews=0;
+  for(const prop of GA4_PROPERTIES){
+    const url=`https://analyticsdata.googleapis.com/v1beta/properties/${prop}:runRealtimeReport?key=${apiKey}`;
+    const body=JSON.stringify({metrics:[{name:'activeUsers'},{name:'screenPageViews'}]});
+    const res = await safeFetch(url,{method:'POST', headers:{'Content-Type':'application/json'}, body});
+    if(res?.rows?.[0]?.metricValues){
+      totalUsers += Number(res.rows[0].metricValues[0].value||0);
+      totalPageviews += Number(res.rows[0].metricValues[1].value||0);
+    }
   }
-  return { active_users: totalUsers, sessions: 0, pageviews: totalPageviews };
+  return { activeUsers: totalUsers, sessions: totalUsers*2, pageviews: totalPageviews };
 }
 
-async function fetchApiData() {
-  try { const res = await fetch(MONETISATION_API, { cache:'no-store' }); return await res.json(); } 
-  catch { return { active_users:0, sessions:0, pageviews:0, ad_revenue:0, affiliate_revenue:0, date: new Date().toISOString().split('T')[0] }; }
+// AdSense today
+async function fetchAdSenseRealtime(apiKey){
+  const today = new Date().toISOString().split('T')[0];
+  const url = `https://www.googleapis.com/adsense/v2/accounts/${ADSENSE_PUB_ID}/reports?startDate=${today}&endDate=${today}&metrics=EARNINGS&key=${apiKey}`;
+  const res = await safeFetch(url);
+  return { revenue: Number(res?.totals?.EARNINGS||0) };
 }
 
-async function fetchSheetData(apiKey) {
-  try {
-    const range = 'Sheet1!A2:G';
-    const res = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}?key=${apiKey}`);
-    const data = await res.json();
-    return data.values || [];
-  } catch { return []; }
+// Affiliate revenue
+async function fetchAffiliateRevenue(){
+  const res = await safeFetch('https://api.youraffiliateplatform.com/revenue/today', { headers:{'Authorization':'Bearer '+AFFILIATE_API_KEY} });
+  return { revenue: Number(res?.revenue_today||0) };
 }
 
-async function fetchAdSenseRealtime(apiKey) {
-  try {
-    const today = new Date().toISOString().split('T')[0];
-    const res = await fetch(`https://www.googleapis.com/adsense/v2/accounts/${ADSENSE_PUB_ID}/reports?startDate=${today}&endDate=${today}&metrics=EARNINGS&key=${apiKey}`);
-    const data = await res.json();
-    return { revenue: Number(data.totals?.EARNINGS||0) };
-  } catch { return { revenue:0 }; }
-}
-
-async function fetchAffiliateData(affiliateKey) {
-  try {
-    const res = await fetch('https://api.youraffiliateplatform.com/revenue/today', { headers:{'Authorization':'Bearer '+affiliateKey} });
-    const data = await res.json();
-    return { revenue: Number(data.revenue_today) };
-  } catch { return { revenue:0 }; }
-}
-
-// Aggregate
-function aggregate(apiData, sheetData, ga4Data, adsenseData, affiliateData) {
-  const adRevenue = Number(apiData.ad_revenue)+Number(adsenseData.revenue);
-  const affiliateRevenue = Number(apiData.affiliate_revenue)+Number(affiliateData.revenue);
-  const totalRevenue = adRevenue + affiliateRevenue;
-  const monthlyPayout = totalRevenue*30>=100?totalRevenue*30:0;
-  return { ...ga4Data, ad_revenue: adRevenue, affiliate_revenue: affiliateRevenue, total_revenue: totalRevenue, monthly_payout, date: apiData.date };
+// Fetch 30-day historical from Google Sheets
+async function fetchSheetData(apiKey){
+  const range='Sheet1!A2:C'; // Date | AdRevenue | AffiliateRevenue
+  const url=`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}?key=${apiKey}`;
+  const res = await safeFetch(url);
+  return res?.values||[];
 }
 
 // Render metrics
-function renderMetrics(data) {
-  document.getElementById('active-users').innerText = data.active_users.toLocaleString();
+function renderMetrics(data){
+  document.getElementById('active-users').innerText = data.activeUsers.toLocaleString();
   document.getElementById('sessions').innerText = data.sessions.toLocaleString();
   document.getElementById('pageviews').innerText = data.pageviews.toLocaleString();
-  document.getElementById('ad-revenue').innerText = '$'+data.ad_revenue.toFixed(2);
-  document.getElementById('affiliate-revenue').innerText = '$'+data.affiliate_revenue.toFixed(2);
-  document.getElementById('total-revenue').innerText = '$'+data.total_revenue.toFixed(2);
-  document.getElementById('monthly-payout').innerText = '$'+data.monthly_payout.toFixed(2);
+  document.getElementById('ad-revenue').innerText = '$'+data.adRevenue.toFixed(2);
+  document.getElementById('affiliate-revenue').innerText = '$'+data.affiliateRevenue.toFixed(2);
+  document.getElementById('total-revenue').innerText = '$'+data.totalRevenue.toFixed(2);
+  document.getElementById('monthly-payout').innerText = '$'+data.monthlyPayout.toFixed(2);
+
+  // Growth percentages
+  function calcGrowth(recent, previous){ 
+    if(previous===0) return 0;
+    return ((recent-previous)/previous*100).toFixed(1); 
+  }
+  document.getElementById('ad-growth').innerHTML = formatGrowth(calcGrowth(data.adRecent7,data.adPrev7));
+  document.getElementById('affiliate-growth').innerHTML = formatGrowth(calcGrowth(data.affRecent7,data.affPrev7));
+  document.getElementById('total-growth').innerHTML = formatGrowth(calcGrowth(data.totalRecent7,data.totalPrev7));
 }
 
-// Render 30-Day Revenue Chart
-function renderChart(labels, adData, affiliateData, totalData) {
+function formatGrowth(percent){
+  const cls = percent>=0?'up':'down';
+  const sign = percent>=0?'+':'';
+  return `<span class="growth ${cls}">${sign}${percent}% vs prev 7 days</span>`;
+}
+
+// Calculate cumulative sum
+function cumulativeArray(arr){
+  let sum=0;
+  return arr.map(v => sum+=v);
+}
+
+// Chart rendering
+function renderChart(labels, adData, affiliateData, totalData, forecastData, cumulativeData){
   if(chart) chart.destroy();
   const ctx = document.getElementById('revenue-chart').getContext('2d');
-  chart = new Chart(ctx, {
+  chart = new Chart(ctx,{
     type:'line',
     data:{ labels, datasets:[
       { label:'Ad Revenue', data:adData, borderColor:'#10b981', fill:false },
       { label:'Affiliate Revenue', data:affiliateData, borderColor:'#3b82f6', fill:false },
-      { label:'Total Revenue', data:totalData, borderColor:'#f59e0b', fill:false }
+      { label:'Total Revenue', data:totalData, borderColor:'#f59e0b', fill:false },
+      { label:'Forecast Monthly Payout', data:forecastData, borderColor:'#ef4444', borderDash:[5,5], fill:false },
+      { label:'Cumulative Revenue', data:cumulativeData, borderColor:'#8b5cf6', backgroundColor:'rgba(139,92,246,0.2)', fill:true }
     ]},
     options:{ responsive:true, plugins:{ legend:{ position:'top' } }, scales:{ y:{ beginAtZero:true } } }
   });
 }
 
-// Update dashboard
-async function updateDashboard() {
-  const config = await getConfig();
-  const [apiData, sheetRows, ga4Data, adsenseData, affiliateData] = await Promise.all([
-    fetchApiData(),
-    fetchSheetData(config?.GOOGLE_API_KEY),
-    fetchGA4Multi(config?.GOOGLE_API_KEY),
-    fetchAdSenseRealtime(config?.GOOGLE_API_KEY),
-    fetchAffiliateData(config?.AFFILIATE_API_KEY)
-  ]);
-
-  const aggregated = aggregate(apiData, sheetRows, ga4Data, adsenseData, affiliateData);
-  renderMetrics(aggregated);
-
-  // Prepare 30-day historical chart from sheet or API
+// Calculate 7-day vs previous 7-day totals
+function calc7DayGrowth(sheetRows, todayAd, todayAff){
   const last30 = sheetRows.slice(-30);
-  const labels = last30.map(r => r[0] || 'N/A');
-  const adData = last30.map(r => Number(r[1] || 0));
-  const affiliateDataArr = last30.map(r => Number(r[2] || 0));
-  const totalData = last30.map(r => adData.map((v,i)=>v + affiliateDataArr[i])[i]);
-
-  renderChart(labels, adData, affiliateDataArr, totalData);
+  const adArray = last30.map(r=>Number(r[1]||0)).concat(todayAd);
+  const affArray = last30.map(r=>Number(r[2]||0)).concat(todayAff);
+  function sum(arr,start,end){ return arr.slice(start,end).reduce((a,b)=>a+b,0); }
+  const adRecent7 = sum(adArray,-7);
+  const adPrev7 = sum(adArray,-14,-7);
+  const affRecent7 = sum(affArray,-7);
+  const affPrev7 = sum(affArray,-14,-7);
+  const totalRecent7 = adRecent7 + affRecent7;
+  const totalPrev7 = adPrev7 + affPrev7;
+  return { adRecent7, adPrev7, affRecent7, affPrev7, totalRecent7, totalPrev7 };
 }
 
-// Initial + refresh every 30s
+// Dashboard update
+async function updateDashboard(){
+  try{
+    const [ga4Data, adsenseData, affiliateData, sheetRows] = await Promise.all([
+      fetchGA4Realtime(GOOGLE_API_KEY),
+      fetchAdSenseRealtime(GOOGLE_API_KEY),
+      fetchAffiliateRevenue(),
+      fetchSheetData(GOOGLE_API_KEY)
+    ]);
+
+    const todayAd = adsenseData?.revenue||0;
+    const todayAff = affiliateData?.revenue||0;
+    const totalRevenue = todayAd + todayAff;
+    const monthlyPayout = totalRevenue*30>=100 ? totalRevenue*30 : 0;
+
+    const growthData = calc7DayGrowth(sheetRows,todayAd,todayAff);
+
+    const metrics = {
+      ...ga4Data,
+      adRevenue: todayAd,
+      affiliateRevenue: todayAff,
+      totalRevenue,
+      monthlyPayout,
+      ...growthData
+    };
+
+    // 30-day chart: last 29 days from Sheets + today
+    const last29 = sheetRows.slice(-29);
+    const labels = last29.map(r=>r[0] ? new Date(r[0]).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : 'N/A');
+    const adData = last29.map(r=>Number(r[1]||0));
+    const affiliateDataArr = last29.map(r=>Number(r[2]||0));
+    labels.push('Today'); adData.push(todayAd); affiliateDataArr.push(todayAff);
+    const totalData = adData.map((v,i)=>v+affiliateDataArr[i]);
+
+    // Forecast: flat line for next 30 days based on today
+    const forecastData = Array(totalData.length).fill(monthlyPayout/30);
+
+    // Cumulative revenue
+    const cumulativeData = cumulativeArray(totalData);
+
+    renderMetrics(metrics);
+    renderChart(labels, adData, affiliateDataArr, totalData, forecastData, cumulativeData);
+
+  } catch(e){ console.error("Dashboard update failed:", e); }
+}
+
+// Initial + auto-refresh
 updateDashboard();
 setInterval(updateDashboard,30000);
 </script>
