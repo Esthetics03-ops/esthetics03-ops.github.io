@@ -1,22 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Esthetics Hub - Full Revenue Dashboard</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>The Esthetics Hub — Simulated Live Revenue Dashboard</title>
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-  body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+  body { font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background:#f3f4f6; }
   .metric { font-weight: 600; }
   .currency { color: #10b981; }
   .loading { color: #9ca3af; font-style: italic; }
+  .growth { font-weight: 600; font-size: .9rem; }
+  .growth.up { color: #10b981; }
+  .growth.down { color: #ef4444; }
 </style>
 </head>
 <body>
-
 <section class="max-w-6xl mx-auto my-8 p-6 bg-white rounded-2xl shadow-lg">
-  <h1 class="text-3xl font-bold text-center mb-6">💰 Full Revenue Dashboard</h1>
+  <h1 class="text-3xl font-bold text-center mb-6">💰 The Esthetics Hub — Live Simulation Dashboard</h1>
 
   <!-- Metrics -->
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -37,23 +39,26 @@
   <!-- Revenue -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
     <div class="p-4 bg-gray-50 rounded-lg shadow">
-      <p class="metric">Total Ad Revenue</p>
-      <p id="ad-revenue" class="text-2xl currency loading">Loading…</p>
+      <p class="metric">Total Ad Revenue (Live)</p>
+      <p id="ad-revenue" class="text-2xl currency loading">$0.00</p>
+      <p id="ad-growth" class="growth">…</p>
     </div>
     <div class="p-4 bg-gray-50 rounded-lg shadow">
-      <p class="metric">Total Affiliate Revenue</p>
-      <p id="affiliate-revenue" class="text-2xl currency loading">Loading…</p>
+      <p class="metric">Total Affiliate Revenue (Live)</p>
+      <p id="affiliate-revenue" class="text-2xl currency loading">$0.00</p>
+      <p id="affiliate-growth" class="growth">…</p>
     </div>
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
     <div class="p-4 bg-gray-50 rounded-lg shadow">
-      <p class="metric">Total Revenue</p>
-      <p id="total-revenue" class="text-2xl currency loading">Loading…</p>
+      <p class="metric">Total Revenue (Live)</p>
+      <p id="total-revenue" class="text-2xl currency loading">$0.00</p>
+      <p id="total-growth" class="growth">…</p>
     </div>
     <div class="p-4 bg-gray-50 rounded-lg shadow">
-      <p class="metric">Monthly Possible Payout</p>
-      <p id="monthly-payout" class="text-2xl currency loading">Loading…</p>
+      <p class="metric">Monthly Possible Payout (Projection)</p>
+      <p id="monthly-payout" class="text-2xl currency loading">$0.00</p>
     </div>
   </div>
 
@@ -62,141 +67,261 @@
 </section>
 
 <script>
-let chart;
+/*
+  Full simulation dashboard:
+  - Simulated GA traffic: active users, sessions, pageviews
+  - Simulated live AdSense revenue (small increments each refresh)
+  - Simulated affiliate revenue
+  - 30-day history (simulated) + today's live appended
+  - Forecast line (monthly payout), cumulative area, and 7d vs previous7d growth
+  - Smooth animations for numeric values
+*/
 
-// Config (replace with your real keys)
-const GA4_PROPERTIES = ['G-QCX3G9KSPC','G-PSW1MY7HB4'];
-const ADSENSE_PUB_ID = 'pub-1959507280210179';
-const SHEET_ID = '1aB2cD3EfGHIjKlmNOPqRstUVwxYZ4567890abcde';
-const AFFILIATE_API_KEY = 'YOUR_REAL_AFFILIATE_KEY_HERE';
-const GOOGLE_API_KEY = 'YOUR_GOOGLE_API_KEY';
+// Chart container
+let chart = null;
+const REFRESH_INTERVAL_MS = 30000;
 
-// Helper
-async function safeFetch(url, options={}) {
-  try { 
-    const res = await fetch(url, options);
-    return await res.json();
-  } catch(e){ console.error("Fetch failed:", url, e); return null; }
-}
+// State holds persistent values across refreshes to make simulation feel continuous
+const state = {
+  // seed baseline values (feel free to tweak)
+  activeUsersBase: 720,
+  sessionsBase: 1600,
+  pageviewsBase: 4200,
+  adTodayBase: 60.25,        // starting dollars for today
+  affiliateTodayBase: 45.10, // starting dollars for today
+  adLiveBuffer: 0,
+  affiliateLiveBuffer: 0,
+  lastAdValue: 60.25,
+  lastAffValue: 45.10,
+  initialized: false,
+  historical: [] // will store array of {date, ad, affiliate}
+};
 
-// GA4 real-time
-async function fetchGA4Realtime(apiKey){
-  let totalUsers=0,totalPageviews=0;
-  for(const prop of GA4_PROPERTIES){
-    const url=`https://analyticsdata.googleapis.com/v1beta/properties/${prop}:runRealtimeReport?key=${apiKey}`;
-    const body=JSON.stringify({metrics:[{name:'activeUsers'},{name:'screenPageViews'}]});
-    const res = await safeFetch(url,{method:'POST', headers:{'Content-Type':'application/json'}, body});
-    if(res?.rows?.[0]?.metricValues){
-      totalUsers += Number(res.rows[0].metricValues[0].value||0);
-      totalPageviews += Number(res.rows[0].metricValues[1].value||0);
+// Utility: format currency
+function fmt(v){ return '$' + Number(v).toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2}); }
+
+// Smooth numeric animation for DOM element
+function animateNumber(id, start, end, ms=800){
+  const el = document.getElementById(id);
+  if(!el) return;
+  const steps = Math.min(40, Math.max(10, Math.floor(ms/25)));
+  let current = start;
+  const step = (end - start) / steps;
+  let i = 0;
+  const t = setInterval(()=>{
+    i++;
+    current += step;
+    el.innerText = fmt(Math.max(0, current));
+    if(i >= steps) {
+      el.innerText = fmt(Math.max(0, end));
+      clearInterval(t);
     }
+  }, ms/steps);
+}
+
+// Create initial 30-day historical data (simulated)
+function seedHistorical() {
+  const arr = [];
+  const today = new Date();
+  for (let i = 29; i >= 0; i--) {
+    const d = new Date(today);
+    d.setDate(d.getDate() - i);
+    // Simulate reasonable daily ad & affiliate revenue (varying with day)
+    const ad = +(Math.random() * 60 + 30).toFixed(2);         // $30 - $90
+    const aff = +(Math.random() * 40 + 15).toFixed(2);        // $15 - $55
+    arr.push({ date: d.toISOString().split('T')[0], ad, aff });
   }
-  return { activeUsers: totalUsers, sessions: totalUsers*2, pageviews: totalPageviews };
+  return arr;
 }
 
-// AdSense today
-async function fetchAdSenseRealtime(apiKey){
-  const today = new Date().toISOString().split('T')[0];
-  const url = `https://www.googleapis.com/adsense/v2/accounts/${ADSENSE_PUB_ID}/reports?startDate=${today}&endDate=${today}&metrics=EARNINGS&key=${apiKey}`;
-  const res = await safeFetch(url);
-  return { revenue: Number(res?.totals?.EARNINGS||0) };
+// Simulate incremental live AdSense earnings (small random increments)
+function simulateLiveIncrements() {
+  // simulate more increments when traffic is high
+  const trafficFactor = 1 + (Math.random()*0.4 - 0.2); // +/-20%
+  const adIncrement = +(Math.random() * 2.5 * trafficFactor).toFixed(3); // small cents to dollars
+  const affIncrement = +(Math.random() * 3.5 * trafficFactor).toFixed(3);
+  state.adLiveBuffer += adIncrement;
+  state.affiliateLiveBuffer += affIncrement;
+
+  state.lastAdValue = +(state.adTodayBase + state.adLiveBuffer).toFixed(2);
+  state.lastAffValue = +(state.affiliateTodayBase + state.affiliateLiveBuffer).toFixed(2);
+
+  return { ad: state.lastAdValue, aff: state.lastAffValue };
 }
 
-// Affiliate revenue
-async function fetchAffiliateRevenue(){
-  const res = await safeFetch('https://api.youraffiliateplatform.com/revenue/today', { headers:{'Authorization':'Bearer '+AFFILIATE_API_KEY} });
-  return { revenue: Number(res?.revenue_today||0) };
+// Calculate 7-day vs previous 7-day growth
+function calc7DayGrowth(history, todayAd, todayAff) {
+  // build arrays of length >= 14 using last 30 history + today
+  const rows = history.slice(-29).map(r => ({ad: r.ad, aff: r.aff})); // last 29
+  rows.push({ad: todayAd, aff: todayAff}); // include today
+  // ensure we have at least 14 entries
+  while (rows.length < 14) rows.unshift({ad:0, aff:0});
+
+  const getSum = (arr, from, to) => arr.slice(from, to).reduce((s, x) => s + (x?.ad || 0), 0);
+  // simpler: compute separate sums for ad and aff
+  const adArray = rows.map(r => r.ad);
+  const affArray = rows.map(r => r.aff);
+
+  const adRecent7 = adArray.slice(-7).reduce((a,b) => a+b, 0);
+  const adPrev7   = adArray.slice(-14, -7).reduce((a,b) => a+b, 0);
+  const affRecent7 = affArray.slice(-7).reduce((a,b) => a+b, 0);
+  const affPrev7   = affArray.slice(-14, -7).reduce((a,b) => a+b, 0);
+
+  const totalRecent7 = adRecent7 + affRecent7;
+  const totalPrev7 = adPrev7 + affPrev7;
+
+  function pctChange(recent, prev) {
+    if (prev === 0) return recent === 0 ? 0 : 100;
+    return ((recent - prev) / prev * 100);
+  }
+
+  return {
+    adRecent7, adPrev7, adPct: pctChange(adRecent7, adPrev7),
+    affRecent7, affPrev7, affPct: pctChange(affRecent7, affPrev7),
+    totalRecent7, totalPrev7, totalPct: pctChange(totalRecent7, totalPrev7)
+  };
 }
 
-// Fetch 30-day historical from Google Sheets
-async function fetchSheetData(apiKey){
-  const range='Sheet1!A2:C'; // Date | AdRevenue | AffiliateRevenue
-  const url=`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}?key=${apiKey}`;
-  const res = await safeFetch(url);
-  return res?.values||[];
+// Build chart data arrays from history + today
+function buildChartSeries(history, todayAd, todayAff) {
+  const last29 = history.slice(-29); // array of {date,ad,aff}
+  const labels = last29.map(r => (new Date(r.date)).toLocaleDateString(undefined, {month:'short', day:'numeric'}));
+  const adSeries = last29.map(r => r.ad);
+  const affSeries = last29.map(r => r.aff);
+  // append today as 'Today'
+  labels.push('Today');
+  adSeries.push(todayAd);
+  affSeries.push(todayAff);
+  const totalSeries = adSeries.map((v,i) => +(v + affSeries[i]).toFixed(2));
+  return { labels, adSeries, affSeries, totalSeries };
 }
 
-// Render metrics
-function renderMetrics(data){
-  document.getElementById('active-users').innerText = data.activeUsers.toLocaleString();
-  document.getElementById('sessions').innerText = data.sessions.toLocaleString();
-  document.getElementById('pageviews').innerText = data.pageviews.toLocaleString();
-  document.getElementById('ad-revenue').innerText = '$'+data.adRevenue.toFixed(2);
-  document.getElementById('affiliate-revenue').innerText = '$'+data.affiliateRevenue.toFixed(2);
-  document.getElementById('total-revenue').innerText = '$'+data.totalRevenue.toFixed(2);
-  document.getElementById('monthly-payout').innerText = '$'+data.monthlyPayout.toFixed(2);
+// cumulative sum
+function cumulative(arr) {
+  const out = [];
+  let s = 0;
+  for (const v of arr) {
+    s += v;
+    out.push(+(s.toFixed(2)));
+  }
+  return out;
 }
 
-// Calculate cumulative sum
-function cumulativeArray(arr){
-  let sum=0;
-  return arr.map(v => sum+=v);
-}
-
-// Chart rendering
-function renderChart(labels, adData, affiliateData, totalData, forecastData, cumulativeData){
-  if(chart) chart.destroy();
+// Render chart
+function renderChart(labels, adData, affData, totalData, forecastPerPoint, cumulativeData) {
   const ctx = document.getElementById('revenue-chart').getContext('2d');
-  chart = new Chart(ctx,{
-    type:'line',
-    data:{ labels, datasets:[
-      { label:'Ad Revenue', data:adData, borderColor:'#10b981', fill:false },
-      { label:'Affiliate Revenue', data:affiliateData, borderColor:'#3b82f6', fill:false },
-      { label:'Total Revenue', data:totalData, borderColor:'#f59e0b', fill:false },
-      { label:'Forecast Monthly Payout', data:forecastData, borderColor:'#ef4444', borderDash:[5,5], fill:false },
-      { label:'Cumulative Revenue', data:cumulativeData, borderColor:'#8b5cf6', backgroundColor:'rgba(139,92,246,0.2)', fill:true }
-    ]},
-    options:{ responsive:true, plugins:{ legend:{ position:'top' } }, scales:{ y:{ beginAtZero:true } } }
+
+  if (chart) chart.destroy();
+
+  chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        { label: 'Ad Revenue', data: adData, borderColor: '#10b981', fill: false, tension: 0.2 },
+        { label: 'Affiliate Revenue', data: affData, borderColor: '#3b82f6', fill: false, tension: 0.2 },
+        { label: 'Total Revenue', data: totalData, borderColor: '#f59e0b', fill: false, tension: 0.2 },
+        { label: 'Forecast Monthly Payout (per day)', data: forecastPerPoint, borderColor: '#ef4444', borderDash: [6,4], fill: false, tension: 0.2 },
+        { label: 'Cumulative Revenue', data: cumulativeData, borderColor: '#8b5cf6', backgroundColor: 'rgba(139,92,246,0.15)', fill: true, tension: 0.2, yAxisID: 'y' }
+      ]
+    },
+    options: {
+      responsive: true,
+      interaction: { mode: 'index', intersect: false },
+      stacked: false,
+      plugins: { legend: { position: 'top' } },
+      scales: {
+        y: { beginAtZero: true, ticks: { callback: function(value){ return '$' + value; } } }
+      }
+    }
   });
 }
 
-// Dashboard update
-async function updateDashboard(){
-  try{
-    const [ga4Data, adsenseData, affiliateData, sheetRows] = await Promise.all([
-      fetchGA4Realtime(GOOGLE_API_KEY),
-      fetchAdSenseRealtime(GOOGLE_API_KEY),
-      fetchAffiliateRevenue(),
-      fetchSheetData(GOOGLE_API_KEY)
-    ]);
-
-    const todayAd = adsenseData?.revenue||0;
-    const todayAff = affiliateData?.revenue||0;
-    const totalRevenue = todayAd + todayAff;
-    const monthlyPayout = totalRevenue*30>=100 ? totalRevenue*30 : 0;
-
-    const metrics = {
-      ...ga4Data,
-      adRevenue: todayAd,
-      affiliateRevenue: todayAff,
-      totalRevenue,
-      monthlyPayout
-    };
-
-    // 30-day chart: last 29 days from Sheets + today
-    const last29 = sheetRows.slice(-29);
-    const labels = last29.map(r=>r[0] ? new Date(r[0]).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : 'N/A');
-    const adData = last29.map(r=>Number(r[1]||0));
-    const affiliateDataArr = last29.map(r=>Number(r[2]||0));
-    labels.push('Today'); adData.push(todayAd); affiliateDataArr.push(todayAff);
-    const totalData = adData.map((v,i)=>v+affiliateDataArr[i]);
-
-    // Forecast: flat line for next 30 days based on today
-    const forecastData = Array(totalData.length).fill(monthlyPayout/30);
-
-    // Cumulative revenue
-    const cumulativeData = cumulativeArray(totalData);
-
-    renderMetrics(metrics);
-    renderChart(labels, adData, affiliateDataArr, totalData, forecastData, cumulativeData);
-
-  } catch(e){ console.error("Dashboard update failed:", e); }
+// Format growth element
+function updateGrowthElement(id, pct) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const val = Math.round(pct * 10) / 10; // one decimal
+  const cls = val >= 0 ? 'up' : 'down';
+  const sign = val >= 0 ? '+' : '';
+  el.innerHTML = `<span class="growth ${cls}">${sign}${val}% vs prev 7 days</span>`;
 }
 
-// Initial + auto-refresh
-updateDashboard();
-setInterval(updateDashboard,30000);
-</script>
+// Main update loop (initial compute + subsequent refreshes)
+function updateDashboard(simTick = false) {
+  // initialize historical data once
+  if (!state.initialized) {
+    state.historical = seedHistorical();
+    state.initialized = true;
+  }
 
+  // Simulate traffic fluctuations
+  const activeUsers = Math.max(50, Math.round(state.activeUsersBase + (Math.random() * 220 - 110)));
+  const sessions = Math.max(120, Math.round(state.sessionsBase + (Math.random() * 400 - 200)));
+  const pageviews = Math.max(400, Math.round(state.pageviewsBase + (Math.random() * 1600 - 800)));
+
+  // Simulate live increments (the "live AdSense" feeling)
+  const live = simulateLiveIncrements(); // updates state.lastAdValue and lastAffValue
+
+  const todayAd = live.ad;
+  const todayAff = live.aff;
+  const todayTotal = +(todayAd + todayAff).toFixed(2);
+  const monthlyPayout = +(todayTotal * 30).toFixed(2);
+
+  // 7-day growth
+  const growth = calc7DayGrowth(state.historical, todayAd, todayAff);
+
+  // Build chart arrays: last 29 days + today
+  const { labels, adSeries, affSeries, totalSeries } = buildChartSeries(state.historical, todayAd, todayAff);
+
+  // Forecast: show a flat per-day line representing monthlyPayout/30 across points (so it visually lines up)
+  const forecastPerPoint = Array(totalSeries.length).fill(+(monthlyPayout/30).toFixed(2));
+
+  // Cumulative:
+  const cum = cumulative(totalSeries);
+
+  // Update DOM with animation
+  animateNumber('active-users', Number(document.getElementById('active-users').innerText.replace(/[^0-9.-]+/g,"")) || activeUsers, activeUsers, 700);
+  animateNumber('sessions', Number(document.getElementById('sessions').innerText.replace(/[^0-9.-]+/g,"")) || sessions, sessions, 700);
+  animateNumber('pageviews', Number(document.getElementById('pageviews').innerText.replace(/[^0-9.-]+/g,"")) || pageviews, pageviews, 700);
+
+  // animate revenue values smoothly
+  const prevAd = Number(document.getElementById('ad-revenue').innerText.replace(/[^0-9.-]+/g,"")) || state.adTodayBase;
+  const prevAff = Number(document.getElementById('affiliate-revenue').innerText.replace(/[^0-9.-]+/g,"")) || state.affiliateTodayBase;
+  const prevTotal = Number(document.getElementById('total-revenue').innerText.replace(/[^0-9.-]+/g,"")) || (state.adTodayBase + state.affiliateTodayBase);
+
+  animateNumber('ad-revenue', prevAd, todayAd, 900);
+  animateNumber('affiliate-revenue', prevAff, todayAff, 900);
+  animateNumber('total-revenue', prevTotal, todayTotal, 900);
+
+  // monthly payout (projection) - no comma format so animateNumber works; we'll directly set final formatting afterwards
+  animateNumber('monthly-payout', Number(document.getElementById('monthly-payout').innerText.replace(/[^0-9.-]+/g,"")) || monthlyPayout, monthlyPayout, 900);
+
+  // Update growth labels
+  updateGrowthElement('ad-growth', growth.adPct);
+  updateGrowthElement('affiliate-growth', growth.affPct);
+  updateGrowthElement('total-growth', growth.totalPct);
+
+  // render chart
+  renderChart(labels, adSeries, affSeries, totalSeries, forecastPerPoint, cum);
+
+  // persist today's simulated values into historical for next tick (replace last row if same date or push)
+  const todayIso = (new Date()).toISOString().split('T')[0];
+  const lastEntry = state.historical[state.historical.length - 1];
+  if (lastEntry && lastEntry.date === todayIso) {
+    lastEntry.ad = +(todayAd).toFixed(2);
+    lastEntry.aff = +(todayAff).toFixed(2);
+  } else {
+    // shift out the oldest and append today
+    state.historical = state.historical.slice(-29);
+    state.historical.push({ date: todayIso, ad: +(todayAd).toFixed(2), aff: +(todayAff).toFixed(2) });
+  }
+}
+
+// Start simulation immediately and repeat every REFRESH_INTERVAL_MS
+updateDashboard(true);
+setInterval(() => updateDashboard(true), REFRESH_INTERVAL_MS);
+
+</script>
 </body>
-</html>
+  </html>
