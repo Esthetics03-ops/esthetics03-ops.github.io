@@ -1,32 +1,10 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Esthetics Hub - Full Live Monetisation Dashboard</title>
+<title>The Esthetics Hub - Live Revenue Dashboard</title>
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  "name": "Website Health & Performance Dashboard – The Esthetics Hub",
-  "url": "https://esthetics03-ops.github.io/revenue-dashboard.html",
-  "description": "Comprehensive dashboard for The Esthetics Hub showing live monetization, performance metrics, SEO insights, and traffic analysis.",
-  "inLanguage": "en",
-  "publisher": {
-    "@type": "Organization",
-    "name": "The Esthetics Hub",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://esthetics03-ops.github.io/logo.png"
-    },
-    "sameAs": [
-      "https://www.facebook.com/yourpage",
-      "https://www.instagram.com/yourpage",
-      "https://www.pinterest.com/yourpage"
-    ]
-  }
-}
-  </script>
 <style>
   body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
   #monetisation-dashboard { transition: all 0.3s ease; }
@@ -36,17 +14,21 @@
   .error { color: #ef4444; }
 </style>
 </head>
-<body><section id="monetisation-dashboard" class="p-6 bg-white rounded-2xl shadow-lg max-w-4xl mx-auto my-8">
-  <h2 class="text-3xl font-bold mb-6 text-center text-gray-800">💰 Full Live Monetisation Dashboard</h2>
-  <div id="revenue-stats" class="text-center text-lg text-gray-700">Loading data...</div>
-</section><script>
+<body>
+
+<section id="monetisation-dashboard" class="p-6 bg-white rounded-2xl shadow-lg max-w-4xl mx-auto my-8">
+  <h2 class="text-3xl font-bold mb-6 text-center text-gray-800">💰 Live Revenue Dashboard</h2>
+  <div id="revenue-stats" class="text-center text-lg text-gray-700">Loading live data...</div>
+</section>
+
+<script>
 // CONFIGURATION
 const GA4_PROPERTY_ID = 'G-QCX3G9KSPC';
 const ADSENSE_PUB_ID = 'pub-1959507280210179';
 const MONETISATION_API = 'https://api.estheticshub.live/monetisation/live?refresh=TRUE';
 const SHEET_ID = '1aB2cD3EfGHIjKlmNOPqRstUVwxYZ4567890abcde';
 
-// Load API key securely
+// Securely load API keys from local config.json
 async function getApiKey() {
   try {
     const res = await fetch('/config.json');
@@ -58,11 +40,15 @@ async function getApiKey() {
   }
 }
 
-// Fallback
-const fallbackData = { date: new Date().toISOString().split('T')[0], active_users: 0, sessions: 0, pageviews: 0, ad_revenue: 0, affiliate_revenue: 0, total_revenue: 0 };
-
 // Fetch functions
-async function fetchApiData() { try { const res = await fetch(MONETISATION_API, { cache: 'no-store' }); if (!res.ok) throw new Error('API response not ok'); return await res.json(); } catch (err) { console.warn('API fetch failed:', err); return null; } }
+async function fetchApiData() {
+  try {
+    const res = await fetch(MONETISATION_API, { cache: 'no-store' });
+    return await res.json();
+  } catch {
+    return { active_users: 0, sessions: 0, pageviews: 0, ad_revenue: 0, affiliate_revenue: 0, date: new Date().toISOString().split('T')[0] };
+  }
+}
 
 async function fetchSheetData(apiKey) {
   if (!apiKey) return null;
@@ -71,7 +57,7 @@ async function fetchSheetData(apiKey) {
     const res = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}?key=${apiKey}`);
     const data = await res.json();
     return data.values ? data.values[data.values.length -1] : null;
-  } catch (err) { console.warn('Sheet fetch failed:', err); return null; }
+  } catch { return null; }
 }
 
 async function fetchGA4Realtime(apiKey) {
@@ -88,25 +74,36 @@ async function fetchGA4Realtime(apiKey) {
       sessions: 0,
       pageviews: Number(data.rows?.[0]?.metricValues?.[1]?.value || 0)
     };
-  } catch (err) { console.warn('GA4 fetch failed:', err); return { active_users: 0, sessions: 0, pageviews: 0 }; }
+  } catch { return { active_users: 0, sessions: 0, pageviews: 0 }; }
 }
 
-async function fetchAdSenseRealtime() { try { /* Replace with real AdSense API call */ return { revenue: 0 }; } catch { return { revenue: 0 }; } }
-async function fetchAffiliateData() { try { /* Replace with affiliate API */ return { revenue: 0 }; } catch { return { revenue: 0 }; } }
+async function fetchAdSenseRealtime() {
+  try {
+    // Replace this placeholder with AdSense Management API call
+    return { revenue: 0 };
+  } catch { return { revenue: 0 }; }
+}
+
+async function fetchAffiliateData() {
+  try {
+    // Replace this placeholder with your affiliate API call
+    return { revenue: 0 };
+  } catch { return { revenue: 0 }; }
+}
 
 // Aggregate metrics
 function aggregateMetrics(apiData, sheetData, ga4Data, adsenseData, affiliateData) {
-  const adRevenue = (apiData?.ad_revenue || 0) + (adsenseData?.revenue || 0);
-  const affiliateRevenue = (apiData?.affiliate_revenue || 0) + (affiliateData?.revenue || 0);
+  const adRevenue = Number(apiData.ad_revenue) + Number(adsenseData.revenue);
+  const affiliateRevenue = Number(apiData.affiliate_revenue) + Number(affiliateData.revenue);
   const totalRevenue = adRevenue + affiliateRevenue;
   const monthlyEarnings = totalRevenue * 30;
   const monthlyPayout = monthlyEarnings >= 100 ? monthlyEarnings : 0;
 
   return {
-    date: apiData?.date || sheetData?.[0] || fallbackData.date,
-    active_users: (apiData?.active_users || 0) + (ga4Data?.active_users || 0),
-    sessions: (apiData?.sessions || 0) + (ga4Data?.sessions || 0),
-    pageviews: (apiData?.pageviews || 0) + (ga4Data?.pageviews || 0),
+    date: apiData.date,
+    active_users: (apiData.active_users || 0) + (ga4Data.active_users || 0),
+    sessions: (apiData.sessions || 0) + (ga4Data.sessions || 0),
+    pageviews: (apiData.pageviews || 0) + (ga4Data.pageviews || 0),
     ad_revenue: adRevenue,
     affiliate_revenue: affiliateRevenue,
     total_revenue: totalRevenue,
@@ -130,17 +127,24 @@ function renderDashboard(data) {
   `;
 }
 
-// Update dashboard every 30 seconds
+// Full live update
 async function updateDashboard() {
   const apiKey = await getApiKey();
   const [apiData, sheetData, ga4Data, adsenseData, affiliateData] = await Promise.all([
-    fetchApiData(), fetchSheetData(apiKey), fetchGA4Realtime(apiKey), fetchAdSenseRealtime(), fetchAffiliateData()
+    fetchApiData(),
+    fetchSheetData(apiKey),
+    fetchGA4Realtime(apiKey),
+    fetchAdSenseRealtime(),
+    fetchAffiliateData()
   ]);
   const aggregated = aggregateMetrics(apiData, sheetData, ga4Data, adsenseData, affiliateData);
   renderDashboard(aggregated);
 }
 
+// Initial run + auto-refresh every 30s
 updateDashboard();
 setInterval(updateDashboard, 30000);
-</script></body>
+</script>
+
+</body>
 </html>
