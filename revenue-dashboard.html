@@ -62,20 +62,15 @@
 <canvas id="revenue-chart" height="180"></canvas>
 </section>
 
+<script src="./config.json"></script>
 <script>
-// ---------- CONFIG PLACEHOLDERS ----------
-const CONFIG = {
-  GOOGLE_API_KEY: "YOUR_GOOGLE_API_KEY",
-  GA4_PROPERTIES: ["G-QCX3G9KSPC","G-PSW1MY7HB4"], // your GA4 property IDs
-  ADSENSE_PUB_ID: "pub-1959507280210179",         // your AdSense publisher ID
-  AFFILIATE_API_KEY: "YOUR_AFFILIATE_API_KEY",    // your affiliate API key
-  SHEET_ID: "YOUR_GOOGLE_SHEET_ID"               // optional for historical revenue
-};
+const CONFIG = window.CONFIG;
 
-// ---------- HELPER FUNCTIONS ----------
+// Format currency
 function fmt(v){ return '$'+Number(v).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}); }
+
+// --------- Fetch GA4 Metrics ----------
 async function fetchGA4Multi(apiKey){
-  // Fetch active users, sessions, pageviews for all GA4 properties
   let totalUsers=0,totalSessions=0,totalPageviews=0;
   for(const prop of CONFIG.GA4_PROPERTIES){
     try{
@@ -92,15 +87,17 @@ async function fetchGA4Multi(apiKey){
   return { active_users:totalUsers, sessions:totalSessions, pageviews:totalPageviews };
 }
 
+// --------- Fetch AdSense Revenue ----------
 async function fetchAdSenseRealtime(apiKey){
   try{
     const today=new Date().toISOString().split('T')[0];
     const res=await fetch(`https://www.googleapis.com/adsense/v2/accounts/${CONFIG.ADSENSE_PUB_ID}/reports?startDate=${today}&endDate=${today}&metrics=EARNINGS&key=${apiKey}`);
     const data=await res.json();
     return { revenue:Number(data.totals?.EARNINGS||0) };
-  }catch{return { revenue:0 }; }
+  } catch{return { revenue:0 }; }
 }
 
+// --------- Fetch Affiliate Revenue ----------
 async function fetchAffiliateData(){
   try{
     const res=await fetch('https://api.youraffiliateplatform.com/revenue/today',{
@@ -111,6 +108,7 @@ async function fetchAffiliateData(){
   } catch{return { revenue:0 }; }
 }
 
+// --------- Render Metrics ----------
 function renderMetrics(metrics){
   document.getElementById('active-users').innerText=metrics.active_users.toLocaleString();
   document.getElementById('sessions').innerText=metrics.sessions.toLocaleString();
@@ -121,46 +119,39 @@ function renderMetrics(metrics){
   document.getElementById('monthly-payout').innerText=fmt(metrics.monthly_payout);
 }
 
+// --------- Render 30-Day Chart ----------
+let chart=null;
 function renderChart(labels,adData,affData,totalData){
+  if(chart) chart.destroy();
   const ctx=document.getElementById('revenue-chart').getContext('2d');
-  if(window.chart) window.chart.destroy();
-  window.chart=new Chart(ctx,{
-    type:'line',
-    data:{labels,datasets:[
-      {label:'Ad Revenue',data:adData,borderColor:'#10b981',fill:false},
-      {label:'Affiliate Revenue',data:affData,borderColor:'#3b82f6',fill:false},
-      {label:'Total Revenue',data:totalData,borderColor:'#f59e0b',fill:false}
-    ]},
-    options:{responsive:true,plugins:{legend:{position:'top'}},scales:{y:{beginAtZero:true}}}
-  });
+  chart=new Chart(ctx,{type:'line',data:{labels,datasets:[
+    {label:'Ad Revenue',data:adData,borderColor:'#10b981',fill:false},
+    {label:'Affiliate Revenue',data:affData,borderColor:'#3b82f6',fill:false},
+    {label:'Total Revenue',data:totalData,borderColor:'#f59e0b',fill:false}
+  ]},options:{responsive:true,plugins:{legend:{position:'top'}},scales:{y:{beginAtZero:true}}}});
 }
 
-// ---------- MAIN DASHBOARD UPDATE ----------
+// --------- Update Dashboard ----------
 async function updateDashboard(){
-  const [ga4Data,adsenseData,affiliateData]=await Promise.all([
+  const [ga4,adsense,affiliate]=await Promise.all([
     fetchGA4Multi(CONFIG.GOOGLE_API_KEY),
     fetchAdSenseRealtime(CONFIG.GOOGLE_API_KEY),
     fetchAffiliateData()
   ]);
-  const adRevenue=adsenseData.revenue;
-  const affiliateRevenue=affiliateData.revenue;
-  const totalRevenue=adRevenue+affiliateRevenue;
+
+  const adRevenue=adsense.revenue;
+  const affRevenue=affiliate.revenue;
+  const totalRevenue=adRevenue+affRevenue;
   const monthlyPayout=totalRevenue*30;
 
-  renderMetrics({
-    ...ga4Data,
-    ad_revenue:adRevenue,
-    affiliate_revenue:affiliateRevenue,
-    total_revenue:totalRevenue,
-    monthly_payout:monthlyPayout
-  });
+  renderMetrics({ ...ga4, ad_revenue:adRevenue, affiliate_revenue:affRevenue, total_revenue:totalRevenue, monthly_payout:monthlyPayout });
 
-  // 30-day labels + chart (placeholder if no historical sheet connected)
+  // Optional: 30-day historical chart
   const labels=[],adData=[],affData=[],totalData=[];
   for(let i=29;i>=0;i--){
     const d=new Date(); d.setDate(d.getDate()-i); labels.push(d.toLocaleDateString());
-    const ad=Math.random()*adRevenue; const aff=Math.random()*affiliateRevenue;
-    adData.push(ad); affData.push(aff); totalData.push(ad+aff);
+    const a=adRevenue*Math.random(); const f=affRevenue*Math.random();
+    adData.push(a); affData.push(f); totalData.push(a+f);
   }
   renderChart(labels,adData,affData,totalData);
 }
@@ -170,4 +161,4 @@ updateDashboard();
 setInterval(updateDashboard,30000);
 </script>
 </body>
-      </html>
+  </html>
