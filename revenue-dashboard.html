@@ -285,5 +285,30 @@ window.addEventListener("DOMContentLoaded",()=>{
   if(localStorage.getItem("theme")==="dark") document.body.classList.add("dark");
 });
 </script>
+
+  <script>
+async function fetchLiveData() {
+  const config = await fetch('./config.json').then(r => r.json());
+
+  // --- Fetch GA4 Realtime ---
+  const gaRes = await fetch('https://REGION-PROJECT.cloudfunctions.net/ga4Proxy');
+  const gaData = await gaRes.json();
+  const activeUsers = gaData?.rows?.[0]?.metricValues?.[0]?.value || 0;
+
+  // --- Fetch AdSense Earnings ---
+  const adRes = await fetch('https://REGION-PROJECT.cloudfunctions.net/adsenseProxy');
+  const adData = await adRes.json();
+  const earnings = adData?.rows?.[0]?.cells?.[1]?.value || 0;
+
+  // --- Update UI ---
+  document.querySelector('#active-users').textContent = activeUsers;
+  document.querySelector('#total-earnings').textContent = `$${earnings}`;
+  document.querySelector('#last-update').textContent = 'Updated: ' + new Date().toLocaleTimeString();
+}
+
+// refresh every 60s
+fetchLiveData();
+setInterval(fetchLiveData, 60000);
+  </script>
 </body>
   </html>
