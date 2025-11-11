@@ -2,24 +2,39 @@ name: Site Performance & Deploy
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v4
-      with: { node-version: 18 }
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
-    - run: npm install sharp @lhci/cli
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
 
-    - run: node scripts/convert-images.js
-    - run: node scripts/generate-sitemap.js
-    - run: lhci autorun --config=lighthouserc.js
+      - name: Install dependencies
+        run: npm install sharp @lhci/cli
 
-    - name: Deploy
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: .
+      - name: Optimize images
+        run: node scripts/convert-images.js
+
+      - name: Generate sitemap
+        run: node scripts/generate-sitemap.js
+
+      - name: Run Lighthouse Performance Test
+        run: lhci autorun --upload.target=temporary-public-storage --config=lighthouserc.js
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .
+          publish_branch: gh-pages
