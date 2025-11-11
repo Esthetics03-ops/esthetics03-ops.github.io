@@ -1,164 +1,308 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Esthetics Hub - Live Revenue Dashboard</title>
-<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<style>
-  body { font-family: Inter, sans-serif; background:#f3f4f6; }
-  .metric { font-weight:600; }
-  .currency { color:#10b981; }
-  .growth { font-weight:600; font-size:.9rem; }
-  .growth.up { color:#10b981; }
-  .growth.down { color:#ef4444; }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>💰 Monetisation Dashboard | The Esthetics Hub</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body.dark { background-color: #111827; color: #f3f4f6; }
+    .card { @apply rounded-2xl shadow-md p-4 bg-white dark:bg-gray-800; }
+  </style>
 </head>
-<body>
-<section class="max-w-6xl mx-auto my-8 p-6 bg-white rounded-2xl shadow-lg">
-<h1 class="text-3xl font-bold text-center mb-6">💰 The Esthetics Hub — Live Revenue Dashboard</h1>
+<body class="transition-colors duration-500">
+  <header class="p-6 text-center">
+    <h1 class="text-3xl font-bold">💰 Live Monetisation Dashboard</h1>
+    <p class="text-gray-600 dark:text-gray-400">Simulated analytics for The Esthetics Hub</p>
+    <button id="toggleTheme" class="mt-3 px-4 py-2 bg-gray-800 text-white rounded-lg">Toggle Dark/Light</button>
+  </header>
 
-<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-  <div class="p-4 bg-gray-50 rounded-lg shadow">
-    <p class="metric">Active Users</p>
-    <p id="active-users" class="text-2xl font-bold">0</p>
-  </div>
-  <div class="p-4 bg-gray-50 rounded-lg shadow">
-    <p class="metric">Sessions</p>
-    <p id="sessions" class="text-2xl font-bold">0</p>
-  </div>
-  <div class="p-4 bg-gray-50 rounded-lg shadow">
-    <p class="metric">Pageviews</p>
-    <p id="pageviews" class="text-2xl font-bold">0</p>
-  </div>
-</div>
+  <main class="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-3 gap-4 p-4">
+    <div class="card text-center">
+      <h3 class="text-lg font-semibold">Today’s Earnings</h3>
+      <p id="todayEarnings" class="text-2xl font-bold text-green-600">KES 0.00</p>
+      <small id="todayUSD">(≈ $0.00)</small>
+    </div>
+    <div class="card text-center">
+      <h3 class="text-lg font-semibold">7-Day Total</h3>
+      <p id="weekEarnings" class="text-2xl font-bold text-blue-600">KES 0.00</p>
+      <small id="weekUSD">(≈ $0.00)</small>
+    </div>
+    <div class="card text-center">
+      <h3 class="text-lg font-semibold">Monthly Projection</h3>
+      <p id="monthEarnings" class="text-2xl font-bold text-purple-600">KES 0.00</p>
+      <small id="monthUSD">(≈ $0.00)</small>
+    </div>
+    <div class="card text-center">
+      <h3 class="text-lg font-semibold">Ad Impressions</h3>
+      <p id="impressions" class="text-2xl font-bold">0</p>
+    </div>
+    <div class="card text-center">
+      <h3 class="text-lg font-semibold">Clicks</h3>
+      <p id="clicks" class="text-2xl font-bold">0</p>
+    </div>
+    <div class="card text-center">
+      <h3 class="text-lg font-semibold">CTR</h3>
+      <p id="ctr" class="text-2xl font-bold text-yellow-600">0%</p>
+    </div>
+     
+  </main>
+  
+  <section id="goals" class="max-w-4xl mx-auto my-10 p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-md">
+  <h2 class="text-2xl font-semibold mb-4 text-center">🎯 Revenue Goals & Payout Tracker</h2>
 
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-  <div class="p-4 bg-gray-50 rounded-lg shadow">
-    <p class="metric">Total Ad Revenue</p>
-    <p id="ad-revenue" class="text-2xl currency">$0</p>
-    <p id="ad-growth" class="growth"></p>
+  <div class="mb-4">
+    <p class="text-sm text-gray-500 dark:text-gray-400">Next payout threshold: <strong>KES 15,000</strong> (≈ $100)</p>
+    <div class="w-full bg-gray-200 rounded-full h-4 dark:bg-gray-700">
+      <div id="progressBar" class="h-4 rounded-full bg-gradient-to-r from-green-400 to-blue-500" style="width:0%"></div>
+    </div>
+    <p id="progressText" class="mt-2 text-center font-semibold text-green-600">Loading...</p>
   </div>
-  <div class="p-4 bg-gray-50 rounded-lg shadow">
-    <p class="metric">Total Affiliate Revenue</p>
-    <p id="affiliate-revenue" class="text-2xl currency">$0</p>
-    <p id="affiliate-growth" class="growth"></p>
-  </div>
-</div>
 
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-  <div class="p-4 bg-gray-50 rounded-lg shadow">
-    <p class="metric">Total Revenue</p>
-    <p id="total-revenue" class="text-2xl currency">$0</p>
-    <p id="total-growth" class="growth"></p>
+  <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-center mt-6">
+    <div class="card">
+      <h3 class="font-semibold">Total Earnings</h3>
+      <p id="goalTotal" class="text-2xl font-bold text-green-600">KES 0</p>
+    </div>
+    <div class="card">
+      <h3 class="font-semibold">Goal Target</h3>
+      <p class="text-2xl font-bold text-blue-600">KES 15,000</p>
+    </div>
+    <div class="card">
+      <h3 class="font-semibold">Days to Payout</h3>
+      <p id="daysLeft" class="text-2xl font-bold text-yellow-600">--</p>
+    </div>
   </div>
-  <div class="p-4 bg-gray-50 rounded-lg shadow">
-    <p class="metric">Monthly Possible Payout</p>
-    <p id="monthly-payout" class="text-2xl currency">$0</p>
-  </div>
-</div>
+    
+    <script>
+  const goalTarget = 15000;
+  const goalTotal = document.getElementById('goalTotal');
+  const progressBar = document.getElementById('progressBar');
+  const progressText = document.getElementById('progressText');
+  const daysLeft = document.getElementById('daysLeft');
 
-<canvas id="revenue-chart" height="180"></canvas>
+  function updateGoalTracker() {
+    const total = parseFloat((Math.random() * 12000 + 3000).toFixed(2)); // Simulated total
+    const pct = Math.min((total / goalTarget) * 100, 100);
+    const remaining = Math.max(goalTarget - total, 0);
+    const days = Math.ceil(remaining / (total / 20)); // Pseudo payout countdown
+
+    goalTotal.textContent = `KES ${total.toLocaleString()}`;
+    progressBar.style.width = `${pct}%`;
+    progressText.textContent = `${pct.toFixed(1)}% of payout goal reached`;
+    daysLeft.textContent = days > 0 ? `${days} days` : "Paid out";
+
+    // Animate progress bar color if goal hit
+    if (pct >= 100) {
+      progressBar.classList.remove("bg-gradient-to-r");
+      progressBar.classList.add("bg-green-500");
+    }
+  }
+
+  updateGoalTracker();
+  setInterval(updateGoalTracker, 7000);
+</script>
+</section>
+  
+  <section id="transactions" class="max-w-4xl mx-auto my-10 p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-md">
+  <h2 class="text-2xl font-semibold mb-4 text-center">💬 Recent Transactions</h2>
+  <table class="w-full border-collapse text-sm md:text-base">
+    <thead>
+      <tr class="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+        <th class="p-3 text-left">Date</th>
+        <th class="p-3 text-left">Source</th>
+        <th class="p-3 text-right">Amount (KES)</th>
+        <th class="p-3 text-right">Status</th>
+      </tr>
+    </thead>
+    <tbody id="transactionsBody" class="text-gray-600 dark:text-gray-300"></tbody>
+  </table>
+    <script>
+  const transactionsBody = document.getElementById('transactionsBody');
+
+  function simulateTransactions() {
+    const sources = ["Google AdSense", "Amazon Affiliate", "Booking.com", "PayPal Tip", "M-Pesa Sale"];
+    const statuses = ["Pending", "Completed", "Processing", "Paid Out"];
+    const rows = Array.from({ length: 5 }).map(() => {
+      const src = sources[Math.floor(Math.random() * sources.length)];
+      const amt = (Math.random() * 5000 + 500).toFixed(2);
+      const status = statuses[Math.floor(Math.random() * statuses.length)];
+      const date = new Date(Date.now() - Math.random() * 86400000 * 5)
+        .toLocaleDateString();
+      return `<tr>
+        <td class="p-3">${date}</td>
+        <td class="p-3">${src}</td>
+        <td class="p-3 text-right">KES ${amt}</td>
+        <td class="p-3 text-right">${status}</td>
+      </tr>`;
+    });
+    transactionsBody.innerHTML = rows.join("");
+  }
+
+  simulateTransactions();
+  setInterval(simulateTransactions, 15000);
+</script>
+</section>
+  
+  <section id="top-posts" class="max-w-4xl mx-auto my-10 p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-md">
+  <h2 class="text-2xl font-semibold mb-4 text-center">📈 Top Performing Posts</h2>
+  <ul id="postList" class="space-y-3"></ul>
+    
+    <script>
+  const postList = document.getElementById('postList');
+
+  function simulatePosts() {
+    const posts = [
+      "10 Foods That Boost Mental Clarity",
+      "5-Minute Morning Routine for Better Focus",
+      "How to Improve Gut Health Naturally",
+      "Best Supplements for Energy & Immunity",
+      "Mindful Habits for Better Sleep"
+    ];
+    const items = posts.map(title => {
+      const views = Math.floor(Math.random() * 1200 + 400);
+      const clicks = Math.floor(views * (Math.random() * 0.04 + 0.01));
+      const ctr = ((clicks / views) * 100).toFixed(2);
+      return `<li class="p-3 border-b border-gray-200 dark:border-gray-700">
+        <div class="flex justify-between items-center">
+          <span class="font-medium">${title}</span>
+          <span class="text-sm text-gray-500">${views} views, ${ctr}% CTR</span>
+        </div>
+      </li>`;
+    });
+    postList.innerHTML = items.join("");
+  }
+
+  simulatePosts();
+  setInterval(simulatePosts, 20000);
+</script>
+</section>
+  
+  <section id="monetisation-summary" class="p-4 bg-gray-50 rounded-2xl shadow-md max-w-3xl mx-auto my-8">
+  <h2 class="text-2xl font-semibold mb-4 text-center">💰 Live Monetisation Summary</h2>
+  <div class="grid grid-cols-2 gap-4 text-center">
+    <div>
+      <h3 class="text-lg font-semibold">Today</h3>
+      <p id="miniToday" class="text-xl font-bold text-green-600">KES 0.00</p>
+    </div>
+    <div>
+      <h3 class="text-lg font-semibold">Month</h3>
+      <p id="miniMonth" class="text-xl font-bold text-blue-600">KES 0.00</p>
+    </div>
+  </div>
 </section>
 
-<script src="./config.json"></script>
 <script>
-const CONFIG = window.CONFIG;
-
-// Format currency
-function fmt(v){ return '$'+Number(v).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}); }
-
-// --------- Fetch GA4 Metrics ----------
-async function fetchGA4Multi(apiKey){
-  let totalUsers=0,totalSessions=0,totalPageviews=0;
-  for(const prop of CONFIG.GA4_PROPERTIES){
-    try{
-      const res=await fetch(`https://analyticsdata.googleapis.com/v1beta/properties/${prop}:runRealtimeReport?key=${apiKey}`,{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({metrics:[{name:'activeUsers'},{name:'screenPageViews'}]})
-      });
-      const data=await res.json();
-      totalUsers+=Number(data.rows?.[0]?.metricValues?.[0]?.value||0);
-      totalPageviews+=Number(data.rows?.[0]?.metricValues?.[1]?.value||0);
-    } catch(e){}
+  function miniSim() {
+    const miniToday = document.getElementById("miniToday");
+    const miniMonth = document.getElementById("miniMonth");
+    const day = (Math.random() * 700 + 200).toFixed(2);
+    const month = (day * 28 + Math.random() * 2000).toFixed(2);
+    miniToday.textContent = `KES ${day}`;
+    miniMonth.textContent = `KES ${month}`;
   }
-  return { active_users:totalUsers, sessions:totalSessions, pageviews:totalPageviews };
-}
+  miniSim();
+  setInterval(miniSim, 6000);
+</script>
 
-// --------- Fetch AdSense Revenue ----------
-async function fetchAdSenseRealtime(apiKey){
-  try{
-    const today=new Date().toISOString().split('T')[0];
-    const res=await fetch(`https://www.googleapis.com/adsense/v2/accounts/${CONFIG.ADSENSE_PUB_ID}/reports?startDate=${today}&endDate=${today}&metrics=EARNINGS&key=${apiKey}`);
-    const data=await res.json();
-    return { revenue:Number(data.totals?.EARNINGS||0) };
-  } catch{return { revenue:0 }; }
-}
+  <section class="max-w-4xl mx-auto my-10 px-4">
+    <h2 class="text-2xl font-semibold mb-4">Revenue Trend</h2>
+    <canvas id="revenueChart"></canvas>
+  </section>
 
-// --------- Fetch Affiliate Revenue ----------
-async function fetchAffiliateData(){
-  try{
-    const res=await fetch('https://api.youraffiliateplatform.com/revenue/today',{
-      headers:{'Authorization':'Bearer '+CONFIG.AFFILIATE_API_KEY}
+  <footer class="p-4 text-center text-sm text-gray-500">
+    &copy; 2025 The Esthetics Hub | Simulated analytics display only
+  </footer>
+
+  <script>
+    const rateUSD = 150; // 1 USD = 150 KES (approx)
+    const todayEarnings = document.getElementById("todayEarnings");
+    const weekEarnings = document.getElementById("weekEarnings");
+    const monthEarnings = document.getElementById("monthEarnings");
+    const todayUSD = document.getElementById("todayUSD");
+    const weekUSD = document.getElementById("weekUSD");
+    const monthUSD = document.getElementById("monthUSD");
+    const impressions = document.getElementById("impressions");
+    const clicks = document.getElementById("clicks");
+    const ctr = document.getElementById("ctr");
+
+    const random = (min, max) => Math.random() * (max - min) + min;
+
+    function simulate() {
+      const dailyKES = random(250, 750);
+      const weeklyKES = dailyKES * random(6, 7);
+      const monthlyKES = weeklyKES * 4.2;
+      const imp = Math.floor(random(1000, 2500));
+      const clk = Math.floor(random(20, 50));
+      const clickRate = ((clk / imp) * 100).toFixed(2);
+
+      todayEarnings.textContent = `KES ${dailyKES.toFixed(2)}`;
+      weekEarnings.textContent = `KES ${weeklyKES.toFixed(2)}`;
+      monthEarnings.textContent = `KES ${monthlyKES.toFixed(2)}`;
+      todayUSD.textContent = `(≈ $${(dailyKES / rateUSD).toFixed(2)})`;
+      weekUSD.textContent = `(≈ $${(weeklyKES / rateUSD).toFixed(2)})`;
+      monthUSD.textContent = `(≈ $${(monthlyKES / rateUSD).toFixed(2)})`;
+      impressions.textContent = imp.toLocaleString();
+      clicks.textContent = clk.toLocaleString();
+      ctr.textContent = `${clickRate}%`;
+
+      // Update chart
+      chart.data.datasets[0].data.push(dailyKES);
+      chart.data.labels.push(new Date().toLocaleTimeString());
+      if (chart.data.labels.length > 10) {
+        chart.data.labels.shift();
+        chart.data.datasets[0].data.shift();
+      }
+      chart.update();
+    }
+
+    const ctx = document.getElementById('revenueChart').getContext('2d');
+    const chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [{
+          label: 'Daily Revenue (KES)',
+          borderColor: '#34D399',
+          fill: false,
+          data: []
+        }]
+      },
+      options: { responsive: true, scales: { y: { beginAtZero: true } } }
     });
-    const data=await res.json();
-    return { revenue:Number(data.revenue_today||0) };
-  } catch{return { revenue:0 }; }
-}
 
-// --------- Render Metrics ----------
-function renderMetrics(metrics){
-  document.getElementById('active-users').innerText=metrics.active_users.toLocaleString();
-  document.getElementById('sessions').innerText=metrics.sessions.toLocaleString();
-  document.getElementById('pageviews').innerText=metrics.pageviews.toLocaleString();
-  document.getElementById('ad-revenue').innerText=fmt(metrics.ad_revenue);
-  document.getElementById('affiliate-revenue').innerText=fmt(metrics.affiliate_revenue);
-  document.getElementById('total-revenue').innerText=fmt(metrics.total_revenue);
-  document.getElementById('monthly-payout').innerText=fmt(metrics.monthly_payout);
-}
+    simulate();
+    setInterval(simulate, 5000);
 
-// --------- Render 30-Day Chart ----------
-let chart=null;
-function renderChart(labels,adData,affData,totalData){
-  if(chart) chart.destroy();
-  const ctx=document.getElementById('revenue-chart').getContext('2d');
-  chart=new Chart(ctx,{type:'line',data:{labels,datasets:[
-    {label:'Ad Revenue',data:adData,borderColor:'#10b981',fill:false},
-    {label:'Affiliate Revenue',data:affData,borderColor:'#3b82f6',fill:false},
-    {label:'Total Revenue',data:totalData,borderColor:'#f59e0b',fill:false}
-  ]},options:{responsive:true,plugins:{legend:{position:'top'}},scales:{y:{beginAtZero:true}}}});
-}
+    document.getElementById("toggleTheme").onclick = () => {
+      document.body.classList.toggle("dark");
+    };
+  </script>
+  
+  <div id="notification" class="fixed bottom-6 right-6 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg hidden">
+  <span id="notifMessage">🎉 Goal milestone reached!</span>
+</div>
 
-// --------- Update Dashboard ----------
-async function updateDashboard(){
-  const [ga4,adsense,affiliate]=await Promise.all([
-    fetchGA4Multi(CONFIG.GOOGLE_API_KEY),
-    fetchAdSenseRealtime(CONFIG.GOOGLE_API_KEY),
-    fetchAffiliateData()
-  ]);
+<script>
+  const notification = document.getElementById('notification');
+  const notifMessage = document.getElementById('notifMessage');
 
-  const adRevenue=adsense.revenue;
-  const affRevenue=affiliate.revenue;
-  const totalRevenue=adRevenue+affRevenue;
-  const monthlyPayout=totalRevenue*30;
-
-  renderMetrics({ ...ga4, ad_revenue:adRevenue, affiliate_revenue:affRevenue, total_revenue:totalRevenue, monthly_payout:monthlyPayout });
-
-  // Optional: 30-day historical chart
-  const labels=[],adData=[],affData=[],totalData=[];
-  for(let i=29;i>=0;i--){
-    const d=new Date(); d.setDate(d.getDate()-i); labels.push(d.toLocaleDateString());
-    const a=adRevenue*Math.random(); const f=affRevenue*Math.random();
-    adData.push(a); affData.push(f); totalData.push(a+f);
+  function showNotification(message, type = "success") {
+    notification.classList.remove("hidden");
+    notification.style.backgroundColor = type === "warning" ? "#facc15" : "#16a34a";
+    notifMessage.textContent = message;
+    setTimeout(() => notification.classList.add("hidden"), 4000);
   }
-  renderChart(labels,adData,affData,totalData);
-}
 
-// Initial + auto-refresh
-updateDashboard();
-setInterval(updateDashboard,30000);
+  // Hook into goal tracker
+  function notifyGoalProgress() {
+    const pct = parseFloat(progressBar.style.width);
+    if (pct > 75 && pct < 100) showNotification("🚀 You’re 75% towards your payout goal!", "warning");
+    if (pct >= 100) showNotification("🎉 Congratulations! Goal reached — payout incoming!");
+  }
+
+  setInterval(notifyGoalProgress, 8000);
 </script>
 </body>
-  </html>
+</html>
