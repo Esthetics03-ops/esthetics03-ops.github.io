@@ -4,12 +4,27 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>💰 Live Monetisation Dashboard | The Esthetics Hub</title>
+
+<!-- SEO Meta Tags -->
+<meta name="description" content="Live monetisation dashboard for The Esthetics Hub: track daily, weekly, monthly earnings, revenue goals, top posts, and transactions.">
+<link rel="canonical" href="https://esthetics03-ops.github.io/revenue-dashboard.html">
+
+<!-- Open Graph for social sharing -->
+<meta property="og:title" content="💰 Live Monetisation Dashboard | The Esthetics Hub">
+<meta property="og:description" content="Track earnings, revenue goals, top posts, and recent transactions in real-time.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://esthetics03-ops.github.io/revenue-dashboard.html">
+<meta property="og:image" content="URL_TO_YOUR_LOGO_OR_PREVIEW_IMAGE">
+
+<!-- Tailwind CSS & Chart.js -->
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://apis.google.com/js/api.js"></script>
+
+<!-- Dark Mode & Card Contrast -->
 <style>
-body.dark { background-color: #111827; color: #f3f4f6; }
-.card { @apply rounded-2xl shadow-md p-4 bg-white dark:bg-gray-800; }
+body.dark { background-color: #111827; color: #f3f4f6; transition: background 0.3s, color 0.3s; }
+.card { background-color: #1f2937; color: #f3f4f6; border-radius: 1rem; padding: 1rem; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+table th, table td { border-color: #374151; }
 </style>
 </head>
 <body class="transition-colors duration-500">
@@ -17,7 +32,7 @@ body.dark { background-color: #111827; color: #f3f4f6; }
 <header class="p-6 text-center">
 <h1 class="text-3xl font-bold">💰 Live Monetisation Dashboard</h1>
 <p class="text-gray-600 dark:text-gray-400">Real-time GA4 & AdSense analytics</p>
-<button id="toggleTheme" class="mt-3 px-4 py-2 bg-gray-800 text-white rounded-lg">Toggle Dark/Light</button>
+<button id="toggleTheme" aria-label="Toggle dark and light theme" class="mt-3 px-4 py-2 bg-gray-800 text-white rounded-lg">Toggle Dark/Light</button>
 </header>
 
 <main class="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-3 gap-4 p-4">
@@ -82,16 +97,17 @@ body.dark { background-color: #111827; color: #f3f4f6; }
 
 <section id="transactions" class="max-w-4xl mx-auto my-10 p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-md">
 <h2 class="text-2xl font-semibold mb-4 text-center">💬 Recent Transactions</h2>
-<table class="w-full border-collapse text-sm md:text-base">
-<thead>
-<tr class="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-<th class="p-3 text-left">Date</th>
-<th class="p-3 text-left">Source</th>
-<th class="p-3 text-right">Amount (KES)</th>
-<th class="p-3 text-right">Status</th>
-</tr>
-</thead>
-<tbody id="transactionsBody" class="text-gray-600 dark:text-gray-300"></tbody>
+<table class="w-full border-collapse text-sm md:text-base" aria-label="Recent transactions">
+  <caption class="sr-only">Recent transactions summary</caption>
+  <thead>
+    <tr class="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+      <th class="p-3 text-left">Date</th>
+      <th class="p-3 text-left">Source</th>
+      <th class="p-3 text-right">Amount (KES)</th>
+      <th class="p-3 text-right">Status</th>
+    </tr>
+  </thead>
+  <tbody id="transactionsBody" class="text-gray-600 dark:text-gray-300"></tbody>
 </table>
 </section>
 
@@ -100,7 +116,7 @@ body.dark { background-color: #111827; color: #f3f4f6; }
 <ul id="postList" class="space-y-3"></ul>
 </section>
 
-<div id="notification" class="fixed bottom-6 right-6 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg hidden">
+<div id="notification" role="status" aria-live="polite" class="fixed bottom-6 right-6 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg hidden">
 <span id="notifMessage">🎉 Goal milestone reached!</span>
 </div>
 
@@ -129,7 +145,7 @@ const notification = document.getElementById('notification');
 const notifMessage = document.getElementById('notifMessage');
 let chart;
 
-// --- Fetch config.json ---
+// --- Load config.json ---
 let configData = null;
 async function loadConfig(){
   try{
@@ -138,7 +154,7 @@ async function loadConfig(){
     console.log('Config loaded', configData);
     initDashboard();
   }catch(err){
-    console.warn('config.json not found, simulation only', err);
+    console.warn('Config not found, using simulation', err);
     configData=null;
     initDashboard();
   }
@@ -147,20 +163,12 @@ loadConfig();
 
 // --- Initialize Dashboard ---
 async function initDashboard(){
-  if(configData){
-    console.log('Using APIs from config.json');
-    await fetchLiveMetrics();
-  }else{
-    console.log('Using simulated metrics');
-    simulateMetrics();
-  }
-  setInterval(()=>{
-    if(configData) fetchLiveMetrics();
-    else simulateMetrics();
-  },5000);
+  if(configData) await fetchLiveMetrics();
+  else simulateMetrics();
+  setInterval(()=>{ if(configData) fetchLiveMetrics(); else simulateMetrics(); },5000);
 }
 
-// --- Simulate metrics fallback ---
+// --- Simulated Metrics ---
 function simulateMetrics(){
   const daily = Math.floor(Math.random()*7000+3000);
   const week = daily*7;
@@ -172,10 +180,10 @@ function simulateMetrics(){
   fetchTopPosts();
 }
 
-// --- Fetch live metrics using config.json ---
+// --- Fetch Live Metrics ---
 async function fetchLiveMetrics(){
   try{
-    // Replace below with actual GA4/AdSense API calls using configData
+    if(!configData) throw new Error("Config not loaded");
     const daily = await fetchGA4Metric('daily');
     const week = await fetchGA4Metric('week');
     const month = await fetchGA4Metric('month');
@@ -185,14 +193,13 @@ async function fetchLiveMetrics(){
     fetchRecentTransactions();
     fetchTopPosts();
   }catch(err){
-    console.error('Live API fetch failed, fallback to simulation', err);
+    console.warn("Live API fetch failed, using simulation", err);
     simulateMetrics();
   }
 }
 
-// --- Placeholder GA4 / AdSense fetch functions ---
+// --- Placeholder for GA4 / AdSense ---
 async function fetchGA4Metric(type){
-  // Replace with real API logic using configData
   switch(type){
     case 'daily': return Math.floor(Math.random()*7000+3000);
     case 'week': return Math.floor(Math.random()*35000+20000);
@@ -203,7 +210,7 @@ async function fetchGA4Metric(type){
   }
 }
 
-// --- Dashboard update ---
+// --- Update Dashboard ---
 function updateDashboard({daily,week,month,impressions:imp,clicks:clk}){
   todayEarnings.textContent=`KES ${daily.toLocaleString()}`;
   weekEarnings.textContent=`KES ${week.toLocaleString()}`;
@@ -265,12 +272,18 @@ function fetchTopPosts(){
   postList.innerHTML=items.join('');
 }
 
-// --- Chart ---
+// --- Revenue Chart ---
 const ctx = document.getElementById('revenueChart').getContext('2d');
 chart = new Chart(ctx,{type:'line',data:{labels:[],datasets:[{label:'Daily Revenue (KES)',borderColor:'#34D399',fill:false,data:[]}]},options:{responsive:true,scales:{y:{beginAtZero:true}}}});
 
-// --- Theme Toggle ---
-document.getElementById("toggleTheme").onclick = ()=>{document.body.classList.toggle("dark");};
+// --- Theme Toggle with Persistence ---
+document.getElementById("toggleTheme").onclick = ()=>{
+  document.body.classList.toggle("dark");
+  localStorage.setItem("theme",document.body.classList.contains("dark")?"dark":"light");
+};
+window.addEventListener("DOMContentLoaded",()=>{
+  if(localStorage.getItem("theme")==="dark") document.body.classList.add("dark");
+});
 </script>
 </body>
   </html>
