@@ -10,25 +10,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
+      # 2️⃣ Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
 
+      # 3️⃣ Install dependencies
       - name: Install dependencies
         run: npm install sharp @lhci/cli
+        continue-on-error: false
 
+      # 4️⃣ Convert images
       - name: Optimize images
         run: node scripts/convert-images.js
+        continue-on-error: false
 
+      # 5️⃣ Generate sitemap
       - name: Generate sitemap
         run: node scripts/generate-sitemap.js
+        continue-on-error: false
 
+      # 6️⃣ Cache-busting for CSS/JS
       - name: Add cache-busting to assets
         run: |
           TIMESTAMP=$(date +%s)
@@ -36,9 +45,13 @@ jobs:
             sed -i -E "s/(href|src)=(\"[^\"]+\.(css|js)\")/\1=\2?v=$TIMESTAMP/g" "$FILE"
           done
 
-      - name: Run Lighthouse Performance Test
-        run: lhci autorun --upload.target=temporary-public-storage --config=lighthouserc.js
+      # 7️⃣ Run Lighthouse CI
+      - name: Lighthouse Performance Test
+        run: |
+          lhci autorun --upload.target=temporary-public-storage --config=lighthouserc.js
+          echo "Lighthouse report URL: https://googlechrome.github.io/lighthouse-ci/viewer/?publicUrl=temporary"
 
+      # 8️⃣ Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
