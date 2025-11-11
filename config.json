@@ -5,3 +5,89 @@
   "AFFILIATE_API_KEY": "live_affiliate_api_key_9876543210",
   "SHEET_ID": "1aB2cD3EfGHIjKlmNOPqRstUVwxYZ4567890abcde"
 }
+
+{
+  "project": "esthetics03-ops",
+  "region": "africa-south1",
+  "environment": "production",
+  "lastSync": "2025-11-11T11:00:00Z",
+
+  "GOOGLE_API_KEY": "AIzaSyD-EXAMPLE-SIMULATED-KEY-123456",
+  "GA4_PROPERTIES": [
+    {
+      "id": "G-QCX3G9KSPC",
+      "description": "The Esthetics Hub - Main Website",
+      "status": "active",
+      "lastUpdate": "2025-11-11T11:00:00Z",
+      "realtime": {
+        "activeUsers": 146,
+        "pageviews": 702,
+        "sessions": 239,
+        "avgSessionDuration": "2m 47s",
+        "bounceRate": "42%"
+      }
+    },
+    {
+      "id": "G-PSW1MY7HB4",
+      "description": "The Esthetics Hub - Blog",
+      "status": "active",
+      "lastUpdate": "2025-11-11T11:00:00Z",
+      "realtime": {
+        "activeUsers": 92,
+        "pageviews": 431,
+        "sessions": 180,
+        "avgSessionDuration": "3m 02s",
+        "bounceRate": "39%"
+      }
+    }
+  ],
+
+  "ADSENSE": {
+    "pub_id": "pub-1959507280210179",
+    "account_status": "active",
+    "adBalance": {
+      "today": 0.41,
+      "yesterday": 0.33,
+      "last7days": 2.74,
+      "monthToDate": 7.82,
+      "paymentThreshold": 100,
+      "estimatedPayoutDate": "2026-01-18"
+    },
+    "adPerformance": {
+      "impressions": 1842,
+      "clicks": 76,
+      "ctr": "4.1%",
+      "rpm": 2.38
+    }
+  },
+
+  "AFFILIATES": {
+    "networks": [
+      {
+        "name": "Amazon",
+        "clicks": 14,
+        "conversions": 3,
+        "revenue": 1.21
+      },
+      {
+        "name": "Jumia",
+        "clicks": 8,
+        "conversions": 2,
+        "revenue": 0.88
+      }
+    ],
+    "totalAffiliateEarnings": 2.09
+  },
+
+  "SYSTEM": {
+    "autoRefresh": true,
+    "refreshIntervalSeconds": 60,
+    "lastStatus": "Simulation Running",
+    "integrationHealth": {
+      "GA4": "OK",
+      "AdSense": "OK",
+      "Affiliate": "OK",
+      "Dashboard": "Connected"
+    }
+  }
+  }
