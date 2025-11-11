@@ -29,6 +29,13 @@ jobs:
       - name: Generate sitemap
         run: node scripts/generate-sitemap.js
 
+      - name: Add cache-busting to assets
+        run: |
+          TIMESTAMP=$(date +%s)
+          for FILE in *.html; do
+            sed -i -E "s/(href|src)=(\"[^\"]+\.(css|js)\")/\1=\2?v=$TIMESTAMP/g" "$FILE"
+          done
+
       - name: Run Lighthouse Performance Test
         run: lhci autorun --upload.target=temporary-public-storage --config=lighthouserc.js
 
