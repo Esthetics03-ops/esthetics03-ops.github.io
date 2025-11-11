@@ -287,6 +287,29 @@ window.addEventListener("DOMContentLoaded",()=>{
 </script>
 
   <script>
+async function updateDashboard() {
+  const config = await fetch('./config.json').then(r => r.json());
+
+  // Fetch GA4 data from Cloud Function
+  const gaData = await fetch('https://REGION-PROJECT.cloudfunctions.net/ga4Proxy').then(r => r.json());
+  const activeUsers = gaData?.rows?.[0]?.metricValues?.[0]?.value || 0;
+
+  // Fetch AdSense data from Cloud Function
+  const adData = await fetch('https://REGION-PROJECT.cloudfunctions.net/adsenseProxy').then(r => r.json());
+  const adEarnings = adData?.rows?.[0]?.cells?.[1]?.value || 0;
+
+  // Update DOM
+  document.querySelector('#active-users').textContent = activeUsers;
+  document.querySelector('#total-earnings').textContent = `$${(adEarnings + config.AFFILIATES.totalAffiliateEarnings).toFixed(2)}`;
+  document.querySelector('#last-update').textContent = 'Updated: ' + new Date().toLocaleTimeString();
+}
+
+// Initial load + auto-refresh
+updateDashboard();
+setInterval(updateDashboard, 60000);
+  </script>
+
+  <script>
 async function fetchLiveData() {
   const config = await fetch('./config.json').then(r => r.json());
 
