@@ -1,11 +1,214 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>The Esthetics Hub Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Esthetics Hub - Real-Time Analytics & Monetisation</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.3/dist/tailwind.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.8/dayjs.min.js"></script>
+
+<!-- JSON-LD Schemas -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "The Esthetics Hub",
+  "url": "https://esthetics03-ops.github.io",
+  "logo": "https://esthetics03-ops.github.io/images/logo.png",
+  "sameAs": [
+    "https://www.facebook.com/esthetics03",
+    "https://www.instagram.com/esthetics03",
+    "https://www.linkedin.com/company/esthetics03"
+  ],
+  "foundingDate": "2025-01-01",
+  "description": "The Esthetics Hub is your go-to site for holistic wellness, nutrition, and lifestyle insights."
+}
+</script>
+<!-- Additional schemas (BlogPosting, FAQPage, Product, Carousel) same as before -->
 </head>
-<body>
-<h1>Dashboard Placeholder</h1>
+<body class="bg-gray-50 text-gray-800">
+
+<!-- Header -->
+<header class="bg-emerald-600 text-white p-6 text-center rounded-b-2xl">
+  <h1 class="text-3xl font-bold">The Esthetics Hub Dashboard</h1>
+  <p id="lastUpdated" class="mt-2">Last updated: --:--:--</p>
+</header>
+
+<!-- Revenue Metrics -->
+<section class="p-6 mt-6 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-6" id="revenueCards">
+  <!-- Cards will be dynamically filled by API -->
+</section>
+
+<!-- Traffic Metrics -->
+<section class="p-6 mt-6 max-w-6xl mx-auto bg-white rounded-2xl shadow">
+  <h2 class="text-2xl font-semibold mb-4 text-emerald-700">🌐 Traffic Overview</h2>
+  <canvas id="trafficChart" height="120"></canvas>
+</section>
+
+<!-- Performance Metrics -->
+<section class="p-6 mt-6 max-w-6xl mx-auto bg-white rounded-2xl shadow">
+  <h2 class="text-2xl font-semibold mb-4 text-emerald-700">⚡ Performance</h2>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="performanceCards">
+    <!-- Cards filled dynamically -->
+  </div>
+</section>
+
+<!-- Demographics -->
+<section class="p-6 mt-6 max-w-6xl mx-auto bg-white rounded-2xl shadow">
+  <h2 class="text-2xl font-semibold mb-4 text-emerald-700">🌎 Demographics</h2>
+  <canvas id="demographicsChart" height="120"></canvas>
+</section>
+
+<!-- Schema & Rich Results -->
+<section class="p-6 mt-6 max-w-6xl mx-auto bg-white rounded-2xl shadow">
+  <h2 class="text-2xl font-semibold mb-4 text-emerald-700">🧩 Schema & Rich Results</h2>
+  <div id="schemaCards" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6"></div>
+  <canvas id="schemaChart" height="120"></canvas>
+  <p id="schemaSummary" class="mt-4 font-semibold"></p>
+</section>
+
+<!-- Optimisation Insights -->
+<section class="p-6 mt-6 max-w-6xl mx-auto bg-white rounded-2xl shadow">
+  <h2 class="text-2xl font-semibold mb-4 text-emerald-700">💡 Optimisation Insights</h2>
+  <ul id="insightsList" class="list-disc list-inside text-gray-700"></ul>
+</section>
+
+<script>
+// ---------------------- CONFIG ----------------------
+// API endpoints for secure backend proxies
+const GA4_API = '/api/ga4';            // returns sessions, pageviews, demographics
+const ADSENSE_API = '/api/adsense';    // returns AdSense revenue
+const AFFILIATE_API = '/api/affiliate';// returns affiliate earnings
+const DONATION_API = '/api/donations'; // returns Stripe/PayPal donations
+const SCHEMA_API = '/api/schema';      // returns JSON-LD validation status
+
+// ---------------------- FETCH & UPDATE FUNCTIONS ----------------------
+async function fetchRevenue() {
+  try {
+    const [adsense, affiliate, donations] = await Promise.all([
+      fetch(ADSENSE_API).then(r => r.json()),
+      fetch(AFFILIATE_API).then(r => r.json()),
+      fetch(DONATION_API).then(r => r.json())
+    ]);
+    const total = (adsense.amount || 0) + (affiliate.amount || 0) + (donations.amount || 0);
+    const cardsHTML = [
+      {title:'AdSense Revenue', amount: adsense.amount, unit:'$'},
+      {title:'Affiliate Earnings', amount: affiliate.amount, unit:'$'},
+      {title:'Donations', amount: donations.amount, unit:'$'},
+      {title:'Total Revenue', amount: total, unit:'$'}
+    ].map(c => `
+      <div class="bg-emerald-50 p-4 rounded-xl shadow text-center">
+        <h2 class="text-lg font-semibold">${c.title}</h2>
+        <p class="text-2xl font-bold">${c.unit}${c.amount.toFixed(2)}</p>
+        <p class="text-gray-500">per day</p>
+      </div>
+    `).join('');
+    document.getElementById('revenueCards').innerHTML = cardsHTML;
+  } catch(e){ console.error('Revenue fetch error:', e); }
+}
+
+async function fetchTraffic() {
+  try {
+    const data = await fetch(GA4_API).then(r => r.json());
+    const ctx = document.getElementById('trafficChart').getContext('2d');
+    if(window.trafficChart) window.trafficChart.destroy();
+    window.trafficChart = new Chart(ctx, {
+      type:'line',
+      data:{
+        labels:data.labels,
+        datasets:[
+          {label:'Sessions', data:data.sessions, borderColor:'#059669', fill:false, tension:0.3},
+          {label:'Pageviews', data:data.pageviews, borderColor:'#2563EB', fill:false, tension:0.3}
+        ]
+      },
+      options:{responsive:true, plugins:{legend:{position:'bottom'}}}
+    });
+  } catch(e){ console.error('Traffic fetch error:', e); }
+}
+
+async function fetchPerformance() {
+  try {
+    const data = await fetch(GA4_API).then(r => r.json()); // or separate API
+    const cardsHTML = [
+      {title:'Page Speed', value:data.pageSpeed+' / 100'},
+      {title:'Errors', value:data.errors},
+      {title:'Uptime', value:data.uptime+'%'}
+    ].map(c=>`
+      <div class="p-4 bg-emerald-50 rounded-xl shadow text-center">
+        <h3 class="font-semibold">${c.title}</h3>
+        <p class="text-xl font-bold">${c.value}</p>
+      </div>
+    `).join('');
+    document.getElementById('performanceCards').innerHTML = cardsHTML;
+  } catch(e){ console.error('Performance fetch error:', e); }
+}
+
+async function fetchDemographics() {
+  try {
+    const data = await fetch(GA4_API).then(r => r.json());
+    const ctx = document.getElementById('demographicsChart').getContext('2d');
+    if(window.demoChart) window.demoChart.destroy();
+    window.demoChart = new Chart(ctx, {
+      type:'doughnut',
+      data:{
+        labels:data.countries.labels,
+        datasets:[{data:data.countries.values, backgroundColor:['#059669','#2563EB','#FBBF24','#F97316','#9CA3AF']}]
+      },
+      options:{responsive:true, plugins:{legend:{position:'bottom'}}}
+    });
+  } catch(e){ console.error('Demographics fetch error:', e); }
+}
+
+async function fetchSchema() {
+  try {
+    const data = await fetch(SCHEMA_API).then(r=>r.json());
+    const cardsHTML = Object.entries(data).map(([type,d])=>`
+      <div class="p-4 rounded-xl shadow ${d.valid?'bg-green-50':'bg-red-50'}">
+        <h3 class="font-semibold">${type}</h3>
+        <p>Status: ${d.valid?'✅ Valid':'⚠️ Invalid'}</p>
+        <p>Rich Result: ${d.rich?'✅ Yes':'⚠️ No'}</p>
+      </div>`).join('');
+    document.getElementById('schemaCards').innerHTML = cardsHTML;
+    document.getElementById('schemaSummary').textContent = `✅ Schema Coverage: ${data.validCount}/${data.totalCount} validated`;
+    const ctx = document.getElementById('schemaChart').getContext('2d');
+    if(window.schemaChart) window.schemaChart.destroy();
+    window.schemaChart = new Chart(ctx,{
+      type:'doughnut',
+      data:{
+        labels:Object.keys(data),
+        datasets:[{
+          data:Object.values(data).map(d=>d.valid?100:0),
+          backgroundColor:['#059669','#2563EB','#FBBF24','#F97316','#9CA3AF']
+        }]
+      }
+    });
+  } catch(e){ console.error('Schema fetch error:', e); }
+}
+
+async function fetchInsights() {
+  try {
+    const data = await fetch(GA4_API).then(r => r.json()); // or custom optimisation API
+    const listHTML = data.insights.map(i=>`<li>${i}</li>`).join('');
+    document.getElementById('insightsList').innerHTML = listHTML;
+  } catch(e){ console.error('Insights fetch error:', e); }
+}
+
+// ---------------------- AUTO REFRESH ----------------------
+async function updateDashboard() {
+  document.getElementById('lastUpdated').textContent = 'Last updated: ' + dayjs().format('HH:mm:ss');
+  await Promise.all([
+    fetchRevenue(),
+    fetchTraffic(),
+    fetchPerformance(),
+    fetchDemographics(),
+    fetchSchema(),
+    fetchInsights()
+  ]);
+}
+
+updateDashboard();
+setInterval(updateDashboard, 60000);
+</script>
 </body>
-</html>
+  </html>
