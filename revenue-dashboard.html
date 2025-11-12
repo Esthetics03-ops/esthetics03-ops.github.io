@@ -1,3 +1,127 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Esthetics Hub — Simulated Live Dashboard</title>
+
+<!-- JSON-LD for rich results -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "The Esthetics Hub",
+  "url": "https://esthetics03-ops.github.io",
+  "description": "Simulated live dashboard showing AdSense, affiliate, GA4, and donation metrics for The Esthetics Hub."
+}
+</script>
+
+<style>
+body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin: 0; padding: 20px; background: #f8fafc; }
+.card { background:#fff; border-radius:12px; padding:18px; box-shadow: 0 6px 18px rgba(0,0,0,.06); margin-bottom:12px; }
+.row { display:flex; gap:12px; flex-wrap:wrap; }
+.metric { flex:1 1 200px; }
+.small { color:#666; font-size:13px; }
+.status { position:fixed; right:14px; bottom:14px; background:#222; color:#fff; padding:10px 14px; border-radius:10px; font-size:13px; z-index:999; }
+.live { color: #16a34a; font-weight:700; }
+.sim { color: #f59e0b; font-weight:700; }
+pre { background:#f3f4f6; padding:10px; border-radius:8px; overflow:auto; }
+</style>
+</head>
+<body>
+<h1>The Esthetics Hub — Simulated Live Dashboard</h1>
+
+<div id="main" class="card">
+  <div id="systemStatus" class="small">Loading status…</div>
+
+  <div class="row" style="margin-top:12px;">
+    <div class="card metric">
+      <div class="small">AdSense — Today</div>
+      <div id="adsense_earn" style="font-size:20px; font-weight:700">$--.--</div>
+      <div class="small" id="adsense_meta">impr: -- • clicks: -- • ctr: --</div>
+    </div>
+
+    <div class="card metric">
+      <div class="small">Affiliate — Today</div>
+      <div id="affiliate_earn" style="font-size:20px; font-weight:700">$--.--</div>
+      <div class="small" id="affiliate_meta">clicks: -- • conv: -- • conv%: --</div>
+    </div>
+
+    <div class="card metric">
+      <div class="small">Donations</div>
+      <div id="donations_earn" style="font-size:20px; font-weight:700">$--.--</div>
+      <div class="small" id="donations_meta">stripe/paypal: --</div>
+    </div>
+  </div>
+
+  <section style="margin-top:14px;">
+    <h3 style="margin:0 0 8px 0;">Detail Panel</h3>
+    <div id="detail" class="card small">Loading details…</div>
+  </section>
+</div>
+
+<div id="statusBox" class="status sim">Loading…</div>
+
+<script>
+// ---------- Helper functions ----------
+const ISO_TODAY = new Date().toISOString().slice(0,10);
+function money(v) { return "$" + (typeof v === 'number' ? v.toFixed(2) : '0.00'); }
+function small(v){ return v ?? '--'; }
+function els(id){ return document.getElementById(id); }
+function renderStatus(text,isLive){ const box=els('statusBox'); box.textContent=text; box.className='status '+(isLive?'live':'sim'); }
+
+// ---------- Simulated data ----------
+const SIM_CONFIG = {
+  GA4: {
+    PROPERTIES: [
+      { id:"G-QCX3G9KSPC", desc:"Main Website", realtime:{activeUsers:146,pageviews:702,sessions:239,avgSessionDuration:"2m 47s",bounceRate:"42%"} },
+      { id:"G-PSW1MY7HB4", desc:"Blog", realtime:{activeUsers:92,pageviews:431,sessions:180,avgSessionDuration:"3m 02s",bounceRate:"39%"} }
+    ]
+  },
+  ADSENSE: { metrics:{estimatedEarnings:14.37,impressions:682,clicks:22,ctr:"3.22%",rpm:21.08} },
+  AFFILIATE: { metrics:{commission_total:26.55,clicks:97,conversions:8,conversion_rate:"8.25%"} },
+  DONATIONS: { total:0.00 }
+};
+
+// ---------- Render function ----------
+function renderDashboard(){
+  // Status
+  els('systemStatus').textContent = `Site: The Esthetics Hub — last sync: 2025-11-11T11:00:00Z`;
+
+  // AdSense
+  els('adsense_earn').textContent = money(SIM_CONFIG.ADSENSE.metrics.estimatedEarnings);
+  els('adsense_meta').textContent = `impr: ${SIM_CONFIG.ADSENSE.metrics.impressions} • clicks: ${SIM_CONFIG.ADSENSE.metrics.clicks} • ctr: ${SIM_CONFIG.ADSENSE.metrics.ctr}`;
+
+  // Affiliate
+  els('affiliate_earn').textContent = money(SIM_CONFIG.AFFILIATE.metrics.commission_total);
+  els('affiliate_meta').textContent = `clicks: ${SIM_CONFIG.AFFILIATE.metrics.clicks} • conv: ${SIM_CONFIG.AFFILIATE.metrics.conversions} • conv%: ${SIM_CONFIG.AFFILIATE.metrics.conversion_rate}`;
+
+  // Donations
+  els('donations_earn').textContent = money(SIM_CONFIG.DONATIONS.total);
+  els('donations_meta').textContent = 'Stripe/PayPal configured';
+
+  // Detail panel
+  const detail = {
+    timestamp: new Date().toISOString(),
+    adsense_source:"SIMULATED",
+    affiliate_source:"SIMULATED",
+    ga4_probe: SIM_CONFIG.GA4.PROPERTIES.map(p=>({id:p.id,realtime:p.realtime}))
+  };
+  els('detail').innerHTML = `<pre>${JSON.stringify(detail,null,2)}</pre>`;
+
+  // Status box
+  renderStatus("✅ Dashboard Simulated Live",true);
+}
+
+// ---------- Auto refresh ----------
+renderDashboard();
+setInterval(renderDashboard,10000); // every 10 seconds
+
+</script>
+</body>
+  </html>
+
 <!doctype html>
 <html lang="en">
 <head>
