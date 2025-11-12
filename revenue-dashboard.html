@@ -9,11 +9,12 @@
 <style>
   body { background: #f9fafb; font-family: 'Inter', sans-serif; }
   .card { @apply p-4 bg-white rounded-2xl shadow-md; }
+  main { overflow-y: auto; scroll-behavior: smooth; }
 </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
-<header class="bg-indigo-600 text-white p-4 text-center text-xl font-semibold">
+<header class="bg-indigo-600 text-white p-4 text-center text-xl font-semibold sticky top-0 z-50">
   The Esthetics Hub 💼 Monetization Dashboard
 </header>
 
@@ -22,7 +23,7 @@
   <!-- Current Earnings -->
   <section class="card">
     <h2 class="text-2xl font-semibold mb-4">💰 Current Earnings</h2>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
       <div>
         <p class="text-gray-500">Today</p>
         <p id="earn-today" class="text-2xl font-bold">$--.--</p>
@@ -38,6 +39,10 @@
       <div>
         <p class="text-gray-500">Possible Payout</p>
         <p id="earn-payout" class="text-2xl font-bold">$--.--</p>
+      </div>
+      <div>
+        <p class="text-gray-500">Affiliate & Donations</p>
+        <p id="earn-affiliate" class="text-2xl font-bold">$--.--</p>
       </div>
     </div>
   </section>
@@ -68,7 +73,7 @@
   <!-- Revenue & Donations Chart -->
   <section class="card">
     <h2 class="text-2xl font-semibold mb-4">📈 Revenue & Donations</h2>
-    <canvas id="revenueChart" height="200"></canvas>
+    <canvas id="revenueChart" height="200" loading="lazy"></canvas>
   </section>
 
 </main>
@@ -88,6 +93,7 @@ function updateMetrics() {
   document.getElementById("earn-month").textContent = "$" + getRandomFloat(500,1200);
   document.getElementById("earn-total").textContent = "$" + getRandomFloat(2000,5000);
   document.getElementById("earn-payout").textContent = "$" + getRandomFloat(1000,3000);
+  document.getElementById("earn-affiliate").textContent = "$" + getRandomFloat(50,500);
 
   const impressions = getRandom(1000,5000);
   const clicks = getRandom(50,200);
@@ -105,7 +111,8 @@ const revenueChart = new Chart(ctx,{
     labels:["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
     datasets:[
       { label:'Revenue ($)', data:Array.from({length:7},()=>getRandomFloat(50,300)), borderColor:'#6366F1', backgroundColor:'rgba(99,102,241,0.2)', tension:0.4 },
-      { label:'Donations ($)', data:Array.from({length:7},()=>getRandomFloat(20,150)), borderColor:'#10B981', backgroundColor:'rgba(16,185,129,0.2)', tension:0.4 }
+      { label:'Donations ($)', data:Array.from({length:7},()=>getRandomFloat(20,150)), borderColor:'#10B981', backgroundColor:'rgba(16,185,129,0.2)', tension:0.4 },
+      { label:'Affiliate ($)', data:Array.from({length:7},()=>getRandomFloat(20,250)), borderColor:'#F59E0B', backgroundColor:'rgba(245,158,11,0.2)', tension:0.4 }
     ]
   },
   options:{ responsive:true, plugins:{ legend:{position:'top'} } }
@@ -114,6 +121,7 @@ const revenueChart = new Chart(ctx,{
 function updateChart() {
   revenueChart.data.datasets[0].data = Array.from({length:7},()=>getRandomFloat(50,300));
   revenueChart.data.datasets[1].data = Array.from({length:7},()=>getRandomFloat(20,150));
+  revenueChart.data.datasets[2].data = Array.from({length:7},()=>getRandomFloat(20,250));
   revenueChart.update();
 }
 
