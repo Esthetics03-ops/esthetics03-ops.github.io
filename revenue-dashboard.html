@@ -3,375 +3,330 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Esthetics Hub - Monetization Dashboard</title>
+<title>The Esthetics Hub - Live Monetization Dashboard</title>
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.3/dist/tailwind.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <!-- Add your existing Tailwind dashboard here -->
-<script data-ad-client="pub-1959507280210179" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QCX3G9KSPC"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-QCX3G9KSPC');
-</script>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-QCX3G9KSPC"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-QCX3G9KSPC');
-</script>
-<script>
-  (async () => {
-  const statusContainer = document.createElement('div');
-  statusContainer.style.position = 'fixed';
-  statusContainer.style.bottom = '10px';
-  statusContainer.style.right = '10px';
-  statusContainer.style.backgroundColor = '#222';
-  statusContainer.style.color = '#fff';
-  statusContainer.style.padding = '10px 15px';
-  statusContainer.style.borderRadius = '8px';
-  statusContainer.style.fontFamily = 'sans-serif';
-  statusContainer.style.fontSize = '14px';
-  statusContainer.style.zIndex = 9999;
-  document.body.appendChild(statusContainer);
-
-  let config;
-  try {
-    const res = await fetch('./config.json');
-    config = await res.json();
-  } catch (err) {
-    statusContainer.innerHTML = `<strong>API Status:</strong><br>❌ Failed to load config.json`;
-    return;
-  }
-
-  async function checkAPIs() {
-    // --- GA4 Check ---
-    let ga4Status = 'Not Connected ❌';
-    if (config.GA4_PROPERTIES && config.GA4_PROPERTIES.length > 0) {
-      try {
-        const ga4Test = await fetch(
-          `https://analyticsdata.googleapis.com/v1beta/properties/${config.GA4_PROPERTIES[0]}:runRealtimeReport`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${config.GOOGLE_API_KEY || ''}`
-            },
-            body: JSON.stringify({ metrics: [{ name: "activeUsers" }] })
-          }
-        );
-        if (ga4Test.ok) ga4Status = 'Connected ✅';
-      } catch {}
-    }
-
-    // --- AdSense Check ---
-    let adsenseStatus = 'Not Connected ❌';
-    if (config.ADSENSE_PUB_ID) {
-      try {
-        const adsenseTest = await fetch(
-          `https://www.googleapis.com/adsense/v2/accounts/${config.ADSENSE_PUB_ID}/reports?startDate=2025-11-12&endDate=2025-11-12`,
-          { headers: { 'Authorization': `Bearer ${config.GOOGLE_API_KEY || ''}` } }
-        );
-        if (adsenseTest.ok) adsenseStatus = 'Connected ✅';
-      } catch {}
-    }
-
-    statusContainer.innerHTML = `<strong>API Status (Live Refresh):</strong><br>GA4: ${ga4Status}<br>AdSense: ${adsenseStatus}`;
-  }
-
-  // Initial check
-  await checkAPIs();
-
-  // Auto-refresh every 10 seconds
-  setInterval(checkAPIs, 10000);
-})();
-  (async () => {
-  const statusContainer = document.createElement('div');
-  statusContainer.style.position = 'fixed';
-  statusContainer.style.bottom = '10px';
-  statusContainer.style.right = '10px';
-  statusContainer.style.backgroundColor = '#222';
-  statusContainer.style.color = '#fff';
-  statusContainer.style.padding = '10px 15px';
-  statusContainer.style.borderRadius = '8px';
-  statusContainer.style.fontFamily = 'sans-serif';
-  statusContainer.style.fontSize = '14px';
-  statusContainer.style.zIndex = 9999;
-  statusContainer.innerHTML = `<strong>API Status:</strong><br>Checking...`;
-  document.body.appendChild(statusContainer);
-
-  let config;
-  try {
-    const res = await fetch('./config.json');
-    config = await res.json();
-  } catch (err) {
-    statusContainer.innerHTML = `<strong>API Status:</strong><br>❌ Failed to load config.json`;
-    return;
-  }
-
-  // --- GA4 Check ---
-  let ga4Status = 'Not Connected ❌';
-  if (config.GA4_PROPERTIES && config.GA4_PROPERTIES.length > 0) {
-    try {
-      const ga4Test = await fetch(
-        `https://analyticsdata.googleapis.com/v1beta/properties/${config.GA4_PROPERTIES[0]}:runRealtimeReport`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${config.GOOGLE_API_KEY || ''}`
-          },
-          body: JSON.stringify({ metrics: [{ name: "activeUsers" }] })
-        }
-      );
-      if (ga4Test.ok) ga4Status = 'Connected ✅';
-    } catch {}
-  }
-
-  // --- AdSense Check ---
-  let adsenseStatus = 'Not Connected ❌';
-  if (config.ADSENSE_PUB_ID) {
-    try {
-      const adsenseTest = await fetch(
-        `https://www.googleapis.com/adsense/v2/accounts/${config.ADSENSE_PUB_ID}/reports?startDate=2025-11-12&endDate=2025-11-12`,
-        { headers: { 'Authorization': `Bearer ${config.GOOGLE_API_KEY || ''}` } }
-      );
-      if (adsenseTest.ok) adsenseStatus = 'Connected ✅';
-    } catch {}
-  }
-
-  statusContainer.innerHTML = `<strong>API Status:</strong><br>GA4: ${ga4Status}<br>AdSense: ${adsenseStatus}`;
-})();
-
-  async function checkGA4Connection() {
-  try {
-    const response = await fetch('/api/ga4');
-    if (!response.ok) throw new Error('GA4 API error');
-    const data = await response.json();
-    
-    if (data.activeUsers !== undefined) {
-      document.getElementById('ga4-status').textContent = 'Connected ✅';
-      document.getElementById('ga4-status').classList.remove('text-red-500');
-      document.getElementById('ga4-status').classList.add('text-green-600');
-    } else {
-      throw new Error('GA4 metrics missing');
-    }
-  } catch (err) {
-    document.getElementById('ga4-status').textContent = 'Disconnected ❌';
-    document.getElementById('ga4-status').classList.remove('text-green-600');
-    document.getElementById('ga4-status').classList.add('text-red-500');
-    console.error('GA4 Connection Error:', err);
-  }
-}
-
-async function checkAdSenseConnection() {
-  try {
-    const response = await fetch('/api/adsense');
-    if (!response.ok) throw new Error('AdSense API error');
-    const data = await response.json();
-
-    if (data.earnings !== undefined) {
-      document.getElementById('adsense-status').textContent = 'Connected ✅';
-      document.getElementById('adsense-status').classList.remove('text-red-500');
-      document.getElementById('adsense-status').classList.add('text-green-600');
-    } else {
-      throw new Error('AdSense metrics missing');
-    }
-  } catch (err) {
-    document.getElementById('adsense-status').textContent = 'Disconnected ❌';
-    document.getElementById('adsense-status').classList.remove('text-green-600');
-    document.getElementById('adsense-status').classList.add('text-red-500');
-    console.error('AdSense Connection Error:', err);
-  }
-}
-
-// Initial check
-checkGA4Connection();
-checkAdSenseConnection();
-
-// Repeat every 10 seconds
-setInterval(() => {
-  checkGA4Connection();
-  checkAdSenseConnection();
-}, 10000);
-  
-async function updateMetrics() {
-  try {
-    const ga4Data = await fetch('/api/ga4').then(r => r.json());
-    const adsenseData = await fetch('/api/adsense').then(r => r.json());
-
-    // GA4
-    document.getElementById("ga4-users").textContent = ga4Data.activeUsers;
-    document.getElementById("ga4-pageviews").textContent = ga4Data.pageviews;
-    document.getElementById("ga4-avgduration").textContent = ga4Data.avgSessionDuration;
-
-    // Top Pages
-    const topPages = document.getElementById("top-pages");
-    topPages.innerHTML = '';
-    ga4Data.topPages.forEach(p => {
-      topPages.innerHTML += `<tr><td>${p.page}</td><td>${p.views}</td></tr>`;
-    });
-
-    // AdSense
-    document.getElementById("ad-impressions").textContent = adsenseData.impressions;
-    document.getElementById("ad-clicks").textContent = adsenseData.clicks;
-    document.getElementById("ad-ctr").textContent = adsenseData.ctr + '%';
-    document.getElementById("earn-today").textContent = "$" + adsenseData.earnings;
-
-  } catch (err) {
-    console.error("Error fetching real-time data:", err);
-  }
-}
-
-setInterval(updateMetrics, 5000); // Auto-refresh every 5s
-updateMetrics();
-                             </script>
 <style>
   body { background: #f9fafb; font-family: 'Inter', sans-serif; }
   .card { @apply p-4 bg-white rounded-2xl shadow-md; }
-  main { overflow-y: auto; scroll-behavior: smooth; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { border-bottom: 1px solid #e5e7eb; padding: 0.5rem; }
 </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
-<header class="bg-indigo-600 text-white p-4 text-center text-xl font-semibold sticky top-0 z-50">
-  The Esthetics Hub 💼 Monetization Dashboard
+<header class="bg-indigo-600 text-white p-4 text-center text-xl font-semibold">
+  The Esthetics Hub 💼 Live Monetization Dashboard
 </header>
-
-  <div class="card mt-4">
-  <h2 class="text-2xl font-semibold mb-2">🔗 API Connection Status</h2>
-  <div class="grid grid-cols-2 gap-4">
-    <div>
-      <p class="text-gray-500">GA4:</p>
-      <p id="ga4-status" class="text-lg font-bold text-gray-700">Checking...</p>
-    </div>
-    <div>
-      <p class="text-gray-500">AdSense:</p>
-      <p id="adsense-status" class="text-lg font-bold text-gray-700">Checking...</p>
-    </div>
-  </div>
-  </div>
 
 <main class="flex-1 p-6 grid gap-6 max-w-6xl mx-auto">
 
-  <!-- Current Earnings -->
+  <!-- Total Earnings -->
   <section class="card">
-    <h2 class="text-2xl font-semibold mb-4">💰 Current Earnings</h2>
-    <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+    <h2 class="text-2xl font-semibold mb-4">💰 Total Earnings</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div><p class="text-gray-500">Today</p><p id="earn-today" class="text-2xl font-bold">$0</p></div>
+      <div><p class="text-gray-500">Month-to-Date</p><p id="earn-month" class="text-2xl font-bold">$0</p></div>
+      <div><p class="text-gray-500">Accumulated</p><p id="earn-total" class="text-2xl font-bold">$0</p></div>
+      <div><p class="text-gray-500">Possible Payout</p><p id="earn-payout" class="text-2xl font-bold">$0</p></div>
+    </div>
+  </section>
+
+  <!-- GA4 Metrics -->
+  <section class="card">
+    <h2 class="text-2xl font-semibold mb-4">📊 GA4 Metrics</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div><p class="text-gray-500">Active Users</p><p id="ga4-users" class="text-2xl font-bold">0</p></div>
+      <div><p class="text-gray-500">Pageviews</p><p id="ga4-pageviews" class="text-2xl font-bold">0</p></div>
+      <div><p class="text-gray-500">Avg. Session Duration</p><p id="ga4-avgduration" class="text-2xl font-bold">0:00</p></div>
       <div>
-        <p class="text-gray-500">Today</p>
-        <p id="earn-today" class="text-2xl font-bold">$--.--</p>
-      </div>
-      <div>
-        <p class="text-gray-500">Month-to-Date</p>
-        <p id="earn-month" class="text-2xl font-bold">$--.--</p>
-      </div>
-      <div>
-        <p class="text-gray-500">Accumulated</p>
-        <p id="earn-total" class="text-2xl font-bold">$--.--</p>
-      </div>
-      <div>
-        <p class="text-gray-500">Possible Payout</p>
-        <p id="earn-payout" class="text-2xl font-bold">$--.--</p>
-      </div>
-      <div>
-        <p class="text-gray-500">Affiliate & Donations</p>
-        <p id="earn-affiliate" class="text-2xl font-bold">$--.--</p>
+        <p class="text-gray-500">Top Pages</p>
+        <table class="w-full text-sm mt-2"><tbody id="top-pages"></tbody></table>
       </div>
     </div>
   </section>
 
-  <!-- Ads Metrics -->
+  <!-- AdSense Metrics -->
   <section class="card">
-    <h2 class="text-2xl font-semibold mb-4">📊 Ad Metrics</h2>
+    <h2 class="text-2xl font-semibold mb-4">📈 AdSense Metrics</h2>
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <div>
-        <p class="text-gray-500">Impressions</p>
-        <p id="ad-impressions" class="text-2xl font-bold">--</p>
-      </div>
-      <div>
-        <p class="text-gray-500">Clicks</p>
-        <p id="ad-clicks" class="text-2xl font-bold">--</p>
-      </div>
-      <div>
-        <p class="text-gray-500">CTR (%)</p>
-        <p id="ad-ctr" class="text-2xl font-bold">--%</p>
-      </div>
-      <div>
-        <p class="text-gray-500">RPM ($)</p>
-        <p id="ad-rpm" class="text-2xl font-bold">$--.--</p>
-      </div>
+      <div><p class="text-gray-500">Impressions</p><p id="ad-impressions" class="text-2xl font-bold">0</p></div>
+      <div><p class="text-gray-500">Clicks</p><p id="ad-clicks" class="text-2xl font-bold">0</p></div>
+      <div><p class="text-gray-500">CTR (%)</p><p id="ad-ctr" class="text-2xl font-bold">0%</p></div>
+      <div><p class="text-gray-500">Earnings ($)</p><p id="earn-ad" class="text-2xl font-bold">0</p></div>
+    </div>
+  </section>
+
+  <!-- Affiliate & Donations -->
+  <section class="card">
+    <h2 class="text-2xl font-semibold mb-4">💸 Affiliate & Donations</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div><p class="text-gray-500">Affiliate Clicks</p><p id="affiliate-clicks" class="text-2xl font-bold">0</p></div>
+      <div><p class="text-gray-500">Affiliate Conversions</p><p id="affiliate-conversions" class="text-2xl font-bold">0</p></div>
+      <div><p class="text-gray-500">Affiliate Earnings ($)</p><p id="affiliate-earnings" class="text-2xl font-bold">0</p></div>
+      <div><p class="text-gray-500">Donations ($)</p><p id="donations-total" class="text-2xl font-bold">0</p></div>
     </div>
   </section>
 
   <!-- Revenue & Donations Chart -->
   <section class="card">
-    <h2 class="text-2xl font-semibold mb-4">📈 Revenue & Donations</h2>
-    <canvas id="revenueChart" height="200" loading="lazy"></canvas>
+    <h2 class="text-2xl font-semibold mb-4">📊 Revenue & Donations Chart</h2>
+    <canvas id="revenueChart" height="200"></canvas>
+  </section>
+
+  <!-- Top Earning Pages with CSV download -->
+  <section class="card">
+    <h2 class="text-2xl font-semibold mb-4">🏆 Top Earning Pages</h2>
+    <div class="flex justify-end mb-2">
+      <button id="download-csv" class="bg-indigo-600 text-white px-4 py-2 rounded-xl hover:bg-indigo-700 transition">
+        📥 Download CSV
+      </button>
+    </div>
+    <table>
+      <thead>
+        <tr class="border-b">
+          <th class="text-left p-2">Page</th>
+          <th class="text-right p-2">Revenue ($)</th>
+        </tr>
+      </thead>
+      <tbody id="top-earning-pages"></tbody>
+    </table>
+  </section>
+
+  <!-- Connection Status -->
+  <section class="card">
+    <h2 class="text-2xl font-semibold mb-4">🔗 API Connection Status</h2>
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <p class="text-gray-500">GA4:</p>
+        <p id="ga4-status" class="text-lg font-bold text-gray-700">Checking...</p>
+      </div>
+      <div>
+        <p class="text-gray-500">AdSense:</p>
+        <p id="adsense-status" class="text-lg font-bold text-gray-700">Checking...</p>
+      </div>
+    </div>
   </section>
 
 </main>
 
 <footer class="bg-gray-200 text-gray-700 p-4 text-center text-sm">
-  &copy; 2025 The Esthetics Hub. Simulation Only
+  &copy; 2025 The Esthetics Hub. Live Dashboard
 </footer>
 
 <script>
-// --- Helper ---
-function getRandom(min,max){ return Math.floor(Math.random()*(max-min+1)+min); }
-function getRandomFloat(min,max){ return (Math.random()*(max-min)+min).toFixed(2); }
-
-// --- Update Metrics ---
-function updateMetrics() {
-  document.getElementById("earn-today").textContent = "$" + getRandomFloat(50,300);
-  document.getElementById("earn-month").textContent = "$" + getRandomFloat(500,1200);
-  document.getElementById("earn-total").textContent = "$" + getRandomFloat(2000,5000);
-  document.getElementById("earn-payout").textContent = "$" + getRandomFloat(1000,3000);
-  document.getElementById("earn-affiliate").textContent = "$" + getRandomFloat(50,500);
-
-  const impressions = getRandom(1000,5000);
-  const clicks = getRandom(50,200);
-  document.getElementById("ad-impressions").textContent = impressions;
-  document.getElementById("ad-clicks").textContent = clicks;
-  document.getElementById("ad-ctr").textContent = ((clicks/impressions)*100).toFixed(2) + "%";
-  document.getElementById("ad-rpm").textContent = "$" + getRandomFloat(5,20);
-}
-
-// --- Revenue Chart ---
-const ctx = document.getElementById('revenueChart').getContext('2d');
-const revenueChart = new Chart(ctx,{
+// -----------------------
+// Chart Setup
+// -----------------------
+const revenueChartCtx = document.getElementById('revenueChart').getContext('2d');
+const revenueChart = new Chart(revenueChartCtx,{
   type:'line',
   data:{
     labels:["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
     datasets:[
-      { label:'Revenue ($)', data:Array.from({length:7},()=>getRandomFloat(50,300)), borderColor:'#6366F1', backgroundColor:'rgba(99,102,241,0.2)', tension:0.4 },
-      { label:'Donations ($)', data:Array.from({length:7},()=>getRandomFloat(20,150)), borderColor:'#10B981', backgroundColor:'rgba(16,185,129,0.2)', tension:0.4 },
-      { label:'Affiliate ($)', data:Array.from({length:7},()=>getRandomFloat(20,250)), borderColor:'#F59E0B', backgroundColor:'rgba(245,158,11,0.2)', tension:0.4 }
+      { label:'Revenue ($)', data:Array(7).fill(0), borderColor:'#6366F1', backgroundColor:'rgba(99,102,241,0.2)', tension:0.4 },
+      { label:'Donations ($)', data:Array(7).fill(0), borderColor:'#10B981', backgroundColor:'rgba(16,185,129,0.2)', tension:0.4 }
     ]
   },
   options:{ responsive:true, plugins:{ legend:{position:'top'} } }
 });
 
-function updateChart() {
-  revenueChart.data.datasets[0].data = Array.from({length:7},()=>getRandomFloat(50,300));
-  revenueChart.data.datasets[1].data = Array.from({length:7},()=>getRandomFloat(20,150));
-  revenueChart.data.datasets[2].data = Array.from({length:7},()=>getRandomFloat(20,250));
+// -----------------------
+// Lazy Load Helper
+// -----------------------
+function lazyLoad(element, callback){
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        callback();
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  observer.observe(element);
+}
+
+// -----------------------
+// Fetch with Retry
+// -----------------------
+async function fetchWithRetry(url, retries = 3, delay = 2000){
+  for(let i=0;i<retries;i++){
+    try{
+      const res = await fetch(url);
+      if(!res.ok) throw new Error(`HTTP ${res.status}`);
+      return await res.json();
+    }catch(err){
+      console.warn(`Fetch attempt ${i+1} failed for ${url}: ${err}`);
+      if(i<retries-1) await new Promise(r => setTimeout(r, delay));
+    }
+  }
+  throw new Error(`Failed to fetch ${url} after ${retries} attempts`);
+}
+
+// -----------------------
+// Flash Alert
+// -----------------------
+function flashAlert(element, times = 3, interval = 500){
+  let count = 0;
+  const originalColor = element.style.backgroundColor || '';
+  const flash = setInterval(() => {
+    element.style.backgroundColor = count % 2 === 0 ? '#F87171' : originalColor; // red flash
+    count++;
+    if(count > times*2){
+      clearInterval(flash);
+      element.style.backgroundColor = originalColor;
+    }
+  }, interval);
+}
+
+// -----------------------
+// Fetch GA4 Metrics
+// -----------------------
+async function fetchGA4Metrics(){
+  const statusEl = document.getElementById('ga4-status');
+  try{
+    const data = await fetchWithRetry('/api/ga4');
+    document.getElementById("ga4-users").textContent = data.activeUsers;
+    document.getElementById("ga4-pageviews").textContent = data.pageviews;
+    document.getElementById("ga4-avgduration").textContent = data.avgDuration || '0:00';
+    const topPages = document.getElementById("top-pages"); topPages.innerHTML = '';
+    data.topPages?.forEach(p => {
+      topPages.innerHTML += `<tr><td>${p.page}</td><td>${p.views}</td></tr>`;
+    });
+    statusEl.textContent = 'Connected ✅';
+    statusEl.classList.replace('text-red-500','text-green-600');
+  }catch{
+    statusEl.textContent = 'Disconnected ❌ (Retry failed)';
+    statusEl.classList.replace('text-green-600','text-red-500');
+    flashAlert(statusEl);
+  }
+}
+
+// -----------------------
+// Fetch AdSense Metrics
+// -----------------------
+async function fetchAdSenseMetrics(){
+  const statusEl = document.getElementById('adsense-status');
+  try{
+    const data = await fetchWithRetry('/api/adsense');
+    document.getElementById("ad-impressions").textContent = data.impressions;
+    document.getElementById("ad-clicks").textContent = data.clicks;
+    document.getElementById("ad-ctr").textContent = ((data.clicks/data.impressions)*100).toFixed(2)+'%';
+    document.getElementById("earn-ad").textContent = "$"+data.earnings;
+    statusEl.textContent = 'Connected ✅';
+    statusEl.classList.replace('text-red-500','text-green-600');
+    return data.earnings;
+  }catch{
+    document.getElementById("earn-ad").textContent = "$0";
+    statusEl.textContent = 'Disconnected ❌ (Retry failed)';
+    statusEl.classList.replace('text-green-600','text-red-500');
+    flashAlert(statusEl);
+    return 0;
+  }
+}
+
+// -----------------------
+// Fetch Affiliate & Donations
+// -----------------------
+async function fetchAffiliateMetrics(){
+  try{
+    const data = await fetchWithRetry('/api/affiliate');
+    document.getElementById("affiliate-clicks").textContent = data.clicks;
+    document.getElementById("affiliate-conversions").textContent = data.conversions;
+    document.getElementById("affiliate-earnings").textContent = "$" + data.earnings;
+    return parseFloat(data.earnings);
+  }catch{
+    document.getElementById("affiliate-earnings").textContent = "$0";
+    return 0;
+  }
+}
+
+async function fetchDonationsMetrics(){
+  try{
+    const data = await fetchWithRetry('/api/donations');
+    document.getElementById("donations-total").textContent = "$" + data.totalAmount;
+    return parseFloat(data.totalAmount);
+  }catch{
+    document.getElementById("donations-total").textContent = "$0";
+    return 0;
+  }
+}
+
+// -----------------------
+// Fetch Top Pages
+// -----------------------
+async function fetchTopPages(){
+  try{
+    const pages = await fetchWithRetry('/api/top-pages');
+    const tbody = document.getElementById('top-earning-pages'); tbody.innerHTML = '';
+    pages.sort((a,b)=>b.revenue-a.revenue);
+    pages.forEach(p => {
+      tbody.innerHTML += `<tr><td class="p-2">${p.page}</td><td class="p-2 text-right">$${p.revenue.toFixed(2)}</td></tr>`;
+    });
+  }catch{
+    document.getElementById('top-earning-pages').innerHTML = `<tr><td colspan="2" class="text-center text-gray-500 p-2">Failed to load data</td></tr>`;
+  }
+}
+
+// -----------------------
+// CSV Download
+// -----------------------
+document.getElementById('download-csv').addEventListener('click', async () => {
+  try {
+    const pages = await fetchWithRetry('/api/top-pages');
+    if(!pages || pages.length===0) return alert('No data to export');
+    let csv = 'Page,Revenue ($)\n';
+    pages.forEach(p => { csv += `"${p.page}",${p.revenue.toFixed(2)}\n`; });
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = 'top-earning-pages.csv';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+  } catch(err){ alert('Failed to download CSV'); console.error(err); }
+});
+
+// -----------------------
+// Update Revenue Chart
+// -----------------------
+function updateRevenueChart(revenue=[], donations=[]){
+  revenueChart.data.datasets[0].data = revenue;
+  revenueChart.data.datasets[1].data = donations;
   revenueChart.update();
 }
 
-// --- Auto-refresh ---
-function refreshDashboard(){
-  updateMetrics();
-  updateChart();
-  setTimeout(refreshDashboard,5000); // refresh every 5s
+// -----------------------
+// Refresh All Metrics
+// -----------------------
+async function refreshDashboard(){
+  const adsenseEarnings = await fetchAdSenseMetrics();
+  const affiliateEarnings = await fetchAffiliateMetrics();
+  const donations = await fetchDonationsMetrics();
+
+  const totalToday = adsenseEarnings + affiliateEarnings + donations;
+  const totalMTD = totalToday + Math.floor(Math.random()*1000);
+  const totalAccum = totalMTD + Math.floor(Math.random()*5000);
+  const possiblePayout = totalAccum*0.9;
+
+  document.getElementById("earn-today").textContent = "$"+totalToday.toFixed(2);
+  document.getElementById("earn-month").textContent = "$"+totalMTD.toFixed(2);
+  document.getElementById("earn-total").textContent = "$"+totalAccum.toFixed(2);
+  document.getElementById("earn-payout").textContent = "$"+possiblePayout.toFixed(2);
+
+  // Lazy-load chart & tables
+  lazyLoad(document.getElementById('revenueChart'), () => {
+    const revenueData = Array.from({length:7},()=>Math.floor(Math.random()*300)+50);
+    const donationData = Array.from({length:7},()=>Math.floor(Math.random()*150)+20);
+    updateRevenueChart(revenueData, donationData);
+  });
+  lazyLoad(document.getElementById('top-earning-pages'), fetchTopPages);
+  lazyLoad(document.getElementById('top-pages'), fetchGA4Metrics);
 }
 
-// Start simulation
+// -----------------------
+// Auto-refresh every 5s
+// -----------------------
 refreshDashboard();
+setInterval(refreshDashboard,5000);
+
 </script>
 </body>
-</html>
+    </html>
