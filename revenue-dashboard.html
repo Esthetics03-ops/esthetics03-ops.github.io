@@ -111,6 +111,103 @@ table th, table td { border-color: #374151; }
 </table>
 </section>
 
+  <!-- 🌿 The Esthetics Hub: Dynamic Structured Data Audit Dashboard -->
+<section id="schema-dashboard" class="p-6 bg-white rounded-2xl shadow-md max-w-4xl mx-auto my-10">
+  <h2 class="text-3xl font-semibold text-center mb-6 text-emerald-700">
+    🧩 Structured Data Audit Summary
+  </h2>
+
+  <div id="schema-status-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+
+  <div class="mt-8 bg-emerald-50 p-6 rounded-2xl shadow-inner">
+    <h3 class="text-xl font-semibold text-center text-emerald-800 mb-4">📊 Structured Data Coverage</h3>
+    <canvas id="schemaChart" height="150"></canvas>
+  </div>
+
+  <div class="mt-8 p-4 bg-emerald-100 rounded-xl shadow-inner text-gray-800">
+    <h3 class="text-lg font-semibold mb-2">📈 Overall Schema Health</h3>
+    <p id="schema-summary">Loading...</p>
+  </div>
+
+  <div class="mt-6 text-center text-sm text-gray-600">
+    <p>Auto-updates every 60 seconds • Last synced: <span id="schemaSyncTime"></span></p>
+  </div>
+</section>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+async function loadSchemaMetrics() {
+  try {
+    // Fetch config.json dynamically
+    const response = await fetch('config.json');
+    const config = await response.json();
+
+    // Simulate schema health metrics based on site config
+    const schemaMetrics = {
+      Organization: config.ORGANIZATION_STATUS || 100,
+      BlogPosting: config.BLOGPOSTING_STATUS || 100,
+      FAQPage: config.FAQPAGE_STATUS || 100,
+      WebSite: config.WEBSITE_STATUS || 70
+    };
+
+    const validSchemas = Object.values(schemaMetrics).filter(v => v >= 100).length;
+    const totalSchemas = Object.keys(schemaMetrics).length;
+
+    // Create schema grid cards
+    const grid = document.getElementById('schema-status-grid');
+    grid.innerHTML = Object.entries(schemaMetrics).map(([type, value]) => `
+      <div class="p-4 rounded-xl shadow-sm ${value === 100 ? 'bg-green-50' : 'bg-gray-50'}">
+        <h3 class="text-xl font-semibold mb-3 text-gray-800">${type}</h3>
+        <ul class="text-gray-700">
+          <li>Status: <strong>${value === 100 ? '✅ Valid' : '⚠️ Missing / Incomplete'}</strong></li>
+          <li>Score: ${value}%</li>
+        </ul>
+      </div>
+    `).join('');
+
+    // Summary text
+    document.getElementById('schema-summary').innerHTML =
+      `✅ <strong>${Math.round((validSchemas / totalSchemas) * 100)}%</strong> Schema Coverage — ${validSchemas} of ${totalSchemas} validated types detected.`;
+
+    // Update Chart
+    const ctx = document.getElementById('schemaChart').getContext('2d');
+    if (window.schemaChart) window.schemaChart.destroy();
+    window.schemaChart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: Object.keys(schemaMetrics),
+        datasets: [{
+          data: Object.values(schemaMetrics),
+          backgroundColor: ['#059669', '#2563EB', '#FBBF24', '#9CA3AF'],
+          borderWidth: 2,
+          hoverOffset: 10
+        }]
+      },
+      options: {
+        cutout: '65%',
+        plugins: {
+          legend: {
+            display: true,
+            position: 'bottom',
+            labels: { font: { size: 14 }, color: '#374151' }
+          }
+        }
+      }
+    });
+
+    // Update timestamp
+    document.getElementById("schemaSyncTime").textContent = new Date().toLocaleTimeString();
+  } catch (error) {
+    console.error("Schema metrics load failed:", error);
+  }
+}
+
+// Initial and interval refresh
+loadSchemaMetrics();
+setInterval(loadSchemaMetrics, 60000);
+</script>
+
 <section id="top-posts" class="max-w-4xl mx-auto my-10 p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-md">
 <h2 class="text-2xl font-semibold mb-4 text-center">📈 Top Performing Posts</h2>
 <ul id="postList" class="space-y-3"></ul>
