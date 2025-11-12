@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Esthetics Hub - Live Dashboard</title>
+<title>The Esthetics Hub - Live Simulation</title>
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.3/dist/tailwind.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
@@ -13,15 +13,12 @@
 </head>
 <body class="min-h-screen flex flex-col">
 
-<!-- Header -->
 <header class="bg-indigo-600 text-white p-4 text-center text-xl font-semibold">
-  The Esthetics Hub 💼 Live Dashboard
+  The Esthetics Hub 💼 Live Simulation
 </header>
 
-<!-- Main Content -->
 <main class="flex-1 p-6 grid gap-6 max-w-5xl mx-auto">
 
-  <!-- GA4 Metrics -->
   <section class="card">
     <h2 class="text-2xl font-semibold mb-4">📊 Live Traffic Metrics</h2>
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -44,14 +41,12 @@
     </div>
   </section>
 
-  <!-- AdSense Revenue -->
   <section class="card">
     <h2 class="text-2xl font-semibold mb-4">💰 AdSense Revenue</h2>
     <p class="text-gray-500">Today</p>
     <p id="adsense-revenue" class="text-3xl font-bold">$--.--</p>
   </section>
 
-  <!-- Revenue & Donations Chart -->
   <section class="card">
     <h2 class="text-2xl font-semibold mb-4">📈 Revenue & Donations</h2>
     <canvas id="revenueChart" height="200"></canvas>
@@ -59,85 +54,57 @@
 
 </main>
 
-<!-- Footer -->
 <footer class="bg-gray-200 text-gray-700 p-4 text-center text-sm">
-  &copy; 2025 The Esthetics Hub. All rights reserved.
+  &copy; 2025 The Esthetics Hub. Simulation Only
 </footer>
 
-<!-- Scripts -->
 <script>
-// Load config.json dynamically
-async function loadConfig() {
-  const res = await fetch('/config.json');
-  return res.json();
+// --- Simulated Live Data ---
+function getRandom(min, max) { return Math.floor(Math.random()*(max-min+1)+min); }
+
+// GA4 simulation
+function updateGA4() {
+  document.getElementById("ga4-users").textContent = getRandom(50, 300);
+  document.getElementById("ga4-sessions").textContent = getRandom(100, 500);
+  document.getElementById("ga4-pageviews").textContent = getRandom(150, 700);
+  document.getElementById("ga4-bounce").textContent = getRandom(30, 70) + "%";
 }
 
-async function initDashboard() {
-  const CONFIG = await loadConfig();
-
-  // --- GA4 Fetch ---
-  async function fetchGA4Metrics() {
-    try {
-      const propertyId = CONFIG.GA4_PROPERTIES[0];
-      const url = `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runRealtimeReport?key=${CONFIG.GOOGLE_API_KEY}`;
-      const body = { metrics:[{"name":"activeUsers"}], dimensions:[{"name":"unifiedScreenName"}] };
-      const res = await fetch(url, { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify(body) });
-      const data = await res.json();
-      const activeUsers = data.rows?.[0]?.metricValues?.[0]?.value || 0;
-      document.getElementById("ga4-users").textContent = activeUsers;
-      document.getElementById("ga4-sessions").textContent = "--";
-      document.getElementById("ga4-pageviews").textContent = "--";
-      document.getElementById("ga4-bounce").textContent = "--";
-    } catch(e) { console.error("GA4 API Error:", e); }
-  }
-
-  // --- AdSense Fetch ---
-  async function fetchAdSenseRevenue() {
-    try {
-      // Replace with backend if using OAuth, here using dummy for live simulation
-      const res = await fetch(`/adsense-data?pubId=${CONFIG.ADSENSE_PUB_ID}`);
-      const data = await res.json();
-      document.getElementById("adsense-revenue").textContent = `$${data.today}`;
-    } catch(e) { console.error("AdSense fetch error:", e); }
-  }
-
-  // --- Revenue Chart ---
-  const ctx = document.getElementById('revenueChart').getContext('2d');
-  const revenueChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
-      datasets: [
-        { label: 'Revenue ($)', data: Array(7).fill(0), borderColor: '#6366F1', backgroundColor: 'rgba(99,102,241,0.2)', tension: 0.4 },
-        { label: 'Donations ($)', data: Array(7).fill(0), borderColor: '#10B981', backgroundColor: 'rgba(16,185,129,0.2)', tension: 0.4 }
-      ]
-    },
-    options: { responsive: true, plugins: { legend: { position: 'top' } } }
-  });
-
-  async function updateChartData() {
-    try {
-      const res = await fetch('/revenue-chart-data');
-      const chartData = await res.json();
-      revenueChart.data.datasets[0].data = chartData.revenue;
-      revenueChart.data.datasets[1].data = chartData.donations;
-      revenueChart.update();
-    } catch(e) { console.warn("Chart backend not available yet"); }
-  }
-
-  // --- Auto-refresh ---
-  async function refreshDashboard() {
-    await fetchGA4Metrics();
-    await fetchAdSenseRevenue();
-    await updateChartData();
-    setTimeout(refreshDashboard, 30000);
-  }
-
-  refreshDashboard();
+// AdSense simulation
+function updateRevenue() {
+  document.getElementById("adsense-revenue").textContent = "$" + (getRandom(50, 300) + Math.random()).toFixed(2);
 }
 
-// Initialize
-initDashboard();
+// Revenue chart simulation
+const ctx = document.getElementById('revenueChart').getContext('2d');
+const revenueChart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
+    datasets: [
+      { label: 'Revenue ($)', data: Array.from({length:7},()=>getRandom(50,300)), borderColor: '#6366F1', backgroundColor: 'rgba(99,102,241,0.2)', tension: 0.4 },
+      { label: 'Donations ($)', data: Array.from({length:7},()=>getRandom(20,150)), borderColor: '#10B981', backgroundColor: 'rgba(16,185,129,0.2)', tension: 0.4 }
+    ]
+  },
+  options: { responsive:true, plugins:{legend:{position:'top'}} }
+});
+
+function updateChart() {
+  revenueChart.data.datasets[0].data = Array.from({length:7},()=>getRandom(50,300));
+  revenueChart.data.datasets[1].data = Array.from({length:7},()=>getRandom(20,150));
+  revenueChart.update();
+}
+
+// Auto-refresh every 5 seconds for simulation
+function refreshSimulation() {
+  updateGA4();
+  updateRevenue();
+  updateChart();
+  setTimeout(refreshSimulation, 5000);
+}
+
+// Start simulation
+refreshSimulation();
 </script>
 </body>
-  </html>
+</html>
