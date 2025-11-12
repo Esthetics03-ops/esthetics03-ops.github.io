@@ -1,0 +1,11 @@
+{
+  "network": "Esthetics Hub - Mock Affiliate",
+  "date": "2025-11-12",
+  "metrics": {
+    "clicks": 97,
+    "conversions": 8,
+    "commission_total": 26.55,
+    "conversion_rate": "8.25%"
+  },
+  "source": "MOCK_JSON_API"
+}
