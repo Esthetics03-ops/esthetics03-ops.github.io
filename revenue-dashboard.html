@@ -6,6 +6,41 @@
 <title>The Esthetics Hub - Monetization Dashboard</title>
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.3/dist/tailwind.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Add your existing Tailwind dashboard here -->
+
+<script>
+async function updateMetrics() {
+  try {
+    const ga4Data = await fetch('/api/ga4').then(r => r.json());
+    const adsenseData = await fetch('/api/adsense').then(r => r.json());
+
+    // GA4
+    document.getElementById("ga4-users").textContent = ga4Data.activeUsers;
+    document.getElementById("ga4-pageviews").textContent = ga4Data.pageviews;
+    document.getElementById("ga4-avgduration").textContent = ga4Data.avgSessionDuration;
+
+    // Top Pages
+    const topPages = document.getElementById("top-pages");
+    topPages.innerHTML = '';
+    ga4Data.topPages.forEach(p => {
+      topPages.innerHTML += `<tr><td>${p.page}</td><td>${p.views}</td></tr>`;
+    });
+
+    // AdSense
+    document.getElementById("ad-impressions").textContent = adsenseData.impressions;
+    document.getElementById("ad-clicks").textContent = adsenseData.clicks;
+    document.getElementById("ad-ctr").textContent = adsenseData.ctr + '%';
+    document.getElementById("earn-today").textContent = "$" + adsenseData.earnings;
+
+  } catch (err) {
+    console.error("Error fetching real-time data:", err);
+  }
+}
+
+setInterval(updateMetrics, 5000); // Auto-refresh every 5s
+updateMetrics();
+                             </script>
 <style>
   body { background: #f9fafb; font-family: 'Inter', sans-serif; }
   .card { @apply p-4 bg-white rounded-2xl shadow-md; }
