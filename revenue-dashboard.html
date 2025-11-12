@@ -3,31 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Esthetics Hub - Real-Time Analytics & Monetisation</title>
+<title>The Esthetics Hub - Live Dashboard</title>
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.3/dist/tailwind.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.8/dayjs.min.js"></script>
-
-<!-- JSON-LD Schemas -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "The Esthetics Hub",
-  "url": "https://esthetics03-ops.github.io",
-  "logo": "https://esthetics03-ops.github.io/images/logo.png",
-  "sameAs": [
-    "https://www.facebook.com/esthetics03",
-    "https://www.instagram.com/esthetics03",
-    "https://www.linkedin.com/company/esthetics03"
-  ],
-  "foundingDate": "2025-01-01",
-  "description": "The Esthetics Hub is your go-to site for holistic wellness, nutrition, and lifestyle insights."
-}
-</script>
-<!-- Additional schemas (BlogPosting, FAQPage, Product, Carousel) same as before -->
-
-
 <style>
   body { background: #f9fafb; font-family: 'Inter', sans-serif; }
   .card { @apply p-4 bg-white rounded-2xl shadow-md; }
@@ -37,7 +15,7 @@
 
 <!-- Header -->
 <header class="bg-indigo-600 text-white p-4 text-center text-xl font-semibold">
-  The Esthetics Hub 💼 Revenue Dashboard
+  The Esthetics Hub 💼 Live Dashboard
 </header>
 
 <!-- Main Content -->
@@ -66,14 +44,14 @@
     </div>
   </section>
 
-  <!-- AdSense Metrics -->
+  <!-- AdSense Revenue -->
   <section class="card">
     <h2 class="text-2xl font-semibold mb-4">💰 AdSense Revenue</h2>
     <p class="text-gray-500">Today</p>
     <p id="adsense-revenue" class="text-3xl font-bold">$--.--</p>
   </section>
 
-  <!-- Revenue Chart -->
+  <!-- Revenue & Donations Chart -->
   <section class="card">
     <h2 class="text-2xl font-semibold mb-4">📈 Revenue & Donations</h2>
     <canvas id="revenueChart" height="200"></canvas>
@@ -88,85 +66,78 @@
 
 <!-- Scripts -->
 <script>
-// Configuration
-const CONFIG = {
-  GA4_PROPERTIES: ["G-QCX3G9KSPC","G-PSW1MY7HB4"], // GA4 IDs
-  GOOGLE_API_KEY: "YOUR_GOOGLE_API_KEY_HERE",      // Add your API key
-  ADSENSE_BACKEND_URL: "/adsense-data",            // Backend endpoint to fetch revenue
-  AUTO_REFRESH: 30000                               // 30 seconds
-};
+// Load config.json dynamically
+async function loadConfig() {
+  const res = await fetch('/config.json');
+  return res.json();
+}
 
-// --- GA4 Fetch ---
-async function fetchGA4Metrics() {
-  try {
-    const propertyId = CONFIG.GA4_PROPERTIES[0]; // First GA4 property
-    const url = `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runRealtimeReport?key=${CONFIG.GOOGLE_API_KEY}`;
-    const body = {
-      "metrics":[{"name":"activeUsers"}],
-      "dimensions":[{"name":"unifiedScreenName"}]
-    };
+async function initDashboard() {
+  const CONFIG = await loadConfig();
 
-    const res = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
-    const data = await res.json();
-
-    const activeUsers = data.rows?.[0]?.metricValues?.[0]?.value || 0;
-    document.getElementById("ga4-users").textContent = activeUsers;
-
-    // For sessions/pageviews/bounce, implement additional API calls if needed
-    document.getElementById("ga4-sessions").textContent = "--";
-    document.getElementById("ga4-pageviews").textContent = "--";
-    document.getElementById("ga4-bounce").textContent = "--";
-  } catch(e) {
-    console.error("GA4 API Error:", e);
+  // --- GA4 Fetch ---
+  async function fetchGA4Metrics() {
+    try {
+      const propertyId = CONFIG.GA4_PROPERTIES[0];
+      const url = `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runRealtimeReport?key=${CONFIG.GOOGLE_API_KEY}`;
+      const body = { metrics:[{"name":"activeUsers"}], dimensions:[{"name":"unifiedScreenName"}] };
+      const res = await fetch(url, { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify(body) });
+      const data = await res.json();
+      const activeUsers = data.rows?.[0]?.metricValues?.[0]?.value || 0;
+      document.getElementById("ga4-users").textContent = activeUsers;
+      document.getElementById("ga4-sessions").textContent = "--";
+      document.getElementById("ga4-pageviews").textContent = "--";
+      document.getElementById("ga4-bounce").textContent = "--";
+    } catch(e) { console.error("GA4 API Error:", e); }
   }
-}
 
-// --- AdSense Fetch via Backend ---
-async function fetchAdSenseRevenue() {
-  try {
-    const res = await fetch(CONFIG.ADSENSE_BACKEND_URL);
-    const data = await res.json();
-    document.getElementById("adsense-revenue").textContent = `$${data.today}`;
-  } catch(e) {
-    console.error("AdSense fetch error:", e);
+  // --- AdSense Fetch ---
+  async function fetchAdSenseRevenue() {
+    try {
+      // Replace with backend if using OAuth, here using dummy for live simulation
+      const res = await fetch(`/adsense-data?pubId=${CONFIG.ADSENSE_PUB_ID}`);
+      const data = await res.json();
+      document.getElementById("adsense-revenue").textContent = `$${data.today}`;
+    } catch(e) { console.error("AdSense fetch error:", e); }
   }
+
+  // --- Revenue Chart ---
+  const ctx = document.getElementById('revenueChart').getContext('2d');
+  const revenueChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
+      datasets: [
+        { label: 'Revenue ($)', data: Array(7).fill(0), borderColor: '#6366F1', backgroundColor: 'rgba(99,102,241,0.2)', tension: 0.4 },
+        { label: 'Donations ($)', data: Array(7).fill(0), borderColor: '#10B981', backgroundColor: 'rgba(16,185,129,0.2)', tension: 0.4 }
+      ]
+    },
+    options: { responsive: true, plugins: { legend: { position: 'top' } } }
+  });
+
+  async function updateChartData() {
+    try {
+      const res = await fetch('/revenue-chart-data');
+      const chartData = await res.json();
+      revenueChart.data.datasets[0].data = chartData.revenue;
+      revenueChart.data.datasets[1].data = chartData.donations;
+      revenueChart.update();
+    } catch(e) { console.warn("Chart backend not available yet"); }
+  }
+
+  // --- Auto-refresh ---
+  async function refreshDashboard() {
+    await fetchGA4Metrics();
+    await fetchAdSenseRevenue();
+    await updateChartData();
+    setTimeout(refreshDashboard, 30000);
+  }
+
+  refreshDashboard();
 }
 
-// --- Revenue Chart ---
-const ctx = document.getElementById('revenueChart').getContext('2d');
-const revenueChart = new Chart(ctx, {
-  type: 'line',
-  data: {
-    labels: ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
-    datasets: [
-      { label: 'Revenue ($)', data: Array(7).fill(0), borderColor: '#6366F1', backgroundColor: 'rgba(99,102,241,0.2)', tension: 0.4 },
-      { label: 'Donations ($)', data: Array(7).fill(0), borderColor: '#10B981', backgroundColor: 'rgba(16,185,129,0.2)', tension: 0.4 }
-    ]
-  },
-  options: { responsive: true, plugins: { legend: { position: 'top' } } }
-});
-
-// --- Update Chart Data from Backend if Available ---
-async function updateChartData() {
-  try {
-    const res = await fetch("/revenue-chart-data"); // Optional backend endpoint
-    const chartData = await res.json();
-    revenueChart.data.datasets[0].data = chartData.revenue;
-    revenueChart.data.datasets[1].data = chartData.donations;
-    revenueChart.update();
-  } catch(e) { /* skip if endpoint not ready */ }
-}
-
-// --- Refresh Dashboard ---
-async function refreshDashboard() {
-  await fetchGA4Metrics();
-  await fetchAdSenseRevenue();
-  await updateChartData();
-  setTimeout(refreshDashboard, CONFIG.AUTO_REFRESH);
-}
-
-// --- Initial Load ---
-refreshDashboard();
+// Initialize
+initDashboard();
 </script>
 </body>
   </html>
