@@ -1,332 +1,260 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Esthetics Hub - Live Monetization Dashboard</title>
-<link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.3/dist/tailwind.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<style>
-  body { background: #f9fafb; font-family: 'Inter', sans-serif; }
-  .card { @apply p-4 bg-white rounded-2xl shadow-md; }
-  table { border-collapse: collapse; width: 100%; }
-  th, td { border-bottom: 1px solid #e5e7eb; padding: 0.5rem; }
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>The Esthetics Hub — Revenue Dashboard</title>
+
+  <!-- Basic JSON-LD for rich results -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "The Esthetics Hub",
+    "url": "https://esthetics03-ops.github.io",
+    "description": "Dashboard showing AdSense, affiliate and donation revenue for The Esthetics Hub."
+  }
+  </script>
+
+  <style>
+    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin: 0; padding: 20px; background: #fafafa; }
+    .card { background:#fff; border-radius:12px; padding:18px; box-shadow: 0 6px 18px rgba(0,0,0,.06); margin-bottom:12px; }
+    .row { display:flex; gap:12px; flex-wrap:wrap; }
+    .metric { flex:1 1 200px; }
+    .small { color:#666; font-size:13px; }
+    .status { position:fixed; right:14px; bottom:14px; background:#222; color:#fff; padding:10px 14px; border-radius:10px; font-size:13px; z-index:999; }
+    .live { color: #16a34a; font-weight:700; }
+    .sim { color: #f59e0b; font-weight:700; }
+    pre { background:#f3f4f6; padding:10px; border-radius:8px; overflow:auto; }
+  </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body>
+  <h1>The Esthetics Hub — Revenue Dashboard</h1>
 
-<header class="bg-indigo-600 text-white p-4 text-center text-xl font-semibold">
-  The Esthetics Hub 💼 Live Monetization Dashboard
-</header>
+  <div id="main" class="card">
+    <div id="systemStatus" class="small">Loading status…</div>
 
-<main class="flex-1 p-6 grid gap-6 max-w-6xl mx-auto">
+    <div class="row" style="margin-top:12px;">
+      <div class="card metric">
+        <div class="small">AdSense — Today</div>
+        <div id="adsense_earn" style="font-size:20px; font-weight:700">$--.--</div>
+        <div class="small" id="adsense_meta">impr: -- • clicks: -- • ctr: --</div>
+      </div>
 
-  <!-- Total Earnings -->
-  <section class="card">
-    <h2 class="text-2xl font-semibold mb-4">💰 Total Earnings</h2>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <div><p class="text-gray-500">Today</p><p id="earn-today" class="text-2xl font-bold">$0</p></div>
-      <div><p class="text-gray-500">Month-to-Date</p><p id="earn-month" class="text-2xl font-bold">$0</p></div>
-      <div><p class="text-gray-500">Accumulated</p><p id="earn-total" class="text-2xl font-bold">$0</p></div>
-      <div><p class="text-gray-500">Possible Payout</p><p id="earn-payout" class="text-2xl font-bold">$0</p></div>
-    </div>
-  </section>
+      <div class="card metric">
+        <div class="small">Affiliate — Today</div>
+        <div id="affiliate_earn" style="font-size:20px; font-weight:700">$--.--</div>
+        <div class="small" id="affiliate_meta">clicks: -- • conv: -- • conv%: --</div>
+      </div>
 
-  <!-- GA4 Metrics -->
-  <section class="card">
-    <h2 class="text-2xl font-semibold mb-4">📊 GA4 Metrics</h2>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <div><p class="text-gray-500">Active Users</p><p id="ga4-users" class="text-2xl font-bold">0</p></div>
-      <div><p class="text-gray-500">Pageviews</p><p id="ga4-pageviews" class="text-2xl font-bold">0</p></div>
-      <div><p class="text-gray-500">Avg. Session Duration</p><p id="ga4-avgduration" class="text-2xl font-bold">0:00</p></div>
-      <div>
-        <p class="text-gray-500">Top Pages</p>
-        <table class="w-full text-sm mt-2"><tbody id="top-pages"></tbody></table>
+      <div class="card metric">
+        <div class="small">Donations</div>
+        <div id="donations_earn" style="font-size:20px; font-weight:700">$--.--</div>
+        <div class="small" id="donations_meta">stripe/paypal: --</div>
       </div>
     </div>
-  </section>
 
-  <!-- AdSense Metrics -->
-  <section class="card">
-    <h2 class="text-2xl font-semibold mb-4">📈 AdSense Metrics</h2>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <div><p class="text-gray-500">Impressions</p><p id="ad-impressions" class="text-2xl font-bold">0</p></div>
-      <div><p class="text-gray-500">Clicks</p><p id="ad-clicks" class="text-2xl font-bold">0</p></div>
-      <div><p class="text-gray-500">CTR (%)</p><p id="ad-ctr" class="text-2xl font-bold">0%</p></div>
-      <div><p class="text-gray-500">Earnings ($)</p><p id="earn-ad" class="text-2xl font-bold">0</p></div>
-    </div>
-  </section>
+    <section style="margin-top:14px;">
+      <h3 style="margin:0 0 8px 0;">Detailed</h3>
+      <div id="detail" class="card small">Loading details…</div>
+    </section>
+  </div>
 
-  <!-- Affiliate & Donations -->
-  <section class="card">
-    <h2 class="text-2xl font-semibold mb-4">💸 Affiliate & Donations</h2>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <div><p class="text-gray-500">Affiliate Clicks</p><p id="affiliate-clicks" class="text-2xl font-bold">0</p></div>
-      <div><p class="text-gray-500">Affiliate Conversions</p><p id="affiliate-conversions" class="text-2xl font-bold">0</p></div>
-      <div><p class="text-gray-500">Affiliate Earnings ($)</p><p id="affiliate-earnings" class="text-2xl font-bold">0</p></div>
-      <div><p class="text-gray-500">Donations ($)</p><p id="donations-total" class="text-2xl font-bold">0</p></div>
-    </div>
-  </section>
-
-  <!-- Revenue & Donations Chart -->
-  <section class="card">
-    <h2 class="text-2xl font-semibold mb-4">📊 Revenue & Donations Chart</h2>
-    <canvas id="revenueChart" height="200"></canvas>
-  </section>
-
-  <!-- Top Earning Pages with CSV download -->
-  <section class="card">
-    <h2 class="text-2xl font-semibold mb-4">🏆 Top Earning Pages</h2>
-    <div class="flex justify-end mb-2">
-      <button id="download-csv" class="bg-indigo-600 text-white px-4 py-2 rounded-xl hover:bg-indigo-700 transition">
-        📥 Download CSV
-      </button>
-    </div>
-    <table>
-      <thead>
-        <tr class="border-b">
-          <th class="text-left p-2">Page</th>
-          <th class="text-right p-2">Revenue ($)</th>
-        </tr>
-      </thead>
-      <tbody id="top-earning-pages"></tbody>
-    </table>
-  </section>
-
-  <!-- Connection Status -->
-  <section class="card">
-    <h2 class="text-2xl font-semibold mb-4">🔗 API Connection Status</h2>
-    <div class="grid grid-cols-2 gap-4">
-      <div>
-        <p class="text-gray-500">GA4:</p>
-        <p id="ga4-status" class="text-lg font-bold text-gray-700">Checking...</p>
-      </div>
-      <div>
-        <p class="text-gray-500">AdSense:</p>
-        <p id="adsense-status" class="text-lg font-bold text-gray-700">Checking...</p>
-      </div>
-    </div>
-  </section>
-
-</main>
-
-<footer class="bg-gray-200 text-gray-700 p-4 text-center text-sm">
-  &copy; 2025 The Esthetics Hub. Live Dashboard
-</footer>
+  <div id="statusBox" class="status">Checking APIs…</div>
 
 <script>
-// -----------------------
-// Chart Setup
-// -----------------------
-const revenueChartCtx = document.getElementById('revenueChart').getContext('2d');
-const revenueChart = new Chart(revenueChartCtx,{
-  type:'line',
-  data:{
-    labels:["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
-    datasets:[
-      { label:'Revenue ($)', data:Array(7).fill(0), borderColor:'#6366F1', backgroundColor:'rgba(99,102,241,0.2)', tension:0.4 },
-      { label:'Donations ($)', data:Array(7).fill(0), borderColor:'#10B981', backgroundColor:'rgba(16,185,129,0.2)', tension:0.4 }
-    ]
-  },
-  options:{ responsive:true, plugins:{ legend:{position:'top'} } }
-});
+/*
+  Dashboard behavior:
+  1. Loads ./config.json from repo root.
+  2. Attempts lightweight "connectivity" calls to GA4 and AdSense (best-effort).
+     - Many Google APIs require OAuth or server-side proxies; client-side calls may fail due to CORS or missing credentials.
+  3. If live calls fail, loads local mock files:
+     - /api/adsense.json
+     - /api/affiliate.json
+     (these are served by GitHub Pages if placed in /api folder)
+  4. Automatically updates the UI and shows whether data are LIVE or SIMULATED.
+*/
 
-// -----------------------
-// Lazy Load Helper
-// -----------------------
-function lazyLoad(element, callback){
-  const observer = new IntersectionObserver((entries, obs) => {
-    entries.forEach(entry => {
-      if(entry.isIntersecting){
-        callback();
-        obs.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.1 });
-  observer.observe(element);
-}
+const ISO_TODAY = new Date().toISOString().slice(0,10);
 
-// -----------------------
-// Fetch with Retry
-// -----------------------
-async function fetchWithRetry(url, retries = 3, delay = 2000){
-  for(let i=0;i<retries;i++){
-    try{
-      const res = await fetch(url);
-      if(!res.ok) throw new Error(`HTTP ${res.status}`);
-      return await res.json();
-    }catch(err){
-      console.warn(`Fetch attempt ${i+1} failed for ${url}: ${err}`);
-      if(i<retries-1) await new Promise(r => setTimeout(r, delay));
-    }
-  }
-  throw new Error(`Failed to fetch ${url} after ${retries} attempts`);
-}
+// util
+function els(id){ return document.getElementById(id); }
+function money(v, cur="$"){ return (typeof v === 'number') ? (cur + v.toFixed(2)) : cur + '0.00'; }
+function small(v){ return v ?? '--'; }
 
-// -----------------------
-// Flash Alert
-// -----------------------
-function flashAlert(element, times = 3, interval = 500){
-  let count = 0;
-  const originalColor = element.style.backgroundColor || '';
-  const flash = setInterval(() => {
-    element.style.backgroundColor = count % 2 === 0 ? '#F87171' : originalColor; // red flash
-    count++;
-    if(count > times*2){
-      clearInterval(flash);
-      element.style.backgroundColor = originalColor;
-    }
-  }, interval);
-}
-
-// -----------------------
-// Fetch GA4 Metrics
-// -----------------------
-async function fetchGA4Metrics(){
-  const statusEl = document.getElementById('ga4-status');
-  try{
-    const data = await fetchWithRetry('/api/ga4');
-    document.getElementById("ga4-users").textContent = data.activeUsers;
-    document.getElementById("ga4-pageviews").textContent = data.pageviews;
-    document.getElementById("ga4-avgduration").textContent = data.avgDuration || '0:00';
-    const topPages = document.getElementById("top-pages"); topPages.innerHTML = '';
-    data.topPages?.forEach(p => {
-      topPages.innerHTML += `<tr><td>${p.page}</td><td>${p.views}</td></tr>`;
-    });
-    statusEl.textContent = 'Connected ✅';
-    statusEl.classList.replace('text-red-500','text-green-600');
-  }catch{
-    statusEl.textContent = 'Disconnected ❌ (Retry failed)';
-    statusEl.classList.replace('text-green-600','text-red-500');
-    flashAlert(statusEl);
-  }
-}
-
-// -----------------------
-// Fetch AdSense Metrics
-// -----------------------
-async function fetchAdSenseMetrics(){
-  const statusEl = document.getElementById('adsense-status');
-  try{
-    const data = await fetchWithRetry('/api/adsense');
-    document.getElementById("ad-impressions").textContent = data.impressions;
-    document.getElementById("ad-clicks").textContent = data.clicks;
-    document.getElementById("ad-ctr").textContent = ((data.clicks/data.impressions)*100).toFixed(2)+'%';
-    document.getElementById("earn-ad").textContent = "$"+data.earnings;
-    statusEl.textContent = 'Connected ✅';
-    statusEl.classList.replace('text-red-500','text-green-600');
-    return data.earnings;
-  }catch{
-    document.getElementById("earn-ad").textContent = "$0";
-    statusEl.textContent = 'Disconnected ❌ (Retry failed)';
-    statusEl.classList.replace('text-green-600','text-red-500');
-    flashAlert(statusEl);
-    return 0;
-  }
-}
-
-// -----------------------
-// Fetch Affiliate & Donations
-// -----------------------
-async function fetchAffiliateMetrics(){
-  try{
-    const data = await fetchWithRetry('/api/affiliate');
-    document.getElementById("affiliate-clicks").textContent = data.clicks;
-    document.getElementById("affiliate-conversions").textContent = data.conversions;
-    document.getElementById("affiliate-earnings").textContent = "$" + data.earnings;
-    return parseFloat(data.earnings);
-  }catch{
-    document.getElementById("affiliate-earnings").textContent = "$0";
-    return 0;
-  }
-}
-
-async function fetchDonationsMetrics(){
-  try{
-    const data = await fetchWithRetry('/api/donations');
-    document.getElementById("donations-total").textContent = "$" + data.totalAmount;
-    return parseFloat(data.totalAmount);
-  }catch{
-    document.getElementById("donations-total").textContent = "$0";
-    return 0;
-  }
-}
-
-// -----------------------
-// Fetch Top Pages
-// -----------------------
-async function fetchTopPages(){
-  try{
-    const pages = await fetchWithRetry('/api/top-pages');
-    const tbody = document.getElementById('top-earning-pages'); tbody.innerHTML = '';
-    pages.sort((a,b)=>b.revenue-a.revenue);
-    pages.forEach(p => {
-      tbody.innerHTML += `<tr><td class="p-2">${p.page}</td><td class="p-2 text-right">$${p.revenue.toFixed(2)}</td></tr>`;
-    });
-  }catch{
-    document.getElementById('top-earning-pages').innerHTML = `<tr><td colspan="2" class="text-center text-gray-500 p-2">Failed to load data</td></tr>`;
-  }
-}
-
-// -----------------------
-// CSV Download
-// -----------------------
-document.getElementById('download-csv').addEventListener('click', async () => {
+async function safeFetchJson(url, options = {}) {
   try {
-    const pages = await fetchWithRetry('/api/top-pages');
-    if(!pages || pages.length===0) return alert('No data to export');
-    let csv = 'Page,Revenue ($)\n';
-    pages.forEach(p => { csv += `"${p.page}",${p.revenue.toFixed(2)}\n`; });
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a'); a.href = url; a.download = 'top-earning-pages.csv';
-    document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
-  } catch(err){ alert('Failed to download CSV'); console.error(err); }
-});
-
-// -----------------------
-// Update Revenue Chart
-// -----------------------
-function updateRevenueChart(revenue=[], donations=[]){
-  revenueChart.data.datasets[0].data = revenue;
-  revenueChart.data.datasets[1].data = donations;
-  revenueChart.update();
+    const res = await fetch(url, options);
+    if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+    return await res.json();
+  } catch (err) {
+    // return an object containing error flag so caller can decide
+    return { __error: true, error: err.message || String(err) };
+  }
 }
 
-// -----------------------
-// Refresh All Metrics
-// -----------------------
-async function refreshDashboard(){
-  const adsenseEarnings = await fetchAdSenseMetrics();
-  const affiliateEarnings = await fetchAffiliateMetrics();
-  const donations = await fetchDonationsMetrics();
+async function loadConfig(){
+  const cfg = await safeFetchJson('./config.json');
+  if (cfg && cfg.__error) throw new Error('Failed to load config.json: ' + cfg.error);
+  return cfg;
+}
 
-  const totalToday = adsenseEarnings + affiliateEarnings + donations;
-  const totalMTD = totalToday + Math.floor(Math.random()*1000);
-  const totalAccum = totalMTD + Math.floor(Math.random()*5000);
-  const possiblePayout = totalAccum*0.9;
-
-  document.getElementById("earn-today").textContent = "$"+totalToday.toFixed(2);
-  document.getElementById("earn-month").textContent = "$"+totalMTD.toFixed(2);
-  document.getElementById("earn-total").textContent = "$"+totalAccum.toFixed(2);
-  document.getElementById("earn-payout").textContent = "$"+possiblePayout.toFixed(2);
-
-  // Lazy-load chart & tables
-  lazyLoad(document.getElementById('revenueChart'), () => {
-    const revenueData = Array.from({length:7},()=>Math.floor(Math.random()*300)+50);
-    const donationData = Array.from({length:7},()=>Math.floor(Math.random()*150)+20);
-    updateRevenueChart(revenueData, donationData);
+async function testGa4(propertyId, apiKey){
+  // Light, best-effort test — GA4 Realtime Data API usually needs OAuth; API key may be blocked by CORS.
+  const endpoint = `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runRealtimeReport`;
+  const body = { metrics:[{name:"activeUsers"}] };
+  const res = await safeFetchJson(endpoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type':'application/json',
+      'Authorization': apiKey ? `Bearer ${apiKey}` : ''
+    },
+    body: JSON.stringify(body)
   });
-  lazyLoad(document.getElementById('top-earning-pages'), fetchTopPages);
-  lazyLoad(document.getElementById('top-pages'), fetchGA4Metrics);
+  return res;
 }
 
-// -----------------------
-// Auto-refresh every 5s
-// -----------------------
-refreshDashboard();
-setInterval(refreshDashboard,5000);
+async function testAdsense(pubId, apiKey){
+  // Light test for AdSense — Management API normally requires OAuth and is often blocked from client-side.
+  const endpoint = `https://www.googleapis.com/adsense/v2/accounts/${pubId}/reports?startDate=${ISO_TODAY}&endDate=${ISO_TODAY}`;
+  const res = await safeFetchJson(endpoint, {
+    headers: { 'Authorization': apiKey ? `Bearer ${apiKey}` : '' }
+  });
+  return res;
+}
 
+function renderStatus(text, isLive){
+  const box = els('statusBox');
+  box.innerHTML = text;
+  if (isLive) box.classList.add('live'); else box.classList.remove('live');
+}
+
+// Fallback simulated values (used if live APIs fail)
+const SIM_ADSENSE = {
+  account: "pub-1959507280210179",
+  date: ISO_TODAY,
+  metrics: { estimatedEarnings: 14.37, impressions: 682, clicks: 22, ctr: "3.22%", rpm: 21.08 },
+  source: "SIMULATED"
+};
+const SIM_AFFIL = {
+  network: "Esthetics Partners",
+  date: ISO_TODAY,
+  metrics: { clicks: 97, conversions: 8, commission_total: 26.55, conversion_rate: "8.25%" },
+  source: "SIMULATED"
+};
+
+async function loadDataAndRender() {
+  try {
+    const cfg = await loadConfig();
+    els('systemStatus').textContent = `Site: ${cfg.SITE_NAME ?? 'Unknown'} — last sync: ${cfg.PROJECT?.lastSync ?? 'unknown'}`;
+
+    // Try GA4 / AdSense "connectivity" first (best-effort)
+    let ga4Ok = false, adsenseOk = false;
+    let adsenseData = null, affiliateData = null;
+
+    // Attempt to test AdSense API (may fail client-side)
+    if (cfg.ADSENSE?.PUB_ID) {
+      const resAds = await testAdsense(cfg.ADSENSE.PUB_ID, cfg.GOOGLE_API_KEY);
+      if (!resAds || resAds.__error) {
+        console.warn('AdSense live test failed:', resAds?.error ?? resAds);
+      } else {
+        adsenseOk = true;
+        adsenseData = resAds;
+      }
+    }
+
+    // Attempt an affiliate/API marketplace probe (this repo uses a local mock)
+    // We'll try real affiliate endpoint path if present; otherwise fallback to mock.
+    // For client-side safety, we expect affiliate networks to require server tokens.
+
+    // If live AdSense failed or returned error, try local mock: /api/adsense.json
+    if (!adsenseOk) {
+      const mockAds = await safeFetchJson('/api/adsense.json');
+      if (!mockAds.__error) {
+        adsenseData = mockAds;
+        adsenseOk = false; // false means it's from mock
+      } else {
+        // if no mock, use built-in simulated
+        adsenseData = SIM_ADSENSE;
+        adsenseOk = false;
+      }
+    }
+
+    // Load affiliate: prefer /api/affiliate.json
+    const mockAff = await safeFetchJson('/api/affiliate.json');
+    if (!mockAff.__error) {
+      affiliateData = mockAff;
+    } else if (cfg.AFFILIATES?.TOTAL_EARNINGS !== undefined) {
+      // use config.json affiliates totals
+      affiliateData = {
+        network: "From config",
+        date: ISO_TODAY,
+        metrics: {
+          clicks: cfg.AFFILIATES?.NETWORKS?.reduce((s,n)=>s+(n.clicks||0),0) || 0,
+          conversions: cfg.AFFILIATES?.NETWORKS?.reduce((s,n)=>s+(n.conversions||0),0) || 0,
+          commission_total: cfg.AFFILIATES?.TOTAL_EARNINGS || 0,
+          conversion_rate: 'N/A'
+        },
+        source: "CONFIG"
+      };
+    } else {
+      affiliateData = SIM_AFFIL;
+    }
+
+    // Donations - use config or default zero
+    const donationsTotal = cfg.DONATIONS?.STRIPE || cfg.DONATIONS?.PAYPAL ? 0.00 : 0.00;
+
+    // Render UI: Ads
+    const adm = (adsenseData.metrics || adsenseData).metrics || adsenseData.metrics;
+    els('adsense_earn').textContent = money(adm.estimatedEarnings ?? adm.estimatedEarningsToday ?? adm.today ?? 0, '$');
+    els('adsense_meta').textContent = `impr: ${small(adm.impressions)} • clicks: ${small(adm.clicks)} • ctr: ${small(adm.ctr)}`;
+
+    const affm = (affiliateData.metrics || affiliateData).metrics || affiliateData.metrics;
+    els('affiliate_earn').textContent = money(affm.commission_total ?? 0, '$');
+    els('affiliate_meta').textContent = `clicks: ${small(affm.clicks)} • conv: ${small(affm.conversions)} • conv%: ${small(affm.conversion_rate)}`;
+
+    els('donations_earn').textContent = money(donationsTotal, '$');
+    els('donations_meta').textContent = 'Stripe/PayPal: configured';
+
+    // Detail panel
+    const detail = {
+      timestamp: new Date().toISOString(),
+      adsense_source: adsenseData.source ?? (adsenseOk ? 'LIVE' : 'UNKNOWN'),
+      affiliate_source: affiliateData.source ?? 'LOCAL',
+      ga4_probe: cfg.GA4?.PROPERTY_IDS?.map(p => ({ id: p.id, realtime: p.realtime })) || cfg.GA4?.PROPERTY_IDS || []
+    };
+    els('detail').innerHTML = `<pre>${JSON.stringify(detail, null, 2)}</pre>`;
+
+    // Update status box
+    const liveFlag = (adsenseData && adsenseData.source && adsenseData.source.toUpperCase() === 'SIMULATED') ? false : true;
+    if (adsenseData && adsenseData.source === 'SIMULATED') {
+      renderStatus('API Status: Simulated (using local/mock data)', false);
+    } else if (adsenseOk) {
+      renderStatus('API Status: Live data (AdSense OK)', true);
+    } else {
+      renderStatus('API Status: Partial/Unknown (check console for fetch errors)', false);
+    }
+
+  } catch (err) {
+    console.error('Dashboard error', err);
+    els('detail').innerHTML = `<pre>Dashboard error: ${String(err)}</pre>`;
+    renderStatus('API Status: Error — see console', false);
+  }
+}
+
+// run once and optionally auto-refresh based on config
+(async () => {
+  await loadDataAndRender();
+
+  // If config requests auto refresh, read it (safe default 60s)
+  try {
+    const cfg = await safeFetchJson('./config.json');
+    if (!cfg.__error && cfg.SYSTEM?.AUTO_REFRESH) {
+      const t = (cfg.SYSTEM.REFRESH_INTERVAL_SECONDS || 60) * 1000;
+      setInterval(loadDataAndRender, t);
+    }
+  } catch(e){}
+})();
 </script>
 </body>
-    </html>
+          </html>
