@@ -10,6 +10,59 @@
   <!-- Add your existing Tailwind dashboard here -->
 
 <script>
+
+  async function checkGA4Connection() {
+  try {
+    const response = await fetch('/api/ga4');
+    if (!response.ok) throw new Error('GA4 API error');
+    const data = await response.json();
+    
+    if (data.activeUsers !== undefined) {
+      document.getElementById('ga4-status').textContent = 'Connected ✅';
+      document.getElementById('ga4-status').classList.remove('text-red-500');
+      document.getElementById('ga4-status').classList.add('text-green-600');
+    } else {
+      throw new Error('GA4 metrics missing');
+    }
+  } catch (err) {
+    document.getElementById('ga4-status').textContent = 'Disconnected ❌';
+    document.getElementById('ga4-status').classList.remove('text-green-600');
+    document.getElementById('ga4-status').classList.add('text-red-500');
+    console.error('GA4 Connection Error:', err);
+  }
+}
+
+async function checkAdSenseConnection() {
+  try {
+    const response = await fetch('/api/adsense');
+    if (!response.ok) throw new Error('AdSense API error');
+    const data = await response.json();
+
+    if (data.earnings !== undefined) {
+      document.getElementById('adsense-status').textContent = 'Connected ✅';
+      document.getElementById('adsense-status').classList.remove('text-red-500');
+      document.getElementById('adsense-status').classList.add('text-green-600');
+    } else {
+      throw new Error('AdSense metrics missing');
+    }
+  } catch (err) {
+    document.getElementById('adsense-status').textContent = 'Disconnected ❌';
+    document.getElementById('adsense-status').classList.remove('text-green-600');
+    document.getElementById('adsense-status').classList.add('text-red-500');
+    console.error('AdSense Connection Error:', err);
+  }
+}
+
+// Initial check
+checkGA4Connection();
+checkAdSenseConnection();
+
+// Repeat every 10 seconds
+setInterval(() => {
+  checkGA4Connection();
+  checkAdSenseConnection();
+}, 10000);
+  
 async function updateMetrics() {
   try {
     const ga4Data = await fetch('/api/ga4').then(r => r.json());
@@ -52,6 +105,20 @@ updateMetrics();
 <header class="bg-indigo-600 text-white p-4 text-center text-xl font-semibold sticky top-0 z-50">
   The Esthetics Hub 💼 Monetization Dashboard
 </header>
+
+  <div class="card mt-4">
+  <h2 class="text-2xl font-semibold mb-2">🔗 API Connection Status</h2>
+  <div class="grid grid-cols-2 gap-4">
+    <div>
+      <p class="text-gray-500">GA4:</p>
+      <p id="ga4-status" class="text-lg font-bold text-gray-700">Checking...</p>
+    </div>
+    <div>
+      <p class="text-gray-500">AdSense:</p>
+      <p id="adsense-status" class="text-lg font-bold text-gray-700">Checking...</p>
+    </div>
+  </div>
+  </div>
 
 <main class="flex-1 p-6 grid gap-6 max-w-6xl mx-auto">
 
