@@ -1,61 +1,51 @@
 {
-  "GOOGLE_API_KEY": "AIzaSyD-EXAMPLE-LIVE-KEY12345",
-  "GA4_PROPERTIES": ["G-QCX3G9KSPC","G-PSW1MY7HB4"],
-  "ADSENSE_PUB_ID": "pub-1959507280210179",
-  "AFFILIATE_API_KEY": "live_affiliate_api_key_9876543210",
-  "SHEET_ID": "1aB2cD3EfGHIjKlmNOPqRstUVwxYZ4567890abcde"
-}
+  "SITE_NAME": "The Esthetics Hub",
+  "FRONTEND_URL": "https://esthetics03-ops.github.io",
+  
+  "PROJECT": {
+    "name": "esthetics03-ops",
+    "region": "africa-south1",
+    "environment": "production",
+    "lastSync": "2025-11-11T11:00:00Z"
+  },
 
-{
-  "GOOGLE_API_KEY": "AIzaSyD-EXAMPLE-LIVE-KEY12345",
-  "GA4_PROPERTIES": ["G-QCX3G9KSPC", "G-PSW1MY7HB4"],
-  "ADSENSE_PUB_ID": "pub-1959507280210179",
-  "ORGANIZATION_STATUS": 100,
-  "BLOGPOSTING_STATUS": 100,
-  "FAQPAGE_STATUS": 100,
-  "WEBSITE_STATUS": 70
-}
-
-{
-  "project": "esthetics03-ops",
-  "region": "africa-south1",
-  "environment": "production",
-  "lastSync": "2025-11-11T11:00:00Z",
-
-  "GOOGLE_API_KEY": "AIzaSyD-EXAMPLE-SIMULATED-KEY-123456",
-  "GA4_PROPERTIES": [
-    {
-      "id": "G-QCX3G9KSPC",
-      "description": "The Esthetics Hub - Main Website",
-      "status": "active",
-      "lastUpdate": "2025-11-11T11:00:00Z",
-      "realtime": {
-        "activeUsers": 146,
-        "pageviews": 702,
-        "sessions": 239,
-        "avgSessionDuration": "2m 47s",
-        "bounceRate": "42%"
+  "GA4": {
+    "API_KEY": "AIzaSyD-EXAMPLE-LIVE-KEY12345",
+    "PROPERTY_IDS": [
+      {
+        "id": "G-QCX3G9KSPC",
+        "description": "The Esthetics Hub - Main Website",
+        "status": "active",
+        "lastUpdate": "2025-11-11T11:00:00Z",
+        "realtime": {
+          "activeUsers": 146,
+          "pageviews": 702,
+          "sessions": 239,
+          "avgSessionDuration": "2m 47s",
+          "bounceRate": "42%"
+        }
+      },
+      {
+        "id": "G-PSW1MY7HB4",
+        "description": "The Esthetics Hub - Blog",
+        "status": "active",
+        "lastUpdate": "2025-11-11T11:00:00Z",
+        "realtime": {
+          "activeUsers": 92,
+          "pageviews": 431,
+          "sessions": 180,
+          "avgSessionDuration": "3m 02s",
+          "bounceRate": "39%"
+        }
       }
-    },
-    {
-      "id": "G-PSW1MY7HB4",
-      "description": "The Esthetics Hub - Blog",
-      "status": "active",
-      "lastUpdate": "2025-11-11T11:00:00Z",
-      "realtime": {
-        "activeUsers": 92,
-        "pageviews": 431,
-        "sessions": 180,
-        "avgSessionDuration": "3m 02s",
-        "bounceRate": "39%"
-      }
-    }
-  ],
+    ],
+    "SERVICE_ACCOUNT_KEY_FILE": "backend/service-account-ga4.json"
+  },
 
   "ADSENSE": {
-    "pub_id": "pub-1959507280210179",
-    "account_status": "active",
-    "adBalance": {
+    "PUB_ID": "pub-1959507280210179",
+    "ACCOUNT_STATUS": "active",
+    "AD_BALANCE": {
       "today": 0.41,
       "yesterday": 0.33,
       "last7days": 2.74,
@@ -63,21 +53,25 @@
       "paymentThreshold": 100,
       "estimatedPayoutDate": "2026-01-18"
     },
-    "adPerformance": {
+    "AD_PERFORMANCE": {
       "impressions": 1842,
       "clicks": 76,
       "ctr": "4.1%",
       "rpm": 2.38
-    }
+    },
+    "SERVICE_ACCOUNT_KEY_FILE": "backend/service-account-adsense.json"
   },
 
   "AFFILIATES": {
-    "networks": [
+    "NETWORKS": [
       {
         "name": "Amazon",
         "clicks": 14,
         "conversions": 3,
-        "revenue": 1.21
+        "revenue": 1.21,
+        "ACCESS_KEY": "<YOUR_AMAZON_ACCESS_KEY>",
+        "SECRET_KEY": "<YOUR_AMAZON_SECRET_KEY>",
+        "ASSOCIATE_TAG": "<YOUR_AMAZON_ASSOCIATE_TAG>"
       },
       {
         "name": "Jumia",
@@ -86,30 +80,44 @@
         "revenue": 0.88
       }
     ],
-    "totalAffiliateEarnings": 2.09
+    "TOTAL_EARNINGS": 2.09,
+    "CLICKBANK": {
+      "API_KEY": "<YOUR_CLICKBANK_API_KEY>"
+    },
+    "API_KEY": "live_affiliate_api_key_9876543210"
+  },
+
+  "DONATIONS": {
+    "STRIPE": {
+      "SECRET_KEY": "<YOUR_STRIPE_SECRET_KEY>"
+    },
+    "PAYPAL": {
+      "CLIENT_ID": "<YOUR_PAYPAL_CLIENT_ID>",
+      "CLIENT_SECRET": "<YOUR_PAYPAL_CLIENT_SECRET>"
+    }
   },
 
   "SYSTEM": {
-    "autoRefresh": true,
-    "refreshIntervalSeconds": 60,
-    "lastStatus": "Simulation Running",
-    "integrationHealth": {
+    "AUTO_REFRESH": true,
+    "REFRESH_INTERVAL_SECONDS": 60,
+    "LAST_STATUS": "Simulation Running",
+    "INTEGRATION_HEALTH": {
       "GA4": "OK",
       "AdSense": "OK",
       "Affiliate": "OK",
       "Dashboard": "Connected"
     }
+  },
+
+  "SCHEMA": {
+    "ORGANIZATION_STATUS": 100,
+    "BLOGPOSTING_STATUS": 100,
+    "FAQPAGE_STATUS": 100,
+    "WEBSITE_STATUS": 70
+  },
+
+  "SHEET_ID": "1aB2cD3EfGHIjKlmNOPqRstUVwxYZ4567890abcde",
+  "DASHBOARD": {
+    "MAX_TOP_PAGES": 5
   }
-  }
-
-
-{
-  "SITE_NAME": "The Esthetics Hub",
-  "FRONTEND_URL": "https://esthetics03-ops.github.io",
-  "GA4": {"PROPERTY_IDS": ["G-QCX3G9KSPC"], "SERVICE_ACCOUNT_KEY_FILE": "backend/service-account-ga4.json"},
-  "ADSENSE": {"ACCOUNT_ID": "pub-1959507280210179", "SERVICE_ACCOUNT_KEY_FILE": "backend/service-account-adsense.json"},
-  "AFFILIATE": {"AMAZON": {"ACCESS_KEY": "<YOUR_AMAZON_ACCESS_KEY>", "SECRET_KEY": "<YOUR_AMAZON_SECRET_KEY>", "ASSOCIATE_TAG": "<YOUR_AMAZON_ASSOCIATE_TAG>"},"CLICKBANK":{"API_KEY":"<YOUR_CLICKBANK_API_KEY>"}},
-  "DONATIONS":{"STRIPE":{"SECRET_KEY":"<YOUR_STRIPE_SECRET_KEY>"},"PAYPAL":{"CLIENT_ID":"<YOUR_PAYPAL_CLIENT_ID>","CLIENT_SECRET":"<YOUR_PAYPAL_CLIENT_SECRET>"}},
-  "DASHBOARD":{"AUTO_REFRESH":60,"MAX_TOP_PAGES":5}
-}
-
+    }
