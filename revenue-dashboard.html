@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Esthetics Hub - Live Simulation</title>
+<title>The Esthetics Hub - Monetization Dashboard</title>
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.3/dist/tailwind.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
@@ -14,39 +14,58 @@
 <body class="min-h-screen flex flex-col">
 
 <header class="bg-indigo-600 text-white p-4 text-center text-xl font-semibold">
-  The Esthetics Hub 💼 Live Simulation
+  The Esthetics Hub 💼 Monetization Dashboard
 </header>
 
-<main class="flex-1 p-6 grid gap-6 max-w-5xl mx-auto">
+<main class="flex-1 p-6 grid gap-6 max-w-6xl mx-auto">
 
+  <!-- Current Earnings -->
   <section class="card">
-    <h2 class="text-2xl font-semibold mb-4">📊 Live Traffic Metrics</h2>
+    <h2 class="text-2xl font-semibold mb-4">💰 Current Earnings</h2>
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
       <div>
-        <p class="text-gray-500">Users</p>
-        <p id="ga4-users" class="text-2xl font-bold">--</p>
+        <p class="text-gray-500">Today</p>
+        <p id="earn-today" class="text-2xl font-bold">$--.--</p>
       </div>
       <div>
-        <p class="text-gray-500">Sessions</p>
-        <p id="ga4-sessions" class="text-2xl font-bold">--</p>
+        <p class="text-gray-500">Month-to-Date</p>
+        <p id="earn-month" class="text-2xl font-bold">$--.--</p>
       </div>
       <div>
-        <p class="text-gray-500">Pageviews</p>
-        <p id="ga4-pageviews" class="text-2xl font-bold">--</p>
+        <p class="text-gray-500">Accumulated</p>
+        <p id="earn-total" class="text-2xl font-bold">$--.--</p>
       </div>
       <div>
-        <p class="text-gray-500">Bounce Rate</p>
-        <p id="ga4-bounce" class="text-2xl font-bold">--</p>
+        <p class="text-gray-500">Possible Payout</p>
+        <p id="earn-payout" class="text-2xl font-bold">$--.--</p>
       </div>
     </div>
   </section>
 
+  <!-- Ads Metrics -->
   <section class="card">
-    <h2 class="text-2xl font-semibold mb-4">💰 AdSense Revenue</h2>
-    <p class="text-gray-500">Today</p>
-    <p id="adsense-revenue" class="text-3xl font-bold">$--.--</p>
+    <h2 class="text-2xl font-semibold mb-4">📊 Ad Metrics</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div>
+        <p class="text-gray-500">Impressions</p>
+        <p id="ad-impressions" class="text-2xl font-bold">--</p>
+      </div>
+      <div>
+        <p class="text-gray-500">Clicks</p>
+        <p id="ad-clicks" class="text-2xl font-bold">--</p>
+      </div>
+      <div>
+        <p class="text-gray-500">CTR (%)</p>
+        <p id="ad-ctr" class="text-2xl font-bold">--%</p>
+      </div>
+      <div>
+        <p class="text-gray-500">RPM ($)</p>
+        <p id="ad-rpm" class="text-2xl font-bold">$--.--</p>
+      </div>
+    </div>
   </section>
 
+  <!-- Revenue & Donations Chart -->
   <section class="card">
     <h2 class="text-2xl font-semibold mb-4">📈 Revenue & Donations</h2>
     <canvas id="revenueChart" height="200"></canvas>
@@ -59,52 +78,54 @@
 </footer>
 
 <script>
-// --- Simulated Live Data ---
-function getRandom(min, max) { return Math.floor(Math.random()*(max-min+1)+min); }
+// --- Helper ---
+function getRandom(min,max){ return Math.floor(Math.random()*(max-min+1)+min); }
+function getRandomFloat(min,max){ return (Math.random()*(max-min)+min).toFixed(2); }
 
-// GA4 simulation
-function updateGA4() {
-  document.getElementById("ga4-users").textContent = getRandom(50, 300);
-  document.getElementById("ga4-sessions").textContent = getRandom(100, 500);
-  document.getElementById("ga4-pageviews").textContent = getRandom(150, 700);
-  document.getElementById("ga4-bounce").textContent = getRandom(30, 70) + "%";
+// --- Update Metrics ---
+function updateMetrics() {
+  document.getElementById("earn-today").textContent = "$" + getRandomFloat(50,300);
+  document.getElementById("earn-month").textContent = "$" + getRandomFloat(500,1200);
+  document.getElementById("earn-total").textContent = "$" + getRandomFloat(2000,5000);
+  document.getElementById("earn-payout").textContent = "$" + getRandomFloat(1000,3000);
+
+  const impressions = getRandom(1000,5000);
+  const clicks = getRandom(50,200);
+  document.getElementById("ad-impressions").textContent = impressions;
+  document.getElementById("ad-clicks").textContent = clicks;
+  document.getElementById("ad-ctr").textContent = ((clicks/impressions)*100).toFixed(2) + "%";
+  document.getElementById("ad-rpm").textContent = "$" + getRandomFloat(5,20);
 }
 
-// AdSense simulation
-function updateRevenue() {
-  document.getElementById("adsense-revenue").textContent = "$" + (getRandom(50, 300) + Math.random()).toFixed(2);
-}
-
-// Revenue chart simulation
+// --- Revenue Chart ---
 const ctx = document.getElementById('revenueChart').getContext('2d');
-const revenueChart = new Chart(ctx, {
-  type: 'line',
-  data: {
-    labels: ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
-    datasets: [
-      { label: 'Revenue ($)', data: Array.from({length:7},()=>getRandom(50,300)), borderColor: '#6366F1', backgroundColor: 'rgba(99,102,241,0.2)', tension: 0.4 },
-      { label: 'Donations ($)', data: Array.from({length:7},()=>getRandom(20,150)), borderColor: '#10B981', backgroundColor: 'rgba(16,185,129,0.2)', tension: 0.4 }
+const revenueChart = new Chart(ctx,{
+  type:'line',
+  data:{
+    labels:["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
+    datasets:[
+      { label:'Revenue ($)', data:Array.from({length:7},()=>getRandomFloat(50,300)), borderColor:'#6366F1', backgroundColor:'rgba(99,102,241,0.2)', tension:0.4 },
+      { label:'Donations ($)', data:Array.from({length:7},()=>getRandomFloat(20,150)), borderColor:'#10B981', backgroundColor:'rgba(16,185,129,0.2)', tension:0.4 }
     ]
   },
-  options: { responsive:true, plugins:{legend:{position:'top'}} }
+  options:{ responsive:true, plugins:{ legend:{position:'top'} } }
 });
 
 function updateChart() {
-  revenueChart.data.datasets[0].data = Array.from({length:7},()=>getRandom(50,300));
-  revenueChart.data.datasets[1].data = Array.from({length:7},()=>getRandom(20,150));
+  revenueChart.data.datasets[0].data = Array.from({length:7},()=>getRandomFloat(50,300));
+  revenueChart.data.datasets[1].data = Array.from({length:7},()=>getRandomFloat(20,150));
   revenueChart.update();
 }
 
-// Auto-refresh every 5 seconds for simulation
-function refreshSimulation() {
-  updateGA4();
-  updateRevenue();
+// --- Auto-refresh ---
+function refreshDashboard(){
+  updateMetrics();
   updateChart();
-  setTimeout(refreshSimulation, 5000);
+  setTimeout(refreshDashboard,5000); // refresh every 5s
 }
 
 // Start simulation
-refreshSimulation();
+refreshDashboard();
 </script>
 </body>
 </html>
