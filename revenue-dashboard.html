@@ -1,260 +1,122 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>The Esthetics Hub — Revenue Dashboard</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Esthetics Hub — Simulated Live Dashboard</title>
 
-  <!-- Basic JSON-LD for rich results -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "The Esthetics Hub",
-    "url": "https://esthetics03-ops.github.io",
-    "description": "Dashboard showing AdSense, affiliate and donation revenue for The Esthetics Hub."
-  }
-  </script>
+<!-- JSON-LD for rich results -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "The Esthetics Hub",
+  "url": "https://esthetics03-ops.github.io",
+  "description": "Simulated live dashboard showing AdSense, affiliate, GA4, and donation metrics for The Esthetics Hub."
+}
+</script>
 
-  <style>
-    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin: 0; padding: 20px; background: #fafafa; }
-    .card { background:#fff; border-radius:12px; padding:18px; box-shadow: 0 6px 18px rgba(0,0,0,.06); margin-bottom:12px; }
-    .row { display:flex; gap:12px; flex-wrap:wrap; }
-    .metric { flex:1 1 200px; }
-    .small { color:#666; font-size:13px; }
-    .status { position:fixed; right:14px; bottom:14px; background:#222; color:#fff; padding:10px 14px; border-radius:10px; font-size:13px; z-index:999; }
-    .live { color: #16a34a; font-weight:700; }
-    .sim { color: #f59e0b; font-weight:700; }
-    pre { background:#f3f4f6; padding:10px; border-radius:8px; overflow:auto; }
-  </style>
+<style>
+body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin: 0; padding: 20px; background: #f8fafc; }
+.card { background:#fff; border-radius:12px; padding:18px; box-shadow: 0 6px 18px rgba(0,0,0,.06); margin-bottom:12px; }
+.row { display:flex; gap:12px; flex-wrap:wrap; }
+.metric { flex:1 1 200px; }
+.small { color:#666; font-size:13px; }
+.status { position:fixed; right:14px; bottom:14px; background:#222; color:#fff; padding:10px 14px; border-radius:10px; font-size:13px; z-index:999; }
+.live { color: #16a34a; font-weight:700; }
+.sim { color: #f59e0b; font-weight:700; }
+pre { background:#f3f4f6; padding:10px; border-radius:8px; overflow:auto; }
+</style>
 </head>
 <body>
-  <h1>The Esthetics Hub — Revenue Dashboard</h1>
+<h1>The Esthetics Hub — Simulated Live Dashboard</h1>
 
-  <div id="main" class="card">
-    <div id="systemStatus" class="small">Loading status…</div>
+<div id="main" class="card">
+  <div id="systemStatus" class="small">Loading status…</div>
 
-    <div class="row" style="margin-top:12px;">
-      <div class="card metric">
-        <div class="small">AdSense — Today</div>
-        <div id="adsense_earn" style="font-size:20px; font-weight:700">$--.--</div>
-        <div class="small" id="adsense_meta">impr: -- • clicks: -- • ctr: --</div>
-      </div>
-
-      <div class="card metric">
-        <div class="small">Affiliate — Today</div>
-        <div id="affiliate_earn" style="font-size:20px; font-weight:700">$--.--</div>
-        <div class="small" id="affiliate_meta">clicks: -- • conv: -- • conv%: --</div>
-      </div>
-
-      <div class="card metric">
-        <div class="small">Donations</div>
-        <div id="donations_earn" style="font-size:20px; font-weight:700">$--.--</div>
-        <div class="small" id="donations_meta">stripe/paypal: --</div>
-      </div>
+  <div class="row" style="margin-top:12px;">
+    <div class="card metric">
+      <div class="small">AdSense — Today</div>
+      <div id="adsense_earn" style="font-size:20px; font-weight:700">$--.--</div>
+      <div class="small" id="adsense_meta">impr: -- • clicks: -- • ctr: --</div>
     </div>
 
-    <section style="margin-top:14px;">
-      <h3 style="margin:0 0 8px 0;">Detailed</h3>
-      <div id="detail" class="card small">Loading details…</div>
-    </section>
+    <div class="card metric">
+      <div class="small">Affiliate — Today</div>
+      <div id="affiliate_earn" style="font-size:20px; font-weight:700">$--.--</div>
+      <div class="small" id="affiliate_meta">clicks: -- • conv: -- • conv%: --</div>
+    </div>
+
+    <div class="card metric">
+      <div class="small">Donations</div>
+      <div id="donations_earn" style="font-size:20px; font-weight:700">$--.--</div>
+      <div class="small" id="donations_meta">stripe/paypal: --</div>
+    </div>
   </div>
 
-  <div id="statusBox" class="status">Checking APIs…</div>
+  <section style="margin-top:14px;">
+    <h3 style="margin:0 0 8px 0;">Detail Panel</h3>
+    <div id="detail" class="card small">Loading details…</div>
+  </section>
+</div>
+
+<div id="statusBox" class="status sim">Loading…</div>
 
 <script>
-/*
-  Dashboard behavior:
-  1. Loads ./config.json from repo root.
-  2. Attempts lightweight "connectivity" calls to GA4 and AdSense (best-effort).
-     - Many Google APIs require OAuth or server-side proxies; client-side calls may fail due to CORS or missing credentials.
-  3. If live calls fail, loads local mock files:
-     - /api/adsense.json
-     - /api/affiliate.json
-     (these are served by GitHub Pages if placed in /api folder)
-  4. Automatically updates the UI and shows whether data are LIVE or SIMULATED.
-*/
-
+// ---------- Helper functions ----------
 const ISO_TODAY = new Date().toISOString().slice(0,10);
-
-// util
-function els(id){ return document.getElementById(id); }
-function money(v, cur="$"){ return (typeof v === 'number') ? (cur + v.toFixed(2)) : cur + '0.00'; }
+function money(v) { return "$" + (typeof v === 'number' ? v.toFixed(2) : '0.00'); }
 function small(v){ return v ?? '--'; }
+function els(id){ return document.getElementById(id); }
+function renderStatus(text,isLive){ const box=els('statusBox'); box.textContent=text; box.className='status '+(isLive?'live':'sim'); }
 
-async function safeFetchJson(url, options = {}) {
-  try {
-    const res = await fetch(url, options);
-    if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
-    return await res.json();
-  } catch (err) {
-    // return an object containing error flag so caller can decide
-    return { __error: true, error: err.message || String(err) };
-  }
-}
-
-async function loadConfig(){
-  const cfg = await safeFetchJson('./config.json');
-  if (cfg && cfg.__error) throw new Error('Failed to load config.json: ' + cfg.error);
-  return cfg;
-}
-
-async function testGa4(propertyId, apiKey){
-  // Light, best-effort test — GA4 Realtime Data API usually needs OAuth; API key may be blocked by CORS.
-  const endpoint = `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runRealtimeReport`;
-  const body = { metrics:[{name:"activeUsers"}] };
-  const res = await safeFetchJson(endpoint, {
-    method: 'POST',
-    headers: {
-      'Content-Type':'application/json',
-      'Authorization': apiKey ? `Bearer ${apiKey}` : ''
-    },
-    body: JSON.stringify(body)
-  });
-  return res;
-}
-
-async function testAdsense(pubId, apiKey){
-  // Light test for AdSense — Management API normally requires OAuth and is often blocked from client-side.
-  const endpoint = `https://www.googleapis.com/adsense/v2/accounts/${pubId}/reports?startDate=${ISO_TODAY}&endDate=${ISO_TODAY}`;
-  const res = await safeFetchJson(endpoint, {
-    headers: { 'Authorization': apiKey ? `Bearer ${apiKey}` : '' }
-  });
-  return res;
-}
-
-function renderStatus(text, isLive){
-  const box = els('statusBox');
-  box.innerHTML = text;
-  if (isLive) box.classList.add('live'); else box.classList.remove('live');
-}
-
-// Fallback simulated values (used if live APIs fail)
-const SIM_ADSENSE = {
-  account: "pub-1959507280210179",
-  date: ISO_TODAY,
-  metrics: { estimatedEarnings: 14.37, impressions: 682, clicks: 22, ctr: "3.22%", rpm: 21.08 },
-  source: "SIMULATED"
-};
-const SIM_AFFIL = {
-  network: "Esthetics Partners",
-  date: ISO_TODAY,
-  metrics: { clicks: 97, conversions: 8, commission_total: 26.55, conversion_rate: "8.25%" },
-  source: "SIMULATED"
+// ---------- Simulated data ----------
+const SIM_CONFIG = {
+  GA4: {
+    PROPERTIES: [
+      { id:"G-QCX3G9KSPC", desc:"Main Website", realtime:{activeUsers:146,pageviews:702,sessions:239,avgSessionDuration:"2m 47s",bounceRate:"42%"} },
+      { id:"G-PSW1MY7HB4", desc:"Blog", realtime:{activeUsers:92,pageviews:431,sessions:180,avgSessionDuration:"3m 02s",bounceRate:"39%"} }
+    ]
+  },
+  ADSENSE: { metrics:{estimatedEarnings:14.37,impressions:682,clicks:22,ctr:"3.22%",rpm:21.08} },
+  AFFILIATE: { metrics:{commission_total:26.55,clicks:97,conversions:8,conversion_rate:"8.25%"} },
+  DONATIONS: { total:0.00 }
 };
 
-async function loadDataAndRender() {
-  try {
-    const cfg = await loadConfig();
-    els('systemStatus').textContent = `Site: ${cfg.SITE_NAME ?? 'Unknown'} — last sync: ${cfg.PROJECT?.lastSync ?? 'unknown'}`;
+// ---------- Render function ----------
+function renderDashboard(){
+  // Status
+  els('systemStatus').textContent = `Site: The Esthetics Hub — last sync: 2025-11-11T11:00:00Z`;
 
-    // Try GA4 / AdSense "connectivity" first (best-effort)
-    let ga4Ok = false, adsenseOk = false;
-    let adsenseData = null, affiliateData = null;
+  // AdSense
+  els('adsense_earn').textContent = money(SIM_CONFIG.ADSENSE.metrics.estimatedEarnings);
+  els('adsense_meta').textContent = `impr: ${SIM_CONFIG.ADSENSE.metrics.impressions} • clicks: ${SIM_CONFIG.ADSENSE.metrics.clicks} • ctr: ${SIM_CONFIG.ADSENSE.metrics.ctr}`;
 
-    // Attempt to test AdSense API (may fail client-side)
-    if (cfg.ADSENSE?.PUB_ID) {
-      const resAds = await testAdsense(cfg.ADSENSE.PUB_ID, cfg.GOOGLE_API_KEY);
-      if (!resAds || resAds.__error) {
-        console.warn('AdSense live test failed:', resAds?.error ?? resAds);
-      } else {
-        adsenseOk = true;
-        adsenseData = resAds;
-      }
-    }
+  // Affiliate
+  els('affiliate_earn').textContent = money(SIM_CONFIG.AFFILIATE.metrics.commission_total);
+  els('affiliate_meta').textContent = `clicks: ${SIM_CONFIG.AFFILIATE.metrics.clicks} • conv: ${SIM_CONFIG.AFFILIATE.metrics.conversions} • conv%: ${SIM_CONFIG.AFFILIATE.metrics.conversion_rate}`;
 
-    // Attempt an affiliate/API marketplace probe (this repo uses a local mock)
-    // We'll try real affiliate endpoint path if present; otherwise fallback to mock.
-    // For client-side safety, we expect affiliate networks to require server tokens.
+  // Donations
+  els('donations_earn').textContent = money(SIM_CONFIG.DONATIONS.total);
+  els('donations_meta').textContent = 'Stripe/PayPal configured';
 
-    // If live AdSense failed or returned error, try local mock: /api/adsense.json
-    if (!adsenseOk) {
-      const mockAds = await safeFetchJson('/api/adsense.json');
-      if (!mockAds.__error) {
-        adsenseData = mockAds;
-        adsenseOk = false; // false means it's from mock
-      } else {
-        // if no mock, use built-in simulated
-        adsenseData = SIM_ADSENSE;
-        adsenseOk = false;
-      }
-    }
+  // Detail panel
+  const detail = {
+    timestamp: new Date().toISOString(),
+    adsense_source:"SIMULATED",
+    affiliate_source:"SIMULATED",
+    ga4_probe: SIM_CONFIG.GA4.PROPERTIES.map(p=>({id:p.id,realtime:p.realtime}))
+  };
+  els('detail').innerHTML = `<pre>${JSON.stringify(detail,null,2)}</pre>`;
 
-    // Load affiliate: prefer /api/affiliate.json
-    const mockAff = await safeFetchJson('/api/affiliate.json');
-    if (!mockAff.__error) {
-      affiliateData = mockAff;
-    } else if (cfg.AFFILIATES?.TOTAL_EARNINGS !== undefined) {
-      // use config.json affiliates totals
-      affiliateData = {
-        network: "From config",
-        date: ISO_TODAY,
-        metrics: {
-          clicks: cfg.AFFILIATES?.NETWORKS?.reduce((s,n)=>s+(n.clicks||0),0) || 0,
-          conversions: cfg.AFFILIATES?.NETWORKS?.reduce((s,n)=>s+(n.conversions||0),0) || 0,
-          commission_total: cfg.AFFILIATES?.TOTAL_EARNINGS || 0,
-          conversion_rate: 'N/A'
-        },
-        source: "CONFIG"
-      };
-    } else {
-      affiliateData = SIM_AFFIL;
-    }
-
-    // Donations - use config or default zero
-    const donationsTotal = cfg.DONATIONS?.STRIPE || cfg.DONATIONS?.PAYPAL ? 0.00 : 0.00;
-
-    // Render UI: Ads
-    const adm = (adsenseData.metrics || adsenseData).metrics || adsenseData.metrics;
-    els('adsense_earn').textContent = money(adm.estimatedEarnings ?? adm.estimatedEarningsToday ?? adm.today ?? 0, '$');
-    els('adsense_meta').textContent = `impr: ${small(adm.impressions)} • clicks: ${small(adm.clicks)} • ctr: ${small(adm.ctr)}`;
-
-    const affm = (affiliateData.metrics || affiliateData).metrics || affiliateData.metrics;
-    els('affiliate_earn').textContent = money(affm.commission_total ?? 0, '$');
-    els('affiliate_meta').textContent = `clicks: ${small(affm.clicks)} • conv: ${small(affm.conversions)} • conv%: ${small(affm.conversion_rate)}`;
-
-    els('donations_earn').textContent = money(donationsTotal, '$');
-    els('donations_meta').textContent = 'Stripe/PayPal: configured';
-
-    // Detail panel
-    const detail = {
-      timestamp: new Date().toISOString(),
-      adsense_source: adsenseData.source ?? (adsenseOk ? 'LIVE' : 'UNKNOWN'),
-      affiliate_source: affiliateData.source ?? 'LOCAL',
-      ga4_probe: cfg.GA4?.PROPERTY_IDS?.map(p => ({ id: p.id, realtime: p.realtime })) || cfg.GA4?.PROPERTY_IDS || []
-    };
-    els('detail').innerHTML = `<pre>${JSON.stringify(detail, null, 2)}</pre>`;
-
-    // Update status box
-    const liveFlag = (adsenseData && adsenseData.source && adsenseData.source.toUpperCase() === 'SIMULATED') ? false : true;
-    if (adsenseData && adsenseData.source === 'SIMULATED') {
-      renderStatus('API Status: Simulated (using local/mock data)', false);
-    } else if (adsenseOk) {
-      renderStatus('API Status: Live data (AdSense OK)', true);
-    } else {
-      renderStatus('API Status: Partial/Unknown (check console for fetch errors)', false);
-    }
-
-  } catch (err) {
-    console.error('Dashboard error', err);
-    els('detail').innerHTML = `<pre>Dashboard error: ${String(err)}</pre>`;
-    renderStatus('API Status: Error — see console', false);
-  }
+  // Status box
+  renderStatus("✅ Dashboard Simulated Live",true);
 }
 
-// run once and optionally auto-refresh based on config
-(async () => {
-  await loadDataAndRender();
+// ---------- Auto refresh ----------
+renderDashboard();
+setInterval(renderDashboard,10000); // every 10 seconds
 
-  // If config requests auto refresh, read it (safe default 60s)
-  try {
-    const cfg = await safeFetchJson('./config.json');
-    if (!cfg.__error && cfg.SYSTEM?.AUTO_REFRESH) {
-      const t = (cfg.SYSTEM.REFRESH_INTERVAL_SECONDS || 60) * 1000;
-      setInterval(loadDataAndRender, t);
-    }
-  } catch(e){}
-})();
 </script>
 </body>
-          </html>
+  </html>
