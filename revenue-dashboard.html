@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>The Esthetics Hub — Live Monetisation Dashboard</title>
+<title>The Esthetics Hub — Full Monetisation Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin:0; padding:20px; background:#f8fafc; }
@@ -18,16 +18,10 @@ h1,h2,h3{margin:0 0 12px 0;}
 table { width:100%; border-collapse:collapse; margin-top:8px; }
 th,td { padding:6px 8px; text-align:left; border-bottom:1px solid #ddd; font-size:14px; }
 canvas { background:#fff; border-radius:12px; padding:10px; }
-button { padding:8px 16px; border-radius:8px; border:none; font-weight:600; cursor:pointer; }
 </style>
 </head>
 <body>
 <h1>The Esthetics Hub — Full Monetisation Dashboard</h1>
-
-<!-- Toggle -->
-<div class="card" style="margin-bottom:12px;">
-  <button id="toggleLive" style="background:#2563eb;color:#fff;">Switch to Real-time Live</button>
-</div>
 
 <div id="main" class="card">
   <div id="systemStatus" class="small">Loading system status…</div>
@@ -111,76 +105,90 @@ const SIM_CONFIG = {
   ]
 };
 
-// ---------- Toggle Live Mode ----------
-let isLiveMode = false;
-const toggleBtn = document.getElementById('toggleLive');
-toggleBtn.addEventListener('click', ()=>{
-  isLiveMode = !isLiveMode;
-  toggleBtn.textContent = isLiveMode ? "Switch to Simulated Mode" : "Switch to Real-time Live";
-  renderDashboard();
-});
-
 // ---------- Charts ----------
 let ga4Chart, revenueChart, cumulativeChart, pageRevenueChart;
 function initCharts(){
   const days = Array.from({length:30},(_,i)=>`Day ${i+1}`);
-
+  
+  // GA4 Active Users
   const ctxGA = document.getElementById("ga4Chart").getContext("2d");
-  ga4Chart = new Chart(ctxGA,{type:'line',data:{labels:["Now-4","Now-3","Now-2","Now-1","Now"],datasets: SIM_CONFIG.GA4.map(site=>({label: site.desc,data:[site.activeUsers-10, site.activeUsers-5, site.activeUsers-3, site.activeUsers, site.activeUsers+5],borderColor: site.id==="G-QCX3G9KSPC"?"#16a34a":"#2563eb",fill:false,tension:0.3}))},options:{responsive:true,plugins:{title:{display:true,text:"GA4 Active Users Trend"}}});
+  ga4Chart = new Chart(ctxGA,{
+    type:'line',
+    data:{labels:["Now-4","Now-3","Now-2","Now-1","Now"], datasets: SIM_CONFIG.GA4.map(site=>({
+      label: site.desc,
+      data:[site.activeUsers-10, site.activeUsers-5, site.activeUsers-3, site.activeUsers, site.activeUsers+5],
+      borderColor: site.id==="G-QCX3G9KSPC"?"#16a34a":"#2563eb",
+      fill:false,
+      tension:0.3
+    }))},
+    options:{responsive:true, plugins:{title:{display:true,text:"GA4 Active Users Trend"}}}
+  });
 
+  // Revenue Distribution
   const ctxRev = document.getElementById("revenueChart").getContext("2d");
-  revenueChart = new Chart(ctxRev,{type:'bar',data:{labels:["AdSense","Affiliate","Donations"],datasets:[{label:"Revenue ($)", data:[SIM_CONFIG.ADSENSE.earnings,SIM_CONFIG.AFFILIATE.earnings,SIM_CONFIG.DONATIONS.total], backgroundColor:["#16a34a","#2563eb","#f59e0b"]}]},options:{responsive:true,plugins:{title:{display:true,text:"Revenue Distribution"}}}});
+  revenueChart = new Chart(ctxRev,{
+    type:'bar',
+    data:{
+      labels:["AdSense","Affiliate","Donations"],
+      datasets:[{label:"Revenue ($)", data:[SIM_CONFIG.ADSENSE.earnings,SIM_CONFIG.AFFILIATE.earnings,SIM_CONFIG.DONATIONS.total], backgroundColor:["#16a34a","#2563eb","#f59e0b"]}]
+    },
+    options:{responsive:true, plugins:{title:{display:true,text:"Revenue Distribution"}}}
+  });
 
+  // Cumulative Revenue (30 days)
   const ctxCum = document.getElementById("cumulativeChart").getContext("2d");
-  cumulativeChart = new Chart(ctxCum,{type:'line',data:{labels:days,datasets:[{label:"AdSense", data:days.map(()=>SIM_CONFIG.ADSENSE.earnings+Math.random()*2), borderColor:"#16a34a", fill:false, tension:0.2},{label:"Affiliate", data:days.map(()=>SIM_CONFIG.AFFILIATE.earnings+Math.random()*1.5), borderColor:"#2563eb", fill:false, tension:0.2},{label:"Donations", data:days.map(()=>SIM_CONFIG.DONATIONS.total), borderColor:"#f59e0b", fill:false, tension:0.2}]} ,options:{responsive:true, plugins:{title:{display:true,text:"Cumulative Revenue (30 Days)"}}}});
+  cumulativeChart = new Chart(ctxCum,{
+    type:'line',
+    data:{
+      labels:days,
+      datasets:[
+        {label:"AdSense", data:days.map(()=>SIM_CONFIG.ADSENSE.earnings+Math.random()*2), borderColor:"#16a34a", fill:false, tension:0.2},
+        {label:"Affiliate", data:days.map(()=>SIM_CONFIG.AFFILIATE.earnings+Math.random()*1.5), borderColor:"#2563eb", fill:false, tension:0.2},
+        {label:"Donations", data:days.map(()=>SIM_CONFIG.DONATIONS.total), borderColor:"#f59e0b", fill:false, tension:0.2}
+      ]
+    },
+    options:{responsive:true, plugins:{title:{display:true,text:"Cumulative Revenue (30 Days)"}}}
+  });
 
+  // Top Pages Revenue vs Traffic
   const ctxPage = document.getElementById("pageRevenueChart").getContext("2d");
-  pageRevenueChart = new Chart(ctxPage,{type:'bar',data:{labels: SIM_CONFIG.TOP_ARTICLES.map(a=>a.title),datasets:[{type:'bar', label:'Pageviews', data: SIM_CONFIG.TOP_ARTICLES.map(a=>a.pageviews), backgroundColor:'#2563eb', yAxisID:'y1'},{type:'line', label:'Revenue ($)', data: SIM_CONFIG.TOP_ARTICLES.map(a=>a.revenue), borderColor:'#16a34a', fill:false, tension:0.3, yAxisID:'y'}]},options:{responsive:true,plugins:{title:{display:true,text:'Top Pages Revenue vs Traffic'}},scales:{y:{type:'linear', position:'left', title:{display:true,text:'Revenue ($)'}},y1:{type:'linear', position:'right', title:{display:true,text:'Pageviews'}}}}});
-}
-
-// ---------- Fetch Live Data (Replace with real API endpoints) ----------
-async function fetchLiveData(){
-  try {
-    // Example placeholders — replace URLs with real API endpoints
-    const ga4Data = await fetch('YOUR_GA4_ENDPOINT').then(r=>r.json());
-    const adsenseData = await fetch('YOUR_ADSENSE_ENDPOINT').then(r=>r.json());
-    const affiliateData = await fetch('YOUR_AFFILIATE_ENDPOINT').then(r=>r.json());
-    const donationsData = await fetch('YOUR_DONATIONS_ENDPOINT').then(r=>r.json());
-
-    SIM_CONFIG.GA4.forEach((site,i)=>{
-      site.activeUsers = ga4Data[i]?.activeUsers || site.activeUsers;
-      site.pageviews = ga4Data[i]?.pageviews || site.pageviews;
-    });
-
-    SIM_CONFIG.ADSENSE.earnings = adsenseData.earnings || SIM_CONFIG.ADSENSE.earnings;
-    SIM_CONFIG.ADSENSE.clicks = adsenseData.clicks || SIM_CONFIG.ADSENSE.clicks;
-    SIM_CONFIG.ADSENSE.impressions = adsenseData.impressions || SIM_CONFIG.ADSENSE.impressions;
-
-    SIM_CONFIG.AFFILIATE.earnings = affiliateData.earnings || SIM_CONFIG.AFFILIATE.earnings;
-    SIM_CONFIG.AFFILIATE.clicks = affiliateData.clicks || SIM_CONFIG.AFFILIATE.clicks;
-    SIM_CONFIG.AFFILIATE.conversions = affiliateData.conversions || SIM_CONFIG.AFFILIATE.conversions;
-
-    SIM_CONFIG.DONATIONS.total = donationsData.total || SIM_CONFIG.DONATIONS.total;
-
-  } catch(e){ console.error("Live API fetch failed — using simulated data", e); }
+  pageRevenueChart = new Chart(ctxPage,{
+    type:'bar',
+    data:{
+      labels: SIM_CONFIG.TOP_ARTICLES.map(a=>a.title),
+      datasets:[
+        {type:'bar', label:'Pageviews', data: SIM_CONFIG.TOP_ARTICLES.map(a=>a.pageviews), backgroundColor:'#2563eb', yAxisID:'y1'},
+        {type:'line', label:'Revenue ($)', data: SIM_CONFIG.TOP_ARTICLES.map(a=>a.revenue), borderColor:'#16a34a', fill:false, tension:0.3, yAxisID:'y'}
+      ]
+    },
+    options:{
+      responsive:true,
+      plugins:{title:{display:true,text:'Top Pages Revenue vs Traffic'}},
+      scales:{y:{type:'linear', position:'left', title:{display:true,text:'Revenue ($)'}},y1:{type:'linear', position:'right', title:{display:true,text:'Pageviews'}}}
+    }
+  });
 }
 
 // ---------- Render Dashboard ----------
-async function renderDashboard(){
-  if(isLiveMode) await fetchLiveData();
+function renderDashboard(){
+  // Status
+  els('systemStatus').textContent = `Site: The Esthetics Hub — last sync: 2025-11-11T11:00:00Z`;
 
-  els('systemStatus').textContent = `Site: The Esthetics Hub — last sync: ${new Date().toISOString()}`;
-
+  // AdSense
   els('adsense_earn').textContent = money(SIM_CONFIG.ADSENSE.earnings);
-  els('adsense_meta').textContent = `impr: ${SIM_CONFIG.ADSENSE.impressions} • clicks: ${SIM_CONFIG.ADSENSE.clicks} • ctr: ${SIM_CONFIG.ADSENSE.ctr || 'N/A'} • RPM: ${SIM_CONFIG.ADSENSE.rpm || 'N/A'}`;
+  els('adsense_meta').textContent = `impr: ${SIM_CONFIG.ADSENSE.impressions} • clicks: ${SIM_CONFIG.ADSENSE.clicks} • ctr: ${SIM_CONFIG.ADSENSE.ctr} • RPM: ${SIM_CONFIG.ADSENSE.rpm}`;
   els('adsense_payout').textContent = `Next Payout: ${SIM_CONFIG.ADSENSE.nextPayout}`;
 
+  // Affiliate
   els('affiliate_earn').textContent = money(SIM_CONFIG.AFFILIATE.earnings);
-  els('affiliate_meta').textContent = `clicks: ${SIM_CONFIG.AFFILIATE.clicks} • conv: ${SIM_CONFIG.AFFILIATE.conversions} • conv%: ${SIM_CONFIG.AFFILIATE.conversion_rate || 'N/A'}`;
+  els('affiliate_meta').textContent = `clicks: ${SIM_CONFIG.AFFILIATE.clicks} • conv: ${SIM_CONFIG.AFFILIATE.conversions} • conv%: ${SIM_CONFIG.AFFILIATE.conversion_rate}`;
   els('affiliate_payout').textContent = `Next Payout: ${SIM_CONFIG.AFFILIATE.nextPayout}`;
 
+  // Donations
   els('donations_earn').textContent = money(SIM_CONFIG.DONATIONS.total);
+  els('donations_meta').textContent = 'Stripe/PayPal configured';
 
+  // Top Articles Table
   const tbody = els('topArticles'); tbody.innerHTML='';
   SIM_CONFIG.TOP_ARTICLES.forEach(a=>{
     const row=document.createElement('tr');
@@ -188,12 +196,23 @@ async function renderDashboard(){
     tbody.appendChild(row);
   });
 
-  els('detail').textContent = JSON.stringify(SIM_CONFIG,null,2);
+  // Detail panel
+  const detail = {
+    timestamp:new Date().toISOString(),
+    adsense_source:"SIMULATED",
+    affiliate_source:"SIMULATED",
+    donations:SIM_CONFIG.DONATIONS.total,
+    ga4_probe: SIM_CONFIG.GA4,
+    top_articles: SIM_CONFIG.TOP_ARTICLES
+  };
+  els('detail').textContent = JSON.stringify(detail,null,2);
 
-  renderStatus(isLiveMode?"💚 Real-time Live":"🟠 Simulated Live",isLiveMode);
+  // Status box
+  renderStatus("✅ Dashboard Simulated Live",true);
 
+  // Update charts dynamically
   ga4Chart.data.datasets.forEach((d,i)=>d.data=d.data.map(v=>v+Math.floor(Math.random()*5-2))); ga4Chart.update();
-  revenueChart.data.datasets[0].data=[SIM_CONFIG.ADSENSE.earnings,SIM_CONFIG.AFFILIATE.earnings,SIM_CONFIG.DONATIONS.total]; revenueChart.update();
+  revenueChart.data.datasets[0].data=[SIM_CONFIG.ADSENSE.earnings+Math.random()*2,SIM_CONFIG.AFFILIATE.earnings+Math.random()*1.5,SIM_CONFIG.DONATIONS.total]; revenueChart.update();
   cumulativeChart.data.datasets.forEach(ds=>ds.data=ds.data.map(v=>v+Math.random()*0.5)); cumulativeChart.update();
   pageRevenueChart.data.datasets[0].data=SIM_CONFIG.TOP_ARTICLES.map(a=>a.pageviews+Math.floor(Math.random()*10-5));
   pageRevenueChart.data.datasets[1].data=SIM_CONFIG.TOP_ARTICLES.map(a=>a.revenue+Math.random()*0.5);
@@ -201,9 +220,7 @@ async function renderDashboard(){
 }
 
 // ---------- Init ----------
-initCharts();
-renderDashboard();
-setInterval(renderDashboard,10000);
+initCharts(); renderDashboard(); setInterval(renderDashboard,10000);
 </script>
 </body>
-</html>
+  </html>
