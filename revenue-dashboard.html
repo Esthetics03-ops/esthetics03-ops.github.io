@@ -1,184 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>The Esthetics Hub - Revenue & Schema Dashboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.3/dist/tailwind.min.css" rel="stylesheet">
-
-  <!-- ====== JSON-LD Schemas ====== -->
-
-  <!-- Organization -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "The Esthetics Hub",
-    "url": "https://esthetics03-ops.github.io",
-    "logo": "https://esthetics03-ops.github.io/images/logo.png",
-    "sameAs": [
-      "https://www.facebook.com/esthetics03",
-      "https://www.instagram.com/esthetics03",
-      "https://www.linkedin.com/company/esthetics03"
-    ],
-    "foundingDate": "2025-01-01",
-    "description": "The Esthetics Hub is your go-to site for holistic wellness, nutrition, and lifestyle insights."
-  }
-  </script>
-
-  <!-- BlogPosting -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "headline": "Nutrition & Mental Clarity",
-    "image": "https://esthetics03-ops.github.io/images/nutrition-mental.jpg",
-    "author": {"@type": "Person","name": "George Kutosi"},
-    "publisher":{"@type": "Organization","name":"The Esthetics Hub","logo":{"@type":"ImageObject","url":"https://esthetics03-ops.github.io/images/logo.png"}},
-    "datePublished":"2025-11-01",
-    "dateModified":"2025-11-11",
-    "mainEntityOfPage":"https://esthetics03-ops.github.io/blog/nutrition-mental-clarity.html",
-    "keywords":["nutrition","mental health","holistic wellness"]
-  }
-  </script>
-
-  <!-- FAQPage -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity":[
-      {"@type":"Question","name":"What is holistic well-being?","acceptedAnswer":{"@type":"Answer","text":"Holistic well-being involves nurturing physical, mental, and emotional health to achieve balance and long-term wellness."}},
-      {"@type":"Question","name":"How can nutrition improve mental health?","acceptedAnswer":{"@type":"Answer","text":"Balanced nutrition supports brain function and mood regulation, enhancing cognitive performance and emotional stability."}}
-    ]
-  }
-  </script>
-
-  <!-- Product -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    "name": "Holistic Wellness Guide",
-    "image": "https://esthetics03-ops.github.io/images/product-guide.jpg",
-    "description": "A comprehensive guide to improving holistic well-being.",
-    "sku": "HWG001",
-    "offers":{"@type":"Offer","url":"https://esthetics03-ops.github.io/product/holistic-wellness-guide.html","priceCurrency":"USD","price":"19.99","availability":"https://schema.org/InStock"}
-  }
-  </script>
-
-  <!-- Carousel -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    "itemListElement":[
-      {"@type":"ListItem","position":1,"url":"https://esthetics03-ops.github.io/blog/nutrition-mental-clarity.html"},
-      {"@type":"ListItem","position":2,"url":"https://esthetics03-ops.github.io/blog/mindfulness-tips.html"},
-      {"@type":"ListItem","position":3,"url":"https://esthetics03-ops.github.io/blog/holistic-fitness.html"}
-    ]
-  }
-  </script>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Esthetics Hub Revenue Dashboard</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.3/dist/tailwind.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  body { background: #f9fafb; font-family: 'Inter', sans-serif; }
+  .card { @apply p-4 bg-white rounded-2xl shadow-md; }
+</style>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body class="min-h-screen flex flex-col">
 
-<!-- ====== EXISTING REVENUE DASHBOARD ====== -->
-<section class="p-6 bg-white rounded-2xl shadow-md max-w-5xl mx-auto my-8">
-  <h2 class="text-3xl font-semibold text-center mb-6 text-emerald-700">💰 Revenue Dashboard</h2>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <div class="p-4 bg-emerald-50 rounded-xl shadow-sm">
-      <h3 class="text-xl font-semibold mb-2">AdSense Revenue</h3>
-      <p class="text-2xl">$32.45 / day</p>
+<!-- Header -->
+<header class="bg-indigo-600 text-white p-4 text-center text-xl font-semibold">
+  The Esthetics Hub 💼 Revenue Dashboard
+</header>
+
+<!-- Main Content -->
+<main class="flex-1 p-6 grid gap-6 max-w-5xl mx-auto">
+
+  <!-- GA4 Metrics -->
+  <section class="card">
+    <h2 class="text-2xl font-semibold mb-4">📊 Live Traffic Metrics</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div>
+        <p class="text-gray-500">Users</p>
+        <p id="ga4-users" class="text-2xl font-bold">--</p>
+      </div>
+      <div>
+        <p class="text-gray-500">Sessions</p>
+        <p id="ga4-sessions" class="text-2xl font-bold">--</p>
+      </div>
+      <div>
+        <p class="text-gray-500">Pageviews</p>
+        <p id="ga4-pageviews" class="text-2xl font-bold">--</p>
+      </div>
+      <div>
+        <p class="text-gray-500">Bounce Rate</p>
+        <p id="ga4-bounce" class="text-2xl font-bold">--</p>
+      </div>
     </div>
-    <div class="p-4 bg-emerald-50 rounded-xl shadow-sm">
-      <h3 class="text-xl font-semibold mb-2">Affiliate Earnings</h3>
-      <p class="text-2xl">$15.70 / day</p>
-    </div>
-    <div class="p-4 bg-emerald-50 rounded-xl shadow-sm">
-      <h3 class="text-xl font-semibold mb-2">Donations</h3>
-      <p class="text-2xl">$5.20 / day</p>
-    </div>
-    <div class="p-4 bg-emerald-50 rounded-xl shadow-sm">
-      <h3 class="text-xl font-semibold mb-2">Total Revenue</h3>
-      <p class="text-2xl">$53.35 / day</p>
-    </div>
-  </div>
-</section>
+  </section>
 
-<!-- ====== SCHEMA & RICH RESULTS DASHBOARD ====== -->
-<section class="p-6 bg-white rounded-2xl shadow-md max-w-5xl mx-auto my-8">
-  <h2 class="text-3xl font-semibold text-center mb-6 text-emerald-700">🧩 Schema & Rich Results</h2>
+  <!-- AdSense Metrics -->
+  <section class="card">
+    <h2 class="text-2xl font-semibold mb-4">💰 AdSense Revenue</h2>
+    <p class="text-gray-500">Today</p>
+    <p id="adsense-revenue" class="text-3xl font-bold">$--.--</p>
+  </section>
 
-  <div id="schema-cards" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+  <!-- Revenue Chart -->
+  <section class="card">
+    <h2 class="text-2xl font-semibold mb-4">📈 Revenue & Donations</h2>
+    <canvas id="revenueChart" height="200"></canvas>
+  </section>
 
-  <div class="mt-8 bg-emerald-50 p-6 rounded-2xl shadow-inner">
-    <h3 class="text-xl font-semibold text-center text-emerald-800 mb-4">📊 Schema Coverage</h3>
-    <canvas id="schemaChart" height="150"></canvas>
-  </div>
+</main>
 
-  <div class="mt-8 p-4 bg-emerald-100 rounded-xl shadow-inner text-gray-800">
-    <h3 class="text-lg font-semibold mb-2">📈 Overall Health Summary</h3>
-    <p id="schema-summary">Loading...</p>
-  </div>
+<!-- Footer -->
+<footer class="bg-gray-200 text-gray-700 p-4 text-center text-sm">
+  &copy; 2025 The Esthetics Hub. All rights reserved.
+</footer>
 
-  <div class="mt-6 text-center text-sm text-gray-600">
-    <p>Auto-updates every 60 seconds • Last synced: <span id="schemaSyncTime"></span></p>
-  </div>
-</section>
-
-<!-- ====== DYNAMIC DASHBOARD SCRIPT ====== -->
+<!-- Scripts -->
 <script>
-async function loadSchemaDashboard() {
-  const schemaData = {
-    "Organization": { score: 100, richResult: true },
-    "BlogPosting": { score: 100, richResult: true },
-    "FAQPage": { score: 100, richResult: true },
-    "Product": { score: 100, richResult: true },
-    "Carousel": { score: 100, richResult: true }
-  };
+// Configuration
+const CONFIG = {
+  GA4_PROPERTIES: ["G-QCX3G9KSPC","G-PSW1MY7HB4"], // GA4 IDs
+  GOOGLE_API_KEY: "YOUR_GOOGLE_API_KEY_HERE",      // Add your API key
+  ADSENSE_BACKEND_URL: "/adsense-data",            // Backend endpoint to fetch revenue
+  AUTO_REFRESH: 30000                               // 30 seconds
+};
 
-  const validSchemas = Object.values(schemaData).filter(v => v.score === 100).length;
-  const totalSchemas = Object.keys(schemaData).length;
+// --- GA4 Fetch ---
+async function fetchGA4Metrics() {
+  try {
+    const propertyId = CONFIG.GA4_PROPERTIES[0]; // First GA4 property
+    const url = `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runRealtimeReport?key=${CONFIG.GOOGLE_API_KEY}`;
+    const body = {
+      "metrics":[{"name":"activeUsers"}],
+      "dimensions":[{"name":"unifiedScreenName"}]
+    };
 
-  const cardsContainer = document.getElementById('schema-cards');
-  cardsContainer.innerHTML = Object.entries(schemaData).map(([type, data]) => `
-    <div class="p-4 rounded-xl shadow-sm ${data.score === 100 ? 'bg-green-50' : 'bg-gray-50'}">
-      <h3 class="text-xl font-semibold mb-3 text-gray-800">${type}</h3>
-      <ul class="text-gray-700">
-        <li>Status: <strong>${data.score === 100 ? '✅ Valid' : '⚠️ Missing / Incomplete'}</strong></li>
-        <li>Rich Result Eligible: ${data.richResult ? '✅ Yes' : '⚠️ No'}</li>
-      </ul>
-    </div>
-  `).join('');
+    const res = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+    const data = await res.json();
 
-  document.getElementById('schema-summary').innerHTML = `
-    ✅ <strong>${Math.round((validSchemas / totalSchemas) * 100)}%</strong> Schema Coverage — ${validSchemas} of ${totalSchemas} validated types.
-  `;
+    const activeUsers = data.rows?.[0]?.metricValues?.[0]?.value || 0;
+    document.getElementById("ga4-users").textContent = activeUsers;
 
-  const ctx = document.getElementById('schemaChart').getContext('2d');
-  if (window.schemaChart) window.schemaChart.destroy();
-  window.schemaChart = new Chart(ctx, {
-    type: 'doughnut',
-    data: {
-      labels: Object.keys(schemaData),
-      datasets: [{
-        data: Object.values(schemaData).map(d => d.score),
-        backgroundColor: ['#059669','#2563EB','#FBBF24','#F97316','#9CA3AF'],
-        borderWidth: 2,
-        hoverOffset: 10
-      }]
-    },
-    options: { cutout: '65%', plugins: { legend: { display:true, position:'bottom', labels:{color:'#374151', font:{size:14}} } } }
-  });
-
-  document.getElementById("schemaSyncTime").textContent = new Date().toLocaleTimeString();
+    // For sessions/pageviews/bounce, implement additional API calls if needed
+    document.getElementById("ga4-sessions").textContent = "--";
+    document.getElementById("ga4-pageviews").textContent = "--";
+    document.getElementById("ga4-bounce").textContent = "--";
+  } catch(e) {
+    console.error("GA4 API Error:", e);
+  }
 }
 
-loadSchemaDashboard();
-setInterval(loadSchemaDashboard, 60000);
-</script>
+// --- AdSense Fetch via Backend ---
+async function fetchAdSenseRevenue() {
+  try {
+    const res = await fetch(CONFIG.ADSENSE_BACKEND_URL);
+    const data = await res.json();
+    document.getElementById("adsense-revenue").textContent = `$${data.today}`;
+  } catch(e) {
+    console.error("AdSense fetch error:", e);
+  }
+}
 
+// --- Revenue Chart ---
+const ctx = document.getElementById('revenueChart').getContext('2d');
+const revenueChart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
+    datasets: [
+      { label: 'Revenue ($)', data: Array(7).fill(0), borderColor: '#6366F1', backgroundColor: 'rgba(99,102,241,0.2)', tension: 0.4 },
+      { label: 'Donations ($)', data: Array(7).fill(0), borderColor: '#10B981', backgroundColor: 'rgba(16,185,129,0.2)', tension: 0.4 }
+    ]
+  },
+  options: { responsive: true, plugins: { legend: { position: 'top' } } }
+});
+
+// --- Update Chart Data from Backend if Available ---
+async function updateChartData() {
+  try {
+    const res = await fetch("/revenue-chart-data"); // Optional backend endpoint
+    const chartData = await res.json();
+    revenueChart.data.datasets[0].data = chartData.revenue;
+    revenueChart.data.datasets[1].data = chartData.donations;
+    revenueChart.update();
+  } catch(e) { /* skip if endpoint not ready */ }
+}
+
+// --- Refresh Dashboard ---
+async function refreshDashboard() {
+  await fetchGA4Metrics();
+  await fetchAdSenseRevenue();
+  await updateChartData();
+  setTimeout(refreshDashboard, CONFIG.AUTO_REFRESH);
+}
+
+// --- Initial Load ---
+refreshDashboard();
+</script>
 </body>
-</html>
+  </html>
