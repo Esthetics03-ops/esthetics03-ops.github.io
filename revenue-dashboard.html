@@ -25,6 +25,63 @@
   gtag('config', 'G-QCX3G9KSPC');
 </script>
 <script>
+  (async () => {
+  const statusContainer = document.createElement('div');
+  statusContainer.style.position = 'fixed';
+  statusContainer.style.bottom = '10px';
+  statusContainer.style.right = '10px';
+  statusContainer.style.backgroundColor = '#222';
+  statusContainer.style.color = '#fff';
+  statusContainer.style.padding = '10px 15px';
+  statusContainer.style.borderRadius = '8px';
+  statusContainer.style.fontFamily = 'sans-serif';
+  statusContainer.style.fontSize = '14px';
+  statusContainer.style.zIndex = 9999;
+  statusContainer.innerHTML = `<strong>API Status:</strong><br>Checking...`;
+  document.body.appendChild(statusContainer);
+
+  let config;
+  try {
+    const res = await fetch('./config.json');
+    config = await res.json();
+  } catch (err) {
+    statusContainer.innerHTML = `<strong>API Status:</strong><br>❌ Failed to load config.json`;
+    return;
+  }
+
+  // --- GA4 Check ---
+  let ga4Status = 'Not Connected ❌';
+  if (config.GA4_PROPERTIES && config.GA4_PROPERTIES.length > 0) {
+    try {
+      const ga4Test = await fetch(
+        `https://analyticsdata.googleapis.com/v1beta/properties/${config.GA4_PROPERTIES[0]}:runRealtimeReport`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${config.GOOGLE_API_KEY || ''}`
+          },
+          body: JSON.stringify({ metrics: [{ name: "activeUsers" }] })
+        }
+      );
+      if (ga4Test.ok) ga4Status = 'Connected ✅';
+    } catch {}
+  }
+
+  // --- AdSense Check ---
+  let adsenseStatus = 'Not Connected ❌';
+  if (config.ADSENSE_PUB_ID) {
+    try {
+      const adsenseTest = await fetch(
+        `https://www.googleapis.com/adsense/v2/accounts/${config.ADSENSE_PUB_ID}/reports?startDate=2025-11-12&endDate=2025-11-12`,
+        { headers: { 'Authorization': `Bearer ${config.GOOGLE_API_KEY || ''}` } }
+      );
+      if (adsenseTest.ok) adsenseStatus = 'Connected ✅';
+    } catch {}
+  }
+
+  statusContainer.innerHTML = `<strong>API Status:</strong><br>GA4: ${ga4Status}<br>AdSense: ${adsenseStatus}`;
+})();
 
   async function checkGA4Connection() {
   try {
