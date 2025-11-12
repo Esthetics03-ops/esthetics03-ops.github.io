@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>The Esthetics Hub — Live Monetisation Dashboard</title>
+<title>The Esthetics Hub — Monetisation Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin:0; padding:20px; background:#f8fafc; }
@@ -22,10 +22,10 @@ button { padding:8px 16px; border-radius:8px; border:none; font-weight:600; curs
 </style>
 </head>
 <body>
-<h1>The Esthetics Hub — Full Monetisation Dashboard</h1>
+<h1>The Esthetics Hub — Monetisation Dashboard</h1>
 
 <!-- Toggle -->
-<div class="card" style="margin-bottom:12px;">
+<div class="card">
   <button id="toggleLive" style="background:#2563eb;color:#fff;">Switch to Real-time Live</button>
 </div>
 
@@ -49,7 +49,7 @@ button { padding:8px 16px; border-radius:8px; border:none; font-weight:600; curs
     <div class="card metric">
       <div class="small">Donations</div>
       <div id="donations_earn" style="font-size:20px; font-weight:700">$--.--</div>
-      <div class="small" id="donations_meta">Stripe/PayPal configured</div>
+      <div class="small">Stripe/PayPal configured</div>
     </div>
   </div>
 
@@ -138,10 +138,10 @@ function initCharts(){
   pageRevenueChart = new Chart(ctxPage,{type:'bar',data:{labels: SIM_CONFIG.TOP_ARTICLES.map(a=>a.title),datasets:[{type:'bar', label:'Pageviews', data: SIM_CONFIG.TOP_ARTICLES.map(a=>a.pageviews), backgroundColor:'#2563eb', yAxisID:'y1'},{type:'line', label:'Revenue ($)', data: SIM_CONFIG.TOP_ARTICLES.map(a=>a.revenue), borderColor:'#16a34a', fill:false, tension:0.3, yAxisID:'y'}]},options:{responsive:true,plugins:{title:{display:true,text:'Top Pages Revenue vs Traffic'}},scales:{y:{type:'linear', position:'left', title:{display:true,text:'Revenue ($)'}},y1:{type:'linear', position:'right', title:{display:true,text:'Pageviews'}}}}});
 }
 
-// ---------- Fetch Live Data (Replace with real API endpoints) ----------
+// ---------- Fetch Live Data (replace endpoints) ----------
 async function fetchLiveData(){
   try {
-    // Example placeholders — replace URLs with real API endpoints
+    // Example placeholders — replace with real API URLs
     const ga4Data = await fetch('YOUR_GA4_ENDPOINT').then(r=>r.json());
     const adsenseData = await fetch('YOUR_ADSENSE_ENDPOINT').then(r=>r.json());
     const affiliateData = await fetch('YOUR_AFFILIATE_ENDPOINT').then(r=>r.json());
@@ -161,7 +161,6 @@ async function fetchLiveData(){
     SIM_CONFIG.AFFILIATE.conversions = affiliateData.conversions || SIM_CONFIG.AFFILIATE.conversions;
 
     SIM_CONFIG.DONATIONS.total = donationsData.total || SIM_CONFIG.DONATIONS.total;
-
   } catch(e){ console.error("Live API fetch failed — using simulated data", e); }
 }
 
