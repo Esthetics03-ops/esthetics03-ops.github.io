@@ -1,4 +1,4 @@
-<!-- Updated revenue-dashboard.html with serverless proxy endpoints --><!doctype html>
+<!-- revenue-dashboard.html ready-to-use with serverless proxy --><!doctype html>
 
 <html lang="en">
 <head>
@@ -82,10 +82,10 @@
 <div id="statusBox" class="status">Loading…</div>
 
   </div><script>
-const els = id => document.getElementById(id);
-const money = v => "$" + (typeof v==='number'?v.toFixed(2):'0.00');
-let isLiveMode = false;
-const toggleBtn = els('toggleLive');
+const els=id=>document.getElementById(id);
+const money=v=>"$"+(typeof v==='number'?v.toFixed(2):'0.00');
+let isLiveMode=false;
+const toggleBtn=els('toggleLive');
 toggleBtn.addEventListener('click',()=>{isLiveMode=!isLiveMode;toggleBtn.textContent=isLiveMode?'Switch to Simulated Mode':'Switch to Real-time Live';els('modeNote').textContent=isLiveMode?'(Fetching live from serverless proxy)':'(Simulated by default)';renderDashboard();});
 
 const SIM={
@@ -104,11 +104,12 @@ function initCharts(){
 
 async function fetchLive(){
   try{
+    const baseURL='https://esthetics-proxy.vercel.app'; // <-- your serverless proxy URL
     const [ga4,ads,aff,dons]=await Promise.all([
-      fetch('/api/ga4/realtime').then(r=>r.json()),
-      fetch('/api/adsense').then(r=>r.json()),
-      fetch('/api/affiliate').then(r=>r.json()),
-      fetch('/api/donations').then(r=>r.json())
+      fetch(`${baseURL}/api/ga4/realtime`).then(r=>r.json()),
+      fetch(`${baseURL}/api/adsense`).then(r=>r.json()),
+      fetch(`${baseURL}/api/affiliate`).then(r=>r.json()),
+      fetch(`${baseURL}/api/donations`).then(r=>r.json())
     ]);
     return {ga4,ads,aff,dons};
   }catch(e){console.warn(e);return null;}
