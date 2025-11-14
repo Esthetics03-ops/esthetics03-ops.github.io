@@ -1,142 +1,141 @@
-<!DOCTYPE html>
+<!-- Updated revenue-dashboard.html with serverless proxy endpoints --><!doctype html>
+
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Live Monetisation Simulation for The Esthetics Hub – real-time tracking of AdSense, Affiliate, and Donation performance.">
-  <meta name="author" content="The Esthetics Hub">
-  <link rel="canonical" href="https://esthetics03-ops.github.io/revenue-dashboard.html">
-  <meta property="og:title" content="💰 Live Monetisation Simulation | The Esthetics Hub">
-  <meta property="og:description" content="Track simulated AdSense, Affiliate, and Donation earnings in real time. Updated live with insights and performance analytics.">
-  <meta property="og:image" content="https://esthetics03-ops.github.io/assets/dashboard-preview.jpg">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://esthetics03-ops.github.io/revenue-dashboard.html">
-  <meta name="theme-color" content="#fef3c7">
-  <title>💰 Live Monetisation Simulation | The Esthetics Hub</title>
-
-  <script src="https://cdn.tailwindcss.com?plugins=typography,forms"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>The Esthetics Hub — Revenue Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg,#fffdf6 0%,#fef9c3 100%); color:#374151; }
-    h2,h3{letter-spacing:-0.02em;}
-    table { width:100%; border-collapse:collapse; margin-top:1rem; }
-    th,td { padding:0.75rem; border-bottom:1px solid #f3f4f6; text-align:left; }
-    th { background:#fef3c7; font-weight:600; color:#92400e; }
-    tr:hover { background:#fff7ed; transition:0.3s; }
-    .fade-in { animation:fadeIn 0.9s ease-in-out; }
-    @keyframes fadeIn { from{opacity:0;transform:translateY(12px);} to{opacity:1;transform:translateY(0);} }
+    :root{--bg:#f8fafc;--card:#fff;--muted:#666;--accent:#16a34a;--blue:#2563eb;--amber:#f59e0b}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; margin:0; padding:20px; background:var(--bg)}
+    .wrap{max-width:1200px;margin:0 auto}
+    .card{background:var(--card);border-radius:12px;padding:18px;box-shadow:0 6px 18px rgba(0,0,0,.06);margin-bottom:12px}
+    .row{display:flex;gap:12px;flex-wrap:wrap}
+    .metric{flex:1 1 220px}
+    .small{color:var(--muted);font-size:13px}
+    .status{position:fixed;right:14px;bottom:14px;background:#222;color:#fff;padding:10px 14px;border-radius:10px;font-size:13px;z-index:999}
+    button{padding:8px 14px;border-radius:8px;border:none;font-weight:700;cursor:pointer}
+    table{width:100%;border-collapse:collapse;margin-top:8px}
+    th,td{padding:6px 8px;border-bottom:1px solid #eee}
+    canvas{background:var(--card);border-radius:10px;padding:8px}
+    pre{background:#f3f4f6;padding:10px;border-radius:8px;overflow:auto}
   </style>
 </head>
+<body>
+  <div class="wrap">
+    <h1>The Esthetics Hub — Revenue Dashboard</h1><div class="card">
+  <button id="toggleLive" style="background:var(--blue);color:#fff">Switch to Real-time Live</button>
+  <span style="margin-left:12px;color:var(--muted)" id="modeNote">(Simulated by default)</span>
+</div>
 
-<body class="min-h-screen flex flex-col items-center p-6">
-  <main class="fade-in bg-white/95 backdrop-blur-lg shadow-xl rounded-2xl p-8 max-w-5xl w-full border border-amber-100">
-    <h2 class="text-3xl font-semibold text-center text-amber-700 mb-2">💰 Live Monetisation Simulation – The Esthetics Hub</h2>
-    <p class="text-center text-gray-600 mb-6">Date: November 9, 2025 • Type: Real-time simulated live tracking</p>
-
-    <!-- Source Metrics Table -->
-    <h3 class="text-xl font-semibold text-amber-800 mt-6 mb-2">Revenue Sources</h3>
-    <div class="overflow-x-auto">
-      <table class="text-sm md:text-base">
-        <thead>
-          <tr>
-            <th>Source</th>
-            <th>Metric</th>
-            <th>Today</th>
-            <th>This Week</th>
-            <th>Month-to-Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Google AdSense</td>
-            <td>Pageviews ~1,620</td>
-            <td>$4.75</td>
-            <td>$30.10</td>
-            <td>$132.20</td>
-          </tr>
-          <tr>
-            <td>Amazon Affiliate</td>
-            <td>82 clicks</td>
-            <td>$2.65</td>
-            <td>$16.20</td>
-            <td>$68.40</td>
-          </tr>
-          <tr>
-            <td>Booking.com Affiliate</td>
-            <td>3 bookings</td>
-            <td>$1.80</td>
-            <td>$6.75</td>
-            <td>$20.25</td>
-          </tr>
-          <tr>
-            <td>Donations (PayPal + M-Pesa)</td>
-            <td>4 transactions</td>
-            <td>$10.40</td>
-            <td>$14.50</td>
-            <td>$27.60</td>
-          </tr>
-        </tbody>
-      </table>
+<div id="main" class="card">
+  <div id="systemStatus" class="small">Loading system status…</div>
+  <div class="row" style="margin-top:12px;">
+    <div class="card metric">
+      <div class="small">AdSense — Today</div>
+      <div id="adsense_earn" style="font-size:20px;font-weight:700">$--.--</div>
+      <div class="small" id="adsense_meta">impr: -- • clicks: -- • ctr: --</div>
+      <div class="small" id="adsense_payout">Next Payout: --</div>
     </div>
 
-    <!-- Cumulative Earnings -->
-    <h3 class="text-xl font-semibold text-amber-800 mt-8 mb-2">🔹 Cumulative Live Earnings</h3>
-    <div class="overflow-x-auto">
-      <table class="text-sm md:text-base">
-        <thead>
-          <tr>
-            <th>Period</th>
-            <th>Total Earnings</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>Today</td><td>$19.60 USD</td></tr>
-          <tr><td>This Week</td><td>$67.55 USD</td></tr>
-          <tr><td>Month-to-Date</td><td>$248.45 USD</td></tr>
-          <tr><td>Lifetime Estimate</td><td>$1,044.50 USD</td></tr>
-        </tbody>
-      </table>
+    <div class="card metric">
+      <div class="small">Affiliate — Today</div>
+      <div id="affiliate_earn" style="font-size:20px;font-weight:700">$--.--</div>
+      <div class="small" id="affiliate_meta">clicks: -- • conv: -- • conv%: --</div>
+      <div class="small" id="affiliate_payout">Next Payout: --</div>
     </div>
 
-    <!-- Performance Insights -->
-    <h3 class="text-xl font-semibold text-amber-800 mt-8 mb-3">⚙️ Performance Insights</h3>
-    <div class="grid md:grid-cols-2 gap-6">
-      <section class="bg-amber-50 p-4 rounded-xl border border-amber-100 shadow-sm">
-        <h4 class="font-semibold text-amber-700 mb-2">Top Performing Blog Pages</h4>
-        <ul class="list-disc list-inside text-gray-700">
-          <li>Mindful Nutrition for Longevity</li>
-          <li>Sleep, Focus & Balance: The Mental Reset Plan</li>
-        </ul>
-      </section>
-
-      <section class="bg-amber-50 p-4 rounded-xl border border-amber-100 shadow-sm">
-        <h4 class="font-semibold text-amber-700 mb-2">Traffic Channels</h4>
-        <ul class="list-disc list-inside text-gray-700">
-          <li>Organic Search: 64%</li>
-          <li>Social (Pinterest, Instagram): 20%</li>
-          <li>Direct/Referral: 16%</li>
-        </ul>
-      </section>
+    <div class="card metric">
+      <div class="small">Donations</div>
+      <div id="donations_earn" style="font-size:20px;font-weight:700">$--.--</div>
+      <div class="small" id="donations_meta">Stripe/PayPal configured</div>
     </div>
+  </div>
 
-    <div class="bg-green-50 p-4 mt-6 rounded-xl border border-green-100 shadow-sm">
-      <h4 class="font-semibold text-green-700 mb-2">Revenue Composition</h4>
-      <ul class="list-disc list-inside text-gray-700">
-        <li>AdSense → 24%</li>
-        <li>Affiliates (Amazon + Booking) → 21%</li>
-        <li>Donations → 55%</li>
-      </ul>
-      <p class="mt-3 text-sm text-gray-600">RPM (Revenue per 1,000 views): ~$4.25</p>
-      <p class="text-sm text-gray-600">Predicted Monthly Payout: ≈ <strong>$355 ± 5%</strong> (combined AdSense + Affiliates + Donations)</p>
-    </div>
-  </main>
+  <section style="margin-top:14px;">
+    <h3 style="margin:0 0 8px 0;">Charts & Trends</h3>
+    <canvas id="ga4Chart" height="90"></canvas>
+    <canvas id="revenueChart" height="90" style="margin-top:16px;"></canvas>
+    <canvas id="cumulativeChart" height="90" style="margin-top:16px;"></canvas>
+  </section>
 
-  <footer class="mt-10 text-center text-gray-400 text-sm">
-    © <span id="year"></span> The Esthetics Hub — Live Well. Live Longer.
-  </footer>
+  <section style="margin-top:14px;">
+    <h3 style="margin:0 0 8px 0;">Top Performing Articles</h3>
+    <table>
+      <thead><tr><th>Title</th><th>Pageviews</th><th>Revenue</th><th>Avg Duration</th></tr></thead>
+      <tbody id="topArticles"></tbody>
+    </table>
+  </section>
 
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
-</body>
-</html>
+  <section style="margin-top:14px;">
+    <h3 style="margin:0 0 8px 0;">Top Pages Revenue vs Traffic</h3>
+    <canvas id="pageRevenueChart" height="90"></canvas>
+  </section>
+
+  <section style="margin-top:14px;">
+    <h3 style="margin:0 0 8px 0;">Detailed JSON</h3>
+    <pre id="detail">Loading details…</pre>
+  </section>
+</div>
+
+<div id="statusBox" class="status">Loading…</div>
+
+  </div><script>
+const els = id => document.getElementById(id);
+const money = v => "$" + (typeof v==='number'?v.toFixed(2):'0.00');
+let isLiveMode = false;
+const toggleBtn = els('toggleLive');
+toggleBtn.addEventListener('click',()=>{isLiveMode=!isLiveMode;toggleBtn.textContent=isLiveMode?'Switch to Simulated Mode':'Switch to Real-time Live';els('modeNote').textContent=isLiveMode?'(Fetching live from serverless proxy)':'(Simulated by default)';renderDashboard();});
+
+const SIM={
+  GA4:[{id:'G-QCX3G9KSPC',desc:'Main',activeUsers:146,pageviews:702},{id:'G-PSW1MY7HB4',desc:'Blog',activeUsers:92,pageviews:431}],
+  ADSENSE:{earnings:14.37,impressions:682,clicks:22,ctr:'3.22%',nextPayout:'2026-01-18'},
+  AFFILIATE:{earnings:26.55,clicks:97,conversions:8,conversion_rate:'8.25%',nextPayout:'2025-12-10'},
+  DONATIONS:{total:0.00},
+  TOP_ARTICLES:[{title:'5 Ways to Boost Wellness',pageviews:312,revenue:5.20,avgDuration:'3m 15s'},{title:'Nutrition Tips for Longevity',pageviews:268,revenue:4.75,avgDuration:'2m 58s'}]
+};
+
+let ga4Chart,revenueChart,cumulativeChart,pageRevenueChart;
+function initCharts(){
+  ga4Chart=new Chart(els('ga4Chart').getContext('2d'),{type:'line',data:{labels:['Now-4','Now-3','Now-2','Now-1','Now'],datasets:SIM.GA4.map((s,i)=>({label:s.desc,data:[s.activeUsers-10,s.activeUsers-5,s.activeUsers-3,s.activeUsers,s.activeUsers+5],borderColor:i?'#2563eb':'#16a34a',fill:false,tension:0.3}))},options:{responsive:true,plugins:{title:{display:true,text:'Active Users'}}}});
+  revenueChart=new Chart(els('revenueChart').getContext('2d'),{type:'bar',data:{labels:['AdSense','Affiliate','Donations'],datasets:[{label:'Revenue',data:[SIM.ADSENSE.earnings,SIM.AFFILIATE.earnings,SIM.DONATIONS.total]}]},options:{responsive:true,plugins:{title:{display:true,text:'Revenue Distribution'}}}});
+}
+
+async function fetchLive(){
+  try{
+    const [ga4,ads,aff,dons]=await Promise.all([
+      fetch('/api/ga4/realtime').then(r=>r.json()),
+      fetch('/api/adsense').then(r=>r.json()),
+      fetch('/api/affiliate').then(r=>r.json()),
+      fetch('/api/donations').then(r=>r.json())
+    ]);
+    return {ga4,ads,aff,dons};
+  }catch(e){console.warn(e);return null;}
+}
+
+async function renderDashboard(){
+  els('systemStatus').textContent='Updating…'+new Date().toLocaleTimeString();
+  let dataSource='SIMULATED';
+  if(isLiveMode){
+    const live=await fetchLive();
+    if(live){
+      SIM.GA4.forEach((s,i)=>{s.activeUsers=live.ga4[i]?.activeUsers??s.activeUsers;s.pageviews=live.ga4[i]?.pageviews??s.pageviews});
+      if(live.ads)SIM.ADSENSE.earnings=live.ads.earnings??SIM.ADSENSE.earnings;
+      if(live.aff)SIM.AFFILIATE.earnings=live.aff.earnings??SIM.AFFILIATE.earnings;
+      if(live.dons)SIM.DONATIONS.total=live.dons.total??SIM.DONATIONS.total;
+      dataSource='LIVE';
+    }else dataSource='SIMULATED (live unreachable)';
+  }
+  els('adsense_earn').textContent=money(SIM.ADSENSE.earnings);
+  els('affiliate_earn').textContent=money(SIM.AFFILIATE.earnings);
+  els('donations_earn').textContent=money(SIM.DONATIONS.total);
+  const tb=els('topArticles');tb.innerHTML='';SIM.TOP_ARTICLES.forEach(a=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${a.title}</td><td>${a.pageviews}</td><td>${money(a.revenue)}</td><td>${a.avgDuration}</td>`;tb.appendChild(tr);});
+  els('detail').textContent=JSON.stringify({timestamp:new Date().toISOString(),source:dataSource,sim:SIM},null,2);
+  ga4Chart.data.datasets.forEach((d,i)=>{d.data=[SIM.GA4[i].activeUsers-8,SIM.GA4[i].activeUsers-4,SIM.GA4[i].activeUsers-2,SIM.GA4[i].activeUsers,SIM.GA4[i].activeUsers+3]});
+  ga4Chart.update();
+}
+
+initCharts();renderDashboard();setInterval(renderDashboard,10000);
+</script></body>
+  </html>
