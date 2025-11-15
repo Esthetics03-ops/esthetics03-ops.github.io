@@ -39,6 +39,10 @@
       <div class="small" id="adsense_payout">Next Payout: --</div>
     </div>
 
+    <div>AdSense Revenue: <span id="adsense-revenue">--</span></div>
+<div>Affiliate Revenue: <span id="affiliate-revenue">--</span></div>
+<div>Donations Revenue: <span id="donations-revenue">--</span></div>
+
     <div class="card metric">
       <div class="small">Affiliate — Today</div>
       <div id="affiliate_earn" style="font-size:20px;font-weight:700">$--.--</div>
@@ -138,5 +142,109 @@ async function renderDashboard(){
 }
 
 initCharts();renderDashboard();setInterval(renderDashboard,10000);
-</script></body>
+</script>
+
+  <script>
+// ==== Live-Populating Dashboard Script for The Esthetics Hub ====
+
+// --- Config: Replace placeholders with your real keys and endpoints ---
+const config = {
+    adsense: { key: "AIzaSyD-EXAMPLE-LIVE-KEY12345", propertyId: "G-QCX3G9KSPC","G-PSW1MY7HB4" },
+    affiliate: { url: "YOUR_AFFILIATE_API_ENDPOINT", key: "YOUR_AFFILIATE_API_KEY" },
+    donations: { url: "YOUR_DONATIONS_API_ENDPOINT", key: "YOUR_DONATIONS_API_KEY" }
+};
+
+// --- Helper: Update DOM elements safely ---
+function updateElement(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
+}
+
+// --- AdSense API Fetch ---
+async function fetchAdSense() {
+    try {
+        const response = await fetch(`https://analyticsdata.googleapis.com/v1beta/properties/${config.adsense.propertyId}:runReport`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${config.adsense.key}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "dimensions": [{"name": "date"}],
+                "metrics": [{"name": "estimatedRevenue"}, {"name": "impressions"}, {"name": "screenPageViews"}],
+                "dateRanges": [{"startDate": "2025-11-01", "endDate": "2025-11-14"}]
+            })
+        });
+        const data = await response.json();
+        if (data.error) {
+            console.error("AdSense API Error:", data.error);
+            updateElement("adsense-revenue", "--");
+        } else {
+            const revenue = data.rows?.reduce((sum, row) => sum + parseFloat(row.metricValues[0].value), 0) || 0;
+            updateElement("adsense-revenue", `$${revenue.toFixed(2)}`);
+            console.log("AdSense data loaded:", data);
+        }
+    } catch (err) {
+        console.error("AdSense Fetch Failed:", err);
+        updateElement("adsense-revenue", "--");
+    }
+}
+
+// --- Affiliate API Fetch ---
+async function fetchAffiliate() {
+    try {
+        const response = await fetch(config.affiliate.url, {
+            headers: { 'Authorization': `Bearer ${config.affiliate.key}` }
+        });
+        const data = await response.json();
+        if (data.error) {
+            console.error("Affiliate API Error:", data.error);
+            updateElement("affiliate-revenue", "--");
+        } else {
+            const total = data.totalRevenue || 0;
+            updateElement("affiliate-revenue", `$${total.toFixed(2)}`);
+            console.log("Affiliate data loaded:", data);
+        }
+    } catch (err) {
+        console.error("Affiliate Fetch Failed:", err);
+        updateElement("affiliate-revenue", "--");
+    }
+}
+
+// --- Donations API Fetch ---
+async function fetchDonations() {
+    try {
+        const response = await fetch(config.donations.url, {
+            headers: { 'Authorization': `Bearer ${config.donations.key}` }
+        });
+        const data = await response.json();
+        if (data.error) {
+            console.error("Donations API Error:", data.error);
+            updateElement("donations-revenue", "--");
+        } else {
+            const total = data.totalDonations || 0;
+            updateElement("donations-revenue", `$${total.toFixed(2)}`);
+            console.log("Donations data loaded:", data);
+        }
+    } catch (err) {
+        console.error("Donations Fetch Failed:", err);
+        updateElement("donations-revenue", "--");
+    }
+}
+
+// --- Run All Fetches and Populate Dashboard ---
+async function updateDashboard() {
+    updateElement("adsense-revenue", "Loading...");
+    updateElement("affiliate-revenue", "Loading...");
+    updateElement("donations-revenue", "Loading...");
+
+    await Promise.all([fetchAdSense(), fetchAffiliate(), fetchDonations()]);
+    console.log("Dashboard updated with live data.");
+}
+
+// --- Auto-refresh every 5 minutes ---
+updateDashboard();
+setInterval(updateDashboard, 300000); // 300,000 ms = 5 minutes
+  </script>
+</body>
   </html>
