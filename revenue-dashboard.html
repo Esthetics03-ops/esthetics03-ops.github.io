@@ -110,10 +110,10 @@ async function fetchLive(){
   try{
     const baseURL='https://esthetics-proxy.vercel.app'; // <-- your serverless proxy URL
     const [ga4,ads,aff,dons]=await Promise.all([
-      fetch(`${baseURL}/ga4/realtime`).then(r=>r.json()),
-      fetch(`${baseURL}/adsense`).then(r=>r.json()),
-      fetch(`${baseURL}/affiliate`).then(r=>r.json()),
-      fetch(`${baseURL}/donations`).then(r=>r.json())
+      fetch(`${baseURL}/API/ga4/realtime`).then(r=>r.json()),
+      fetch(`${baseURL}/API/adsense`).then(r=>r.json()),
+      fetch(`${baseURL}/API/affiliate`).then(r=>r.json()),
+      fetch(`${baseURL}/API/donations`).then(r=>r.json())
     ]);
     return {ga4,ads,aff,dons};
   }catch(e){console.warn(e);return null;}
