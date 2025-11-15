@@ -110,10 +110,10 @@ async function fetchLive(){
   try{
     const baseURL='https://esthetics-proxy.vercel.app'; // <-- your serverless proxy URL
     const [ga4,ads,aff,dons]=await Promise.all([
-      fetch(`${baseURL}/api/ga4/realtime`).then(r=>r.json()),
-      fetch(`${baseURL}/api/adsense`).then(r=>r.json()),
-      fetch(`${baseURL}/api/affiliate`).then(r=>r.json()),
-      fetch(`${baseURL}/api/donations`).then(r=>r.json())
+      fetch(`${baseURL}/ga4/realtime`).then(r=>r.json()),
+      fetch(`${baseURL}/adsense`).then(r=>r.json()),
+      fetch(`${baseURL}/affiliate`).then(r=>r.json()),
+      fetch(`${baseURL}/donations`).then(r=>r.json())
     ]);
     return {ga4,ads,aff,dons};
   }catch(e){console.warn(e);return null;}
@@ -149,7 +149,7 @@ initCharts();renderDashboard();setInterval(renderDashboard,10000);
 
 // --- Config: Replace placeholders with your real keys and endpoints ---
 const config = {
-    adsense: { key: "pub-1959507280210179", propertyId: "G-QCX3G9KSPC,G-PSW1MY7HB4" },
+    adsense: { key: "pub-1959507280210179", propertyId: "G-QCX3G9KSPC" },
     affiliate: { url: "YOUR_AFFILIATE_API_ENDPOINT", key: "esthetics-hub-affiliate" },
     donations: { url: "YOUR_DONATIONS_API_ENDPOINT", key: "YOUR_DONATIONS_API_KEY" }
 };
