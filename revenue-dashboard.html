@@ -1,5 +1,5 @@
-<!-- revenue-dashboard.html ready-to-use with serverless proxy --><!doctype html>
-
+<!-- revenue-dashboard.html — single-script, live-ready with proxy fallback -->
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -24,75 +24,92 @@
 </head>
 <body>
   <div class="wrap">
-    <h1>The Esthetics Hub — Revenue Dashboard</h1><div class="card">
-  <button id="toggleLive" style="background:var(--blue);color:#fff">Switch to Real-time Live</button>
-  <span style="margin-left:12px;color:var(--muted)" id="modeNote">(Simulated by default)</span>
-</div>
+    <h1>The Esthetics Hub — Revenue Dashboard</h1>
 
-<div id="main" class="card">
-  <div id="systemStatus" class="small">Loading system status…</div>
-  <div class="row" style="margin-top:12px;">
-    <div class="card metric">
-      <div class="small">AdSense — Today</div>
-      <div id="adsense_earn" style="font-size:20px;font-weight:700">$--.--</div>
-      <div class="small" id="adsense_meta">impr: -- • clicks: -- • ctr: --</div>
-      <div class="small" id="adsense_payout">Next Payout: --</div>
+    <div class="card">
+      <button id="toggleLive" style="background:var(--blue);color:#fff">Switch to Real-time Live</button>
+      <span style="margin-left:12px;color:var(--muted)" id="modeNote">(Simulated by default)</span>
     </div>
 
-    <div>AdSense Revenue: <span id="adsense-revenue">--</span></div>
-<div>Affiliate Revenue: <span id="affiliate-revenue">--</span></div>
-<div>Donations Revenue: <span id="donations-revenue">--</span></div>
+    <div id="main" class="card">
+      <div id="systemStatus" class="small">Updating…</div>
 
-    <div class="card metric">
-      <div class="small">Affiliate — Today</div>
-      <div id="affiliate_earn" style="font-size:20px;font-weight:700">$--.--</div>
-      <div class="small" id="affiliate_meta">clicks: -- • conv: -- • conv%: --</div>
-      <div class="small" id="affiliate_payout">Next Payout: --</div>
+      <div class="row" style="margin-top:12px;">
+        <div class="card metric">
+          <div class="small">AdSense — Today</div>
+          <div id="adsense_earn" style="font-size:20px;font-weight:700">$0.00</div>
+          <div class="small" id="adsense_meta">impr: -- • clicks: -- • ctr: --</div>
+          <div class="small" id="adsense_payout">Next Payout: --</div>
+        </div>
+
+        <div class="card metric">
+          <div class="small">Affiliate — Today</div>
+          <div id="affiliate_earn" style="font-size:20px;font-weight:700">$0.00</div>
+          <div class="small" id="affiliate_meta">clicks: -- • conv: -- • conv%: --</div>
+          <div class="small" id="affiliate_payout">Next Payout: --</div>
+        </div>
+
+        <div class="card metric">
+          <div class="small">Donations</div>
+          <div id="donations_earn" style="font-size:20px;font-weight:700">$0.00</div>
+          <div class="small" id="donations_meta">Stripe/PayPal configured</div>
+        </div>
+      </div>
+
+      <section style="margin-top:14px;">
+        <h3 style="margin:0 0 8px 0;">Charts & Trends</h3>
+        <canvas id="ga4Chart" height="120"></canvas>
+        <canvas id="revenueChart" height="120" style="margin-top:16px;"></canvas>
+      </section>
+
+      <section style="margin-top:14px;">
+        <h3 style="margin:0 0 8px 0;">Top Performing Articles</h3>
+        <table>
+          <thead><tr><th>Title</th><th>Pageviews</th><th>Revenue</th><th>Avg Duration</th></tr></thead>
+          <tbody id="topArticles"><tr><td colspan="4" class="small">No data</td></tr></tbody>
+        </table>
+      </section>
+
+      <section style="margin-top:14px;">
+        <h3 style="margin:0 0 8px 0;">Detailed JSON</h3>
+        <pre id="detail">{} </pre>
+      </section>
     </div>
 
-    <div class="card metric">
-      <div class="small">Donations</div>
-      <div id="donations_earn" style="font-size:20px;font-weight:700">$--.--</div>
-      <div class="small" id="donations_meta">Stripe/PayPal configured</div>
-    </div>
+    <div id="statusBox" class="status">Loading…</div>
   </div>
 
-  <section style="margin-top:14px;">
-    <h3 style="margin:0 0 8px 0;">Charts & Trends</h3>
-    <canvas id="ga4Chart" height="90"></canvas>
-    <canvas id="revenueChart" height="90" style="margin-top:16px;"></canvas>
-    <canvas id="cumulativeChart" height="90" style="margin-top:16px;"></canvas>
-  </section>
+<script>
+/* === CONFIG ===
+   - Set proxyBase to your deployed serverless proxy (no trailing slash), e.g.
+     proxyBase = 'https://esthetics-proxy.vercel.app'
+   - The proxy must expose:
+     GET  /API/ga4/realtime   -> { ga4: [{activeUsers, pageviews, id, desc}, ...] }
+     GET  /API/adsense        -> { earnings, impressions, clicks, ctr, nextPayout }
+     GET  /API/affiliate      -> { earnings, clicks, conversions, conversion_rate, nextPayout }
+     GET  /API/donations      -> { total }
+   - If proxyBase is empty or unreachable, the dashboard uses SIMULATED data.
+*/
+const proxyBase = ''; // <-- PUT your proxy URL HERE when ready
 
-  <section style="margin-top:14px;">
-    <h3 style="margin:0 0 8px 0;">Top Performing Articles</h3>
-    <table>
-      <thead><tr><th>Title</th><th>Pageviews</th><th>Revenue</th><th>Avg Duration</th></tr></thead>
-      <tbody id="topArticles"></tbody>
-    </table>
-  </section>
+/* =================== DO NOT PUT SECRETS IN THIS FILE ===================
+   The serverless proxy must handle authentication to Google/Stripe/Affiliate
+   networks and return JSON to this client.
+   ===================================================================== */
 
-  <section style="margin-top:14px;">
-    <h3 style="margin:0 0 8px 0;">Top Pages Revenue vs Traffic</h3>
-    <canvas id="pageRevenueChart" height="90"></canvas>
-  </section>
+const qs = id => document.getElementById(id);
+const money = v => '$'+(Number(v||0).toFixed(2));
+const toggleBtn = qs('toggleLive');
+let isLiveMode = false;
+toggleBtn.addEventListener('click', ()=> {
+  isLiveMode = !isLiveMode;
+  toggleBtn.textContent = isLiveMode ? 'Switch to Simulated Mode' : 'Switch to Real-time Live';
+  qs('modeNote').textContent = isLiveMode ? '(Fetching live from serverless proxy)' : '(Simulated by default)';
+  renderDashboard(); // immediate refresh
+});
 
-  <section style="margin-top:14px;">
-    <h3 style="margin:0 0 8px 0;">Detailed JSON</h3>
-    <pre id="detail">Loading details…</pre>
-  </section>
-</div>
-
-<div id="statusBox" class="status">Loading…</div>
-
-  </div><script>
-const els=id=>document.getElementById(id);
-const money=v=>"$"+(typeof v==='number'?v.toFixed(2):'0.00');
-let isLiveMode=false;
-const toggleBtn=els('toggleLive');
-toggleBtn.addEventListener('click',()=>{isLiveMode=!isLiveMode;toggleBtn.textContent=isLiveMode?'Switch to Simulated Mode':'Switch to Real-time Live';els('modeNote').textContent=isLiveMode?'(Fetching live from serverless proxy)':'(Simulated by default)';renderDashboard();});
-
-const SIM={
+/* === SIMULATED FALLBACK DATA === */
+const SIM = {
   GA4:[{id:'G-QCX3G9KSPC',desc:'Main',activeUsers:146,pageviews:702},{id:'G-PSW1MY7HB4',desc:'Blog',activeUsers:92,pageviews:431}],
   ADSENSE:{earnings:14.37,impressions:682,clicks:22,ctr:'3.22%',nextPayout:'2026-01-18'},
   AFFILIATE:{earnings:26.55,clicks:97,conversions:8,conversion_rate:'8.25%',nextPayout:'2025-12-10'},
@@ -100,151 +117,222 @@ const SIM={
   TOP_ARTICLES:[{title:'5 Ways to Boost Wellness',pageviews:312,revenue:5.20,avgDuration:'3m 15s'},{title:'Nutrition Tips for Longevity',pageviews:268,revenue:4.75,avgDuration:'2m 58s'}]
 };
 
-let ga4Chart,revenueChart,cumulativeChart,pageRevenueChart;
-function initCharts(){
-  ga4Chart=new Chart(els('ga4Chart').getContext('2d'),{type:'line',data:{labels:['Now-4','Now-3','Now-2','Now-1','Now'],datasets:SIM.GA4.map((s,i)=>({label:s.desc,data:[s.activeUsers-10,s.activeUsers-5,s.activeUsers-3,s.activeUsers,s.activeUsers+5],borderColor:i?'#2563eb':'#16a34a',fill:false,tension:0.3}))},options:{responsive:true,plugins:{title:{display:true,text:'Active Users'}}}});
-  revenueChart=new Chart(els('revenueChart').getContext('2d'),{type:'bar',data:{labels:['AdSense','Affiliate','Donations'],datasets:[{label:'Revenue',data:[SIM.ADSENSE.earnings,SIM.AFFILIATE.earnings,SIM.DONATIONS.total]}]},options:{responsive:true,plugins:{title:{display:true,text:'Revenue Distribution'}}}});
-}
-
-async function fetchLive(){
+/* === Live fetch helpers === */
+async function fetchJsonSafe(url){
   try{
-    const baseURL='https://esthetics-proxy.vercel.app'; // <-- your serverless proxy URL
-    const [ga4,ads,aff,dons]=await Promise.all([
-      fetch(`${baseURL}/API/ga4/realtime`).then(r=>r.json()),
-      fetch(`${baseURL}/API/adsense`).then(r=>r.json()),
-      fetch(`${baseURL}/API/affiliate`).then(r=>r.json()),
-      fetch(`${baseURL}/API/donations`).then(r=>r.json())
-    ]);
-    return {ga4,ads,aff,dons};
-  }catch(e){console.warn(e);return null;}
-}
-
-async function renderDashboard(){
-  els('systemStatus').textContent='Updating…'+new Date().toLocaleTimeString();
-  let dataSource='SIMULATED';
-  if(isLiveMode){
-    const live=await fetchLive();
-    if(live){
-      SIM.GA4.forEach((s,i)=>{s.activeUsers=live.ga4[i]?.activeUsers??s.activeUsers;s.pageviews=live.ga4[i]?.pageviews??s.pageviews});
-      if(live.ads)SIM.ADSENSE.earnings=live.ads.earnings??SIM.ADSENSE.earnings;
-      if(live.aff)SIM.AFFILIATE.earnings=live.aff.earnings??SIM.AFFILIATE.earnings;
-      if(live.dons)SIM.DONATIONS.total=live.dons.total??SIM.DONATIONS.total;
-      dataSource='LIVE';
-    }else dataSource='SIMULATED (live unreachable)';
+    const res = await fetch(url, {cache: 'no-store'});
+    const contentType = res.headers.get('content-type') || '';
+    if(!res.ok){
+      const txt = await res.text();
+      console.error('fetchJsonSafe non-OK:', url, res.status, txt);
+      return { error: `HTTP ${res.status}`, raw: txt };
+    }
+    if(!contentType.includes('application/json')){
+      const txt = await res.text();
+      console.error('fetchJsonSafe invalid content-type (expected JSON):', url, contentType, txt);
+      return { error: 'invalid-content-type', raw: txt };
+    }
+    const data = await res.json();
+    return { data };
+  }catch(err){
+    console.warn('fetchJsonSafe failed:', url, err);
+    return { error: 'network', raw: String(err) };
   }
-  els('adsense_earn').textContent=money(SIM.ADSENSE.earnings);
-  els('affiliate_earn').textContent=money(SIM.AFFILIATE.earnings);
-  els('donations_earn').textContent=money(SIM.DONATIONS.total);
-  const tb=els('topArticles');tb.innerHTML='';SIM.TOP_ARTICLES.forEach(a=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${a.title}</td><td>${a.pageviews}</td><td>${money(a.revenue)}</td><td>${a.avgDuration}</td>`;tb.appendChild(tr);});
-  els('detail').textContent=JSON.stringify({timestamp:new Date().toISOString(),source:dataSource,sim:SIM},null,2);
-  ga4Chart.data.datasets.forEach((d,i)=>{d.data=[SIM.GA4[i].activeUsers-8,SIM.GA4[i].activeUsers-4,SIM.GA4[i].activeUsers-2,SIM.GA4[i].activeUsers,SIM.GA4[i].activeUsers+3]});
+}
+
+async function fetchLiveData(){
+  if(!proxyBase) return null;
+  try{
+    const urls = {
+      ga4: `${proxyBase}/API/ga4/realtime`,
+      ads: `${proxyBase}/API/adsense`,
+      aff: `${proxyBase}/API/affiliate`,
+      dons: `${proxyBase}/API/donations`
+    };
+    const [g, a, f, d] = await Promise.all([
+      fetchJsonSafe(urls.ga4),
+      fetchJsonSafe(urls.ads),
+      fetchJsonSafe(urls.aff),
+      fetchJsonSafe(urls.dons)
+    ]);
+    // If any fetch returned an error, log and return null so UI uses SIM
+    const errors = [g,a,f,d].filter(x=>x.error);
+    if(errors.length){
+      console.warn('fetchLiveData partial errors:', errors);
+      return null;
+    }
+    return {
+      ga4: g.data,
+      ads: a.data,
+      aff: f.data,
+      dons: d.data
+    };
+  }catch(e){
+    console.warn('fetchLiveData overall failure:', e);
+    return null;
+  }
+}
+
+/* === Charts === */
+let ga4Chart, revenueChart;
+function initCharts(){
+  const ctx1 = qs('ga4Chart').getContext('2d');
+  ga4Chart = new Chart(ctx1, {
+    type: 'line',
+    data: { labels: ['-4','-3','-2','-1','now'], datasets: [] },
+    options: { responsive:true, plugins:{title:{display:true,text:'Active Users (trend)'}}, interaction:{mode:'index'} }
+  });
+
+  const ctx2 = qs('revenueChart').getContext('2d');
+  revenueChart = new Chart(ctx2, {
+    type: 'bar',
+    data: { labels:['AdSense','Affiliate','Donations'], datasets:[{label:'Revenue', data:[0,0,0]}] },
+    options: { responsive:true, plugins:{title:{display:true,text:'Revenue Distribution'}}}
+  });
+}
+
+/* === Render === */
+function safeAssign(target, path, value){
+  // simple setter: target[path] = value if exists
+  if(target && path) target[path] = value;
+}
+
+function populateFromPayload(payloadSource, payload){
+  // payloadSource: 'SIM' or 'LIVE'
+  // payload: { ga4, ads, aff, dons } or SIM object
+  const s = payload;
+  // GA4 top-level: array
+  if(Array.isArray(s.GA4) || Array.isArray(s.ga4)){
+    const arr = s.GA4 || s.ga4;
+    // map into SIM.GA4 structure
+    SIM.GA4 = arr.map((r, i) => ({ id: r.id || r.property || `p${i}`, desc: r.desc || r.name || `prop${i}`, activeUsers: Number(r.activeUsers||r.active_users||r.active||0), pageviews: Number(r.pageviews||r.page_views||0) }));
+  }
+  // AdSense
+  if(s.ADSENSE || s.ads){
+    const ad = s.ADSENSE || s.ads;
+    SIM.ADSENSE.earnings = Number(ad.earnings || ad.revenue || 0);
+    SIM.ADSENSE.impressions = ad.impressions || SIM.ADSENSE.impressions;
+    SIM.ADSENSE.clicks = ad.clicks || SIM.ADSENSE.clicks;
+    SIM.ADSENSE.ctr = ad.ctr || SIM.ADSENSE.ctr;
+    SIM.ADSENSE.nextPayout = ad.nextPayout || ad.next_payout || SIM.ADSENSE.nextPayout;
+  }
+  // Affiliate
+  if(s.AFFILIATE || s.aff){
+    const af = s.AFFILIATE || s.aff;
+    SIM.AFFILIATE.earnings = Number(af.earnings || af.totalRevenue || 0);
+    SIM.AFFILIATE.clicks = af.clicks || SIM.AFFILIATE.clicks;
+    SIM.AFFILIATE.conversions = af.conversions || af.conversion_count || SIM.AFFILIATE.conversions;
+    SIM.AFFILIATE.conversion_rate = af.conversion_rate || af.conversion_rate || SIM.AFFILIATE.conversion_rate;
+    SIM.AFFILIATE.nextPayout = af.nextPayout || af.next_payout || SIM.AFFILIATE.nextPayout;
+  }
+  // Donations
+  if(s.DONATIONS || s.dons){
+    const dn = s.DONATIONS || s.dons;
+    SIM.DONATIONS.total = Number(dn.total || dn.amount || 0);
+  }
+  // Top articles (if present)
+  if(s.TOP_ARTICLES || s.top_articles || s.topArticles){
+    SIM.TOP_ARTICLES = s.TOP_ARTICLES || s.top_articles || s.topArticles;
+  }
+}
+
+function renderFromSIM(sourceLabel='SIMULATED'){
+  // Status
+  qs('systemStatus').textContent = `Status: ${sourceLabel} • ${new Date().toLocaleString()}`;
+  qs('statusBox').textContent = `Mode: ${isLiveMode ? 'LIVE' : 'SIMULATED'} • ${sourceLabel}`;
+
+  // Metrics
+  qs('adsense_earn').textContent = money(SIM.ADSENSE.earnings);
+  qs('adsense_meta').textContent = `impr: ${SIM.ADSENSE.impressions||'--'} • clicks: ${SIM.ADSENSE.clicks||'--'} • ctr: ${SIM.ADSENSE.ctr||'--'}`;
+  qs('adsense_payout').textContent = `Next Payout: ${SIM.ADSENSE.nextPayout||'--'}`;
+
+  qs('affiliate_earn').textContent = money(SIM.AFFILIATE.earnings);
+  qs('affiliate_meta').textContent = `clicks: ${SIM.AFFILIATE.clicks||'--'} • conv: ${SIM.AFFILIATE.conversions||'--'} • conv%: ${SIM.AFFILIATE.conversion_rate||'--'}`;
+  qs('affiliate_payout').textContent = `Next Payout: ${SIM.AFFILIATE.nextPayout||'--'}`;
+
+  qs('donations_earn').textContent = money(SIM.DONATIONS.total);
+  qs('donations_meta').textContent = SIM.DONATIONS.total>0 ? 'Recent donations received' : 'Stripe/PayPal configured';
+
+  // Top articles
+  const tb = qs('topArticles'); tb.innerHTML = '';
+  if(Array.isArray(SIM.TOP_ARTICLES) && SIM.TOP_ARTICLES.length){
+    SIM.TOP_ARTICLES.forEach(a => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${a.title||'Untitled'}</td><td>${a.pageviews||0}</td><td>${money(a.revenue||0)}</td><td>${a.avgDuration||'--'}</td>`;
+      tb.appendChild(tr);
+    });
+  } else {
+    tb.innerHTML = `<tr><td colspan="4" class="small">No article data</td></tr>`;
+  }
+
+  // JSON detail
+  qs('detail').textContent = JSON.stringify({ timestamp: new Date().toISOString(), source: sourceLabel, sim: SIM }, null, 2);
+
+  // Update charts
+  // GA4 chart: build datasets from SIM.GA4
+  ga4Chart.data.labels = ['-4','-3','-2','-1','now'];
+  ga4Chart.data.datasets = SIM.GA4.map((s, i) => {
+    const base = Number(s.activeUsers||0);
+    return {
+      label: s.desc || s.id || `prop${i}`,
+      data: [Math.max(0, base-8), Math.max(0, base-4), Math.max(0, base-2), base, base+3],
+      borderColor: i ? '#2563eb' : '#16a34a',
+      fill: false,
+      tension: 0.3
+    };
+  });
   ga4Chart.update();
+
+  // Revenue chart
+  revenueChart.data.datasets[0].data = [Number(SIM.ADSENSE.earnings||0), Number(SIM.AFFILIATE.earnings||0), Number(SIM.DONATIONS.total||0)];
+  revenueChart.update();
 }
 
-initCharts();renderDashboard();setInterval(renderDashboard,10000);
+/* === Main loop: fetch live if requested, else simulated === */
+let lastRender = 0;
+async function renderDashboard(){
+  // throttle to avoid overlapping calls
+  const now = Date.now();
+  if(now - lastRender < 900) return;
+  lastRender = now;
+
+  qs('systemStatus').textContent = `Updating… ${new Date().toLocaleTimeString()}`;
+  let sourceLabel = 'SIMULATED';
+
+  if(isLiveMode && proxyBase){
+    const live = await fetchLiveData();
+    if(live){
+      // Transform live into same structure keys used by populateFromPayload
+      const payload = {
+        ga4: live.ga4,
+        ads: live.ads,
+        aff: live.aff,
+        dons: live.dons,
+        // optional: top_articles
+        top_articles: live.top_articles || live.topArticles || live.TOP_ARTICLES
+      };
+      // Normalize and populate SIM with live values
+      populateFromPayload('LIVE', payload);
+      sourceLabel = 'LIVE';
+    } else {
+      console.warn('Live fetch failed — using SIMULATED data');
+      sourceLabel = 'SIMULATED (live unreachable)';
+    }
+  } else {
+    sourceLabel = 'SIMULATED';
+  }
+
+  renderFromSIM(sourceLabel);
+}
+
+/* === Initialization === */
+initCharts();
+renderDashboard();
+setInterval(renderDashboard, 10000); // refresh every 10s
+
+/* === Helpful console hints === */
+console.info('Dashboard loaded. To enable live mode: set proxyBase to your serverless proxy URL and then click "Switch to Real-time Live".');
+console.info('Proxy endpoints expected: /API/ga4/realtime , /API/adsense , /API/affiliate , /API/donations');
 </script>
-
-  <script>
-// ==== Live-Populating Dashboard Script for The Esthetics Hub ====
-
-// --- Config: Replace placeholders with your real keys and endpoints ---
-const config = {
-    adsense: { key: "pub-1959507280210179", propertyId: "G-QCX3G9KSPC" },
-    affiliate: { url: "YOUR_AFFILIATE_API_ENDPOINT", key: "esthetics-hub-affiliate" },
-    donations: { url: "YOUR_DONATIONS_API_ENDPOINT", key: "YOUR_DONATIONS_API_KEY" }
-};
-
-// --- Helper: Update DOM elements safely ---
-function updateElement(id, value) {
-    const el = document.getElementById(id);
-    if (el) el.textContent = value;
-}
-
-// --- AdSense API Fetch ---
-async function fetchAdSense() {
-    try {
-        const response = await fetch(`https://analyticsdata.googleapis.com/v1beta/properties/${config.adsense.propertyId}:runReport`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${config.adsense.key}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                "dimensions": [{"name": "date"}],
-                "metrics": [{"name": "estimatedRevenue"}, {"name": "impressions"}, {"name": "screenPageViews"}],
-                "dateRanges": [{"startDate": "2025-11-01", "endDate": "2025-11-14"}]
-            })
-        });
-        const data = await response.json();
-        if (data.error) {
-            console.error("AdSense API Error:", data.error);
-            updateElement("adsense-revenue", "--");
-        } else {
-            const revenue = data.rows?.reduce((sum, row) => sum + parseFloat(row.metricValues[0].value), 0) || 0;
-            updateElement("adsense-revenue", `$${revenue.toFixed(2)}`);
-            console.log("AdSense data loaded:", data);
-        }
-    } catch (err) {
-        console.error("AdSense Fetch Failed:", err);
-        updateElement("adsense-revenue", "--");
-    }
-}
-
-// --- Affiliate API Fetch ---
-async function fetchAffiliate() {
-    try {
-        const response = await fetch(config.affiliate.url, {
-            headers: { 'Authorization': `Bearer ${config.affiliate.key}` }
-        });
-        const data = await response.json();
-        if (data.error) {
-            console.error("Affiliate API Error:", data.error);
-            updateElement("affiliate-revenue", "--");
-        } else {
-            const total = data.totalRevenue || 0;
-            updateElement("affiliate-revenue", `$${total.toFixed(2)}`);
-            console.log("Affiliate data loaded:", data);
-        }
-    } catch (err) {
-        console.error("Affiliate Fetch Failed:", err);
-        updateElement("affiliate-revenue", "--");
-    }
-}
-
-// --- Donations API Fetch ---
-async function fetchDonations() {
-    try {
-        const response = await fetch(config.donations.url, {
-            headers: { 'Authorization': `Bearer ${config.donations.key}` }
-        });
-        const data = await response.json();
-        if (data.error) {
-            console.error("Donations API Error:", data.error);
-            updateElement("donations-revenue", "--");
-        } else {
-            const total = data.totalDonations || 0;
-            updateElement("donations-revenue", `$${total.toFixed(2)}`);
-            console.log("Donations data loaded:", data);
-        }
-    } catch (err) {
-        console.error("Donations Fetch Failed:", err);
-        updateElement("donations-revenue", "--");
-    }
-}
-
-// --- Run All Fetches and Populate Dashboard ---
-async function updateDashboard() {
-    updateElement("adsense-revenue", "Loading...");
-    updateElement("affiliate-revenue", "Loading...");
-    updateElement("donations-revenue", "Loading...");
-
-    await Promise.all([fetchAdSense(), fetchAffiliate(), fetchDonations()]);
-    console.log("Dashboard updated with live data.");
-}
-
-// --- Auto-refresh every 5 minutes ---
-updateDashboard();
-setInterval(updateDashboard, 300000); // 300,000 ms = 5 minutes
-  </script>
 </body>
   </html>
