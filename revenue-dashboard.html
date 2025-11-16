@@ -1,63 +1,61 @@
-<!-- revenue-dashboard.html ready-to-use with serverless proxy --><!doctype html>
-
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>The Esthetics Hub — Revenue Dashboard</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    :root{--bg:#f8fafc;--card:#fff;--muted:#666;--accent:#16a34a;--blue:#2563eb;--amber:#f59e0b}
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; margin:0; padding:20px; background:var(--bg)}
-    .wrap{max-width:1200px;margin:0 auto}
-    .card{background:var(--card);border-radius:12px;padding:18px;box-shadow:0 6px 18px rgba(0,0,0,.06);margin-bottom:12px}
-    .row{display:flex;gap:12px;flex-wrap:wrap}
-    .metric{flex:1 1 220px}
-    .small{color:var(--muted);font-size:13px}
-    .status{position:fixed;right:14px;bottom:14px;background:#222;color:#fff;padding:10px 14px;border-radius:10px;font-size:13px;z-index:999}
-    button{padding:8px 14px;border-radius:8px;border:none;font-weight:700;cursor:pointer}
-    table{width:100%;border-collapse:collapse;margin-top:8px}
-    th,td{padding:6px 8px;border-bottom:1px solid #eee}
-    canvas{background:var(--card);border-radius:10px;padding:8px}
-    pre{background:#f3f4f6;padding:10px;border-radius:8px;overflow:auto}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>The Esthetics Hub — Revenue Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  :root{--bg:#f8fafc;--card:#fff;--muted:#666;--accent:#16a34a;--blue:#2563eb;--amber:#f59e0b}
+  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; margin:0; padding:20px; background:var(--bg)}
+  .wrap{max-width:1200px;margin:0 auto}
+  .card{background:var(--card);border-radius:12px;padding:18px;box-shadow:0 6px 18px rgba(0,0,0,.06);margin-bottom:12px}
+  .row{display:flex;gap:12px;flex-wrap:wrap}
+  .metric{flex:1 1 220px}
+  .small{color:var(--muted);font-size:13px}
+  .status{position:fixed;right:14px;bottom:14px;background:#222;color:#fff;padding:10px 14px;border-radius:10px;font-size:13px;z-index:999}
+  button{padding:8px 14px;border-radius:8px;border:none;font-weight:700;cursor:pointer}
+  table{width:100%;border-collapse:collapse;margin-top:8px}
+  th,td{padding:6px 8px;border-bottom:1px solid #eee}
+  canvas{background:var(--card);border-radius:10px;padding:8px}
+  pre{background:#f3f4f6;padding:10px;border-radius:8px;overflow:auto}
+</style>
 </head>
 <body>
-  <div class="wrap">
-    <h1>The Esthetics Hub — Revenue Dashboard</h1><div class="card">
+<div class="wrap">
+<h1>The Esthetics Hub — Revenue Dashboard</h1>
+
+<div class="card">
   <button id="toggleLive" style="background:var(--blue);color:#fff">Switch to Real-time Live</button>
   <span style="margin-left:12px;color:var(--muted)" id="modeNote">(Simulated by default)</span>
 </div>
 
 <div id="main" class="card">
-  <div id="systemStatus" class="small">Loading system status…</div>
+  <div id="systemStatus" class="small">Updating…</div>
   <div class="row" style="margin-top:12px;">
     <div class="card metric">
       <div class="small">AdSense — Today</div>
-      <div id="adsense_earn" style="font-size:20px;font-weight:700">$--.--</div>
+      <div id="adsense_earn" style="font-size:20px;font-weight:700">$0.00</div>
       <div class="small" id="adsense_meta">impr: -- • clicks: -- • ctr: --</div>
       <div class="small" id="adsense_payout">Next Payout: --</div>
     </div>
-
     <div class="card metric">
       <div class="small">Affiliate — Today</div>
-      <div id="affiliate_earn" style="font-size:20px;font-weight:700">$--.--</div>
+      <div id="affiliate_earn" style="font-size:20px;font-weight:700">$0.00</div>
       <div class="small" id="affiliate_meta">clicks: -- • conv: -- • conv%: --</div>
       <div class="small" id="affiliate_payout">Next Payout: --</div>
     </div>
-
     <div class="card metric">
       <div class="small">Donations</div>
-      <div id="donations_earn" style="font-size:20px;font-weight:700">$--.--</div>
+      <div id="donations_earn" style="font-size:20px;font-weight:700">$0.00</div>
       <div class="small" id="donations_meta">Stripe/PayPal configured</div>
     </div>
   </div>
 
   <section style="margin-top:14px;">
     <h3 style="margin:0 0 8px 0;">Charts & Trends</h3>
-    <canvas id="ga4Chart" height="90"></canvas>
-    <canvas id="revenueChart" height="90" style="margin-top:16px;"></canvas>
-    <canvas id="cumulativeChart" height="90" style="margin-top:16px;"></canvas>
+    <canvas id="ga4Chart" height="200" role="img" aria-label="GA4 Active Users Chart"></canvas>
+    <canvas id="revenueChart" height="200" style="margin-top:16px" role="img" aria-label="Revenue Distribution Chart"></canvas>
   </section>
 
   <section style="margin-top:14px;">
@@ -69,80 +67,108 @@
   </section>
 
   <section style="margin-top:14px;">
-    <h3 style="margin:0 0 8px 0;">Top Pages Revenue vs Traffic</h3>
-    <canvas id="pageRevenueChart" height="90"></canvas>
-  </section>
-
-  <section style="margin-top:14px;">
     <h3 style="margin:0 0 8px 0;">Detailed JSON</h3>
-    <pre id="detail">Loading details…</pre>
+    <pre id="detail"></pre>
   </section>
 </div>
 
 <div id="statusBox" class="status">Loading…</div>
 
-  </div>
+</div>
+
 <script>
 const PROXY_URL = "https://the-esthetics-hub-proxy.workers.dev";
-const els = id => document.getElementById(id);
-const money = v => "$" + (typeof v === 'number' ? v.toFixed(2) : '0.00');
-let isLiveMode = false;
+const els=id=>document.getElementById(id);
+const money=v=>"$"+(typeof v==='number'?v.toFixed(2):'0.00');
+let isLiveMode=false;
+const toggleBtn=els('toggleLive');
 
-const toggleBtn = els('toggleLive');
-toggleBtn.addEventListener('click', () => {
-  isLiveMode = !isLiveMode;
-  toggleBtn.textContent = isLiveMode ? 'Switch to Simulated Mode' : 'Switch to Real-time Live';
-  els('modeNote').textContent = isLiveMode ? '(Fetching live from serverless proxy)' : '(Simulated by default)';
-  renderDashboard();
-});
-
-const SIM = {
-  GA4: [{ id: 'G-QCX3G9KSPC', desc: 'Main', activeUsers: 0, pageviews: 0 }],
-  ADSENSE: { earnings: 0, impressions: 0, clicks: 0, ctr: '0%', nextPayout: '--' },
-  AFFILIATE: { earnings: 0, clicks: 0, conversions: 0, conversion_rate: '0%', nextPayout: '--' },
-  DONATIONS: { total: 0 },
-  TOP_ARTICLES: []
+const SIM={
+  GA4:[{id:'G-QCX3G9KSPC',desc:'Main',activeUsers:120,pageviews:500}],
+  ADSENSE:{earnings:14.37,impressions:682,clicks:22,ctr:'3.22%',nextPayout:'2026-01-18'},
+  AFFILIATE:{earnings:26.55,clicks:97,conversions:8,conversion_rate:'8.25%',nextPayout:'2025-12-10'},
+  DONATIONS:{total:0},
+  TOP_ARTICLES:[{title:'5 Ways to Boost Wellness',pageviews:312,revenue:5.20,avgDuration:'3m 15s'},{title:'Nutrition Tips for Longevity',pageviews:268,revenue:4.75,avgDuration:'2m 58s'}]
 };
 
-async function fetchAPI(path) {
-  try {
-    const res = await fetch(`${PROXY_URL}/?url=${encodeURIComponent(path)}`);
-    return await res.json();
-  } catch (err) {
-    console.warn("Fetch failed", err);
-    return null;
-  }
+let ga4Chart,revenueChart;
+
+function initCharts(){
+  ga4Chart=new Chart(els('ga4Chart').getContext('2d'),{
+    type:'line',
+    data:{labels:['Now-4','Now-3','Now-2','Now-1','Now'],datasets:[{label:'Active Users',data:[0,0,0,0,0],borderColor:'#16a34a',fill:false,tension:0.3}]},
+    options:{responsive:true,plugins:{title:{display:true,text:'Active Users'}},animation:false}
+  });
+
+  revenueChart=new Chart(els('revenueChart').getContext('2d'),{
+    type:'bar',
+    data:{labels:['AdSense','Affiliate','Donations'],datasets:[{label:'Revenue',data:[0,0,0],backgroundColor:['#16a34a','#2563eb','#f59e0b']}]},
+    options:{responsive:true,plugins:{title:{display:true,text:'Revenue Distribution'}},animation:false}
+  });
 }
 
-async function renderDashboard() {
-  els('systemStatus').textContent = 'Updating…' + new Date().toLocaleTimeString();
-  let dataSource = 'SIMULATED';
+toggleBtn.addEventListener('click',()=>{isLiveMode=!isLiveMode;toggleBtn.textContent=isLiveMode?'Switch to Simulated Mode':'Switch to Real-time Live';els('modeNote').textContent=isLiveMode?'(Fetching live from serverless proxy)':'(Simulated by default)';renderDashboard();});
 
-  if (isLiveMode) {
-    // Example GA4 & AdSense fetch URLs
-    const ga4 = await fetchAPI('https://analyticsdata.googleapis.com/v1beta/properties/G-QCX3G9KSPC:runRealtimeReport');
-    const adsense = await fetchAPI('https://analyticsdata.googleapis.com/v1beta/properties/G-QCX3G9KSPC:runReport');
+async function fetchAPI(url, options={}){
+  try{
+    const res = await fetch(`${PROXY_URL}/?url=${encodeURIComponent(url)}`, options);
+    return await res.json();
+  }catch(e){console.warn("Fetch failed:",e);return null;}
+}
 
-    if (ga4) {
-      SIM.GA4[0].activeUsers = ga4.rows?.[0]?.metricValues?.[0]?.value || 0;
-      SIM.GA4[0].pageviews = ga4.rows?.[0]?.metricValues?.[1]?.value || 0;
-      dataSource = 'LIVE';
+async function renderDashboard(){
+  els('systemStatus').textContent='Updating… '+new Date().toLocaleTimeString();
+  let dataSource='SIMULATED';
+
+  if(isLiveMode){
+    // GA4 Realtime
+    const ga4Data = await fetchAPI('https://analyticsdata.googleapis.com/v1beta/properties/G-QCX3G9KSPC:runRealtimeReport',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({metrics:[{name:'activeUsers'}]})
+    });
+    if(ga4Data?.rows){
+      SIM.GA4[0].activeUsers = parseInt(ga4Data.rows[0].metricValues[0].value)||SIM.GA4[0].activeUsers;
+      dataSource='LIVE';
     }
-    if (adsense) {
-      SIM.ADSENSE.earnings = adsense.rows?.reduce((sum, row) => sum + parseFloat(row.metricValues[0].value), 0) || 0;
+
+    // AdSense
+    const adsenseData = await fetchAPI('https://analyticsdata.googleapis.com/v1beta/properties/G-QCX3G9KSPC:runReport',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({metrics:[{name:'estimatedRevenue'}],dateRanges:[{startDate:'2025-01-01',endDate:'2025-11-16'}]})
+    });
+    if(adsenseData?.rows){
+      SIM.ADSENSE.earnings = adsenseData.rows.reduce((sum,row)=>sum+parseFloat(row.metricValues[0].value),0);
     }
   }
 
+  // Update UI
   els('adsense_earn').textContent = money(SIM.ADSENSE.earnings);
   els('affiliate_earn').textContent = money(SIM.AFFILIATE.earnings);
   els('donations_earn').textContent = money(SIM.DONATIONS.total);
 
-  els('detail').textContent = JSON.stringify({ timestamp: new Date().toISOString(), source: dataSource, sim: SIM }, null, 2);
+  // Top articles
+  const tb=els('topArticles'); tb.innerHTML='';
+  SIM.TOP_ARTICLES.forEach(a=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${a.title}</td><td>${a.pageviews}</td><td>${money(a.revenue)}</td><td>${a.avgDuration}</td>`;
+    tb.appendChild(tr);
+  });
+
+  els('detail').textContent=JSON.stringify({timestamp:new Date().toISOString(),source:dataSource,sim:SIM},null,2);
+
+  // Update charts
+  ga4Chart.data.datasets[0].data=[SIM.GA4[0].activeUsers-10,SIM.GA4[0].activeUsers-5,SIM.GA4[0].activeUsers-2,SIM.GA4[0].activeUsers,SIM.GA4[0].activeUsers+3];
+  ga4Chart.update();
+
+  revenueChart.data.datasets[0].data=[SIM.ADSENSE.earnings,SIM.AFFILIATE.earnings,SIM.DONATIONS.total];
+  revenueChart.update();
 }
 
-// Initialize charts here (Chart.js logic stays same)
+initCharts();
 renderDashboard();
-setInterval(renderDashboard, 10000);
-  </script>
+setInterval(renderDashboard,10000);
+</script>
 </body>
   </html>
