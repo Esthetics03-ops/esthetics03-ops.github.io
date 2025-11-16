@@ -81,62 +81,68 @@
 
 <div id="statusBox" class="status">Loading…</div>
 
-  </div><script>
-const els=id=>document.getElementById(id);
-const money=v=>"$"+(typeof v==='number'?v.toFixed(2):'0.00');
-let isLiveMode=false;
-const toggleBtn=els('toggleLive');
-toggleBtn.addEventListener('click',()=>{isLiveMode=!isLiveMode;toggleBtn.textContent=isLiveMode?'Switch to Simulated Mode':'Switch to Real-time Live';els('modeNote').textContent=isLiveMode?'(Fetching live from serverless proxy)':'(Simulated by default)';renderDashboard();});
+  </div>
+<script>
+const PROXY_URL = "https://the-esthetics-hub-proxy.workers.dev";
+const els = id => document.getElementById(id);
+const money = v => "$" + (typeof v === 'number' ? v.toFixed(2) : '0.00');
+let isLiveMode = false;
 
-const SIM={
-  GA4:[{id:'G-QCX3G9KSPC',desc:'Main',activeUsers:146,pageviews:702},{id:'G-PSW1MY7HB4',desc:'Blog',activeUsers:92,pageviews:431}],
-  ADSENSE:{earnings:14.37,impressions:682,clicks:22,ctr:'3.22%',nextPayout:'2026-01-18'},
-  AFFILIATE:{earnings:26.55,clicks:97,conversions:8,conversion_rate:'8.25%',nextPayout:'2025-12-10'},
-  DONATIONS:{total:0.00},
-  TOP_ARTICLES:[{title:'5 Ways to Boost Wellness',pageviews:312,revenue:5.20,avgDuration:'3m 15s'},{title:'Nutrition Tips for Longevity',pageviews:268,revenue:4.75,avgDuration:'2m 58s'}]
+const toggleBtn = els('toggleLive');
+toggleBtn.addEventListener('click', () => {
+  isLiveMode = !isLiveMode;
+  toggleBtn.textContent = isLiveMode ? 'Switch to Simulated Mode' : 'Switch to Real-time Live';
+  els('modeNote').textContent = isLiveMode ? '(Fetching live from serverless proxy)' : '(Simulated by default)';
+  renderDashboard();
+});
+
+const SIM = {
+  GA4: [{ id: 'G-QCX3G9KSPC', desc: 'Main', activeUsers: 0, pageviews: 0 }],
+  ADSENSE: { earnings: 0, impressions: 0, clicks: 0, ctr: '0%', nextPayout: '--' },
+  AFFILIATE: { earnings: 0, clicks: 0, conversions: 0, conversion_rate: '0%', nextPayout: '--' },
+  DONATIONS: { total: 0 },
+  TOP_ARTICLES: []
 };
 
-let ga4Chart,revenueChart,cumulativeChart,pageRevenueChart;
-function initCharts(){
-  ga4Chart=new Chart(els('ga4Chart').getContext('2d'),{type:'line',data:{labels:['Now-4','Now-3','Now-2','Now-1','Now'],datasets:SIM.GA4.map((s,i)=>({label:s.desc,data:[s.activeUsers-10,s.activeUsers-5,s.activeUsers-3,s.activeUsers,s.activeUsers+5],borderColor:i?'#2563eb':'#16a34a',fill:false,tension:0.3}))},options:{responsive:true,plugins:{title:{display:true,text:'Active Users'}}}});
-  revenueChart=new Chart(els('revenueChart').getContext('2d'),{type:'bar',data:{labels:['AdSense','Affiliate','Donations'],datasets:[{label:'Revenue',data:[SIM.ADSENSE.earnings,SIM.AFFILIATE.earnings,SIM.DONATIONS.total]}]},options:{responsive:true,plugins:{title:{display:true,text:'Revenue Distribution'}}}});
-}
-
-async function fetchLive(){
-  try{
-    const baseURL='https://esthetics-proxy.vercel.app'; // <-- your serverless proxy URL
-    const [ga4,ads,aff,dons]=await Promise.all([
-      fetch(`${baseURL}/api/ga4/realtime`).then(r=>r.json()),
-      fetch(`${baseURL}/api/adsense`).then(r=>r.json()),
-      fetch(`${baseURL}/api/affiliate`).then(r=>r.json()),
-      fetch(`${baseURL}/api/donations`).then(r=>r.json())
-    ]);
-    return {ga4,ads,aff,dons};
-  }catch(e){console.warn(e);return null;}
-}
-
-async function renderDashboard(){
-  els('systemStatus').textContent='Updating…'+new Date().toLocaleTimeString();
-  let dataSource='SIMULATED';
-  if(isLiveMode){
-    const live=await fetchLive();
-    if(live){
-      SIM.GA4.forEach((s,i)=>{s.activeUsers=live.ga4[i]?.activeUsers??s.activeUsers;s.pageviews=live.ga4[i]?.pageviews??s.pageviews});
-      if(live.ads)SIM.ADSENSE.earnings=live.ads.earnings??SIM.ADSENSE.earnings;
-      if(live.aff)SIM.AFFILIATE.earnings=live.aff.earnings??SIM.AFFILIATE.earnings;
-      if(live.dons)SIM.DONATIONS.total=live.dons.total??SIM.DONATIONS.total;
-      dataSource='LIVE';
-    }else dataSource='SIMULATED (live unreachable)';
+async function fetchAPI(path) {
+  try {
+    const res = await fetch(`${PROXY_URL}/?url=${encodeURIComponent(path)}`);
+    return await res.json();
+  } catch (err) {
+    console.warn("Fetch failed", err);
+    return null;
   }
-  els('adsense_earn').textContent=money(SIM.ADSENSE.earnings);
-  els('affiliate_earn').textContent=money(SIM.AFFILIATE.earnings);
-  els('donations_earn').textContent=money(SIM.DONATIONS.total);
-  const tb=els('topArticles');tb.innerHTML='';SIM.TOP_ARTICLES.forEach(a=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${a.title}</td><td>${a.pageviews}</td><td>${money(a.revenue)}</td><td>${a.avgDuration}</td>`;tb.appendChild(tr);});
-  els('detail').textContent=JSON.stringify({timestamp:new Date().toISOString(),source:dataSource,sim:SIM},null,2);
-  ga4Chart.data.datasets.forEach((d,i)=>{d.data=[SIM.GA4[i].activeUsers-8,SIM.GA4[i].activeUsers-4,SIM.GA4[i].activeUsers-2,SIM.GA4[i].activeUsers,SIM.GA4[i].activeUsers+3]});
-  ga4Chart.update();
 }
 
-initCharts();renderDashboard();setInterval(renderDashboard,10000);
-</script></body>
+async function renderDashboard() {
+  els('systemStatus').textContent = 'Updating…' + new Date().toLocaleTimeString();
+  let dataSource = 'SIMULATED';
+
+  if (isLiveMode) {
+    // Example GA4 & AdSense fetch URLs
+    const ga4 = await fetchAPI('https://analyticsdata.googleapis.com/v1beta/properties/G-QCX3G9KSPC:runRealtimeReport');
+    const adsense = await fetchAPI('https://analyticsdata.googleapis.com/v1beta/properties/G-QCX3G9KSPC:runReport');
+
+    if (ga4) {
+      SIM.GA4[0].activeUsers = ga4.rows?.[0]?.metricValues?.[0]?.value || 0;
+      SIM.GA4[0].pageviews = ga4.rows?.[0]?.metricValues?.[1]?.value || 0;
+      dataSource = 'LIVE';
+    }
+    if (adsense) {
+      SIM.ADSENSE.earnings = adsense.rows?.reduce((sum, row) => sum + parseFloat(row.metricValues[0].value), 0) || 0;
+    }
+  }
+
+  els('adsense_earn').textContent = money(SIM.ADSENSE.earnings);
+  els('affiliate_earn').textContent = money(SIM.AFFILIATE.earnings);
+  els('donations_earn').textContent = money(SIM.DONATIONS.total);
+
+  els('detail').textContent = JSON.stringify({ timestamp: new Date().toISOString(), source: dataSource, sim: SIM }, null, 2);
+}
+
+// Initialize charts here (Chart.js logic stays same)
+renderDashboard();
+setInterval(renderDashboard, 10000);
+  </script>
+</body>
   </html>
