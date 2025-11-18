@@ -1,3 +1,118 @@
+// ================================
+// LOAD CONFIG.JSON FROM ROOT
+// ================================
+async function loadConfig() {
+    try {
+        const res = await fetch('/config.json');
+        if (!res.ok) throw new Error('Unable to load config.json');
+        return await res.json();
+    } catch (err) {
+        console.error("CONFIG ERROR:", err);
+        showError("Could not load configuration file.");
+        return null;
+    }
+}
+
+// ================================
+// MAIN INITIALIZER
+// ================================
+async function initDashboard() {
+    const config = await loadConfig();
+    if (!config) return;
+
+    // Extract values from improved structure
+    const apiKey            = config.google_api.api_key;
+    const ga4Properties     = config.analytics.ga4_properties;
+    const adsensePub        = config.adsense.publisher_id;
+    const affiliateID       = config.affiliate.affiliate_id;
+
+    // Display config values in UI
+    updateConfigStatus(apiKey, ga4Properties, adsensePub, affiliateID);
+
+    // Run simulated GA4 & AdSense data
+    simulateGA4(ga4Properties);
+    simulateAdSense(adsensePub);
+    simulateAffiliate(affiliateID);
+}
+
+// ================================
+// UPDATE CONFIG STATUS ON SCREEN
+// ================================
+function updateConfigStatus(apiKey, ga4Props, adsense, affiliate) {
+    safeSet("api-key-status", apiKey !== "REPLACE_WITH_REAL_GOOGLE_API_KEY" ? "Valid Key Loaded" : "⚠ Replace API Key");
+    safeSet("ga4-status", ga4Props.join(", "));
+    safeSet("adsense-status", adsense);
+    safeSet("affiliate-status", affiliate);
+}
+
+function safeSet(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
+}
+
+// ================================
+// SIMULATION — GA4 (browser cannot call GA4 API directly)
+// ================================
+function simulateGA4(properties) {
+    const daily = random(120, 380);
+    const weekly = daily * 7;
+    const realtime = random(1, 7);
+
+    safeSet("ga4-realtime", realtime + " users");
+    safeSet("ga4-daily", daily + " visits");
+    safeSet("ga4-weekly", weekly + " visits");
+
+    console.log("GA4 properties detected:", properties);
+}
+
+// ================================
+// SIMULATION — AdSense
+// ================================
+function simulateAdSense(pubID) {
+    const today = random(0.10, 2.40).toFixed(2);
+    const weekly = (today * 7).toFixed(2);
+    const monthly = (weekly * 4.2).toFixed(2);
+
+    safeSet("adsense-today", "USD " + today);
+    safeSet("adsense-week", "USD " + weekly);
+    safeSet("adsense-month", "USD " + monthly);
+
+    console.log("AdSense Publisher:", pubID);
+}
+
+// ================================
+// SIMULATION — Affiliate Earnings
+// ================================
+function simulateAffiliate(affiliateID) {
+    const clicks = random(15, 80);
+    const conversions = random(1, 4);
+    const earnings = (random(1.5, 17.5)).toFixed(2);
+
+    safeSet("aff-clicks", clicks);
+    safeSet("aff-conversions", conversions);
+    safeSet("aff-earnings", "USD " + earnings);
+
+    console.log("Affiliate ID:", affiliateID);
+}
+
+// ================================
+// HELPER
+// ================================
+function random(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function showError(msg) {
+    const box = document.getElementById("error-box");
+    if (box) {
+        box.style.display = "block";
+        box.textContent = msg;
+    }
+}
+
+// Run the dashboard
+initDashboard();
+
 function showModal(){
   const modal = document.getElementById('bookingModal');
   if(modal){
