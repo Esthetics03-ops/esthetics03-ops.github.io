@@ -158,6 +158,25 @@ footer {
 </footer>
 
 <script>
+  
+// Simulated Metrics (replace with real API calls or proxy)
+async function fetchMetrics(){
+  const activeUsers = Math.floor(Math.random()*100);
+  const dailyVisits = activeUsers*12;
+  const adsenseToday = (Math.random()*25).toFixed(2);
+  const adsenseMonth = (adsenseToday*22).toFixed(2);
+  const affiliate = (Math.random()*200).toFixed(2);
+
+  document.getElementById('api-key-status').textContent = "Connected ✅";
+  document.getElementById('ga4-properties-status').textContent = `${GA4_PROPERTIES.length} Properties ✅`;
+  document.getElementById('real-time-users').textContent = activeUsers;
+  document.getElementById('daily-visits').textContent = dailyVisits;
+  document.getElementById('adsense-today').textContent = `$${adsenseToday}`;
+  document.getElementById('adsense-month').textContent = `$${adsenseMonth}`;
+  document.getElementById('affiliate-earnings').textContent = `$${affiliate}`;
+  addChartData(dailyVisits, parseFloat(adsenseToday)+parseFloat(affiliate));
+}
+  
   async function fetchMetrics() {
   try {
     const res = await fetch('/.netlify/functions/metrics'); // serverless endpoint
