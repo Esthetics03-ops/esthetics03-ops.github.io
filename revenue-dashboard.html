@@ -38,6 +38,7 @@ footer { text-align:center; padding:1rem; background:#222; color:#fff; margin-to
 </header>
 
 <main>
+
   <!-- Configuration Status -->
   <section id="config-section" class="dashboard-section">
     <div class="config-item">
@@ -83,11 +84,17 @@ footer { text-align:center; padding:1rem; background:#222; color:#fff; margin-to
     <h2>Revenue & Visits Overview</h2>
     <canvas id="revenueChart" height="150"></canvas>
   </section>
+
 </main>
 
 <footer>&copy; 2025 The Esthetics Hub</footer>
 
-  <script>
+
+<!-- ===================================================================================== -->
+<!-- === NEW: Real-time /config.json loader (FIXED) ===================================== -->
+<!-- ===================================================================================== -->
+
+<script>
 // === Load config.json dynamically ===
 let GOOGLE_API_KEY = "";
 let GA4_PROPERTIES = [];
@@ -102,19 +109,18 @@ async function loadConfig() {
 
     const config = await response.json();
 
-    // Apply config values
     GOOGLE_API_KEY = config.GOOGLE_API_KEY || "MISSING_KEY";
     GA4_PROPERTIES = config.GA4_PROPERTIES || [];
     ADSENSE_PUB_ID = config.ADSENSE_PUB_ID || "MISSING_PUB_ID";
     AFFILIATE_ID = config.AFFILIATE_ID || "MISSING_AFFILIATE";
 
-    document.getElementById("api-key-status").textContent = 
-        GOOGLE_API_KEY !== "MISSING_KEY" ? "Connected ✅" : "Missing ❌";
+    document.getElementById("api-key-status").textContent =
+      GOOGLE_API_KEY !== "MISSING_KEY" ? "Connected ✅" : "Missing ❌";
 
-    document.getElementById("ga4-properties-status").textContent = 
-        GA4_PROPERTIES.length > 0 ? `${GA4_PROPERTIES.length} Loaded ✅` : "Missing ❌";
+    document.getElementById("ga4-properties-status").textContent =
+      GA4_PROPERTIES.length > 0 ? `${GA4_PROPERTIES.length} Loaded ✅` : "Missing ❌";
 
-    // After config loads → run dashboard
+    // Start updates once config is loaded
     updateMetrics();
 
   } catch (err) {
@@ -123,20 +129,13 @@ async function loadConfig() {
     document.getElementById("ga4-properties-status").textContent = "Config Error ❌";
   }
 }
+</script>
 
-document.addEventListener("DOMContentLoaded", () => {
-  loadConfig();                 // Load real-time config
-  setInterval(updateMetrics, 60000); // Auto-refresh
-});
-      </script>
-  
+
+<!-- ===================================================================================== -->
+<!-- === Original Dashboard Script (Unchanged but linked to config loader) =============== -->
+<!-- ===================================================================================== -->
 <script>
-// CONFIG
-const GOOGLE_API_KEY = "AIzaSyD-EXAMPLE-LIVE-KEY12345";
-const GA4_PROPERTIES = ["G-QCX3G9KSPC","G-PSW1MY7HB4"];
-const ADSENSE_PUB_ID = "pub-1959507280210179";
-const AFFILIATE_ID = "esthetics-hub-affiliate";
-
 // Chart Setup
 const ctx = document.getElementById('revenueChart').getContext('2d');
 const revenueChart = new Chart(ctx, {
@@ -170,35 +169,32 @@ function addChartData(visits, revenue){
   revenueChart.update();
 }
 
-// Fetch GA4 metrics (placeholder)
+// Placeholder GA4 fetch
 async function fetchGA4Metrics(propertyId){
   try {
-    // Replace with real GA4 API
     return Math.floor(Math.random()*100);
   } catch(e) { return 0; }
 }
 
-// Fetch AdSense metrics (placeholder)
+// Placeholder AdSense fetch
 async function fetchAdsenseMetrics(){
   return (Math.random()*25).toFixed(2);
 }
 
-// Fetch Affiliate metrics (placeholder)
+// Placeholder Affiliate fetch
 async function fetchAffiliateEarnings(){
   return (Math.random()*200).toFixed(2);
 }
 
 // Update All Metrics
 async function updateMetrics(){
-  document.getElementById('api-key-status').textContent = "Connected ✅";
-  document.getElementById('ga4-properties-status').textContent = `${GA4_PROPERTIES.length} Properties ✅`;
-
   let totalActiveUsers = 0;
+
   for(const property of GA4_PROPERTIES){
     totalActiveUsers += await fetchGA4Metrics(property);
   }
 
-  const dailyVisits = totalActiveUsers * 12; // example scaling
+  const dailyVisits = totalActiveUsers * 12;
   const adsenseToday = await fetchAdsenseMetrics();
   const adsenseMonth = (adsenseToday*22).toFixed(2);
   const affiliate = await fetchAffiliateEarnings();
@@ -212,9 +208,9 @@ async function updateMetrics(){
   addChartData(dailyVisits, parseFloat(adsenseToday) + parseFloat(affiliate));
 }
 
-// Auto-refresh every 60s
-document.addEventListener('DOMContentLoaded', ()=>{
-  updateMetrics();
+// Initialize
+document.addEventListener('DOMContentLoaded', ()=> {
+  loadConfig();
   setInterval(updateMetrics,60000);
 });
 </script>
