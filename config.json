@@ -1,6 +1,28 @@
 {
   "GOOGLE_API_KEY": "AIzaSyD-EXAMPLE-LIVE-KEY12345",
   "GA4_PROPERTIES": ["G-QCX3G9KSPC","G-PSW1MY7HB4"],
+  "ADSENSE_PUB_ID": "pub-1959507280210179",
+  "AFFILIATE_ID": "esthetics-hub-affiliate"
+}
+
+{
+  "google_api": {
+    "api_key": "AIzaSyD-EXAMPLE-LIVE-KEY12345"
+  },
+  "analytics": {
+    "ga4_properties": ["G-QCX3G9KSPC","G-PSW1MY7HB4"]
+  },
+  "adsense": {
+    "publisher_id": "pub-1959507280210179"
+  },
+  "affiliate": {
+    "affiliate_id": "esthetics-hub-affiliate"
+  }
+}
+
+{
+  "GOOGLE_API_KEY": "AIzaSyD-EXAMPLE-LIVE-KEY12345",
+  "GA4_PROPERTIES": ["G-QCX3G9KSPC","G-PSW1MY7HB4"],
   "AFFILIATE_ID": "esthetics-hub-affiliate",
   "AFFILIATE_API_URL": "https://affiliate.example.com/api/earnings"
 }
