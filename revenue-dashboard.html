@@ -6,106 +6,60 @@
 <title>The Esthetics Hub - Revenue Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-  body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f4f4f4; }
-  header { background:#222; color:#fff; padding:1rem; text-align:center; }
-  main { padding:1rem; max-width:1200px; margin:auto; }
-  h2 { margin-top:2rem; margin-bottom:1rem; }
-  .dashboard-section { display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:1rem; }
-  .metric-card, .config-item, .status-card { background:#fff; padding:1rem; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
-  .metric-label { font-weight:bold; margin-bottom:0.5rem; }
-  .metric-value { font-size:1.5rem; color:#333; }
-  footer { text-align:center; padding:1rem; background:#222; color:#fff; margin-top:2rem; }
-  canvas { background:#fff; border-radius:8px; padding:1rem; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
+body{font-family:Arial,sans-serif;margin:0;padding:0;background:#f4f4f4;}
+header{background:#222;color:#fff;padding:1rem;text-align:center;}
+main{padding:1rem;max-width:1200px;margin:auto;}
+h2{margin-top:2rem;margin-bottom:1rem;}
+.dashboard-section{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;}
+.metric-card,.config-item,.status-card{background:#fff;padding:1rem;border-radius:8px;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
+.metric-label{font-weight:bold;margin-bottom:0.5rem;}
+.metric-value{font-size:1.5rem;color:#333;}
+footer{text-align:center;padding:1rem;background:#222;color:#fff;margin-top:2rem;}
+canvas{background:#fff;border-radius:8px;padding:1rem;box-shadow:0 2px 5px rgba(0,0,0,0.1);}
 </style>
 </head>
 <body>
-
 <header>
-  <h1>The Esthetics Hub Revenue Dashboard</h1>
+<h1>The Esthetics Hub Revenue Dashboard</h1>
 </header>
 
 <main>
-  <!-- Configuration Status -->
-  <section id="config-section" class="dashboard-section">
-    <div class="status-card config-item">
-      <span class="label">API Key</span>
-      <span class="value" id="api-key-status">Checking...</span>
-    </div>
-    <div class="status-card config-item">
-      <span class="label">GA4 Properties</span>
-      <span class="value" id="ga4-properties-status">Checking...</span>
-    </div>
-  </section>
+<section id="config-section" class="dashboard-section">
+  <div class="status-card config-item"><span class="label">API Key</span><span class="value" id="api-key-status">Loading...</span></div>
+  <div class="status-card config-item"><span class="label">GA4 Properties</span><span class="value" id="ga4-properties-status">Loading...</span></div>
+</section>
 
-  <!-- Live Metrics -->
-  <section id="live-metrics-section" class="dashboard-section">
-    <div class="metric-card">
-      <p class="metric-label">Real-Time Users</p>
-      <p class="metric-value" id="real-time-users">-</p>
-    </div>
-    <div class="metric-card">
-      <p class="metric-label">Visits Today</p>
-      <p class="metric-value" id="daily-visits">-</p>
-    </div>
-  </section>
+<section id="live-metrics-section" class="dashboard-section">
+  <div class="metric-card"><p class="metric-label">Real-Time Users</p><p class="metric-value" id="real-time-users">-</p></div>
+  <div class="metric-card"><p class="metric-label">Visits Today</p><p class="metric-value" id="daily-visits">-</p></div>
+</section>
 
-  <!-- Monetization Metrics -->
-  <section id="monetization-section" class="dashboard-section">
-    <div class="metric-card">
-      <p class="metric-label">AdSense (Today)</p>
-      <p class="metric-value" id="adsense-today">-</p>
-    </div>
-    <div class="metric-card">
-      <p class="metric-label">Estimated Earnings (Month)</p>
-      <p class="metric-value" id="adsense-month">-</p>
-    </div>
-    <div class="metric-card">
-      <p class="metric-label">Affiliate Earnings</p>
-      <p class="metric-value" id="affiliate-earnings">-</p>
-    </div>
-  </section>
+<section id="monetization-section" class="dashboard-section">
+  <div class="metric-card"><p class="metric-label">AdSense (Today)</p><p class="metric-value" id="adsense-today">-</p></div>
+  <div class="metric-card"><p class="metric-label">Estimated Earnings (Month)</p><p class="metric-value" id="adsense-month">-</p></div>
+  <div class="metric-card"><p class="metric-label">Affiliate Earnings</p><p class="metric-value" id="affiliate-earnings">-</p></div>
+</section>
 
-  <!-- Revenue Chart -->
-  <section>
-    <h2>Revenue & Visits Overview</h2>
-    <canvas id="revenueChart" height="150"></canvas>
-  </section>
+<section>
+<h2>Revenue & Visits Overview</h2>
+<canvas id="revenueChart" height="150"></canvas>
+</section>
 </main>
 
-<footer>
-  &copy; 2025 The Esthetics Hub
-</footer>
+<footer>&copy; 2025 The Esthetics Hub</footer>
 
 <script>
-// CONFIG - Replace with your actual keys & IDs
-const GOOGLE_API_KEY = "AIzaSyD-EXAMPLE-LIVE-KEY12345";
-const GA4_PROPERTIES = ["G-QCX3G9KSPC","G-PSW1MY7HB4"];
-const ADSENSE_PUB_ID = "pub-1959507280210179";
-const AFFILIATE_ID = "esthetics-hub-affiliate";
+let CONFIG={};
+const ctx=document.getElementById('revenueChart').getContext('2d');
+const revenueChart=new Chart(ctx,{type:'line',data:{labels:[],datasets:[
+{label:'Visits',data:[],borderColor:'#007bff',backgroundColor:'rgba(0,123,255,0.2)',fill:true,tension:0.4},
+{label:'Revenue ($)',data:[],borderColor:'#28a745',backgroundColor:'rgba(40,167,69,0.2)',fill:true,tension:0.4}
+]},options:{responsive:true,plugins:{legend:{position:'top'}},scales:{x:{title:{display:true,text:'Time'}},y:{title:{display:true,text:'Value'},beginAtZero:true}}}});
 
-// Chart Setup
-const ctx = document.getElementById('revenueChart').getContext('2d');
-const revenueChart = new Chart(ctx, {
-  type: 'line',
-  data: {
-    labels: [],
-    datasets: [
-      { label: 'Visits', data: [], borderColor: '#007bff', backgroundColor:'rgba(0,123,255,0.2)', fill:true, tension:0.4 },
-      { label: 'Revenue ($)', data: [], borderColor: '#28a745', backgroundColor:'rgba(40,167,69,0.2)', fill:true, tension:0.4 }
-    ]
-  },
-  options: {
-    responsive:true,
-    plugins:{ legend:{ position:'top' } },
-    scales:{ x:{ title:{ display:true, text:'Time' } }, y:{ title:{ display:true, text:'Value' }, beginAtZero:true } }
-  }
-});
-
-// Helper to update chart
-function addChartData(visits, revenue){
-  const now = new Date();
-  const timeLabel = now.getHours() + ':' + String(now.getMinutes()).padStart(2,'0');
-  if(revenueChart.data.labels.length >= 10){
+function addChartData(visits,revenue){
+  const now=new Date();
+  const timeLabel=now.getHours()+':'+String(now.getMinutes()).padStart(2,'0');
+  if(revenueChart.data.labels.length>=10){
     revenueChart.data.labels.shift();
     revenueChart.data.datasets[0].data.shift();
     revenueChart.data.datasets[1].data.shift();
@@ -116,69 +70,35 @@ function addChartData(visits, revenue){
   revenueChart.update();
 }
 
-// Fetch GA4 Data
-async function fetchGA4Metrics(propertyId){
-  const url = `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runRealtimeReport`;
-  const body = {
-    metrics: [{name:"activeUsers"}],
-    dimensions: [{name:"country"}]
-  };
+async function loadConfig(){
   try{
-    const response = await fetch(url, {
-      method:"POST",
-      headers:{ "Authorization": `Bearer ${GOOGLE_API_KEY}`, "Content-Type":"application/json" },
-      body: JSON.stringify(body)
-    });
-    const data = await response.json();
-    let activeUsers = 0;
-    if(data.rows) activeUsers = parseInt(data.rows.reduce((sum,row)=>sum+parseInt(row.metricValues[0].value),0));
-    return activeUsers;
-  }catch(err){ console.error("GA4 Fetch Error:", err); return 0; }
+    const res=await fetch('/config.json');
+    CONFIG=await res.json();
+    document.getElementById('api-key-status').textContent="Loaded ✅";
+    document.getElementById('ga4-properties-status').textContent=`${CONFIG.GA4_PROPERTIES.length} Properties ✅`;
+  }catch(err){console.error(err);}
 }
 
-// Fetch AdSense Data
-async function fetchAdsenseMetrics(){
-  const url = `https://www.googleapis.com/adsense/v2/accounts/${ADSENSE_PUB_ID}/reports:generate?metric=EARNINGS&dateRange=TODAY`;
-  try{
-    const response = await fetch(url, { headers:{ "Authorization": `Bearer ${GOOGLE_API_KEY}` } });
-    const data = await response.json();
-    let earnings = 0;
-    if(data.rows && data.rows.length) earnings = parseFloat(data.rows[0][0]);
-    return earnings.toFixed(2);
-  }catch(err){ console.error("AdSense Fetch Error:", err); return (Math.random()*20).toFixed(2); }
-}
-
-// Fetch Affiliate Earnings (mock example)
-async function fetchAffiliateEarnings(){
-  // Replace with your real API if available
-  return (Math.random()*200).toFixed(2);
-}
-
-// Update All Metrics
 async function updateMetrics(){
-  document.getElementById('api-key-status').textContent = "Connected ✅";
-  document.getElementById('ga4-properties-status').textContent = `${GA4_PROPERTIES.length} Properties ✅`;
-
-  let totalActiveUsers = 0;
-  for(const propertyId of GA4_PROPERTIES){
-    totalActiveUsers += await fetchGA4Metrics(propertyId);
-  }
-  document.getElementById('real-time-users').textContent = totalActiveUsers;
-  document.getElementById('daily-visits').textContent = totalActiveUsers * 10; // example scaling
-
-  const adsenseToday = await fetchAdsenseMetrics();
-  document.getElementById('adsense-today').textContent = `$${adsenseToday}`;
-  document.getElementById('adsense-month').textContent = `$${(adsenseToday*20).toFixed(2)}`; // example month
-  const affiliateEarnings = await fetchAffiliateEarnings();
-  document.getElementById('affiliate-earnings').textContent = `$${affiliateEarnings}`;
-
-  addChartData(parseInt(totalActiveUsers*10), parseFloat(adsenseToday) + parseFloat(affiliateEarnings));
+  try{
+    const res=await fetch('/api/metrics');
+    const data=await res.json();
+    document.getElementById('real-time-users').textContent=data.ga4.activeUsers;
+    document.getElementById('daily-visits').textContent=data.ga4.dailyVisits;
+    document.getElementById('adsense-today').textContent=`$${data.adsense.today}`;
+    document.getElementById('adsense-month').textContent=`$${data.adsense.month}`;
+    document.getElementById('affiliate-earnings').textContent=`$${data.affiliate.total}`;
+    addChartData(data.ga4.dailyVisits,parseFloat(data.adsense.today)+parseFloat(data.affiliate.total));
+  }catch(err){console.error(err);}
 }
 
-// Auto refresh every 60s
-setInterval(updateMetrics,60000);
-document.addEventListener('DOMContentLoaded', updateMetrics);
+async function initDashboard(){
+  await loadConfig();
+  await updateMetrics();
+  setInterval(updateMetrics,60000);
+}
+document.addEventListener('DOMContentLoaded',initDashboard);
 </script>
 
 </body>
-</html>
+  </html>
