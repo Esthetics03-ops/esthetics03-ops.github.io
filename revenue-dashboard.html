@@ -8,24 +8,9 @@
   <!-- Chart.js CDN -->  
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>  
   <script src="revenue-dashboard.js" defer></script>
-  <script src="/config.json" defer></script>
   <style>
-    :root{
-      --bg: #f5f7fb;
-      --card: #ffffff;
-      --text: #0f172a;
-      --muted: #6b7280;
-      --accent: #06b6d4;
-      --shadow: 0 6px 20px rgba(2,6,23,0.08);
-    }
-    [data-theme="dark"]{
-      --bg: #071122;
-      --card: #081425;
-      --text: #e6eef6;
-      --muted: #9fb0c2;
-      --accent: #06b6d4;
-      --shadow: 0 6px 30px rgba(2,6,23,0.6);
-    }
+    :root{--bg:#f5f7fb;--card:#ffffff;--text:#0f172a;--muted:#6b7280;--accent:#06b6d4;--shadow:0 6px 20px rgba(2,6,23,0.08);}
+    [data-theme="dark"]{--bg:#071122;--card:#081425;--text:#e6eef6;--muted:#9fb0c2;--accent:#06b6d4;--shadow:0 6px 30px rgba(2,6,23,0.6);}
     *{box-sizing:border-box}
     body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
     header{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;background:var(--card);box-shadow:var(--shadow);}
@@ -35,7 +20,8 @@
     .btn{background:var(--accent);color:white;padding:8px 12px;border-radius:10px;border:0;cursor:pointer}
     .secondary{background:transparent;color:var(--text);padding:8px;border-radius:10px;border:1px solid rgba(0,0,0,0.06)}
     .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-    .card{background:var(--card);padding:16px;border-radius:12px;box-shadow:var(--shadow)}
+    .card{background:var(--card);padding:16px;border-radius:12px;box-shadow:var(--shadow);transition:all 0.3s ease}
+    .card:hover{transform:translateY(-4px);box-shadow:0 10px 25px rgba(0,0,0,0.12)}
     .title{font-size:13px;color:var(--muted);}
     .metric{font-size:22px;font-weight:700;margin-top:6px}
     .muted{color:var(--muted);font-size:13px}
@@ -47,182 +33,122 @@
     @media (max-width:560px){.mobile-bar{display:flex;gap:8px}}
     #error-box{display:none;padding:12px;border-radius:10px;background:#fee2e2;color:#7f1d1d;margin:12px 0}
     .small{font-size:12px;color:var(--muted)}
-  </style></head>
-<body>  <header>
-    <h1>📊 Esthetics Hub — Dashboard</h1>
-    <div class="controls">
-      <button class="secondary" id="refresh-btn">⟳ Refresh</button>
-      <button class="btn" id="export-csv">Export CSV</button>
-      <label style="display:flex;align-items:center;gap:8px">
-        <input type="checkbox" id="dark-toggle"> Dark
-      </label>
+  </style>
+</head>
+<body>
+<header>
+  <h1>📊 Esthetics Hub — Dashboard</h1>
+  <div class="controls">
+    <button class="secondary" id="refresh-btn">⟳ Refresh</button>
+    <button class="btn" id="export-csv">Export CSV</button>
+    <label style="display:flex;align-items:center;gap:8px">
+      <input type="checkbox" id="dark-toggle"> Dark
+    </label>
+  </div>
+</header>
+<main class="container">
+  <div id="error-box"></div>  <section class="grid" style="margin-bottom:16px">
+    <div class="card">
+      <div class="title">API Key</div>
+      <div class="metric" id="api-key-status">—</div>
+      <div class="small">Google API key loaded</div>
     </div>
-  </header>  <main class="container"><div id="error-box"></div>
-
-<section class="grid" style="margin-bottom:16px">
-  <div class="card">
-    <div class="title">API Key</div>
-    <div class="metric" id="api-key-status">—</div>
-    <div class="small">Google API key loaded</div>
-  </div>
-  <div class="card">
-    <div class="title">GA4 Properties</div>
-    <div class="metric" id="ga4-status">—</div>
-    <div class="small">Connected data streams</div>
-  </div>
-  <div class="card">
-    <div class="title">AdSense Pub ID</div>
-    <div class="metric" id="adsense-status">—</div>
-    <div class="small">Publisher identifier</div>
-  </div>
-</section>
-
-<section class="chart-row">
-  <div>
-    <div class="card" style="margin-bottom:18px">
-      <div class="title">Traffic Overview</div>
-      <canvas id="trafficChart"></canvas>
+    <div class="card">
+      <div class="title">GA4 Properties</div>
+      <div class="metric" id="ga4-status">—</div>
+      <div class="small">Connected data streams</div>
     </div>
+    <div class="card">
+      <div class="title">AdSense Pub ID</div>
+      <div class="metric" id="adsense-status">—</div>
+      <div class="small">Publisher identifier</div>
+    </div>
+  </section>  <section class="chart-row">
+    <div>
+      <div class="card" style="margin-bottom:18px">
+        <div class="title">Traffic Overview</div>
+        <canvas id="trafficChart"></canvas>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="title">Realtime Users</div>
+          <div class="metric" id="ga4-realtime">—</div>
+          <div class="small">Right now</div>
+        </div>
+        <div class="card">
+          <div class="title">Daily Visits</div>
+          <div class="metric" id="ga4-daily">—</div>
+          <div class="small">Past 24h</div>
+        </div>
+        <div class="card">
+          <div class="title">Weekly Visits</div>
+          <div class="metric" id="ga4-weekly">—</div>
+          <div class="small">Last 7 days</div>
+        </div>
+      </div>
+    </div><div>
+  <div class="card">
+    <div class="title">Earnings Breakdown</div>
+    <canvas id="earningsChart"></canvas>
+  </div>
+  <div style="height:18px"></div>
+  <div class="card">
+    <div class="title">AdSense Today</div>
+    <div class="metric" id="adsense-today">—</div>
+    <div class="small">Estimated</div>
+  </div>
+  <div style="height:12px"></div>
+  <div class="card">
+    <div class="title">Affiliate Earnings</div>
+    <div class="metric" id="aff-earnings">—</div>
+    <div class="small" id="aff-summary">—</div>
+  </div>
+</div>
 
+  </section>  <section style="margin-top:22px">
     <div class="grid">
       <div class="card">
-        <div class="title">Realtime Users</div>
-        <div class="metric" id="ga4-realtime">—</div>
-        <div class="small">Right now</div>
+        <div class="title">Top pages (simulated)</div>
+        <ol id="top-pages" style="margin:12px 0 0 16px;color:var(--muted)"></ol>
       </div>
       <div class="card">
-        <div class="title">Daily Visits</div>
-        <div class="metric" id="ga4-daily">—</div>
-        <div class="small">Past 24h</div>
+        <div class="title">Affiliate Details</div>
+        <div class="small">Clicks: <span id="aff-clicks">—</span></div>
+        <div class="small">Conversions: <span id="aff-conversions">—</span></div>
+        <div class="small">Affiliate ID: <span id="affiliate-status">—</span></div>
       </div>
       <div class="card">
-        <div class="title">Weekly Visits</div>
-        <div class="metric" id="ga4-weekly">—</div>
-        <div class="small">Last 7 days</div>
+        <div class="title">Config JSON (preview)</div>
+        <pre id="config-preview" style="white-space:pre-wrap;word-break:break-word;background:transparent;border:0;margin:0;padding:0;color:var(--muted)"></pre>
       </div>
     </div>
-  </div>
+  </section>
+</main>
+<div class="mobile-bar">
+  <button class="btn" id="mobile-refresh">Refresh</button>
+  <button class="secondary" id="mobile-export">CSV</button>
+</div>
+<script>
+function qs(id){return document.getElementById(id)}
+function showError(msg){const e=qs('error-box');e.style.display='block';e.textContent=msg}async function loadConfig(){try{const res=await fetch('/config.json');if(!res.ok)throw new Error('config.json not found');return await res.json();}catch(err){console.warn('Config load failed',err);showError('Could not load /config.json. Using simulated demo data.');return null;}}
 
-  <div>
-    <div class="card">
-      <div class="title">Earnings Breakdown</div>
-      <canvas id="earningsChart"></canvas>
-    </div>
+function simulateData(){const days=7,labels=[],traffic=[],earnings=[];for(let i=days-1;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);labels.push(d.toLocaleDateString());traffic.push(Math.floor(Math.random()*400)+80);}for(let i=0;i<days;i++){earnings.push(parseFloat((Math.random()*2+0.2).toFixed(2)));}return{labels,traffic,earnings};}
 
-    <div style="height:18px"></div>
+let trafficChart,earningsChart; function makeCharts(labels,traffic,earnings){const tctx=qs('trafficChart').getContext('2d');const ectx=qs('earningsChart').getContext('2d');if(trafficChart)trafficChart.destroy();if(earningsChart)earningsChart.destroy();trafficChart=new Chart(tctx,{type:'line',data:{labels,datasets:[{label:'Visits',data:traffic,fill:true,tension:0.25,pointRadius:3}]},options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});earningsChart=new Chart(ectx,{type:'bar',data:{labels,datasets:[{label:'USD',data:earnings,borderRadius:6}]},options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});}
 
-    <div class="card">
-      <div class="title">AdSense Today</div>
-      <div class="metric" id="adsense-today">—</div>
-      <div class="small">Estimated</div>
-    </div>
+function updateConfigUI(config){if(!config){qs('api-key-status').textContent='⚠ Missing';qs('ga4-status').textContent='⚠ Missing';qs('adsense-status').textContent='⚠ Missing';qs('affiliate-status').textContent='⚠ Missing';return;}qs('api-key-status').textContent=config.google_api?.api_key!=='REPLACE_WITH_REAL_GOOGLE_API_KEY'?'Loaded':'⚠ Replace API Key';qs('ga4-status').textContent=(config.analytics?.ga4_properties||[]).join(', ')||'—';qs('adsense-status').textContent=config.adsense?.publisher_id||'—';qs('affiliate-status').textContent=config.affiliate?.affiliate_id||'—';qs('config-preview').textContent=JSON.stringify(config,null,2);}
 
-    <div style="height:12px"></div>
+function updateMetricsUI({labels,traffic,earnings}){qs('ga4-realtime').textContent=Math.floor(Math.random()*8)+' users';qs('ga4-daily').textContent=traffic[traffic.length-1]+' visits';qs('ga4-weekly').textContent=traffic.reduce((a,b)=>a+b,0)+' visits';qs('adsense-today').textContent='USD '+earnings[earnings.length-1].toFixed(2);qs('aff-earnings').textContent='USD '+(Math.random()*15+1).toFixed(2);qs('aff-clicks').textContent=Math.floor(Math.random()*90)+10;qs('aff-conversions').textContent=Math.floor(Math.random()*6)+1;qs('aff-summary').textContent='Clicks & conversions simulated';const pages=['/','/blog/nutrition-reset','/blog/mental-health-7','/about','/contact'];const ol=qs('top-pages');ol.innerHTML='';pages.slice(0,5).forEach(p=>{const li=document.createElement('li');li.textContent=${p} — ${Math.floor(Math.random()*350)+50} visits;ol.appendChild(li);});}
 
-    <div class="card">
-      <div class="title">Affiliate Earnings</div>
-      <div class="metric" id="aff-earnings">—</div>
-      <div class="small" id="aff-summary">—</div>
-    </div>
-  </div>
-</section>
+function exportCSV({labels,traffic,earnings}){const header=['date','visits','earnings'],rows=labels.map((d,i)=>[d,traffic[i],earnings[i]]),csv=[header.join(','),...rows.map(r=>r.join(','))].join('\n');const blob=new Blob([csv],{type:'text/csv'}),url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='esthetics-data.csv';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);}
 
-<section style="margin-top:22px">
-  <div class="grid">
-    <div class="card">
-      <div class="title">Top pages (simulated)</div>
-      <ol id="top-pages" style="margin:12px 0 0 16px;color:var(--muted)"></ol>
-    </div>
+const themeKey='esthetics:theme';function applyTheme(t){document.documentElement.setAttribute('data-theme',t);qs('dark-toggle').checked=(t==='dark');localStorage.setItem(themeKey,t)} qs('dark-toggle')?.addEventListener('change',(e)=>applyTheme(e.target.checked?'dark':'light')); applyTheme(localStorage.getItem(themeKey)||'light');
 
-    <div class="card">
-      <div class="title">Affiliate Details</div>
-      <div class="small">Clicks: <span id="aff-clicks">—</span></div>
-      <div class="small">Conversions: <span id="aff-conversions">—</span></div>
-      <div class="small">Affiliate ID: <span id="affiliate-status">—</span></div>
-    </div>
+async function refreshDashboard(){const cfg=await loadConfig();updateConfigUI(cfg);const data=simulateData();makeCharts(data.labels,data.traffic,data.earnings);updateMetricsUI(data);}
 
-    <div class="card">
-      <div class="title">Config JSON (preview)</div>
-      <pre id="config-preview" style="white-space:pre-wrap;word-break:break-word;background:transparent;border:0;margin:0;padding:0;color:var(--muted)"></pre>
-    </div>
-  </div>
-</section>
+async function init(){await refreshDashboard(); qs('refresh-btn').addEventListener('click',refreshDashboard); qs('export-csv').addEventListener('click',()=>exportCSV(simulateData())); qs('mobile-refresh').addEventListener('click',()=>qs('refresh-btn').click()); qs('mobile-export').addEventListener('click',()=>qs('export-csv').click()); setInterval(refreshDashboard,60000); // Auto-refresh every 60 seconds }
 
-  </main>  <div class="mobile-bar">
-    <button class="btn" id="mobile-refresh">Refresh</button>
-    <button class="secondary" id="mobile-export">CSV</button>
-  </div>  <script>
-    function qs(id){return document.getElementById(id)}
-    function showError(msg){const e=qs('error-box');e.style.display='block';e.textContent=msg}
+init(); </script>
 
-    async function loadConfig(){
-      try{
-        const res = await fetch('/config.json');
-        if(!res.ok) throw new Error('config.json not found');
-        return await res.json();
-      }catch(err){
-        console.warn('Config load failed',err);
-        showError('Could not load /config.json. Using simulated demo data.');
-        return null;
-      }
-    }
-
-    function simulateData(){
-      const days=7, labels=[], traffic=[], earnings=[];
-      for(let i=days-1;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);labels.push(d.toLocaleDateString());traffic.push(Math.floor(Math.random()*400)+80);}
-      for(let i=0;i<days;i++){earnings.push(parseFloat((Math.random()*2+0.2).toFixed(2)));}
-      return {labels,traffic,earnings};
-    }
-
-    let trafficChart, earningsChart;
-    function makeCharts(labels, traffic, earnings){
-      const tctx=qs('trafficChart').getContext('2d');
-      const ectx=qs('earningsChart').getContext('2d');
-      if(trafficChart) trafficChart.destroy(); if(earningsChart) earningsChart.destroy();
-      trafficChart=new Chart(tctx,{type:'line',data:{labels,datasets:[{label:'Visits',data:traffic,fill:true,tension:0.25,pointRadius:3}]},options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});
-      earningsChart=new Chart(ectx,{type:'bar',data:{labels,datasets:[{label:'USD',data:earnings,borderRadius:6}]},options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});
-    }
-
-    function updateConfigUI(config){
-      if(!config){qs('api-key-status').textContent='⚠ Missing';qs('ga4-status').textContent='⚠ Missing';qs('adsense-status').textContent='⚠ Missing';qs('affiliate-status').textContent='⚠ Missing';return;}
-      qs('api-key-status').textContent=config.google_api?.api_key!=='REPLACE_WITH_REAL_GOOGLE_API_KEY'?'Loaded':'⚠ Replace API Key';
-      qs('ga4-status').textContent=(config.analytics?.ga4_properties||[]).join(', ')||'—';
-      qs('adsense-status').textContent=config.adsense?.publisher_id||'—';
-      qs('affiliate-status').textContent=config.affiliate?.affiliate_id||'—';
-      qs('config-preview').textContent=JSON.stringify(config,null,2);
-    }
-
-    function updateMetricsUI({labels,traffic,earnings}){
-      qs('ga4-realtime').textContent=Math.floor(Math.random()*8)+' users';
-      qs('ga4-daily').textContent=traffic[traffic.length-1]+' visits';
-      qs('ga4-weekly').textContent=traffic.reduce((a,b)=>a+b,0)+' visits';
-      qs('adsense-today').textContent='USD '+earnings[earnings.length-1].toFixed(2);
-      qs('aff-earnings').textContent='USD '+(Math.random()*15+1).toFixed(2);
-      qs('aff-clicks').textContent=Math.floor(Math.random()*90)+10;
-      qs('aff-conversions').textContent=Math.floor(Math.random()*6)+1;
-      qs('aff-summary').textContent='Clicks & conversions simulated';
-      const pages=['/','/blog/nutrition-reset','/blog/mental-health-7','/about','/contact'];
-      const ol=qs('top-pages');ol.innerHTML='';pages.slice(0,5).forEach(p=>{const li=document.createElement('li');li.textContent=`${p} — ${Math.floor(Math.random()*350)+50} visits`;ol.appendChild(li);});
-    }
-
-    function exportCSV({labels,traffic,earnings}){
-      const header=['date','visits','earnings'],rows=labels.map((d,i)=>[d,traffic[i],earnings[i]]),csv=[header.join(','),...rows.map(r=>r.join(','))].join('\n');
-      const blob=new Blob([csv],{type:'text/csv'}),url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='esthetics-data.csv';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
-    }
-
-    const themeKey='esthetics:theme';
-    function applyTheme(t){document.documentElement.setAttribute('data-theme',t);qs('dark-toggle').checked=(t==='dark');localStorage.setItem(themeKey,t)}
-    qs('dark-toggle')?.addEventListener('change',(e)=>applyTheme(e.target.checked?'dark':'light'));
-    applyTheme(localStorage.getItem(themeKey)||'light');
-
-    async function init(){
-      const cfg=await loadConfig(); updateConfigUI(cfg);
-      const data=simulateData(); makeCharts(data.labels,data.traffic,data.earnings); updateMetricsUI(data);
-      qs('refresh-btn').addEventListener('click',async()=>{const cfg2=await loadConfig();updateConfigUI(cfg2);const d2=simulateData();makeCharts(d2.labels,d2.traffic,d2.earnings);updateMetricsUI(d2);});
-      qs('export-csv').addEventListener('click',()=>exportCSV(data));
-      qs('mobile-refresh').addEventListener('click',()=>qs('refresh-btn').click());
-      qs('mobile-export').addEventListener('click',()=>qs('export-csv').click());
-    }
-    init();
-  </script></body>
-      </html>
+</body>
+                                </html>
