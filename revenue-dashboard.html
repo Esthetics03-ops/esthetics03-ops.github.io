@@ -1,284 +1,327 @@
-<!DOCTYPE html><html lang="en">
+<!doctype html>
+
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Esthetics Hub Dashboard</title>
-  <script defer src="script.js"></script>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f4f6f8;
-      color: #1a1a1a;
-    }header {
-  background: #111827;
-  color: #fff;
-  padding: 20px;
-  text-align: center;
-  font-size: 28px;
-  font-weight: bold;
-}
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Esthetics Hub — All-in-One Dashboard</title>  <!-- Chart.js CDN -->  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>  <style>
+    /* ---------- BASE (also exportable to styles.css) ---------- */
+    :root{
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #6b7280;
+      --accent: #06b6d4;
+      --shadow: 0 6px 20px rgba(2,6,23,0.08);
+    }
 
-.container {
-  max-width: 1100px;
-  margin: 30px auto;
-  padding: 20px;
-}
+    [data-theme="dark"]{
+      --bg: #071122;
+      --card: #081425;
+      --text: #e6eef6;
+      --muted: #9fb0c2;
+      --accent: #06b6d4;
+      --shadow: 0 6px 30px rgba(2,6,23,0.6);
+    }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
-}
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: Inter,system-ui,Segoe UI,Roboto,Arial,Helvetica,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
 
-.card {
-  background: #fff;
-  padding: 20px;
-  border-radius: 14px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  transition: 0.3s ease;
-}
+    header{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;background:var(--card);box-shadow:var(--shadow);}
+    header h1{margin:0;font-size:18px}
+    .container{max-width:1150px;margin:22px auto;padding:0 18px}
 
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
-}
+    .controls{display:flex;gap:10px;align-items:center}
+    .btn{background:var(--accent);color:white;padding:8px 12px;border-radius:10px;border:0;cursor:pointer}
+    .secondary{background:transparent;color:var(--text);padding:8px;border-radius:10px;border:1px solid rgba(0,0,0,0.06)}
 
-.title {
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .card{background:var(--card);padding:16px;border-radius:12px;box-shadow:var(--shadow)}
+    .title{font-size:13px;color:var(--muted);}
+    .metric{font-size:22px;font-weight:700;margin-top:6px}
+    .muted{color:var(--muted);font-size:13px}
 
-.value {
-  font-size: 26px;
-  margin: 8px 0;
-  font-weight: bold;
-  color: #111827;
-}
+    /* Charts */
+    .chart-row{display:grid;grid-template-columns:2fr 1fr;gap:18px}
+    canvas{width:100%!important;height:220px!important}
 
-.label {
-  color: #6b7280;
-  font-size: 14px;
-}
+    /* Responsive: collapse to single column on narrow screens */
+    @media (max-width:900px){
+      .grid{grid-template-columns:repeat(2,1fr)}
+      .chart-row{grid-template-columns:1fr}
+    }
+    @media (max-width:560px){
+      header{flex-direction:column;gap:10px;align-items:flex-start}
+      .grid{grid-template-columns:1fr}
+      .container{padding:0 12px}
+      canvas{height:200px!important}
+      .metric{font-size:20px}
+    }
 
-#error-box {
-  background: #fee2e2;
-  color: #991b1b;
-  padding: 10px;
-  border-radius: 8px;
-  display: none;
-  margin-bottom: 20px;
-}
+    /* Mobile simplified CTA bar */
+    .mobile-bar{display:none;position:fixed;bottom:12px;left:50%;transform:translateX(-50%);z-index:60}
+    @media (max-width:560px){.mobile-bar{display:flex;gap:8px}}
 
-  </style>
-</head>
-<body>
-  <header>📊 Esthetics Hub Revenue Dashboard</header>  <div class="container"><div id="error-box"></div>
+    /* error box */
+    #error-box{display:none;padding:12px;border-radius:10px;background:#fee2e2;color:#7f1d1d;margin:12px 0}
 
-<h2>Configuration Status</h2>
-<div class="grid">
+    /* small helper */
+    .small{font-size:12px;color:var(--muted)}
+  </style></head>
+<body>  <header>
+    <h1>📊 Esthetics Hub — Dashboard</h1>
+    <div class="controls">
+      <button class="secondary" id="refresh-btn">⟳ Refresh</button>
+      <button class="btn" id="export-csv">Export CSV</button>
+      <label style="display:flex;align-items:center;gap:8px">
+        <input type="checkbox" id="dark-toggle"> Dark
+      </label>
+    </div>
+  </header>  <main class="container"><div id="error-box"></div>
+
+<!-- CONFIG STATUS -->
+<section class="grid" style="margin-bottom:16px">
   <div class="card">
     <div class="title">API Key</div>
-    <div class="value" id="api-key-status">Loading...</div>
-    <div class="label">Google API Key Status</div>
+    <div class="metric" id="api-key-status">—</div>
+    <div class="small">Google API key loaded</div>
   </div>
-
   <div class="card">
     <div class="title">GA4 Properties</div>
-    <div class="value" id="ga4-status">Loading...</div>
-    <div class="label">Connected GA4 Streams</div>
+    <div class="metric" id="ga4-status">—</div>
+    <div class="small">Connected data streams</div>
   </div>
-
   <div class="card">
-    <div class="title">AdSense Publisher</div>
-    <div class="value" id="adsense-status">Loading...</div>
-    <div class="label">Publisher ID</div>
+    <div class="title">AdSense Pub ID</div>
+    <div class="metric" id="adsense-status">—</div>
+    <div class="small">Publisher identifier</div>
+  </div>
+</section>
+
+<!-- LIVE METRICS + CHARTS -->
+<section class="chart-row">
+  <div>
+    <div class="card" style="margin-bottom:18px">
+      <div class="title">Traffic Overview</div>
+      <canvas id="trafficChart"></canvas>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="title">Realtime Users</div>
+        <div class="metric" id="ga4-realtime">—</div>
+        <div class="small">Right now</div>
+      </div>
+      <div class="card">
+        <div class="title">Daily Visits</div>
+        <div class="metric" id="ga4-daily">—</div>
+        <div class="small">Past 24h</div>
+      </div>
+      <div class="card">
+        <div class="title">Weekly Visits</div>
+        <div class="metric" id="ga4-weekly">—</div>
+        <div class="small">Last 7 days</div>
+      </div>
+    </div>
   </div>
 
-  <div class="card">
-    <div class="title">Affiliate ID</div>
-    <div class="value" id="affiliate-status">Loading...</div>
-    <div class="label">Referral Tracking</div>
-  </div>
-</div>
+  <div>
+    <div class="card">
+      <div class="title">Earnings Breakdown</div>
+      <canvas id="earningsChart"></canvas>
+    </div>
 
-<h2 style="margin-top:40px;">Live Metrics</h2>
-<div class="grid">
-  <div class="card">
-    <div class="title">Real‑Time Users</div>
-    <div class="value" id="ga4-realtime">-</div>
-    <div class="label">Current website activity</div>
-  </div>
+    <div style="height:18px"></div>
 
-  <div class="card">
-    <div class="title">Daily Traffic</div>
-    <div class="value" id="ga4-daily">-</div>
-    <div class="label">Visits today</div>
-  </div>
+    <div class="card">
+      <div class="title">AdSense Today</div>
+      <div class="metric" id="adsense-today">—</div>
+      <div class="small">Estimated</div>
+    </div>
 
-  <div class="card">
-    <div class="title">Weekly Traffic</div>
-    <div class="value" id="ga4-weekly">-</div>
-    <div class="label">Visits last 7 days</div>
-  </div>
-</div>
+    <div style="height:12px"></div>
 
-<h2 style="margin-top:40px;">Monetization Metrics</h2>
-<div class="grid">
-  <div class="card">
-    <div class="title">AdSense (Today)</div>
-    <div class="value" id="adsense-today">-</div>
-    <div class="label">Estimated earnings</div>
+    <div class="card">
+      <div class="title">Affiliate Earnings</div>
+      <div class="metric" id="aff-earnings">—</div>
+      <div class="small" id="aff-summary">—</div>
+    </div>
   </div>
+</section>
 
-  <div class="card">
-    <div class="title">AdSense (Week)</div>
-    <div class="value" id="adsense-week">-</div>
-    <div class="label">Past 7 days</div>
-  </div>
+<!-- DETAILED METRICS -->
+<section style="margin-top:22px">
+  <div class="grid">
+    <div class="card">
+      <div class="title">Top pages (simulated)</div>
+      <ol id="top-pages" style="margin:12px 0 0 16px;color:var(--muted)"></ol>
+    </div>
 
-  <div class="card">
-    <div class="title">AdSense (Month)</div>
-    <div class="value" id="adsense-month">-</div>
-    <div class="label">Estimated monthly earnings</div>
-  </div>
+    <div class="card">
+      <div class="title">Affiliate Details</div>
+      <div class="small">Clicks: <span id="aff-clicks">—</span></div>
+      <div class="small">Conversions: <span id="aff-conversions">—</span></div>
+      <div class="small">Affiliate ID: <span id="affiliate-status">—</span></div>
+    </div>
 
-  <div class="card">
-    <div class="title">Affiliate Earnings</div>
-    <div class="value" id="aff-earnings">-</div>
-    <div class="label">Revenue from referrals</div>
+    <div class="card">
+      <div class="title">Config JSON (preview)</div>
+      <pre id="config-preview" style="white-space:pre-wrap;word-break:break-word;background:transparent;border:0;margin:0;padding:0;color:var(--muted)"></pre>
+    </div>
   </div>
+</section>
 
-  <div class="card">
-    <div class="title">Affiliate Clicks</div>
-    <div class="value" id="aff-clicks">-</div>
-    <div class="label">User engagements</div>
-  </div>
+  </main>  <div class="mobile-bar">
+    <button class="btn" id="mobile-refresh">Refresh</button>
+    <button class="secondary" id="mobile-export">CSV</button>
+  </div>  <script>
+    // ----- Helper utilities -----
+    function qs(id){return document.getElementById(id)}
+    function showError(msg){const e=qs('error-box');e.style.display='block';e.textContent=msg}
 
-  <div class="card">
-    <div class="title">Conversions</div>
-    <div class="value" id="aff-conversions">-</div>
-    <div class="label">Successful referrals</div>
-  </div>
-</div>
-
-  </div>
-  <script>
-    // ================================
-// LOAD CONFIG.JSON FROM ROOT
-// ================================
-async function loadConfig() {
-    try {
-        const res = await fetch('/config.json');
-        if (!res.ok) throw new Error('Unable to load config.json');
-        return await res.json();
-    } catch (err) {
-        console.error("CONFIG ERROR:", err);
-        showError("Could not load configuration file.");
+    async function loadConfig(){
+      try{
+        const r = await fetch('/config.json');
+        if(!r.ok) throw new Error('config.json not found');
+        const j = await r.json();
+        return j;
+      }catch(err){
+        console.warn('Config load failed',err);
+        showError('Could not load /config.json. Using simulated demo data.');
         return null;
+      }
     }
-}
 
-// ================================
-// MAIN INITIALIZER
-// ================================
-async function initDashboard() {
-    const config = await loadConfig();
-    if (!config) return;
+    // ----- Data simulation (fallback) -----
+    function simulateData(){
+      // Traffic series for last 7 days
+      const days = 7;
+      const labels = [];
+      const traffic = [];
+      for(let i=days-1;i>=0;i--){
+        const d = new Date(); d.setDate(d.getDate()-i);
+        labels.push(d.toLocaleDateString());
+        traffic.push(Math.floor(Math.random()*400)+80);
+      }
 
-    // Extract values from improved structure
-    const apiKey            = config.google_api.api_key;
-    const ga4Properties     = config.analytics.ga4_properties;
-    const adsensePub        = config.adsense.publisher_id;
-    const affiliateID       = config.affiliate.affiliate_id;
+      const earnings = [
+        (Math.random()*2+0.2).toFixed(2),
+        (Math.random()*2+0.2).toFixed(2),
+        (Math.random()*2+0.2).toFixed(2),
+        (Math.random()*2+0.2).toFixed(2),
+        (Math.random()*2+0.2).toFixed(2),
+        (Math.random()*2+0.2).toFixed(2),
+        (Math.random()*2+0.2).toFixed(2)
+      ].map(x=>parseFloat(x));
 
-    // Display config values in UI
-    updateConfigStatus(apiKey, ga4Properties, adsensePub, affiliateID);
-
-    // Run simulated GA4 & AdSense data
-    simulateGA4(ga4Properties);
-    simulateAdSense(adsensePub);
-    simulateAffiliate(affiliateID);
-}
-
-// ================================
-// UPDATE CONFIG STATUS ON SCREEN
-// ================================
-function updateConfigStatus(apiKey, ga4Props, adsense, affiliate) {
-    safeSet("api-key-status", apiKey !== "REPLACE_WITH_REAL_GOOGLE_API_KEY" ? "Valid Key Loaded" : "⚠ Replace API Key");
-    safeSet("ga4-status", ga4Props.join(", "));
-    safeSet("adsense-status", adsense);
-    safeSet("affiliate-status", affiliate);
-}
-
-function safeSet(id, value) {
-    const el = document.getElementById(id);
-    if (el) el.textContent = value;
-}
-
-// ================================
-// SIMULATION — GA4 (browser cannot call GA4 API directly)
-// ================================
-function simulateGA4(properties) {
-    const daily = random(120, 380);
-    const weekly = daily * 7;
-    const realtime = random(1, 7);
-
-    safeSet("ga4-realtime", realtime + " users");
-    safeSet("ga4-daily", daily + " visits");
-    safeSet("ga4-weekly", weekly + " visits");
-
-    console.log("GA4 properties detected:", properties);
-}
-
-// ================================
-// SIMULATION — AdSense
-// ================================
-function simulateAdSense(pubID) {
-    const today = random(0.10, 2.40).toFixed(2);
-    const weekly = (today * 7).toFixed(2);
-    const monthly = (weekly * 4.2).toFixed(2);
-
-    safeSet("adsense-today", "USD " + today);
-    safeSet("adsense-week", "USD " + weekly);
-    safeSet("adsense-month", "USD " + monthly);
-
-    console.log("AdSense Publisher:", pubID);
-}
-
-// ================================
-// SIMULATION — Affiliate Earnings
-// ================================
-function simulateAffiliate(affiliateID) {
-    const clicks = random(15, 80);
-    const conversions = random(1, 4);
-    const earnings = (random(1.5, 17.5)).toFixed(2);
-
-    safeSet("aff-clicks", clicks);
-    safeSet("aff-conversions", conversions);
-    safeSet("aff-earnings", "USD " + earnings);
-
-    console.log("Affiliate ID:", affiliateID);
-}
-
-// ================================
-// HELPER
-// ================================
-function random(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function showError(msg) {
-    const box = document.getElementById("error-box");
-    if (box) {
-        box.style.display = "block";
-        box.textContent = msg;
+      return {labels,traffic,earnings};
     }
-}
 
-// Run the dashboard
-initDashboard();
-  </script>
-</body>
-      </html>
+    // ----- Chart setup -----
+    let trafficChart, earningsChart;
+    function makeCharts(labels, traffic, earnings){
+      const tctx = qs('trafficChart').getContext('2d');
+      const ectx = qs('earningsChart').getContext('2d');
+
+      if(trafficChart) trafficChart.destroy();
+      if(earningsChart) earningsChart.destroy();
+
+      trafficChart = new Chart(tctx,{
+        type:'line',
+        data:{labels,datasets:[{label:'Visits',data:traffic,fill:true,tension:0.25,pointRadius:3}]},
+        options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}
+      });
+
+      earningsChart = new Chart(ectx,{
+        type:'bar',
+        data:{labels, datasets:[{label:'USD', data:earnings, borderRadius:6}]},
+        options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}
+      });
+    }
+
+    // ----- UI updates -----
+    function updateConfigUI(config){
+      if(!config){
+        qs('api-key-status').textContent='⚠ Missing';
+        qs('ga4-status').textContent='⚠ Missing';
+        qs('adsense-status').textContent='⚠ Missing';
+        qs('affiliate-status').textContent='⚠ Missing';
+        return;
+      }
+      const apiKey = config.google_api?.api_key || 'REPLACE_WITH_REAL_GOOGLE_API_KEY';
+      qs('api-key-status').textContent = apiKey !== 'REPLACE_WITH_REAL_GOOGLE_API_KEY' ? 'Loaded' : '⚠ Replace API Key';
+      qs('ga4-status').textContent = (config.analytics?.ga4_properties || []).join(', ') || '—';
+      qs('adsense-status').textContent = config.adsense?.publisher_id || '—';
+      qs('affiliate-status').textContent = config.affiliate?.affiliate_id || '—';
+
+      qs('config-preview').textContent = JSON.stringify(config, null, 2);
+    }
+
+    function updateMetricsUI({labels,traffic,earnings}){
+      // basic numbers
+      qs('ga4-realtime').textContent = Math.floor(Math.random()*8)+ ' users';
+      qs('ga4-daily').textContent = traffic[traffic.length-1] + ' visits';
+      qs('ga4-weekly').textContent = traffic.reduce((a,b)=>a+b,0) + ' visits';
+
+      // earnings summary
+      const todayE = earnings[earnings.length-1];
+      qs('adsense-today').textContent = 'USD ' + todayE.toFixed(2);
+      qs('aff-earnings').textContent = 'USD ' + (Math.random()*15+1).toFixed(2);
+      qs('aff-clicks').textContent = Math.floor(Math.random()*90)+10;
+      qs('aff-conversions').textContent = Math.floor(Math.random()*6)+1;
+      qs('aff-summary').textContent = 'Clicks & conversions are simulated';
+
+      // top pages simulated
+      const pages = ['/', '/blog/nutrition-reset', '/blog/mental-health-7', '/about', '/contact'];
+      const ol = qs('top-pages'); ol.innerHTML='';
+      pages.slice(0,5).forEach((p,i)=>{const li=document.createElement('li');li.textContent=`${p} — ${Math.floor(Math.random()*350)+50} visits`;ol.appendChild(li)});
+    }
+
+    // ----- export CSV -----
+    function exportCSV({labels,traffic,earnings}){
+      const header = ['date','visits','earnings'];
+      const rows = labels.map((d,i)=>[d,traffic[i],earnings[i]]);
+      const csv = [header.join(','), ...rows.map(r=>r.join(','))].join('\n');
+      const blob = new Blob([csv],{type:'text/csv'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href=url; a.download='esthetics-data.csv'; document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    // ----- persist theme -----
+    const themeKey = 'esthetics:theme';
+    function applyTheme(t){document.documentElement.setAttribute('data-theme', t); qs('dark-toggle').checked = (t==='dark'); localStorage.setItem(themeKey,t)}
+    qs('dark-toggle')?.addEventListener('change',(e)=>applyTheme(e.target.checked?'dark':'light'))
+    // initialize
+    const saved = localStorage.getItem(themeKey)||'light'; applyTheme(saved);
+
+    // ----- main init -----
+    async function init(){
+      const cfg = await loadConfig();
+      updateConfigUI(cfg);
+
+      const data = simulateData();
+      makeCharts(data.labels, data.traffic, data.earnings);
+      updateMetricsUI(data);
+
+      // wire up buttons
+      qs('refresh-btn').addEventListener('click', async ()=>{
+        const cfg2 = await loadConfig(); updateConfigUI(cfg2); const d2 = simulateData(); makeCharts(d2.labels,d2.traffic,d2.earnings); updateMetricsUI(d2);
+      });
+
+      qs('export-csv').addEventListener('click',()=>exportCSV(data));
+      qs('mobile-refresh').addEventListener('click',()=>qs('refresh-btn').click());
+      qs('mobile-export').addEventListener('click',()=>qs('export-csv').click());
+    }
+
+    // run
+    init();
+  </script></body>
+          </html>
