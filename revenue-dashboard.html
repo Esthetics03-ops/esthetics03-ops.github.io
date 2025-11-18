@@ -1,162 +1,168 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>The Esthetics Hub — Revenue Dashboard</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Esthetics Hub Dashboard</title>
+  <script defer src="script.js"></script>
   <style>
-    :root{--bg:#f8fafc;--card:#fff;--muted:#666;--accent:#16a34a;--blue:#2563eb;--amber:#f59e0b}
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; margin:0; padding:20px; background:var(--bg)}
-    .wrap{max-width:1200px;margin:0 auto}
-    .card{background:var(--card);border-radius:12px;padding:18px;box-shadow:0 6px 18px rgba(0,0,0,.06);margin-bottom:12px}
-    .row{display:flex;gap:12px;flex-wrap:wrap}
-    .metric{flex:1 1 220px}
-    .small{color:var(--muted);font-size:13px}
-    .status{position:fixed;right:14px;bottom:14px;background:#222;color:#fff;padding:10px 14px;border-radius:10px;font-size:13px;z-index:999}
-    button{padding:8px 14px;border-radius:8px;border:none;font-weight:700;cursor:pointer}
-    table{width:100%;border-collapse:collapse;margin-top:8px}
-    th,td{padding:6px 8px;border-bottom:1px solid #eee}
-    canvas{background:var(--card);border-radius:10px;padding:8px}
-    pre{background:#f3f4f6;padding:10px;border-radius:8px;overflow:auto}
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      color: #1a1a1a;
+    }header {
+  background: #111827;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 30px auto;
+  padding: 20px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
+.title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.value {
+  font-size: 26px;
+  margin: 8px 0;
+  font-weight: bold;
+  color: #111827;
+}
+
+.label {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+#error-box {
+  background: #fee2e2;
+  color: #991b1b;
+  padding: 10px;
+  border-radius: 8px;
+  display: none;
+  margin-bottom: 20px;
+}
+
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <h1>The Esthetics Hub — Revenue Dashboard</h1>
-    <div class="card">
-      <button id="toggleLive" style="background:var(--blue);color:#fff">Switch to Real-time Live</button>
-      <span style="margin-left:12px;color:var(--muted)" id="modeNote">(Simulated by default)</span>
-    </div>
+  <header>📊 Esthetics Hub Revenue Dashboard</header>  <div class="container"><div id="error-box"></div>
 
-    <div id="main" class="card">
-      <div id="systemStatus" class="small">Updating…</div>
-      <div class="row" style="margin-top:12px;">
-        <div class="card metric">
-          <div class="small">AdSense — Today</div>
-          <div id="adsense_earn" style="font-size:20px;font-weight:700">$0.00</div>
-        </div>
-        <div class="card metric">
-          <div class="small">Affiliate — Today</div>
-          <div id="affiliate_earn" style="font-size:20px;font-weight:700">$0.00</div>
-        </div>
-        <div class="card metric">
-          <div class="small">Donations</div>
-          <div id="donations_earn" style="font-size:20px;font-weight:700">$0.00</div>
-        </div>
-      </div>
-
-      <section style="margin-top:14px;">
-        <h3>Charts & Trends</h3>
-        <canvas id="ga4Chart" height="150"></canvas>
-        <canvas id="revenueChart" height="150" style="margin-top:16px;"></canvas>
-      </section>
-
-      <section style="margin-top:14px;">
-        <h3>Top Performing Articles</h3>
-        <table>
-          <thead><tr><th>Title</th><th>Pageviews</th><th>Revenue</th><th>Avg Duration</th></tr></thead>
-          <tbody id="topArticles"></tbody>
-        </table>
-      </section>
-
-      <section style="margin-top:14px;">
-        <h3>Detailed JSON</h3>
-        <pre id="detail">{}</pre>
-      </section>
-    </div>
-
-    <div id="statusBox" class="status">Loading…</div>
+<h2>Configuration Status</h2>
+<div class="grid">
+  <div class="card">
+    <div class="title">API Key</div>
+    <div class="value" id="api-key-status">Loading...</div>
+    <div class="label">Google API Key Status</div>
   </div>
 
-  <script>
-    const PROXY_URL = "https://the-esthetics-hub-proxy.workers.dev"; // your deployed worker
-    const els = id => document.getElementById(id);
-    const money = v => "$" + (typeof v === "number" ? v.toFixed(2) : "0.00");
-    let isLiveMode = false;
+  <div class="card">
+    <div class="title">GA4 Properties</div>
+    <div class="value" id="ga4-status">Loading...</div>
+    <div class="label">Connected GA4 Streams</div>
+  </div>
 
-    const toggleBtn = els('toggleLive');
-    toggleBtn.addEventListener('click', () => {
-      isLiveMode = !isLiveMode;
-      toggleBtn.textContent = isLiveMode ? 'Switch to Simulated Mode' : 'Switch to Real-time Live';
-      els('modeNote').textContent = isLiveMode ? '(Fetching live from serverless proxy)' : '(Simulated by default)';
-      renderDashboard();
-    });
+  <div class="card">
+    <div class="title">AdSense Publisher</div>
+    <div class="value" id="adsense-status">Loading...</div>
+    <div class="label">Publisher ID</div>
+  </div>
 
-    let SIM = {
-      GA4:[{id:'G-QCX3G9KSPC',desc:'Main',activeUsers:100,pageviews:500},{id:'G-PSW1MY7HB4',desc:'Blog',activeUsers:80,pageviews:400}],
-      ADSENSE:{earnings:14.37},
-      AFFILIATE:{earnings:26.55},
-      DONATIONS:{total:0},
-      TOP_ARTICLES:[
-        {title:'5 Ways to Boost Wellness',pageviews:312,revenue:5.20,avgDuration:'3m 15s'},
-        {title:'Nutrition Tips for Longevity',pageviews:268,revenue:4.75,avgDuration:'2m 58s'}
-      ]
-    };
+  <div class="card">
+    <div class="title">Affiliate ID</div>
+    <div class="value" id="affiliate-status">Loading...</div>
+    <div class="label">Referral Tracking</div>
+  </div>
+</div>
 
-    let ga4Chart,revenueChart;
+<h2 style="margin-top:40px;">Live Metrics</h2>
+<div class="grid">
+  <div class="card">
+    <div class="title">Real‑Time Users</div>
+    <div class="value" id="ga4-realtime">-</div>
+    <div class="label">Current website activity</div>
+  </div>
 
-    function initCharts() {
-      ga4Chart = new Chart(els('ga4Chart').getContext('2d'),{
-        type:'line',
-        data:{labels:['Now-4','Now-3','Now-2','Now-1','Now'],datasets:SIM.GA4.map((s,i)=>({label:s.desc,data:[s.activeUsers-5,s.activeUsers-3,s.activeUsers-2,s.activeUsers,s.activeUsers+2],borderColor:i?'#2563eb':'#16a34a',fill:false,tension:0.3}))},
-        options:{responsive:true,plugins:{title:{display:true,text:'Active Users'}}}
-      });
+  <div class="card">
+    <div class="title">Daily Traffic</div>
+    <div class="value" id="ga4-daily">-</div>
+    <div class="label">Visits today</div>
+  </div>
 
-      revenueChart = new Chart(els('revenueChart').getContext('2d'),{
-        type:'bar',
-        data:{labels:['AdSense','Affiliate','Donations'],datasets:[{label:'Revenue',data:[SIM.ADSENSE.earnings,SIM.AFFILIATE.earnings,SIM.DONATIONS.total]}]},
-        options:{responsive:true,plugins:{title:{display:true,text:'Revenue Distribution'}}}
-      });
-    }
+  <div class="card">
+    <div class="title">Weekly Traffic</div>
+    <div class="value" id="ga4-weekly">-</div>
+    <div class="label">Visits last 7 days</div>
+  </div>
+</div>
 
-    async function fetchLive() {
-      try {
-        const res = await fetch(PROXY_URL);
-        const data = await res.json();
-        return data;
-      } catch(e) { console.warn("Live fetch failed:", e); return null; }
-    }
+<h2 style="margin-top:40px;">Monetization Metrics</h2>
+<div class="grid">
+  <div class="card">
+    <div class="title">AdSense (Today)</div>
+    <div class="value" id="adsense-today">-</div>
+    <div class="label">Estimated earnings</div>
+  </div>
 
-    async function renderDashboard() {
-      els('systemStatus').textContent = 'Updating…'+new Date().toLocaleTimeString();
-      let dataSource = 'SIMULATED';
+  <div class="card">
+    <div class="title">AdSense (Week)</div>
+    <div class="value" id="adsense-week">-</div>
+    <div class="label">Past 7 days</div>
+  </div>
 
-      if(isLiveMode){
-        const live = await fetchLive();
-        if(live){
-          SIM = live;
-          dataSource = 'LIVE';
-        } else dataSource = 'SIMULATED (live unreachable)';
-      }
+  <div class="card">
+    <div class="title">AdSense (Month)</div>
+    <div class="value" id="adsense-month">-</div>
+    <div class="label">Estimated monthly earnings</div>
+  </div>
 
-      els('adsense_earn').textContent = money(SIM.ADSENSE.earnings);
-      els('affiliate_earn').textContent = money(SIM.AFFILIATE.earnings);
-      els('donations_earn').textContent = money(SIM.DONATIONS.total);
+  <div class="card">
+    <div class="title">Affiliate Earnings</div>
+    <div class="value" id="aff-earnings">-</div>
+    <div class="label">Revenue from referrals</div>
+  </div>
 
-      // Top articles
-      const tb = els('topArticles');
-      tb.innerHTML = '';
-      SIM.TOP_ARTICLES.forEach(a=>{
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${a.title}</td><td>${a.pageviews}</td><td>${money(a.revenue)}</td><td>${a.avgDuration}</td>`;
-        tb.appendChild(tr);
-      });
+  <div class="card">
+    <div class="title">Affiliate Clicks</div>
+    <div class="value" id="aff-clicks">-</div>
+    <div class="label">User engagements</div>
+  </div>
 
-      // JSON panel
-      els('detail').textContent = JSON.stringify({timestamp:new Date().toISOString(),source:dataSource,sim:SIM},null,2);
+  <div class="card">
+    <div class="title">Conversions</div>
+    <div class="value" id="aff-conversions">-</div>
+    <div class="label">Successful referrals</div>
+  </div>
+</div>
 
-      // Update charts
-      ga4Chart.data.datasets.forEach((d,i)=>{
-        d.data=[SIM.GA4[i].activeUsers-4,SIM.GA4[i].activeUsers-2,SIM.GA4[i].activeUsers-1,SIM.GA4[i].activeUsers,SIM.GA4[i].activeUsers+2];
-      });
-      ga4Chart.update();
-      revenueChart.data.datasets[0].data = [SIM.ADSENSE.earnings,SIM.AFFILIATE.earnings,SIM.DONATIONS.total];
-      revenueChart.update();
-    }
-
-    initCharts();
-    renderDashboard();
-    setInterval(renderDashboard,10000); // auto-refresh every 10s
-  </script>
+  </div>
 </body>
-  </html>
+      </html>
