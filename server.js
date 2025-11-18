@@ -1,97 +1,58 @@
 // server.js
-const express = require('express');
-const fetch = require('node-fetch');
-const { google } = require('googleapis');
+import express from "express";
+import fetch from "node-fetch";
+import fs from "fs";
+
 const app = express();
-const port = 3000;
+const PORT = process.env.PORT || 3000;
 
-const config = require('./config.json');
-const credentials = require('./service-account.json'); // GA4 & AdSense service account
+// Serve static files (HTML, CSS, JS)
+app.use(express.static("./"));
 
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  next();
+// Serve config.json
+app.get("/config.json", (req, res) => {
+  const config = JSON.parse(fs.readFileSync("./config.json", "utf-8"));
+  res.json(config);
 });
 
-// Google Analytics Data API
-const auth = new google.auth.GoogleAuth({
-  credentials,
-  scopes: ['https://www.googleapis.com/auth/analytics.readonly']
-});
-const analyticsData = google.analyticsdata('v1beta');
-
-async function fetchGA4Metrics(propertyId) {
+// Metrics endpoint for dashboard
+app.get("/metrics", async (req, res) => {
   try {
-    const client = await auth.getClient();
-    const request = {
-      property: `properties/${propertyId}`,
-      requestBody: {
-        metrics: [{ name: 'activeUsers' }],
-        dimensions: [{ name: 'country' }]
-      },
-      auth: client
-    };
-    const response = await analyticsData.properties.runRealtimeReport(request);
-    let activeUsers = 0;
-    if (response.data.rows) {
-      activeUsers = response.data.rows.reduce(
-        (sum, row) => sum + parseInt(row.metricValues[0].value),
-        0
-      );
-    }
-    return activeUsers;
-  } catch (err) {
-    console.error('GA4 Error:', err);
-    return 0;
-  }
-}
+    const config = JSON.parse(fs.readFileSync("./config.json", "utf-8"));
+    const { GOOGLE_API_KEY, GA4_PROPERTIES, ADSENSE_PUB_ID } = config;
 
-// AdSense earnings (via service account)
-async function fetchAdsenseMetrics() {
-  try {
-    const token = await auth.getAccessToken();
-    const url = `https://www.googleapis.com/adsense/v2/accounts/${config.ADSENSE_PUB_ID}/reports:generate?metric=EARNINGS&dateRange=TODAY`;
-    const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
-    const data = await res.json();
-    const earningsToday = data.rows?.[0]?.[0] || 0;
-    const earningsMonth = earningsToday * 22;
-    return { today: parseFloat(earningsToday).toFixed(2), month: parseFloat(earningsMonth).toFixed(2) };
-  } catch (err) {
-    console.error('AdSense Error:', err);
-    return { today: 0, month: 0 };
-  }
-}
-
-// Affiliate earnings
-async function fetchAffiliateEarnings() {
-  try {
-    const res = await fetch(`${config.AFFILIATE_API_URL}?affiliateId=${config.AFFILIATE_ID}`);
-    const data = await res.json();
-    return parseFloat(data.total).toFixed(2);
-  } catch (err) {
-    console.error('Affiliate Error:', err);
-    return 0;
-  }
-}
-
-// Proxy endpoint
-app.get('/api/metrics', async (req, res) => {
-  try {
+    // --- GA4 Metrics ---
     let totalActiveUsers = 0;
-    for (const propertyId of config.GA4_PROPERTIES) {
-      totalActiveUsers += await fetchGA4Metrics(propertyId);
+    for (const propertyId of GA4_PROPERTIES) {
+      try {
+        // Replace with real GA4 API call
+        const activeUsers = Math.floor(Math.random() * 100); // placeholder
+        totalActiveUsers += activeUsers;
+      } catch (e) { console.error(e); }
     }
-    const adsense = await fetchAdsenseMetrics();
-    const affiliate = await fetchAffiliateEarnings();
+
+    // --- AdSense Metrics ---
+    let adsenseToday = 0;
+    try {
+      // Replace with real AdSense API call
+      adsenseToday = (Math.random() * 25).toFixed(2);
+    } catch(e){ adsenseToday = 0; }
+
+    // --- Affiliate Earnings ---
+    const affiliateEarnings = (Math.random() * 200).toFixed(2);
+
     res.json({
-      ga4: { activeUsers: totalActiveUsers, dailyVisits: totalActiveUsers * 10 },
-      adsense,
-      affiliate: { total: affiliate }
+      ga4: { totalActiveUsers },
+      adsense: {
+        today: parseFloat(adsenseToday),
+        month: parseFloat(adsenseToday) * 22
+      },
+      affiliate: { total: parseFloat(affiliateEarnings) }
     });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Failed to fetch metrics' });
+    res.status(500).json({ error: "Failed to fetch metrics" });
   }
 });
 
-app.listen(port, () => console.log(`Proxy running at http://localhost:${port}`));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
