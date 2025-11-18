@@ -131,21 +131,7 @@
   <button class="secondary" id="mobile-export">CSV</button>
 </div>
 <script>
-function qs(id){return document.getElementById(id)}
-    function showError(msg){const e=qs('error-box');e.style.display='block';e.textContent=msg}
 
-    async function loadConfig(){
-      try{
-        const res = await fetch('/config.json');
-        if(!res.ok) throw new Error('config.json not found');
-        return await res.json();
-      }catch(err){
-        console.warn('Config load failed',err);
-        showError('Could not load /config.json. Using simulated demo data.');
-        return null;
-      }
-    }
-  
 function qs(id){return document.getElementById(id)}
 function showError(msg){const e=qs('error-box');e.style.display='block';e.textContent=msg}async function loadConfig(){try{const res=await fetch('/config.json');if(!res.ok)throw new Error('config.json not found');return await res.json();}catch(err){console.warn('Config load failed',err);showError('Could not load /config.json. Using simulated demo data.');return null;}}
 
