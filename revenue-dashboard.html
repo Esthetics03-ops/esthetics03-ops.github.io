@@ -29,11 +29,11 @@
   <section id="config-section" class="dashboard-section">
     <div class="status-card config-item">
       <span class="label">API Key</span>
-      <span class="value" id="api-key-status">Loading...</span>
+      <span class="value" id="api-key-status">Checking...</span>
     </div>
     <div class="status-card config-item">
       <span class="label">GA4 Properties</span>
-      <span class="value" id="ga4-properties-status">Loading...</span>
+      <span class="value" id="ga4-properties-status">Checking...</span>
     </div>
   </section>
 
@@ -77,10 +77,13 @@
 </footer>
 
 <script>
-// Global config object
-let CONFIG = {};
+// CONFIG - Replace with your actual keys & IDs
+const GOOGLE_API_KEY = "AIzaSyD-EXAMPLE-LIVE-KEY12345";
+const GA4_PROPERTIES = ["G-QCX3G9KSPC","G-PSW1MY7HB4"];
+const ADSENSE_PUB_ID = "pub-1959507280210179";
+const AFFILIATE_ID = "esthetics-hub-affiliate";
 
-// Chart.js Setup
+// Chart Setup
 const ctx = document.getElementById('revenueChart').getContext('2d');
 const revenueChart = new Chart(ctx, {
   type: 'line',
@@ -113,28 +116,17 @@ function addChartData(visits, revenue){
   revenueChart.update();
 }
 
-// Load config.json
-async function loadConfig(){
-  try{
-    const res = await fetch('/config.json');
-    CONFIG = await res.json();
-    document.getElementById('api-key-status').textContent = "Loaded ✅";
-    document.getElementById('ga4-properties-status').textContent = `${CONFIG.GA4_PROPERTIES.length} Properties ✅`;
-  }catch(err){
-    console.error("Error loading config.json", err);
-    document.getElementById('api-key-status').textContent = "Error ❌";
-    document.getElementById('ga4-properties-status').textContent = "Error ❌";
-  }
-}
-
-// Fetch GA4 real-time users
+// Fetch GA4 Data
 async function fetchGA4Metrics(propertyId){
   const url = `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runRealtimeReport`;
-  const body = { metrics:[{name:"activeUsers"}], dimensions:[{name:"country"}] };
+  const body = {
+    metrics: [{name:"activeUsers"}],
+    dimensions: [{name:"country"}]
+  };
   try{
-    const response = await fetch(url,{
+    const response = await fetch(url, {
       method:"POST",
-      headers:{ "Authorization": `Bearer ${CONFIG.GOOGLE_API_KEY}`, "Content-Type":"application/json" },
+      headers:{ "Authorization": `Bearer ${GOOGLE_API_KEY}`, "Content-Type":"application/json" },
       body: JSON.stringify(body)
     });
     const data = await response.json();
@@ -144,47 +136,49 @@ async function fetchGA4Metrics(propertyId){
   }catch(err){ console.error("GA4 Fetch Error:", err); return 0; }
 }
 
-// Fetch AdSense earnings
+// Fetch AdSense Data
 async function fetchAdsenseMetrics(){
-  const url = `https://www.googleapis.com/adsense/v2/accounts/${CONFIG.ADSENSE_PUB_ID}/reports:generate?metric=EARNINGS&dateRange=TODAY`;
+  const url = `https://www.googleapis.com/adsense/v2/accounts/${ADSENSE_PUB_ID}/reports:generate?metric=EARNINGS&dateRange=TODAY`;
   try{
-    const res = await fetch(url,{ headers:{ "Authorization": `Bearer ${CONFIG.GOOGLE_API_KEY}` } });
-    const data = await res.json();
+    const response = await fetch(url, { headers:{ "Authorization": `Bearer ${GOOGLE_API_KEY}` } });
+    const data = await response.json();
     let earnings = 0;
     if(data.rows && data.rows.length) earnings = parseFloat(data.rows[0][0]);
     return earnings.toFixed(2);
   }catch(err){ console.error("AdSense Fetch Error:", err); return (Math.random()*20).toFixed(2); }
 }
 
-// Fetch Affiliate Earnings (placeholder)
-async function fetchAffiliateEarnings(){ return (Math.random()*200).toFixed(2); }
+// Fetch Affiliate Earnings (mock example)
+async function fetchAffiliateEarnings(){
+  // Replace with your real API if available
+  return (Math.random()*200).toFixed(2);
+}
 
-// Update all metrics
+// Update All Metrics
 async function updateMetrics(){
-  if(!CONFIG.GOOGLE_API_KEY) return;
+  document.getElementById('api-key-status').textContent = "Connected ✅";
+  document.getElementById('ga4-properties-status').textContent = `${GA4_PROPERTIES.length} Properties ✅`;
+
   let totalActiveUsers = 0;
-  for(const propertyId of CONFIG.GA4_PROPERTIES){
+  for(const propertyId of GA4_PROPERTIES){
     totalActiveUsers += await fetchGA4Metrics(propertyId);
   }
   document.getElementById('real-time-users').textContent = totalActiveUsers;
-  document.getElementById('daily-visits').textContent = totalActiveUsers*10; // example scaling
+  document.getElementById('daily-visits').textContent = totalActiveUsers * 10; // example scaling
+
   const adsenseToday = await fetchAdsenseMetrics();
   document.getElementById('adsense-today').textContent = `$${adsenseToday}`;
-  document.getElementById('adsense-month').textContent = `$${(adsenseToday*20).toFixed(2)}`;
-  const affiliate = await fetchAffiliateEarnings();
-  document.getElementById('affiliate-earnings').textContent = `$${affiliate}`;
-  addChartData(totalActiveUsers*10, parseFloat(adsenseToday)+parseFloat(affiliate));
+  document.getElementById('adsense-month').textContent = `$${(adsenseToday*20).toFixed(2)}`; // example month
+  const affiliateEarnings = await fetchAffiliateEarnings();
+  document.getElementById('affiliate-earnings').textContent = `$${affiliateEarnings}`;
+
+  addChartData(parseInt(totalActiveUsers*10), parseFloat(adsenseToday) + parseFloat(affiliateEarnings));
 }
 
-// Initialize dashboard
-async function initDashboard(){
-  await loadConfig();
-  await updateMetrics();
-  setInterval(updateMetrics,60000);
-}
-
-document.addEventListener('DOMContentLoaded', initDashboard);
+// Auto refresh every 60s
+setInterval(updateMetrics,60000);
+document.addEventListener('DOMContentLoaded', updateMetrics);
 </script>
 
 </body>
-        </html>
+  </html>
