@@ -77,6 +77,25 @@
 </footer>
 
 <script>
+  async function fetchMetrics() {
+  try {
+    const res = await fetch('/.netlify/functions/metrics'); // serverless endpoint
+    const data = await res.json();
+
+    document.getElementById('api-key-status').textContent = "Connected ✅";
+    document.getElementById('ga4-properties-status').textContent = `${data.ga4.activeUsers ? "GA4 Active" : "N/A"} ✅`;
+    document.getElementById('real-time-users').textContent = data.ga4.activeUsers;
+    document.getElementById('daily-visits').textContent = data.ga4.dailyVisits;
+    document.getElementById('adsense-today').textContent = `$${data.adsense.today}`;
+    document.getElementById('adsense-month').textContent = `$${data.adsense.month}`;
+    document.getElementById('affiliate-earnings').textContent = `$${data.affiliate.total}`;
+
+    addChartData(data.ga4.dailyVisits, parseFloat(data.adsense.today) + parseFloat(data.affiliate.total));
+  } catch (err) {
+    console.error("Failed to fetch metrics:", err);
+  }
+     }
+  
 // CONFIG - Replace with your actual keys & IDs
 const GOOGLE_API_KEY = "AIzaSyD-EXAMPLE-LIVE-KEY12345";
 const GA4_PROPERTIES = ["G-QCX3G9KSPC","G-PSW1MY7HB4"];
