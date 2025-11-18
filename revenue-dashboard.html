@@ -152,6 +152,27 @@
     <button class="btn" id="mobile-refresh">Refresh</button>
     <button class="secondary" id="mobile-export">CSV</button>
   </div>  <script>
+function qs(id){return document.getElementById(id)}
+function showError(msg){const e=qs('error-box');e.style.display='block';e.textContent=msg}async function loadConfig(){try{const res=await fetch('/config.json');if(!res.ok)throw new Error('config.json not found');return await res.json();}catch(err){console.warn('Config load failed',err);showError('Could not load /config.json. Using simulated demo data.');return null;}}
+
+function simulateData(){const days=7,labels=[],traffic=[],earnings=[];for(let i=days-1;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);labels.push(d.toLocaleDateString());traffic.push(Math.floor(Math.random()*400)+80);}for(let i=0;i<days;i++){earnings.push(parseFloat((Math.random()*2+0.2).toFixed(2)));}return{labels,traffic,earnings};}
+
+let trafficChart,earningsChart; function makeCharts(labels,traffic,earnings){const tctx=qs('trafficChart').getContext('2d');const ectx=qs('earningsChart').getContext('2d');if(trafficChart)trafficChart.destroy();if(earningsChart)earningsChart.destroy();trafficChart=new Chart(tctx,{type:'line',data:{labels,datasets:[{label:'Visits',data:traffic,fill:true,tension:0.25,pointRadius:3}]},options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});earningsChart=new Chart(ectx,{type:'bar',data:{labels,datasets:[{label:'USD',data:earnings,borderRadius:6}]},options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});}
+
+function updateConfigUI(config){if(!config){qs('api-key-status').textContent='⚠ Missing';qs('ga4-status').textContent='⚠ Missing';qs('adsense-status').textContent='⚠ Missing';qs('affiliate-status').textContent='⚠ Missing';return;}qs('api-key-status').textContent=config.google_api?.api_key!=='REPLACE_WITH_REAL_GOOGLE_API_KEY'?'Loaded':'⚠ Replace API Key';qs('ga4-status').textContent=(config.analytics?.ga4_properties||[]).join(', ')||'—';qs('adsense-status').textContent=config.adsense?.publisher_id||'—';qs('affiliate-status').textContent=config.affiliate?.affiliate_id||'—';qs('config-preview').textContent=JSON.stringify(config,null,2);}
+
+function updateMetricsUI({labels,traffic,earnings}){qs('ga4-realtime').textContent=Math.floor(Math.random()*8)+' users';qs('ga4-daily').textContent=traffic[traffic.length-1]+' visits';qs('ga4-weekly').textContent=traffic.reduce((a,b)=>a+b,0)+' visits';qs('adsense-today').textContent='USD '+earnings[earnings.length-1].toFixed(2);qs('aff-earnings').textContent='USD '+(Math.random()*15+1).toFixed(2);qs('aff-clicks').textContent=Math.floor(Math.random()*90)+10;qs('aff-conversions').textContent=Math.floor(Math.random()*6)+1;qs('aff-summary').textContent='Clicks & conversions simulated';const pages=['/','/blog/nutrition-reset','/blog/mental-health-7','/about','/contact'];const ol=qs('top-pages');ol.innerHTML='';pages.slice(0,5).forEach(p=>{const li=document.createElement('li');li.textContent=${p} — ${Math.floor(Math.random()*350)+50} visits;ol.appendChild(li);});}
+
+function exportCSV({labels,traffic,earnings}){const header=['date','visits','earnings'],rows=labels.map((d,i)=>[d,traffic[i],earnings[i]]),csv=[header.join(','),...rows.map(r=>r.join(','))].join('\n');const blob=new Blob([csv],{type:'text/csv'}),url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='esthetics-data.csv';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);}
+
+const themeKey='esthetics:theme';function applyTheme(t){document.documentElement.setAttribute('data-theme',t);qs('dark-toggle').checked=(t==='dark');localStorage.setItem(themeKey,t)} qs('dark-toggle')?.addEventListener('change',(e)=>applyTheme(e.target.checked?'dark':'light')); applyTheme(localStorage.getItem(themeKey)||'light');
+
+async function refreshDashboard(){const cfg=await loadConfig();updateConfigUI(cfg);const data=simulateData();makeCharts(data.labels,data.traffic,data.earnings);updateMetricsUI(data);}
+
+async function init(){await refreshDashboard(); qs('refresh-btn').addEventListener('click',refreshDashboard); qs('export-csv').addEventListener('click',()=>exportCSV(simulateData())); qs('mobile-refresh').addEventListener('click',()=>qs('refresh-btn').click()); qs('mobile-export').addEventListener('click',()=>qs('export-csv').click()); setInterval(refreshDashboard,60000); // Auto-refresh every 60 seconds }
+
+init(); 
+    
     function qs(id){return document.getElementById(id)}
     function showError(msg){const e=qs('error-box');e.style.display='block';e.textContent=msg}
 
@@ -225,28 +246,8 @@
     }
     init();
   </script>
-  <script>
-function qs(id){return document.getElementById(id)}
-function showError(msg){const e=qs('error-box');e.style.display='block';e.textContent=msg}async function loadConfig(){try{const res=await fetch('/config.json');if(!res.ok)throw new Error('config.json not found');return await res.json();}catch(err){console.warn('Config load failed',err);showError('Could not load /config.json. Using simulated demo data.');return null;}}
-
-function simulateData(){const days=7,labels=[],traffic=[],earnings=[];for(let i=days-1;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);labels.push(d.toLocaleDateString());traffic.push(Math.floor(Math.random()*400)+80);}for(let i=0;i<days;i++){earnings.push(parseFloat((Math.random()*2+0.2).toFixed(2)));}return{labels,traffic,earnings};}
-
-let trafficChart,earningsChart; function makeCharts(labels,traffic,earnings){const tctx=qs('trafficChart').getContext('2d');const ectx=qs('earningsChart').getContext('2d');if(trafficChart)trafficChart.destroy();if(earningsChart)earningsChart.destroy();trafficChart=new Chart(tctx,{type:'line',data:{labels,datasets:[{label:'Visits',data:traffic,fill:true,tension:0.25,pointRadius:3}]},options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});earningsChart=new Chart(ectx,{type:'bar',data:{labels,datasets:[{label:'USD',data:earnings,borderRadius:6}]},options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});}
-
-function updateConfigUI(config){if(!config){qs('api-key-status').textContent='⚠ Missing';qs('ga4-status').textContent='⚠ Missing';qs('adsense-status').textContent='⚠ Missing';qs('affiliate-status').textContent='⚠ Missing';return;}qs('api-key-status').textContent=config.google_api?.api_key!=='REPLACE_WITH_REAL_GOOGLE_API_KEY'?'Loaded':'⚠ Replace API Key';qs('ga4-status').textContent=(config.analytics?.ga4_properties||[]).join(', ')||'—';qs('adsense-status').textContent=config.adsense?.publisher_id||'—';qs('affiliate-status').textContent=config.affiliate?.affiliate_id||'—';qs('config-preview').textContent=JSON.stringify(config,null,2);}
-
-function updateMetricsUI({labels,traffic,earnings}){qs('ga4-realtime').textContent=Math.floor(Math.random()*8)+' users';qs('ga4-daily').textContent=traffic[traffic.length-1]+' visits';qs('ga4-weekly').textContent=traffic.reduce((a,b)=>a+b,0)+' visits';qs('adsense-today').textContent='USD '+earnings[earnings.length-1].toFixed(2);qs('aff-earnings').textContent='USD '+(Math.random()*15+1).toFixed(2);qs('aff-clicks').textContent=Math.floor(Math.random()*90)+10;qs('aff-conversions').textContent=Math.floor(Math.random()*6)+1;qs('aff-summary').textContent='Clicks & conversions simulated';const pages=['/','/blog/nutrition-reset','/blog/mental-health-7','/about','/contact'];const ol=qs('top-pages');ol.innerHTML='';pages.slice(0,5).forEach(p=>{const li=document.createElement('li');li.textContent=${p} — ${Math.floor(Math.random()*350)+50} visits;ol.appendChild(li);});}
-
-function exportCSV({labels,traffic,earnings}){const header=['date','visits','earnings'],rows=labels.map((d,i)=>[d,traffic[i],earnings[i]]),csv=[header.join(','),...rows.map(r=>r.join(','))].join('\n');const blob=new Blob([csv],{type:'text/csv'}),url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='esthetics-data.csv';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);}
-
-const themeKey='esthetics:theme';function applyTheme(t){document.documentElement.setAttribute('data-theme',t);qs('dark-toggle').checked=(t==='dark');localStorage.setItem(themeKey,t)} qs('dark-toggle')?.addEventListener('change',(e)=>applyTheme(e.target.checked?'dark':'light')); applyTheme(localStorage.getItem(themeKey)||'light');
-
-async function refreshDashboard(){const cfg=await loadConfig();updateConfigUI(cfg);const data=simulateData();makeCharts(data.labels,data.traffic,data.earnings);updateMetricsUI(data);}
-
-async function init(){await refreshDashboard(); qs('refresh-btn').addEventListener('click',refreshDashboard); qs('export-csv').addEventListener('click',()=>exportCSV(simulateData())); qs('mobile-refresh').addEventListener('click',()=>qs('refresh-btn').click()); qs('mobile-export').addEventListener('click',()=>qs('export-csv').click()); setInterval(refreshDashboard,60000); // Auto-refresh every 60 seconds }
-
-init(); 
-  </script>
+  
+  
 </body>
   </html>
   
