@@ -8,6 +8,8 @@
   <!-- Chart.js CDN -->  
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>  
   <script src="revenue-dashboard.js" defer></script>
+  <script src="/config.json" defer></script>
+  
   <style>
     :root{--bg:#f5f7fb;--card:#ffffff;--text:#0f172a;--muted:#6b7280;--accent:#06b6d4;--shadow:0 6px 20px rgba(2,6,23,0.08);}
     [data-theme="dark"]{--bg:#071122;--card:#081425;--text:#e6eef6;--muted:#9fb0c2;--accent:#06b6d4;--shadow:0 6px 30px rgba(2,6,23,0.6);}
@@ -129,6 +131,21 @@
   <button class="secondary" id="mobile-export">CSV</button>
 </div>
 <script>
+function qs(id){return document.getElementById(id)}
+    function showError(msg){const e=qs('error-box');e.style.display='block';e.textContent=msg}
+
+    async function loadConfig(){
+      try{
+        const res = await fetch('/config.json');
+        if(!res.ok) throw new Error('config.json not found');
+        return await res.json();
+      }catch(err){
+        console.warn('Config load failed',err);
+        showError('Could not load /config.json. Using simulated demo data.');
+        return null;
+      }
+    }
+  
 function qs(id){return document.getElementById(id)}
 function showError(msg){const e=qs('error-box');e.style.display='block';e.textContent=msg}async function loadConfig(){try{const res=await fetch('/config.json');if(!res.ok)throw new Error('config.json not found');return await res.json();}catch(err){console.warn('Config load failed',err);showError('Could not load /config.json. Using simulated demo data.');return null;}}
 
