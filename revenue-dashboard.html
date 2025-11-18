@@ -87,6 +87,49 @@ footer { text-align:center; padding:1rem; background:#222; color:#fff; margin-to
 
 <footer>&copy; 2025 The Esthetics Hub</footer>
 
+  <script>
+// === Load config.json dynamically ===
+let GOOGLE_API_KEY = "";
+let GA4_PROPERTIES = [];
+let ADSENSE_PUB_ID = "";
+let AFFILIATE_ID = "";
+
+// Load configuration from /config.json
+async function loadConfig() {
+  try {
+    const response = await fetch("/config.json?cache=" + Date.now());
+    if (!response.ok) throw new Error("Config load error");
+
+    const config = await response.json();
+
+    // Apply config values
+    GOOGLE_API_KEY = config.GOOGLE_API_KEY || "MISSING_KEY";
+    GA4_PROPERTIES = config.GA4_PROPERTIES || [];
+    ADSENSE_PUB_ID = config.ADSENSE_PUB_ID || "MISSING_PUB_ID";
+    AFFILIATE_ID = config.AFFILIATE_ID || "MISSING_AFFILIATE";
+
+    document.getElementById("api-key-status").textContent = 
+        GOOGLE_API_KEY !== "MISSING_KEY" ? "Connected ✅" : "Missing ❌";
+
+    document.getElementById("ga4-properties-status").textContent = 
+        GA4_PROPERTIES.length > 0 ? `${GA4_PROPERTIES.length} Loaded ✅` : "Missing ❌";
+
+    // After config loads → run dashboard
+    updateMetrics();
+
+  } catch (err) {
+    console.error("Config load failed:", err);
+    document.getElementById("api-key-status").textContent = "Config Error ❌";
+    document.getElementById("ga4-properties-status").textContent = "Config Error ❌";
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  loadConfig();                 // Load real-time config
+  setInterval(updateMetrics, 60000); // Auto-refresh
+});
+      </script>
+  
 <script>
 // CONFIG
 const GOOGLE_API_KEY = "AIzaSyD-EXAMPLE-LIVE-KEY12345";
