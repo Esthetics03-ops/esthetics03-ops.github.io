@@ -1,4 +1,4 @@
-<script>
+
 const axios = require('axios');
 const githubToken = 'ghp_1234567890abcdefghijklmnopqrstuvwxyz';
 const facebookAppId = '123456789012345';
@@ -61,5 +61,5 @@ const content = {
 uploadToGitHub(content);
 postToFacebook(content);
 
-</script>
+
 
