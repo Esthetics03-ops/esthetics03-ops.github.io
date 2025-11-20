@@ -3,221 +3,104 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Esthetics Hub - Revenue Dashboard</title>
+<title>The Esthetics Hub Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<!-- === Modular CSS Sections === -->
+<script src="metrics.js" defer></script>
 <style>
-/* === General Layout === */
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background: #f4f4f4;
-}
-header {
-  background: #222;
-  color: #fff;
-  padding: 1rem;
-  text-align: center;
-}
-main {
-  padding: 1rem;
-  max-width: 1200px;
-  margin: auto;
-}
-h2 {
-  margin-top: 2rem;
-  margin-bottom: 1rem;
-}
-footer {
-  text-align: center;
-  padding: 1rem;
-  background: #222;
-  color: #fff;
-  margin-top: 2rem;
-}
-
-/* === Dashboard Sections === */
-.dashboard-section {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1rem;
-}
-
-/* === Configuration Section === */
-.config-item {
-  background: #fff;
-  padding: 1rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-.config-item .label {
-  font-size: 0.9rem;
-  color: #555;
-}
-.config-item .value {
-  font-weight: bold;
-  color: #222;
-}
-
-/* === Live Metrics Section === */
-#live-metrics-section .metric-card {
-  background: #fff;
-  padding: 1rem;
-  border-left: 5px solid #007bff;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-#live-metrics-section .metric-label { font-weight: bold; margin-bottom:0.5rem; }
-#live-metrics-section .metric-value { font-size:1.5rem; color:#007bff; }
-
-/* === Monetization Section === */
-#monetization-section .metric-card {
-  background: #fff;
-  padding: 1rem;
-  border-left: 5px solid #28a745;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-#monetization-section .metric-label { font-weight: bold; margin-bottom:0.5rem; }
-#monetization-section .metric-value { font-size:1.5rem; color:#28a745; }
-
-/* === Chart Section === */
-.chart-section canvas {
-  background: #fff;
-  border-radius: 8px;
-  padding: 1rem;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-/* === Responsive Adjustments === */
-@media (max-width: 600px) {
-  .dashboard-section {
-    grid-template-columns: 1fr;
-  }
-}
+  body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+  h1 { text-align: center; }
+  .metrics { display: flex; justify-content: space-around; margin-bottom: 20px; flex-wrap: wrap; }
+  .metric-card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); width: 30%; text-align: center; margin-bottom: 10px; }
+  table { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.1); margin-top: 20px; }
+  th, td { padding: 12px; text-align: center; border-bottom: 1px solid #ddd; }
+  th { background: #4CAF50; color: white; }
+  canvas { margin-top: 30px; }
 </style>
 </head>
-
 <body>
+<h1>The Esthetics Hub Dashboard</h1>
 
-<header>
-  <h1>The Esthetics Hub Revenue Dashboard</h1>
-</header>
+<div class="metrics">
+  <div class="metric-card">
+    <h2>Total Active Users</h2>
+    <p id="totalUsers">0</p>
+  </div>
+  <div class="metric-card">
+    <h2>Total Ad Revenue</h2>
+    <p id="totalAdRevenue">$0.00</p>
+  </div>
+  <div class="metric-card">
+    <h2>Total Affiliate Revenue</h2>
+    <p id="totalAffiliateRevenue">$0.00</p>
+  </div>
+</div>
 
-<main>
-  <!-- === Configuration Section === -->
-  <section id="config-section" class="dashboard-section">
-    <div class="config-item">
-      <span class="label">API Key</span>
-      <span class="value" id="api-key-status">Checking...</span>
-    </div>
-    <div class="config-item">
-      <span class="label">GA4 Properties</span>
-      <span class="value" id="ga4-properties-status">Checking...</span>
-    </div>
-  </section>
+<h2>Page-Level Metrics</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Page</th>
+      <th>Active Users</th>
+      <th>Ad Revenue</th>
+      <th>Affiliate Revenue</th>
+      <th>Ad RPM</th>
+      <th>Affiliate Clicks</th>
+    </tr>
+  </thead>
+  <tbody id="pagesTableBody">
+  </tbody>
+</table>
 
-  <!-- === Live Metrics Section === -->
-  <section id="live-metrics-section" class="dashboard-section">
-    <div class="metric-card">
-      <p class="metric-label">Real-Time Users</p>
-      <p class="metric-value" id="real-time-users">-</p>
-    </div>
-    <div class="metric-card">
-      <p class="metric-label">Visits Today</p>
-      <p class="metric-value" id="daily-visits">-</p>
-    </div>
-  </section>
+<h2>Device Breakdown</h2>
+<canvas id="deviceChart" height="100"></canvas>
 
-  <!-- === Monetization Section === -->
-  <section id="monetization-section" class="dashboard-section">
-    <div class="metric-card">
-      <p class="metric-label">AdSense (Today)</p>
-      <p class="metric-value" id="adsense-today">-</p>
-    </div>
-    <div class="metric-card">
-      <p class="metric-label">Estimated Earnings (Month)</p>
-      <p class="metric-value" id="adsense-month">-</p>
-    </div>
-    <div class="metric-card">
-      <p class="metric-label">Affiliate Earnings</p>
-      <p class="metric-value" id="affiliate-earnings">-</p>
-    </div>
-  </section>
+<h2>Traffic Source Breakdown</h2>
+<canvas id="sourceChart" height="100"></canvas>
 
-  <!-- === Revenue Chart Section === -->
-  <section class="chart-section">
-    <h2>Revenue & Visits Overview</h2>
-    <canvas id="revenueChart" height="150"></canvas>
-  </section>
-</main>
-
-<footer>
-  &copy; 2025 The Esthetics Hub
-</footer>
-
-<!-- === JavaScript Metrics & Charts === -->
 <script>
-const GOOGLE_API_KEY = "AIzaSyD-EXAMPLE-LIVE-KEY12345";
-const GA4_PROPERTIES = ["G-QCX3G9KSPC","G-PSW1MY7HB4"];
-const ADSENSE_PUB_ID = "pub-1959507280210179";
-const AFFILIATE_ID = "esthetics-hub-affiliate";
+function renderDashboard() {
+  // Overall metrics
+  document.getElementById('totalUsers').innerText = dashboardData.totals.activeUsers;
+  document.getElementById('totalAdRevenue').innerText = '$' + dashboardData.totals.adRevenue;
+  document.getElementById('totalAffiliateRevenue').innerText = '$' + dashboardData.totals.affiliateRevenue;
 
-// Chart Setup
-const ctx = document.getElementById('revenueChart').getContext('2d');
-const revenueChart = new Chart(ctx, {
-  type: 'line',
-  data: { labels: [], datasets:[
-    { label:'Visits', data:[], borderColor:'#007bff', backgroundColor:'rgba(0,123,255,0.2)', fill:true, tension:0.4 },
-    { label:'Revenue ($)', data:[], borderColor:'#28a745', backgroundColor:'rgba(40,167,69,0.2)', fill:true, tension:0.4 }
-  ]},
-  options: {
-    responsive:true,
-    plugins:{ legend:{ position:'top' } },
-    scales:{ x:{ title:{ display:true, text:'Time' } }, y:{ title:{ display:true, text:'Value' }, beginAtZero:true } }
-  }
-});
+  // Page-level table
+  const tableBody = document.getElementById('pagesTableBody');
+  tableBody.innerHTML = '';
+  dashboardData.pages.forEach(p => {
+    const row = `<tr>
+      <td>${p.name}</td>
+      <td>${p.activeUsers}</td>
+      <td>$${p.adRevenue}</td>
+      <td>$${p.affiliateRevenue}</td>
+      <td>${p.adRPM}</td>
+      <td>${p.affiliateClicks}</td>
+    </tr>`;
+    tableBody.innerHTML += row;
+  });
 
-function addChartData(visits, revenue){
-  const now = new Date();
-  const timeLabel = now.getHours() + ':' + String(now.getMinutes()).padStart(2,'0');
-  if(revenueChart.data.labels.length >= 10){
-    revenueChart.data.labels.shift();
-    revenueChart.data.datasets[0].data.shift();
-    revenueChart.data.datasets[1].data.shift();
-  }
-  revenueChart.data.labels.push(timeLabel);
-  revenueChart.data.datasets[0].data.push(visits);
-  revenueChart.data.datasets[1].data.push(revenue);
-  revenueChart.update();
+  // Device chart
+  const ctxDevice = document.getElementById('deviceChart').getContext('2d');
+  if(window.deviceChart) window.deviceChart.destroy();
+  window.deviceChart = new Chart(ctxDevice, {
+    type: 'pie',
+    data: {
+      labels: dashboardData.devices.map(d => d.device),
+      datasets: [{ data: dashboardData.devices.map(d => d.users), backgroundColor: ['#4CAF50','#FF9800','#2196F3'] }]
+    }
+  });
+
+  // Traffic source chart
+  const ctxSource = document.getElementById('sourceChart').getContext('2d');
+  if(window.sourceChart) window.sourceChart.destroy();
+  window.sourceChart = new Chart(ctxSource, {
+    type: 'pie',
+    data: {
+      labels: dashboardData.sources.map(s => s.source),
+      datasets: [{ data: dashboardData.sources.map(s => s.users), backgroundColor: ['#4CAF50','#FF9800','#2196F3','#FFC107','#9C27B0'] }]
+    }
+  });
 }
-
-// Simulated Metrics (replace with real API calls or proxy)
-async function fetchMetrics(){
-  const activeUsers = Math.floor(Math.random()*100);
-  const dailyVisits = activeUsers*12;
-  const adsenseToday = (Math.random()*25).toFixed(2);
-  const adsenseMonth = (adsenseToday*22).toFixed(2);
-  const affiliate = (Math.random()*200).toFixed(2);
-
-  document.getElementById('api-key-status').textContent = "Connected ✅";
-  document.getElementById('ga4-properties-status').textContent = `${GA4_PROPERTIES.length} Properties ✅`;
-  document.getElementById('real-time-users').textContent = activeUsers;
-  document.getElementById('daily-visits').textContent = dailyVisits;
-  document.getElementById('adsense-today').textContent = `$${adsenseToday}`;
-  document.getElementById('adsense-month').textContent = `$${adsenseMonth}`;
-  document.getElementById('affiliate-earnings').textContent = `$${affiliate}`;
-  addChartData(dailyVisits, parseFloat(adsenseToday)+parseFloat(affiliate));
-}
-
-// Auto-refresh every 60s
-document.addEventListener('DOMContentLoaded', () => {
-  fetchMetrics();
-  setInterval(fetchMetrics,60000);
-});
 </script>
-
 </body>
   </html>
