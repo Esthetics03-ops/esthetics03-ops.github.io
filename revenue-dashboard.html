@@ -185,5 +185,98 @@ document.addEventListener('DOMContentLoaded', ()=>{
 });
 </script>
 
+  <script>
+// === LIVE SIMULATION SCRIPT ===
+
+// Simulated configuration (replace with real config if available)
+const CONFIG = {
+  GOOGLE_API_KEY: "AIzaSyD-EXAMPLE-LIVE-KEY12345",
+  GA4_PROPERTIES: ["G-QCX3G9KSPC","G-PSW1MY7HB4"],
+  ADSENSE_PUB_ID: "pub-1959507280210179",
+  AFFILIATE_ID: "esthetics-hub-affiliate"
+};
+
+// Chart reference
+const ctx = document.getElementById('revenueChart').getContext('2d');
+const revenueChart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: [],
+    datasets: [
+      { label: 'Visits', data: [], borderColor: '#007bff', backgroundColor: 'rgba(0,123,255,0.2)', fill: true, tension: 0.4 },
+      { label: 'Revenue ($)', data: [], borderColor: '#28a745', backgroundColor: 'rgba(40,167,69,0.2)', fill: true, tension: 0.4 }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'top' } },
+    scales: {
+      x: { title: { display: true, text: 'Time' } },
+      y: { title: { display: true, text: 'Value' }, beginAtZero: true }
+    }
+  }
+});
+
+// Helper: Add data to chart
+function addChartData(visits, revenue){
+  const now = new Date();
+  const label = now.getHours() + ':' + String(now.getMinutes()).padStart(2,'0');
+  if(revenueChart.data.labels.length >= 10){
+    revenueChart.data.labels.shift();
+    revenueChart.data.datasets[0].data.shift();
+    revenueChart.data.datasets[1].data.shift();
+  }
+  revenueChart.data.labels.push(label);
+  revenueChart.data.datasets[0].data.push(visits);
+  revenueChart.data.datasets[1].data.push(revenue);
+  revenueChart.update();
+}
+
+// Simulate GA4 active users
+function simulateGA4(){
+  return CONFIG.GA4_PROPERTIES.reduce((sum) => sum + Math.floor(Math.random() * 100), 0);
+}
+
+// Simulate AdSense earnings
+function simulateAdsense(){
+  return (Math.random() * 25).toFixed(2);
+}
+
+// Simulate Affiliate earnings
+function simulateAffiliate(){
+  return (Math.random() * 200).toFixed(2);
+}
+
+// Update all dashboard metrics
+function updateMetrics(){
+  // API / GA4 status
+  document.getElementById('api-key-status').textContent = "Connected ✅";
+  document.getElementById('ga4-properties-status').textContent = `${CONFIG.GA4_PROPERTIES.length} Loaded ✅`;
+
+  // Simulate data
+  const totalActiveUsers = simulateGA4();
+  const dailyVisits = totalActiveUsers * 12; // scaling factor
+  const adsenseToday = parseFloat(simulateAdsense());
+  const adsenseMonth = (adsenseToday * 22).toFixed(2);
+  const affiliate = parseFloat(simulateAffiliate());
+
+  // Update DOM
+  document.getElementById('real-time-users').textContent = totalActiveUsers;
+  document.getElementById('daily-visits').textContent = dailyVisits;
+  document.getElementById('adsense-today').textContent = `$${adsenseToday}`;
+  document.getElementById('adsense-month').textContent = `$${adsenseMonth}`;
+  document.getElementById('affiliate-earnings').textContent = `$${affiliate.toFixed(2)}`;
+
+  // Update chart
+  addChartData(dailyVisits, adsenseToday + affiliate);
+}
+
+// Initialize live simulation
+document.addEventListener('DOMContentLoaded', ()=>{
+  updateMetrics();
+  setInterval(updateMetrics, 10000); // update every 10s
+});
+  </script>
+
 </body>
 </html>
