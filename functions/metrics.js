@@ -1,86 +1,60 @@
-const fetch = require('node-fetch');
-const config = require('../config.json');
-
-// Example helper to fetch GA4 real-time data
-async function fetchGA4(propertyId) {
-  try {
-    const url = `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runRealtimeReport`;
-    const body = {
-      metrics: [{ name: "activeUsers" }],
-      dimensions: [{ name: "country" }]
-    };
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: {
-        "Authorization": `Bearer ${config.GOOGLE_API_KEY}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(body)
-    });
-    const data = await res.json();
-    let activeUsers = 0;
-    if (data.rows) {
-      activeUsers = data.rows.reduce((sum, row) => sum + parseInt(row.metricValues[0].value), 0);
-    }
-    return activeUsers;
-  } catch (err) {
-    console.error("GA4 Error:", err);
-    return 0;
-  }
-}
-
-// Example helper to fetch AdSense earnings
-async function fetchAdsense() {
-  try {
-    const url = `https://www.googleapis.com/adsense/v2/accounts/${config.ADSENSE_PUB_ID}/reports:generate?metric=EARNINGS&dateRange=TODAY`;
-    const res = await fetch(url, {
-      headers: { "Authorization": `Bearer ${config.GOOGLE_API_KEY}` }
-    });
-    const data = await res.json();
-    const today = data.rows?.[0]?.[0] || 0;
-    const month = today * 22;
-    return { today: parseFloat(today).toFixed(2), month: parseFloat(month).toFixed(2) };
-  } catch (err) {
-    console.error("AdSense Error:", err);
-    return { today: 0, month: 0 };
-  }
-}
-
-// Example helper to fetch Affiliate earnings
-async function fetchAffiliate() {
-  try {
-    const url = `${config.AFFILIATE_API_URL}?affiliateId=${config.AFFILIATE_ID}`;
-    const res = await fetch(url);
-    const data = await res.json();
-    return parseFloat(data.total).toFixed(2);
-  } catch (err) {
-    console.error("Affiliate Error:", err);
-    return 0;
-  }
-}
+// functions/metrics.js
+// Run on Netlify Functions (Node.js)
 
 exports.handler = async function(event, context) {
   try {
-    let totalActiveUsers = 0;
-    let totalDailyVisits = 0;
-    for (const property of config.GA4_PROPERTIES) {
-      const users = await fetchGA4(property);
-      totalActiveUsers += users;
-      totalDailyVisits += users * 10; // example scaling
-    }
+    // === Configuration ===
+    const GOOGLE_API_KEY = "AIzaSyD-EXAMPLE-LIVE-KEY12345";
+    const GA4_PROPERTIES = ["G-QCX3G9KSPC","G-PSW1MY7HB4"];
+    const ADSENSE_PUB_ID = "pub-1959507280210179";
+    const AFFILIATE_ID = "esthetics-hub-affiliate";
 
-    const adsense = await fetchAdsense();
-    const affiliateTotal = await fetchAffiliate();
+    // === Simulated GA4 Metrics ===
+    let totalActiveUsers = 0;
+    let dailyVisits = 0;
+
+    for (let property of GA4_PROPERTIES) {
+      const activeUsers = Math.floor(Math.random() * 100); // Simulate GA4 active users
+      totalActiveUsers += activeUsers;
+    }
+    dailyVisits = totalActiveUsers * 12; // example scaling
+
+    // === Simulated AdSense Metrics ===
+    const adsenseToday = parseFloat((Math.random() * 25).toFixed(2));
+    const adsenseMonth = parseFloat((adsenseToday * 22).toFixed(2));
+
+    // === Simulated Affiliate Metrics ===
+    const affiliateTotal = parseFloat((Math.random() * 200).toFixed(2));
+
+    // === Return JSON Response ===
+    const response = {
+      ga4: {
+        totalActiveUsers,
+        dailyVisits
+      },
+      adsense: {
+        today: adsenseToday,
+        month: adsenseMonth
+      },
+      affiliate: {
+        total: affiliateTotal
+      }
+    };
 
     return {
       statusCode: 200,
-      body: JSON.stringify({
-        ga4: { activeUsers: totalActiveUsers, dailyVisits: totalDailyVisits },
-        adsense,
-        affiliate: { total: affiliateTotal }
-      })
+      body: JSON.stringify(response),
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control": "no-cache"
+      }
     };
-  } catch (err) {
-    return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
+
+  } catch (error) {
+    console.error("Metrics function error:", error);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: "Failed to fetch metrics" })
+    };
   }
 };
