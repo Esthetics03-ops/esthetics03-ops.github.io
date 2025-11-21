@@ -1,106 +1,145 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Esthetics Hub Dashboard</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="metrics.js" defer></script>
-<style>
-  body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
-  h1 { text-align: center; }
-  .metrics { display: flex; justify-content: space-around; margin-bottom: 20px; flex-wrap: wrap; }
-  .metric-card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); width: 30%; text-align: center; margin-bottom: 10px; }
-  table { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.1); margin-top: 20px; }
-  th, td { padding: 12px; text-align: center; border-bottom: 1px solid #ddd; }
-  th { background: #4CAF50; color: white; }
-  canvas { margin-top: 30px; }
-</style>
+  <meta charset="UTF-8">
+  <title>The Esthetics Hub - Revenue Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
+  <style>
+    body { font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
+  </style>
 </head>
-<body>
-<h1>The Esthetics Hub Dashboard</h1>
+<body class="bg-gray-50 text-gray-900">
+  <div class="max-w-7xl mx-auto p-6">
+    <header class="flex items-center justify-between mb-6">
+      <h1 class="text-2xl font-bold">Revenue & Payout Dashboard</h1>
+      <button id="refreshBtn" class="px-3 py-2 bg-blue-600 text-white rounded">Refresh</button>
+    </header>
 
-<div class="metrics">
-  <div class="metric-card">
-    <h2>Total Active Users</h2>
-    <p id="totalUsers">0</p>
+    <div id="status" class="mb-4 text-sm text-gray-600">Status: <span id="statusText">Initializing...</span></div>
+
+    <div class="grid md:grid-cols-3 gap-4">
+      <!-- Payout Summary -->
+      <div class="bg-white p-4 rounded shadow">
+        <h2 class="font-semibold">Payout Summary</h2>
+        <div id="streamsList" class="mt-3 space-y-2"></div>
+        <div class="mt-4 border-t pt-2 flex justify-between">
+          <div><strong>Total</strong></div>
+          <div><strong id="totalAmount">$0.00</strong></div>
+        </div>
+        <div class="mt-2 text-sm text-gray-600">
+          Available: <span id="availableAmount">$0.00</span> • Pending: <span id="pendingAmount">$0.00</span>
+        </div>
+      </div>
+
+      <!-- Revenue Chart -->
+      <div class="bg-white p-4 rounded shadow md:col-span-2">
+        <h2 class="font-semibold">Revenue Chart</h2>
+        <canvas id="revenueChart" width="600" height="300"></canvas>
+      </div>
+
+      <!-- Upcoming Payouts -->
+      <div class="bg-white p-4 rounded shadow md:col-span-3">
+        <h2 class="font-semibold">Upcoming Payments</h2>
+        <ul id="upcomingList" class="mt-3 space-y-2"></ul>
+      </div>
+    </div>
+
+    <!-- Logs -->
+    <div class="mt-6">
+      <h3 class="font-semibold">Debug / Logs</h3>
+      <pre id="log" class="bg-black text-green-200 p-3 rounded h-40 overflow-auto"></pre>
+    </div>
   </div>
-  <div class="metric-card">
-    <h2>Total Ad Revenue</h2>
-    <p id="totalAdRevenue">$0.00</p>
-  </div>
-  <div class="metric-card">
-    <h2>Total Affiliate Revenue</h2>
-    <p id="totalAffiliateRevenue">$0.00</p>
-  </div>
-</div>
 
-<h2>Page-Level Metrics</h2>
-<table>
-  <thead>
-    <tr>
-      <th>Page</th>
-      <th>Active Users</th>
-      <th>Ad Revenue</th>
-      <th>Affiliate Revenue</th>
-      <th>Ad RPM</th>
-      <th>Affiliate Clicks</th>
-    </tr>
-  </thead>
-  <tbody id="pagesTableBody">
-  </tbody>
-</table>
+  <script>
+    // Config placeholders
+    const CONFIG = {
+      GOOGLE_API_KEY: "AIzaSyD-LIVE-PLACEHOLDER-12345",
+      GA4_PROPERTIES: ["G-QCX3G9KSPC","G-PSW1MY7HB4"],
+      ADSENSE_PUB_ID: "pub-1959507280210179",
+      AFFILIATE_ID: "esthetics-hub-affiliate",
+      MPESA_STK_ENDPOINT: "/api/mpesa-stk"
+    };
 
-<h2>Device Breakdown</h2>
-<canvas id="deviceChart" height="100"></canvas>
+    const logEl = document.getElementById('log');
+    function log(msg){ console.log(msg); if(logEl) logEl.textContent += '\\n'+msg; }
 
-<h2>Traffic Source Breakdown</h2>
-<canvas id="sourceChart" height="100"></canvas>
+    let chart;
 
-<script>
-function renderDashboard() {
-  // Overall metrics
-  document.getElementById('totalUsers').innerText = dashboardData.totals.activeUsers;
-  document.getElementById('totalAdRevenue').innerText = '$' + dashboardData.totals.adRevenue;
-  document.getElementById('totalAffiliateRevenue').innerText = '$' + dashboardData.totals.affiliateRevenue;
-
-  // Page-level table
-  const tableBody = document.getElementById('pagesTableBody');
-  tableBody.innerHTML = '';
-  dashboardData.pages.forEach(p => {
-    const row = `<tr>
-      <td>${p.name}</td>
-      <td>${p.activeUsers}</td>
-      <td>$${p.adRevenue}</td>
-      <td>$${p.affiliateRevenue}</td>
-      <td>${p.adRPM}</td>
-      <td>${p.affiliateClicks}</td>
-    </tr>`;
-    tableBody.innerHTML += row;
-  });
-
-  // Device chart
-  const ctxDevice = document.getElementById('deviceChart').getContext('2d');
-  if(window.deviceChart) window.deviceChart.destroy();
-  window.deviceChart = new Chart(ctxDevice, {
-    type: 'pie',
-    data: {
-      labels: dashboardData.devices.map(d => d.device),
-      datasets: [{ data: dashboardData.devices.map(d => d.users), backgroundColor: ['#4CAF50','#FF9800','#2196F3'] }]
+    // Simulated or backend fetch summary
+    async function fetchSummary() {
+      try {
+        const res = await fetch('/api/summary');
+        if(!res.ok) throw new Error('Backend summary failed: '+res.status);
+        return await res.json();
+      } catch (e) {
+        log('Backend fetch failed, using simulated data');
+        const streams = [
+          {name:'AdSense',amount:123.45,payoutDate:'2025-11-21',paymentMethod:'Bank Transfer'},
+          {name:'Amazon Affiliate',amount:67.89,payoutDate:'2026-01-31',paymentMethod:'Direct Deposit / Gift Card / Check'},
+          {name:'Booking.com Affiliate',amount:45.67,payoutDate:'2025-12-01',paymentMethod:'Bank Transfer'},
+          {name:'PayPal Donations',amount:34.56,payoutDate:'pending',paymentMethod:'PayPal Account'},
+          {name:'M-Pesa Donations',amount:23.45,payoutDate:'pending',paymentMethod:'M-Pesa Mobile Account'}
+        ];
+        const total = streams.reduce((s,i)=>s+i.amount,0);
+        return { streams, total, available:0, pending:total, payments:streams.map(s=>({stream:s.name,date:s.payoutDate,amount:s.amount,method:s.paymentMethod})) };
+      }
     }
-  });
 
-  // Traffic source chart
-  const ctxSource = document.getElementById('sourceChart').getContext('2d');
-  if(window.sourceChart) window.sourceChart.destroy();
-  window.sourceChart = new Chart(ctxSource, {
-    type: 'pie',
-    data: {
-      labels: dashboardData.sources.map(s => s.source),
-      datasets: [{ data: dashboardData.sources.map(s => s.users), backgroundColor: ['#4CAF50','#FF9800','#2196F3','#FFC107','#9C27B0'] }]
+    function renderChart(streams) {
+      const ctx = document.getElementById('revenueChart').getContext('2d');
+      const labels = streams.map(s=>s.name);
+      const data = streams.map(s=>s.amount);
+      if(chart) chart.destroy();
+      chart = new Chart(ctx, {
+        type:'bar',
+        data:{labels,datasets:[{label:'Amount (USD)',data}]},
+        options:{responsive:true,maintainAspectRatio:false}
+      });
     }
-  });
-}
-</script>
+
+    function renderSummary(data) {
+      const list = document.getElementById('streamsList'); list.innerHTML='';
+      data.streams.forEach(s=>{
+        const div = document.createElement('div'); div.className='flex justify-between';
+        div.innerHTML = `<div><strong>${s.name}</strong><div class="text-xs text-gray-500">${s.paymentMethod}</div></div><div>$${s.amount.toFixed(2)}</div>`;
+        list.appendChild(div);
+      });
+      document.getElementById('totalAmount').textContent = '$'+data.total.toFixed(2);
+      document.getElementById('availableAmount').textContent = '$'+(data.available||0).toFixed(2);
+      document.getElementById('pendingAmount').textContent = '$'+(data.pending||0).toFixed(2);
+
+      renderChart(data.streams);
+
+      const ul = document.getElementById('upcomingList'); ul.innerHTML='';
+      data.payments.forEach(p=>{
+        const li = document.createElement('li'); li.className='flex justify-between';
+        li.textContent = `${p.stream} — ${p.method}`;
+        const span = document.createElement('span'); span.className='text-sm text-gray-600'; span.textContent = p.date;
+        li.appendChild(span);
+        ul.appendChild(li);
+      });
+    }
+
+    async function refresh() {
+      document.getElementById('statusText').textContent='Refreshing...';
+      try {
+        const data = await fetchSummary();
+        renderSummary(data);
+        document.getElementById('statusText').textContent = 'OK (last updated '+new Date().toLocaleTimeString()+')';
+        log('Dashboard refreshed');
+      } catch(e){
+        document.getElementById('statusText').textContent='Error: '+e.message;
+        log(e.stack);
+      }
+    }
+
+    document.getElementById('refreshBtn').addEventListener('click', refresh);
+    window.addEventListener('load',()=>{refresh(); setInterval(refresh,60000);});
+  </script>
 </body>
-  </html>
+      </html>
