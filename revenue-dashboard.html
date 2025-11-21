@@ -1,145 +1,211 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>The Esthetics Hub - Revenue Dashboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
-  <style>
-    body { font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Esthetics Hub - Revenue Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body {
+  font-family: Arial,sans-serif;
+  margin:0;
+  padding:0;
+  background:#f4f4f4;
+  overflow-x:hidden;
+}
+header {
+  background:#222;
+  color:#fff;
+  padding:1rem;
+  text-align:center;
+}
+main {
+  padding:1rem;
+  max-width:1200px;
+  margin:auto;
+  box-sizing:border-box;
+}
+h2 {
+  margin:2rem 0 1rem 0;
+}
+footer {
+  text-align:center;
+  padding:1rem;
+  background:#222;
+  color:#fff;
+  margin-top:2rem;
+}
+
+.dashboard-section {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:1rem;
+}
+
+.config-item {
+  background:#fff;
+  padding:1rem;
+  border-radius:8px;
+  box-shadow:0 2px 5px rgba(0,0,0,0.1);
+  word-break:break-word;
+}
+.config-item .label { font-size:0.9rem; color:#555; }
+.config-item .value { font-weight:bold; color:#222; }
+
+#live-metrics-section .metric-card,
+#monetization-section .metric-card {
+  background:#fff;
+  padding:1rem;
+  border-radius:8px;
+  box-shadow:0 2px 5px rgba(0,0,0,0.1);
+  word-break:break-word;
+}
+#live-metrics-section .metric-card { border-left:5px solid #007bff; }
+#live-metrics-section .metric-value { font-size:1.5rem; color:#007bff; }
+#monetization-section .metric-card { border-left:5px solid #28a745; }
+#monetization-section .metric-value { font-size:1.5rem; color:#28a745; }
+
+.chart-section canvas {
+  background:#fff;
+  border-radius:8px;
+  padding:1rem;
+  box-shadow:0 2px 5px rgba(0,0,0,0.1);
+  width:100% !important;
+}
+
+@media (max-width:600px) {
+  .dashboard-section {
+    grid-template-columns:1fr;
+  }
+}
+</style>
 </head>
-<body class="bg-gray-50 text-gray-900">
-  <div class="max-w-7xl mx-auto p-6">
-    <header class="flex items-center justify-between mb-6">
-      <h1 class="text-2xl font-bold">Revenue & Payout Dashboard</h1>
-      <button id="refreshBtn" class="px-3 py-2 bg-blue-600 text-white rounded">Refresh</button>
-    </header>
+<body>
 
-    <div id="status" class="mb-4 text-sm text-gray-600">Status: <span id="statusText">Initializing...</span></div>
+<header>
+  <h1>The Esthetics Hub Revenue Dashboard</h1>
+</header>
 
-    <div class="grid md:grid-cols-3 gap-4">
-      <!-- Payout Summary -->
-      <div class="bg-white p-4 rounded shadow">
-        <h2 class="font-semibold">Payout Summary</h2>
-        <div id="streamsList" class="mt-3 space-y-2"></div>
-        <div class="mt-4 border-t pt-2 flex justify-between">
-          <div><strong>Total</strong></div>
-          <div><strong id="totalAmount">$0.00</strong></div>
-        </div>
-        <div class="mt-2 text-sm text-gray-600">
-          Available: <span id="availableAmount">$0.00</span> • Pending: <span id="pendingAmount">$0.00</span>
-        </div>
-      </div>
+<main>
 
-      <!-- Revenue Chart -->
-      <div class="bg-white p-4 rounded shadow md:col-span-2">
-        <h2 class="font-semibold">Revenue Chart</h2>
-        <canvas id="revenueChart" width="600" height="300"></canvas>
-      </div>
-
-      <!-- Upcoming Payouts -->
-      <div class="bg-white p-4 rounded shadow md:col-span-3">
-        <h2 class="font-semibold">Upcoming Payments</h2>
-        <ul id="upcomingList" class="mt-3 space-y-2"></ul>
-      </div>
+  <!-- Configuration Status -->
+  <section id="config-section" class="dashboard-section">
+    <div class="config-item">
+      <span class="label">API Key</span>
+      <span class="value" id="api-key-status">Checking...</span>
     </div>
-
-    <!-- Logs -->
-    <div class="mt-6">
-      <h3 class="font-semibold">Debug / Logs</h3>
-      <pre id="log" class="bg-black text-green-200 p-3 rounded h-40 overflow-auto"></pre>
+    <div class="config-item">
+      <span class="label">GA4 Properties</span>
+      <span class="value" id="ga4-properties-status">Checking...</span>
     </div>
-  </div>
+  </section>
 
-  <script>
-    // Config placeholders
-    const CONFIG = {
-      GOOGLE_API_KEY: "AIzaSyD-LIVE-PLACEHOLDER-12345",
-      GA4_PROPERTIES: ["G-QCX3G9KSPC","G-PSW1MY7HB4"],
-      ADSENSE_PUB_ID: "pub-1959507280210179",
-      AFFILIATE_ID: "esthetics-hub-affiliate",
-      MPESA_STK_ENDPOINT: "/api/mpesa-stk"
-    };
+  <!-- Live Metrics -->
+  <section id="live-metrics-section" class="dashboard-section">
+    <div class="metric-card">
+      <p class="metric-label">Real-Time Users</p>
+      <p class="metric-value" id="real-time-users">-</p>
+    </div>
+    <div class="metric-card">
+      <p class="metric-label">Visits Today</p>
+      <p class="metric-value" id="daily-visits">-</p>
+    </div>
+  </section>
 
-    const logEl = document.getElementById('log');
-    function log(msg){ console.log(msg); if(logEl) logEl.textContent += '\\n'+msg; }
+  <!-- Monetization Metrics -->
+  <section id="monetization-section" class="dashboard-section">
+    <div class="metric-card">
+      <p class="metric-label">AdSense (Today)</p>
+      <p class="metric-value" id="adsense-today">-</p>
+    </div>
+    <div class="metric-card">
+      <p class="metric-label">Estimated Earnings (Month)</p>
+      <p class="metric-value" id="adsense-month">-</p>
+    </div>
+    <div class="metric-card">
+      <p class="metric-label">Affiliate Earnings</p>
+      <p class="metric-value" id="affiliate-earnings">-</p>
+    </div>
+  </section>
 
-    let chart;
+  <!-- Revenue Chart -->
+  <section class="chart-section">
+    <h2>Revenue & Visits Overview</h2>
+    <canvas id="revenueChart" height="150"></canvas>
+  </section>
 
-    // Simulated or backend fetch summary
-    async function fetchSummary() {
-      try {
-        const res = await fetch('/api/summary');
-        if(!res.ok) throw new Error('Backend summary failed: '+res.status);
-        return await res.json();
-      } catch (e) {
-        log('Backend fetch failed, using simulated data');
-        const streams = [
-          {name:'AdSense',amount:123.45,payoutDate:'2025-11-21',paymentMethod:'Bank Transfer'},
-          {name:'Amazon Affiliate',amount:67.89,payoutDate:'2026-01-31',paymentMethod:'Direct Deposit / Gift Card / Check'},
-          {name:'Booking.com Affiliate',amount:45.67,payoutDate:'2025-12-01',paymentMethod:'Bank Transfer'},
-          {name:'PayPal Donations',amount:34.56,payoutDate:'pending',paymentMethod:'PayPal Account'},
-          {name:'M-Pesa Donations',amount:23.45,payoutDate:'pending',paymentMethod:'M-Pesa Mobile Account'}
-        ];
-        const total = streams.reduce((s,i)=>s+i.amount,0);
-        return { streams, total, available:0, pending:total, payments:streams.map(s=>({stream:s.name,date:s.payoutDate,amount:s.amount,method:s.paymentMethod})) };
-      }
-    }
+</main>
 
-    function renderChart(streams) {
-      const ctx = document.getElementById('revenueChart').getContext('2d');
-      const labels = streams.map(s=>s.name);
-      const data = streams.map(s=>s.amount);
-      if(chart) chart.destroy();
-      chart = new Chart(ctx, {
-        type:'bar',
-        data:{labels,datasets:[{label:'Amount (USD)',data}]},
-        options:{responsive:true,maintainAspectRatio:false}
-      });
-    }
+<footer>&copy; 2025 The Esthetics Hub</footer>
 
-    function renderSummary(data) {
-      const list = document.getElementById('streamsList'); list.innerHTML='';
-      data.streams.forEach(s=>{
-        const div = document.createElement('div'); div.className='flex justify-between';
-        div.innerHTML = `<div><strong>${s.name}</strong><div class="text-xs text-gray-500">${s.paymentMethod}</div></div><div>$${s.amount.toFixed(2)}</div>`;
-        list.appendChild(div);
-      });
-      document.getElementById('totalAmount').textContent = '$'+data.total.toFixed(2);
-      document.getElementById('availableAmount').textContent = '$'+(data.available||0).toFixed(2);
-      document.getElementById('pendingAmount').textContent = '$'+(data.pending||0).toFixed(2);
+<script>
+// === Chart Setup ===
+const ctx = document.getElementById('revenueChart').getContext('2d');
+const revenueChart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: [],
+    datasets: [
+      { label: 'Visits', data: [], borderColor: '#007bff', backgroundColor:'rgba(0,123,255,0.2)', fill:true, tension:0.4 },
+      { label: 'Revenue ($)', data: [], borderColor: '#28a745', backgroundColor:'rgba(40,167,69,0.2)', fill:true, tension:0.4 }
+    ]
+  },
+  options: {
+    responsive:true,
+    plugins:{ legend:{ position:'top' } },
+    scales:{ x:{ title:{ display:true, text:'Time' } }, y:{ title:{ display:true, text:'Value' }, beginAtZero:true } }
+  }
+});
 
-      renderChart(data.streams);
+// Helper to update chart
+function addChartData(visits, revenue){
+  const now = new Date();
+  const label = now.getHours() + ':' + String(now.getMinutes()).padStart(2,'0');
+  if(revenueChart.data.labels.length >= 10){
+    revenueChart.data.labels.shift();
+    revenueChart.data.datasets[0].data.shift();
+    revenueChart.data.datasets[1].data.shift();
+  }
+  revenueChart.data.labels.push(label);
+  revenueChart.data.datasets[0].data.push(visits);
+  revenueChart.data.datasets[1].data.push(revenue);
+  revenueChart.update();
+}
 
-      const ul = document.getElementById('upcomingList'); ul.innerHTML='';
-      data.payments.forEach(p=>{
-        const li = document.createElement('li'); li.className='flex justify-between';
-        li.textContent = `${p.stream} — ${p.method}`;
-        const span = document.createElement('span'); span.className='text-sm text-gray-600'; span.textContent = p.date;
-        li.appendChild(span);
-        ul.appendChild(li);
-      });
-    }
+// === Fetch Metrics from serverless function ===
+async function fetchMetrics() {
+  try {
+    const res = await fetch('/.netlify/functions/metrics');
+    const data = await res.json();
 
-    async function refresh() {
-      document.getElementById('statusText').textContent='Refreshing...';
-      try {
-        const data = await fetchSummary();
-        renderSummary(data);
-        document.getElementById('statusText').textContent = 'OK (last updated '+new Date().toLocaleTimeString()+')';
-        log('Dashboard refreshed');
-      } catch(e){
-        document.getElementById('statusText').textContent='Error: '+e.message;
-        log(e.stack);
-      }
-    }
+    // Update configuration status
+    document.getElementById("api-key-status").textContent = "Connected ✅";
+    document.getElementById("ga4-properties-status").textContent = `${data.ga4 ? "GA4 Active" : "N/A"} ✅`;
 
-    document.getElementById('refreshBtn').addEventListener('click', refresh);
-    window.addEventListener('load',()=>{refresh(); setInterval(refresh,60000);});
-  </script>
+    // Update live metrics
+    document.getElementById('real-time-users').textContent = data.ga4.totalActiveUsers;
+    document.getElementById('daily-visits').textContent = data.ga4.dailyVisits;
+
+    // Update monetization metrics
+    document.getElementById('adsense-today').textContent = `$${data.adsense.today}`;
+    document.getElementById('adsense-month').textContent = `$${data.adsense.month}`;
+    document.getElementById('affiliate-earnings').textContent = `$${data.affiliate.total}`;
+
+    // Update chart
+    addChartData(data.ga4.dailyVisits, data.adsense.today + data.affiliate.total);
+
+  } catch(err) {
+    console.error("Error fetching metrics:", err);
+  }
+}
+
+// Auto refresh every 60s
+document.addEventListener('DOMContentLoaded', ()=>{
+  fetchMetrics();
+  setInterval(fetchMetrics, 60000);
+});
+</script>
+
 </body>
-      </html>
+  </html>
