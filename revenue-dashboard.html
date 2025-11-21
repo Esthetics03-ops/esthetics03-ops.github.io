@@ -6,6 +6,7 @@
 <title>The Esthetics Hub - Revenue Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+<!-- === Modular CSS Sections === -->
 <style>
 body { font-family: Arial,sans-serif; margin:0; padding:0; background:#f4f4f4; }
 header { background:#222; color:#fff; padding:1rem; text-align:center; }
@@ -19,8 +20,7 @@ footer { text-align:center; padding:1rem; background:#222; color:#fff; margin-to
 .config-item .label { font-size:0.9rem; color:#555; }
 .config-item .value { font-weight:bold; color:#222; }
 
-#live-metrics-section .metric-card,
-#monetization-section .metric-card { background:#fff; padding:1rem; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
+#live-metrics-section .metric-card, #monetization-section .metric-card { background:#fff; padding:1rem; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
 #live-metrics-section .metric-card { border-left:5px solid #007bff; }
 #live-metrics-section .metric-value { font-size:1.5rem; color:#007bff; }
 #monetization-section .metric-card { border-left:5px solid #28a745; }
@@ -39,6 +39,7 @@ footer { text-align:center; padding:1rem; background:#222; color:#fff; margin-to
 
 <main>
 
+  <!-- Configuration Status -->
   <section id="config-section" class="dashboard-section">
     <div class="config-item">
       <span class="label">API Key</span>
@@ -50,6 +51,7 @@ footer { text-align:center; padding:1rem; background:#222; color:#fff; margin-to
     </div>
   </section>
 
+  <!-- Live Metrics -->
   <section id="live-metrics-section" class="dashboard-section">
     <div class="metric-card">
       <p class="metric-label">Real-Time Users</p>
@@ -61,6 +63,7 @@ footer { text-align:center; padding:1rem; background:#222; color:#fff; margin-to
     </div>
   </section>
 
+  <!-- Monetization Metrics -->
   <section id="monetization-section" class="dashboard-section">
     <div class="metric-card">
       <p class="metric-label">AdSense (Today)</p>
@@ -76,6 +79,7 @@ footer { text-align:center; padding:1rem; background:#222; color:#fff; margin-to
     </div>
   </section>
 
+  <!-- Revenue Chart -->
   <section class="chart-section">
     <h2>Revenue & Visits Overview</h2>
     <canvas id="revenueChart" height="150"></canvas>
@@ -86,6 +90,36 @@ footer { text-align:center; padding:1rem; background:#222; color:#fff; margin-to
 <footer>&copy; 2025 The Esthetics Hub</footer>
 
 <script>
+// === Dynamic Config Loader ===
+let GOOGLE_API_KEY = "";
+let GA4_PROPERTIES = [];
+let ADSENSE_PUB_ID = "";
+let AFFILIATE_ID = "";
+
+async function loadConfig() {
+  try {
+    const res = await fetch("/config.json?cache=" + Date.now());
+    const config = await res.json();
+
+    GOOGLE_API_KEY = config.GOOGLE_API_KEY || "MISSING_KEY";
+    GA4_PROPERTIES = config.GA4_PROPERTIES || [];
+    ADSENSE_PUB_ID = config.ADSENSE_PUB_ID || "MISSING_PUB_ID";
+    AFFILIATE_ID = config.AFFILIATE_ID || "MISSING_AFFILIATE";
+
+    document.getElementById("api-key-status").textContent =
+      GOOGLE_API_KEY !== "MISSING_KEY" ? "Connected ✅" : "Missing ❌";
+
+    document.getElementById("ga4-properties-status").textContent =
+      GA4_PROPERTIES.length > 0 ? `${GA4_PROPERTIES.length} Loaded ✅` : "Missing ❌";
+
+    updateMetrics();
+  } catch (err) {
+    console.error("Failed to load config:", err);
+    document.getElementById("api-key-status").textContent = "Config Error ❌";
+    document.getElementById("ga4-properties-status").textContent = "Config Error ❌";
+  }
+}
+
 // === Chart Setup ===
 const ctx = document.getElementById('revenueChart').getContext('2d');
 const revenueChart = new Chart(ctx, {
@@ -104,38 +138,9 @@ const revenueChart = new Chart(ctx, {
   }
 });
 
-// === Load /config.json ===
-let GOOGLE_API_KEY = "";
-let GA4_PROPERTIES = [];
-let ADSENSE_PUB_ID = "";
-let AFFILIATE_ID = "";
-
-async function loadConfig() {
-  try {
-    const res = await fetch("/config.json?cache=" + Date.now());
-    if (!res.ok) throw new Error("Config load failed");
-    const cfg = await res.json();
-
-    GOOGLE_API_KEY = cfg.GOOGLE_API_KEY || "MISSING_KEY";
-    GA4_PROPERTIES = cfg.GA4_PROPERTIES || [];
-    ADSENSE_PUB_ID = cfg.ADSENSE_PUB_ID || "MISSING_PUB_ID";
-    AFFILIATE_ID = cfg.AFFILIATE_ID || "MISSING_AFFILIATE";
-
-    document.getElementById("api-key-status").textContent = GOOGLE_API_KEY!=="MISSING_KEY" ? "Connected ✅" : "Missing ❌";
-    document.getElementById("ga4-properties-status").textContent = GA4_PROPERTIES.length>0 ? `${GA4_PROPERTIES.length} Loaded ✅` : "Missing ❌";
-
-    updateMetrics();
-  } catch(err) {
-    console.error(err);
-    document.getElementById("api-key-status").textContent = "Config Error ❌";
-    document.getElementById("ga4-properties-status").textContent = "Config Error ❌";
-  }
-}
-
-// === Chart Helper ===
 function addChartData(visits, revenue){
   const now = new Date();
-  const label = now.getHours() + ":" + String(now.getMinutes()).padStart(2,"0");
+  const label = now.getHours() + ":" + String(now.getMinutes()).padStart(2,'0');
   if(revenueChart.data.labels.length >= 10){
     revenueChart.data.labels.shift();
     revenueChart.data.datasets[0].data.shift();
@@ -147,30 +152,38 @@ function addChartData(visits, revenue){
   revenueChart.update();
 }
 
-// === Fetch metrics from serverless function ===
-async function updateMetrics() {
-  try {
-    const res = await fetch("/.netlify/functions/metrics");
-    const data = await res.json();
+// === Placeholder Fetch Functions (simulate live) ===
+async function fetchGA4Metrics(propertyId){ return Math.floor(Math.random()*100); }
+async function fetchAdsenseMetrics(){ return (Math.random()*25).toFixed(2); }
+async function fetchAffiliateEarnings(){ return (Math.random()*200).toFixed(2); }
 
-    document.getElementById('real-time-users').textContent = data.ga4.totalActiveUsers;
-    document.getElementById('daily-visits').textContent = data.ga4.dailyVisits;
-    document.getElementById('adsense-today').textContent = `$${data.adsense.today}`;
-    document.getElementById('adsense-month').textContent = `$${data.adsense.month}`;
-    document.getElementById('affiliate-earnings').textContent = `$${data.affiliate.total}`;
-
-    addChartData(data.ga4.dailyVisits, parseFloat(data.adsense.today) + parseFloat(data.affiliate.total));
-  } catch(err) {
-    console.error("Failed to fetch metrics:", err);
+// === Update All Metrics ===
+async function updateMetrics(){
+  let totalActiveUsers = 0;
+  for(const property of GA4_PROPERTIES){
+    totalActiveUsers += await fetchGA4Metrics(property);
   }
+
+  const dailyVisits = totalActiveUsers * 12;
+  const adsenseToday = await fetchAdsenseMetrics();
+  const adsenseMonth = (adsenseToday*22).toFixed(2);
+  const affiliate = await fetchAffiliateEarnings();
+
+  document.getElementById('real-time-users').textContent = totalActiveUsers;
+  document.getElementById('daily-visits').textContent = dailyVisits;
+  document.getElementById('adsense-today').textContent = `$${adsenseToday}`;
+  document.getElementById('adsense-month').textContent = `$${adsenseMonth}`;
+  document.getElementById('affiliate-earnings').textContent = `$${affiliate}`;
+
+  addChartData(dailyVisits, parseFloat(adsenseToday) + parseFloat(affiliate));
 }
 
-// === Initialize ===
-document.addEventListener("DOMContentLoaded", ()=>{
+// Initialize dashboard
+document.addEventListener('DOMContentLoaded', ()=>{
   loadConfig();
-  setInterval(updateMetrics, 60000);
+  setInterval(updateMetrics,60000);
 });
 </script>
 
 </body>
-  </html>
+        </html>
