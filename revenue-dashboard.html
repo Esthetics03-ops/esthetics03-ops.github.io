@@ -313,6 +313,134 @@ footer { text-align:center; padding:1rem; background:#222; color:#fff; margin-to
   </style>
   </section>
 
+  <section id="revenue-dashboard-section">
+  <div class="dashboard-container">
+    <div class="dashboard-title">💹 Revenue & Payment Dashboard</div>
+
+    <!-- Collapsible AdSense & Affiliate Metrics -->
+    <div class="metrics-panel">
+      <div style="cursor:pointer; font-weight:bold;" onclick="togglePanel('adsense-affiliate-panel')">
+        AdSense & Affiliate Metrics ⬇
+      </div>
+      <div id="adsense-affiliate-panel" style="display:block; padding-left:10px;">
+        <div><strong>AdSense Pending:</strong> <span id="adsense-pending">--</span></div>
+        <div><strong>Affiliate Pending:</strong> <span id="affiliate-pending">--</span></div>
+        <div><strong>Total Pending:</strong> <span id="total-pending">--</span></div>
+        <div><strong>Next AdSense Payout:</strong> <span id="adsense-payout">--</span></div>
+        <div><strong>Next Affiliate Payout:</strong> <span id="affiliate-payout">--</span></div>
+      </div>
+    </div>
+
+    <!-- Collapsible GA4 Metrics -->
+    <div class="metrics-panel">
+      <div style="cursor:pointer; font-weight:bold;" onclick="togglePanel('ga4-panel')">
+        GA4 Metrics ⬇
+      </div>
+      <div id="ga4-panel" style="display:block; padding-left:10px;">
+        <div><strong>Users Today:</strong> <span id="users-today">--</span></div>
+        <div><strong>Sessions Today:</strong> <span id="sessions-today">--</span></div>
+        <div><strong>Pageviews Today:</strong> <span id="pageviews-today">--</span></div>
+        <div><strong>Bounce Rate:</strong> <span id="bounce-rate">--</span></div>
+        <div><strong>Avg Session Duration:</strong> <span id="session-duration">--</span></div>
+      </div>
+    </div>
+
+    <div class="last-updated">Last Updated: <span id="dashboard-last-updated">--:--:--</span></div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="payment-toast-container"></div>
+
+  <script>
+    // Toggle collapsible panels
+    function togglePanel(id) {
+      const panel = document.getElementById(id);
+      panel.style.display = panel.style.display === "none" ? "block" : "none";
+    }
+
+    let lastAdSensePending = 0;
+    let lastAffiliatePending = 0;
+
+    function showToast(message){
+      const container = document.getElementById('payment-toast-container');
+      const toast = document.createElement('div');
+      toast.className = 'payment-toast';
+      toast.innerText = message;
+      container.appendChild(toast);
+      setTimeout(()=>container.removeChild(toast), 5000);
+    }
+
+    async function checkPaymentUpdate(){
+      try {
+        // Fetch live metrics from serverless endpoints
+        const [adsenseRes, affiliateRes, ga4Res] = await Promise.all([
+          fetch("/api/adsense").then(r=>r.json()),
+          fetch("/api/affiliate").then(r=>r.json()),
+          fetch("/api/ga4").then(r=>r.json())
+        ]);
+
+        const currentAdSensePending = adsenseRes.pending || 0;
+        const currentAffiliatePending = affiliateRes.pending || 0;
+
+        // Toast notifications
+        if(currentAdSensePending < lastAdSensePending){
+          showToast(`💰 AdSense payment received! $${currentAdSensePending.toFixed(2)}`);
+        }
+        if(currentAffiliatePending < lastAffiliatePending){
+          showToast(`💰 Affiliate payment received! $${currentAffiliatePending.toFixed(2)}`);
+        }
+
+        lastAdSensePending = currentAdSensePending;
+        lastAffiliatePending = currentAffiliatePending;
+
+        // Update dashboard
+        document.getElementById('adsense-pending').innerText = `$${currentAdSensePending.toFixed(2)}`;
+        document.getElementById('affiliate-pending').innerText = `$${currentAffiliatePending.toFixed(2)}`;
+        document.getElementById('total-pending').innerText = `$${(currentAdSensePending + currentAffiliatePending).toFixed(2)}`;
+        document.getElementById('adsense-payout').innerText = adsenseRes.nextPayout || "--";
+        document.getElementById('affiliate-payout').innerText = affiliateRes.nextPayout || "--";
+
+        // GA4 Metrics
+        document.getElementById('users-today').innerText = ga4Res.users || 0;
+        document.getElementById('sessions-today').innerText = ga4Res.sessions || 0;
+        document.getElementById('pageviews-today').innerText = ga4Res.pageviews || 0;
+        document.getElementById('bounce-rate').innerText = ga4Res.bounceRate || "--";
+        document.getElementById('session-duration').innerText = ga4Res.avgSessionDuration || "--";
+
+      } catch(err){
+        console.error("Live Metrics Error:", err);
+      }
+    }
+
+    function refreshDashboard(){
+      const now = new Date();
+      const lastUpdatedEl = document.getElementById('dashboard-last-updated');
+      if(lastUpdatedEl) lastUpdatedEl.innerText = now.toLocaleTimeString();
+    }
+
+    // Initial load
+    checkPaymentUpdate();
+    refreshDashboard();
+
+    setInterval(()=>{
+      checkPaymentUpdate();
+      refreshDashboard();
+    }, 60000);
+  </script>
+
+  <style>
+    .dashboard-container { max-width:600px; margin:auto; padding:20px; background:#fff; border-radius:12px; box-shadow:0 3px 12px rgba(0,0,0,0.1); }
+    .dashboard-title { text-align:center; font-size:24px; margin-bottom:20px; }
+    .metrics-panel { padding:10px 0; border-bottom:1px solid #ddd; margin-bottom:10px; }
+    .metrics-panel div { margin:6px 0; font-size:16px; }
+    .last-updated { text-align:center; font-size:13px; color:#666; margin-top:10px; }
+    #payment-toast-container { position:fixed; top:20px; right:20px; z-index:9999; display:flex; flex-direction:column; gap:10px; }
+    .payment-toast { background:#4caf50; color:white; padding:12px 18px; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.2); font-size:14px; opacity:0; transform:translateX(100%); animation: slide-in 0.5s forwards, fade-out 0.5s 4.5s forwards; }
+    @keyframes slide-in { to { opacity:1; transform:translateX(0); } }
+    @keyframes fade-out { to { opacity:0; transform:translateX(100%); } }
+  </style>
+        </section>
+
 </main>
 
 <footer>&copy; 2025 The Esthetics Hub</footer>
