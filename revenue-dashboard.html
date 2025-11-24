@@ -48,6 +48,58 @@ footer { text-align:center; padding:1rem; background:#222; color:#fff; margin-to
 </header>
 
 <main>
+  <!-- Live Payment Status Panel -->
+<div id="payment-dashboard" style="font-family: Roboto, sans-serif; max-width: 450px; margin: 20px auto; padding: 1rem; border: 1px solid #ccc; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); background: #fff;">
+  <h2 style="text-align:center; margin-bottom: 1rem;">💳 Live Payment Status</h2>
+  
+  <div style="margin-bottom: 0.5rem;"><strong>AdSense Pending:</strong> <span id="adsense-pending">Loading...</span></div>
+  <div style="margin-bottom: 0.5rem;"><strong>Affiliate Pending:</strong> <span id="affiliate-pending">Loading...</span></div>
+  <div style="margin-bottom: 0.5rem;"><strong>Total Pending:</strong> <span id="total-pending">Loading...</span></div>
+  
+  <div style="margin-bottom: 0.5rem;"><strong>Next AdSense Payout:</strong> <span id="adsense-payout">Loading...</span></div>
+  <div style="margin-bottom: 0.5rem;"><strong>Next Affiliate Payout:</strong> <span id="affiliate-payout">Loading...</span></div>
+  
+  <div style="margin-top: 1rem; font-size: 0.85rem; color: #666; text-align:center;">
+    Last Updated: <span id="payment-last-updated">--:--:--</span>
+  </div>
+</div>
+
+<script>
+  function updatePaymentStatus() {
+    try {
+      // Simulated AdSense pending
+      const adsensePending = 356.78;
+      document.getElementById('adsense-pending').innerText = `$${adsensePending.toFixed(2)}`;
+
+      // Simulated Affiliate pending
+      const affiliatePending = 478.90;
+      document.getElementById('affiliate-pending').innerText = `$${affiliatePending.toFixed(2)}`;
+
+      // Total Pending
+      const totalPending = adsensePending + affiliatePending;
+      document.getElementById('total-pending').innerText = `$${totalPending.toFixed(2)}`;
+
+      // Next Payout Estimates
+      const adsensePayout = new Date("2025-11-25");
+      document.getElementById('adsense-payout').innerText = adsensePayout.toDateString();
+
+      const affiliatePayout = new Date("2025-11-27");
+      document.getElementById('affiliate-payout').innerText = affiliatePayout.toDateString();
+
+      // Update timestamp
+      const now = new Date();
+      document.getElementById('payment-last-updated').innerText = now.toLocaleTimeString();
+    } catch (err) {
+      console.error("Payment Dashboard Error:", err);
+    }
+  }
+
+  // Initial load
+  updatePaymentStatus();
+
+  // Refresh every 60 seconds
+  setInterval(updatePaymentStatus, 60000);
+</script>
 
   <!-- Configuration Status -->
   <section id="config-section" class="dashboard-section">
