@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chess | Esthetics Hub | Yoga & Mindfulness</title>
+  <meta name="description" content="Play chess, boost focus, blend with wellness. Beginner to intermediate.">
+  <link rel="icon" href="favicon.ico">
+
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QCX3G9KSPC"></script>
+  <script>
+    window.dataLayer = [...]; gtag('js', new Date()); gtag('config', 'G-QCX3G9KSPC');
+  </script>
+
+  <!-- AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=pub-1959507280210179" crossorigin="anonymous"></script>
+
+  <style>
+    body { font-family: sans-serif; text-align: center; background: #f5f5f5; }
+    .board { display: grid; grid: repeat(8, 60px)/repeat(8, 60px); width: 480px; margin: 20px auto; border: 2px solid #333; }
+    .cell { display: flex; align-items: center; justify-content: center; font-size: 30px; }
+    .light { background: #f0d9b5; }
+    .dark { background: #b58863; }
+    .cta { margin: 20px; padding: 10px 20px; background: #e67e22; color: #fff; border: none; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>♟️ **Esthetics Hub Chess** | *Mindful Moves*</h1>
+  <p>Boost focus. Play, breathe, repeat. <a href="#tips">Beginner tips</a>.</p>
+  <div class="board" id="board"></div>
+  <button class="cta" onclick="alert('Move!'); gtag('event', 'start_game')">Start Game</button>
+
+  <!-- Ad Placeholder -->
+  <div style="margin:20px auto;width:320px;height:100px;border:1px dashed #ccc;">
+    Ad space
+  </div>
+
+  <section id="tips">
+    <h2>👉 **Pieces & Moves**</h2>
+    <ul>
+      <li><b>Pawns</b>: Forward 1 (2 on first move), capture diagonally.</li>
+      <li><b>Rooks</b>: ⬆️⬇️⬅️➡️ (rows, columns).</li>
+      <li><b>Knights</b>: L-shape (2+1 steps).</li>
+      <li><b>Bishops</b>: ⬈⬉⬊⬋ (diagonals).</li>
+      <li><b>Queen</b>: ⬆️⬇️⬅️➡️⬈⬉⬊⬋ (all directions).</li>
+      <li><b>King</b>: 1 step any direction. Protect!</li>
+    </ul>
+  </section>
+
+  <script>
+    const board = document.getElementById('board');
+    const pieces = [
+      '♜', '♞', '♝', '♛', '♚', '♝', '♞', '♜',
+      '♟', '♟', '♟', '♟', '♟', '♟', '♟', '♟',
+      '', '', '', '', '', '', '', '',
+      '', '', '', '', '', '', '', '',
+      '', '', '', '', '', '', '', '',
+      '', '', '', '', '', '', '', '',
+      '♙', '♙', '♙', '♙', '♙', '♙', '♙', '♙',
+      '♖', '♘', '♗', '♕', '♔', '♗', '♘', '♖'
+    ];
+    pieces.forEach((p, idx) => {
+      const cell = document.createElement('div');
+      cell.className = (idx + Math.floor(idx / 8)) % 2 ? 'cell dark' : 'cell light';
+      cell.textContent = p;
+      board.appendChild(cell);
+    });
+  </script>
+</body>
+    </html>
+  
