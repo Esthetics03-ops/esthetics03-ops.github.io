@@ -32,18 +32,19 @@
   <meta name="twitter:title" content="The Esthetics Hub | Live Better. Live Longer." />
   <meta name="twitter:description" content="Science-backed nutrition and mental health advice." />
   <meta name="twitter:image" content="https://esthetics03-ops.github.io/g1.png" />
-    <!-- Firebase -->
+<!-- Firebase -->
 <script type="module">
   import { initializeApp } from "https:                                                    
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-analytics.js";
 
   const firebaseConfig = {
-    apiKey: "AIzaSyD-EXAMPLE-LIVE-KEY12345", // Replace with your API key
+    apiKey: "AIzaSyDadhQvQJsezb0Jj8LkaA6NPHvZ6b3guuY", // Replace with your API key
     authDomain: "estheticshub.firebaseapp.com",
     projectId: "esthetics03",
     storageBucket: "esthetics03.appspot.com",
-    messagingSenderId: "123456", // Replace with actual ID
-    appId: "1:123456:app", // Replace with actual ID
+    messagingSenderId: "300830567303
+", // Replace with actual ID
+    appId: "1:300830567303:android:9b9ba2ce17104d0c:app", // Replace with actual ID
     measurementId: "G-QCX3G9KSPC","G-PSW1MY7HB4" // Replace with your GA4 Measurement ID
   };
 
@@ -773,8 +774,8 @@ crossorigin="anonymous"></script>
       "priceRange": "$$",
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": "Riva Rori, Red Hill Road",
-        "addressLocality": "Nairobi",
+        "streetAddress": "Sheikh karume",
+        "addressLocality": "Nairobi,Kenya",
         "addressCountry": "KE"
       },
       "openingHours": "Mo-Sa 09:00-18:00",
@@ -1025,7 +1026,7 @@ crossorigin="anonymous"></script>
   "@type": "Organization",
   "name": "The Esthetics Hub",
   "url": "https://esthetics03-ops.github.io",
-  "logo": "https://esthetics03-ops.github.io/images/logo.png",
+  "logo": "https://esthetics03-ops.github.io/g1.png",
   "sameAs": [
     "https://www.facebook.com/esthetics03",
     "https://www.instagram.com/esthetics03",
@@ -1050,7 +1051,7 @@ crossorigin="anonymous"></script>
     "name": "The Esthetics Hub",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://esthetics03-ops.github.io/images/logo.png"
+      "url": "https://esthetics03-ops.github.io/g1.png"
     }
   },
   "datePublished": "2025-11-01",
@@ -1201,10 +1202,21 @@ crossorigin="anonymous"></script>
  <h2>Free 14-Day Wellness Reset</h2>
  <p>Daily nutrition & mental clarity steps delivered to your inbox.</p>
 
- <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
-   <input type="email" name="email" placeholder="Enter your email" required>
-   <button type="submit">Get Free Guide</button>
- </form>
+<form id="signup">
+       <input type="email" id="email" placeholder="Enter email" required>
+       <button>Join Reset</button>
+     </form>
+     <script type="module">
+       import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+       const auth = getAuth();
+       document.getElementById("signup").addEventListener("submit", (e) => {
+         e.preventDefault();
+         const email = document.getElementById("email").value;
+         createUserWithEmailAndPassword(auth, email, "tempPass123!").then(() => {
+           alert("Check email!");
+         }).catch(alert);
+       });
+     </script>
 </section>
 
     <!-- ✅ Visible AdSense Ad Block -->
