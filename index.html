@@ -32,7 +32,29 @@
   <meta name="twitter:title" content="The Esthetics Hub | Live Better. Live Longer." />
   <meta name="twitter:description" content="Science-backed nutrition and mental health advice." />
   <meta name="twitter:image" content="https://esthetics03-ops.github.io/g1.png" />
-      
+    <!-- Firebase -->
+<script type="module">
+  import { initializeApp } from "https:                                                    
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-analytics.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyD-EXAMPLE-LIVE-KEY12345", // Replace with your API key
+    authDomain: "estheticshub.firebaseapp.com",
+    projectId: "esthetics03",
+    storageBucket: "esthetics03.appspot.com",
+    messagingSenderId: "123456", // Replace with actual ID
+    appId: "1:123456:app", // Replace with actual ID
+    measurementId: "G-QCX3G9KSPC","G-PSW1MY7HB4" // Replace with your GA4 Measurement ID
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+
+  // Example: Log page view
+  import { logEvent } from "firebase/analytics";
+  logEvent(analytics, "page_view", { page_path: location.pathname });
+</script>
+  
 <script async src="https://fundingchoicesmessages.google.com/i/pub-1959507280210179?ers=1"></script>  
 <script>(function() {function signalGooglefcPresent() {if (!window.frames['googlefcPresent']) {if (document.body) {const iframe = document.createElement('iframe'); iframe.style = 'width: 0; height: 0; border: none; z-index: -1000; left: -1000px; top: -1000px;'; iframe.style.display = 'none'; iframe.name = 'googlefcPresent'; document.body.appendChild(iframe);} else {setTimeout(signalGooglefcPresent, 0);}}}signalGooglefcPresent();})();</script>
   <!-- Structured Data for SEO -->
