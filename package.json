@@ -16,3 +16,12 @@
     "deploy": "gh-pages -d _site"
   }
 }
+{
+  "scripts": {
+    "lighthouse": "lhci autorun --config=lighthouse.config.js"
+  },
+  "devDependencies": {
+    "@lhci/cli": "^0.9.0"
+  }
+}
+
