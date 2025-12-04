@@ -1,0 +1,22 @@
+name: Sync GitHub with Google Cloud
+on:
+  push:
+    branches:
+      - main
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v0
+        with:
+          credentials_json: ${{ secrets.GCLOUD_CREDENTIALS }}
+      - name: Sync with Google Cloud Storage
+        run: |
+          gsutil rsync -r ./public gs://esthetics-hub-bucket
+      - name: Sync with Google Cloud DNS
+        run: |
+          gcloud dns record-sets update esthetics03-ops.github.io --zone=esthetics-hub-zone --type=A --ttl=300 --add $(curl -s https://api.github.com/repos/esthetics03-ops/esthetics03-ops.github.io/pages | jq -r '.domains[0]')
+
