@@ -1,0 +1,27 @@
+name: AdSense Sync
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Run daily at midnight
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Fetch AdSense data
+        uses: googleads/google-ads-api@v1
+        with:
+          client_id: ${{ secrets.ADSENSE_CLIENT_ID }}
+          client_secret: ${{ secrets.ADSENSE_CLIENT_SECRET }}
+          refresh_token: ${{ secrets.ADSENSE_REFRESH_TOKEN }}
+          account_id: ${{ secrets.ADSENSE_ACCOUNT_ID }}
+          report_type: payments
+        id: adsense
+
+      - name: Update payment status
+        run: |
+          echo "${{ steps.adsense.outputs.report }}" > adsense_payment_status.json
+          
