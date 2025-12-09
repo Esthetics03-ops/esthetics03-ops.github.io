@@ -1,0 +1,36 @@
+name: Fix Issues
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  fix-issues:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Fix code formatting
+        run: |
+          npm install prettier
+          npx prettier --write .
+
+      - name: Fix linting errors
+        run: |
+          npm install eslint
+          npx eslint --fix .
+
+      - name: Update dependencies
+        run: |
+          npm install npm-check-updates
+          npx ncu -u
+
+      - name: Commit changes
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          git add .
+          git commit -m "Fix issues"
+          git push
