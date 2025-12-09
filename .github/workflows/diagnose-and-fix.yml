@@ -1,0 +1,30 @@
+name: Diagnose and Fix
+
+on:
+  workflow_dispatch:
+
+jobs:
+  diagnose-and-fix:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Diagnose failed jobs
+        run: |
+          failed_jobs=$(gh api repos/${GITHUB_REPOSITORY}/actions/runs?status=failure | jq -r '.workflow_runs[] | select(.status == "failure") | .id')
+          echo "Failed jobs: $failed_jobs"
+
+          for job_id in $failed_jobs; do
+            echo "Rerunning job $job_id"
+            gh api repos/${GITHUB_REPOSITORY}/actions/runs/$job_id/rerun
+          done
+
+      - name: Autocorrect issues
+        run: |
+          # Add your autocorrect commands here, e.g.:
+          # git config --global user.email "your_email@example.com"
+          # git config --global user.name "Your Name"
+          # git add .
+          # git commit -m "Autocorrected issues"
+          # git push
