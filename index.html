@@ -1471,49 +1471,48 @@ This site uses cookies to improve your experience.
 <button onclick="acceptCookies()" style="margin-left:10px;">Okay</button>
 </div>
 
-<div class="monetization-stats">
-  <p>AdSense: <span id="adsense-earnings">Loading...</span></p>
-  <p>Affiliate: <span id="affiliate-earnings">Loading...</span></p>
-  <p>Donations: <span id="donation-earnings">Loading...</span></p>
-  <p><strong>Total: <span id="total-earnings">Loading...</span></strong></p>
+<div id="monetization-dashboard" style="background: #f4f4f4; padding: 15px; border-radius: 8px; margin: 10px 0;">
+    <h4>Live Revenue Dashboard</h4>
+    <p>AdSense: <span id="adsense-earnings">$0.00</span></p>
+    <p>Affiliate: <span id="affiliate-earnings">$0.00</span></p>
+    <p>Donations: <span id="donation-earnings">$0.00</span></p>
+    <hr>
+    <p><strong>Total: <span id="total-earnings">$0.00</span></strong></p>
 </div>
-
 <script>
 async function updateMonetisationData() {
+  const apiURL = "https://api.estheticshub.live/monetisation?refresh=true";
+  
   try {
-    const response = await fetch("https://api.estheticshub.live/monetisation?refresh=true");
-    
-    // Check if API request was successful
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    const response = await fetch(apiURL);
+    if (!response.ok) throw new Error('API unavailable');
     
     const data = await response.json();
 
-    // Mapping API keys to HTML IDs
-    const mappings = {
+    // Mapping: HTML ID -> API Key
+    const fields = {
       "adsense-earnings": data.adsense,
       "affiliate-earnings": data.affiliate,
       "donation-earnings": data.donations,
       "total-earnings": data.total
     };
 
-    // Safely update each element only if it exists
-    for (const [id, value] of Object.entries(mappings)) {
-      const element = document.getElementById(id);
-      if (element) {
-        const numValue = parseFloat(value) || 0;
-        element.textContent = `$${numValue.toFixed(2)}`;
+    for (const [id, value] of Object.entries(fields)) {
+      const el = document.getElementById(id);
+      if (el) {
+        const amount = parseFloat(value) || 0;
+        el.textContent = `$${amount.toFixed(2)}`;
       }
     }
-  } catch (error) {
-    console.error("Monetization Script Error:", error);
-    // Silent fail: keep "Loading..." or set to $0.00
+  } catch (err) {
+    console.warn("Monetization display skipped: ", err.message);
   }
 }
 
-// Run only after the page is fully loaded
+// Run when page is ready
 document.addEventListener("DOMContentLoaded", () => {
-  updateMonetisationData();
-  setInterval(updateMonetisationData, 60000); 
+    updateMonetisationData();
+    setInterval(updateMonetisationData, 60000); // Auto-refresh every minute
 });
 </script>
   
