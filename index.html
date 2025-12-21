@@ -1450,11 +1450,11 @@ This site uses cookies to improve your experience.
 <button onclick="acceptCookies()" style="margin-left:10px;">Okay</button>
 </div>
 
-<div id="monetization-display" style="display:none;">
-    <span id="adsense-earnings"></span>
-    <span id="affiliate-earnings"></span>
-    <span id="donation-earnings"></span>
-    <span id="total-earnings"></span>
+<div class="monetization-stats">
+  <p>AdSense: <span id="adsense-earnings">Loading...</span></p>
+  <p>Affiliate: <span id="affiliate-earnings">Loading...</span></p>
+  <p>Donations: <span id="donation-earnings">Loading...</span></p>
+  <p><strong>Total: <span id="total-earnings">Loading...</span></strong></p>
 </div>
 
 <script>
@@ -1462,37 +1462,40 @@ async function updateMonetisationData() {
   try {
     const response = await fetch("https://api.estheticshub.live/monetisation?refresh=true");
     
-    if (!response.ok) throw new Error('Network response was not ok');
+    // Check if API request was successful
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     
     const data = await response.json();
 
-    // Helper to update elements safely
-    const updateEl = (id, value) => {
-      const el = document.getElementById(id);
-      if (el) {
-        // Ensure the value is a number before calling toFixed
-        const num = parseFloat(value) || 0;
-        el.textContent = `$${num.toFixed(2)}`;
-      }
+    // Mapping API keys to HTML IDs
+    const mappings = {
+      "adsense-earnings": data.adsense,
+      "affiliate-earnings": data.affiliate,
+      "donation-earnings": data.donations,
+      "total-earnings": data.total
     };
 
-    updateEl("adsense-earnings", data.adsense);
-    updateEl("affiliate-earnings", data.affiliate);
-    updateEl("donation-earnings", data.donations);
-    updateEl("total-earnings", data.total);
-
+    // Safely update each element only if it exists
+    for (const [id, value] of Object.entries(mappings)) {
+      const element = document.getElementById(id);
+      if (element) {
+        const numValue = parseFloat(value) || 0;
+        element.textContent = `$${numValue.toFixed(2)}`;
+      }
+    }
   } catch (error) {
-    console.error("Monetization Data Error:", error);
+    console.error("Monetization Script Error:", error);
+    // Silent fail: keep "Loading..." or set to $0.00
   }
 }
 
-// Run when the page finishes loading
+// Run only after the page is fully loaded
 document.addEventListener("DOMContentLoaded", () => {
-    updateMonetisationData();
-    setInterval(updateMonetisationData, 60000); 
+  updateMonetisationData();
+  setInterval(updateMonetisationData, 60000); 
 });
 </script>
-
+  
 <script>
 function acceptCookies() {
  document.getElementById("cookieBox").style.display="none";
