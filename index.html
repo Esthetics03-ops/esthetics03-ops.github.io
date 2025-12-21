@@ -103,6 +103,27 @@
     gtag('config', 'G-PSW1MY7HB4');
   </script>
 
+      <?php
+// Allow only your GitHub site to access this data
+header("Access-Control-Allow-Origin: https://esthetics03-ops.github.io");
+header("Content-Type: application/json; charset=UTF-8");
+header("Access-Control-Allow-Methods: GET");
+header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+
+// Your existing logic to fetch data...
+echo json_encode($monetizationData);
+?>
+      <script>
+        const cors = require('cors');
+
+const corsOptions = {
+  origin: 'https://esthetics03-ops.github.io',
+  optionsSuccessStatus: 200 
+};
+
+app.use(cors(corsOptions));
+      </script>
+
   <!-- Google AdSense (Monetisation) -->
   <script data-ad-client="pub-1959507280210179" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 
