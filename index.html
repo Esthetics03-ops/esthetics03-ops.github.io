@@ -186,16 +186,45 @@
 <meta name="google-adsense-account" content="ca-pub-1959507280210179">
 
   <script>
-async function runLiveMonetisation() {
-  const response = await fetch('https://api.estheticshub.live/monetisation?refresh=true');
-  const data = await response.json();
-  document.getElementById('revenue-today').innerText = `$${data.today.toFixed(2)}`;
-  document.getElementById('monthly-revenue').innerText = `$${data.month.toFixed(2)}`;
-  document.getElementById('yearly-revenue').innerText = `$${data.year.toFixed(2)}`;
-  document.getElementById('total-balance').innerText = `$${data.total.toFixed(2)}`;
+async function updateMonetisationData() {
+  try {
+    const response = await fetch("https://api.estheticshub.live/monetisation?refresh=true");
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    // Helper to safely update text content
+    const updateText = (id, value) => {
+      const el = document.getElementById(id);
+      if (el) {
+        // Ensure value is a number before calling toFixed
+        const numValue = parseFloat(value) || 0;
+        el.textContent = `$${numValue.toFixed(2)}`;
+      }
+    };
+
+    updateText("adsense-earnings", data.adsense);
+    updateText("affiliate-earnings", data.affiliate);
+    updateText("donation-earnings", data.donations);
+    updateText("total-earnings", data.total);
+
+  } catch (error) {
+    console.error("Failed to fetch monetisation data:", error);
+    // Optional: Set values to $0.00 or "Error" so the UI doesn't look empty
+    const elements = ["adsense-earnings", "affiliate-earnings", "donation-earnings", "total-earnings"];
+    elements.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && el.textContent === "Loading...") el.textContent = "$0.00";
+    });
+  }
 }
-setInterval(runLiveMonetisation, 60000); // auto-refresh every minute
-runLiveMonetisation();
+
+// Start the cycle
+setInterval(updateMonetisationData, 60000); 
+updateMonetisationData();
     </script>
 
   <script type="application/ld+json">
@@ -1461,6 +1490,13 @@ View wellness travel deals on Booking.com
 This site uses cookies to improve your experience.
 <button onclick="acceptCookies()" style="margin-left:10px;">Okay</button>
 </div>
+
+  <div class="earnings-dashboard">
+  <p>AdSense: <span id="adsense-earnings">Loading...</span></p>
+  <p>Affiliate: <span id="affiliate-earnings">Loading...</span></p>
+  <p>Donations: <span id="donation-earnings">Loading...</span></p>
+  <p><strong>Total: <span id="total-earnings">Loading...</span></strong></p>
+  </div>
 
 <script>
 function acceptCookies() {
