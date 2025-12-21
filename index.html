@@ -1471,49 +1471,93 @@ This site uses cookies to improve your experience.
 <button onclick="acceptCookies()" style="margin-left:10px;">Okay</button>
 </div>
 
-<div id="monetization-dashboard" style="background: #f4f4f4; padding: 15px; border-radius: 8px; margin: 10px 0;">
-    <h4>Live Revenue Dashboard</h4>
-    <p>AdSense: <span id="adsense-earnings">$0.00</span></p>
-    <p>Affiliate: <span id="affiliate-earnings">$0.00</span></p>
-    <p>Donations: <span id="donation-earnings">$0.00</span></p>
-    <hr>
-    <p><strong>Total: <span id="total-earnings">$0.00</span></strong></p>
+<div class="earnings-grid">
+    <div>AdSense: <span id="adsense-earnings">$0.00</span></div>
+    <div>Affiliate: <span id="affiliate-earnings">$0.00</span></div>
+    <div>Donations: <span id="donation-earnings">$0.00</span></div>
+    <div class="total">Total: <span id="total-earnings">$0.00</span></div>
 </div>
+
+
 <script>
+/**
+ * Esthetics Hub - Optimized Monetization Dashboard
+ * Version: 1.2.0
+ * Deployment: GitHub Pages (https://esthetics03-ops.github.io)
+ */
+
+const MONETIZATION_CONFIG = {
+    apiEndpoint: "https://api.estheticshub.live/monetisation?refresh=true",
+    refreshInterval: 60000, // 60 seconds
+    currencySymbol: "$"
+};
+
 async function updateMonetisationData() {
-  const apiURL = "https://api.estheticshub.live/monetisation?refresh=true";
-  
-  try {
-    const response = await fetch(apiURL);
-    if (!response.ok) throw new Error('API unavailable');
+    console.log("Fetching live monetization data...");
     
-    const data = await response.json();
+    try {
+        const response = await fetch(MONETIZATION_CONFIG.apiEndpoint, {
+            method: 'GET',
+            mode: 'cors', // Crucial for GitHub Pages to external API
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
 
-    // Mapping: HTML ID -> API Key
-    const fields = {
-      "adsense-earnings": data.adsense,
-      "affiliate-earnings": data.affiliate,
-      "donation-earnings": data.donations,
-      "total-earnings": data.total
-    };
+        if (!response.ok) {
+            throw new Error(`Server responded with ${response.status}`);
+        }
 
-    for (const [id, value] of Object.entries(fields)) {
-      const el = document.getElementById(id);
-      if (el) {
-        const amount = parseFloat(value) || 0;
-        el.textContent = `$${amount.toFixed(2)}`;
-      }
+        const data = await response.json();
+
+        // Mapping: [HTML ID] : [API JSON Key]
+        const dataMap = {
+            "adsense-earnings": data.adsense,
+            "affiliate-earnings": data.affiliate,
+            "donation-earnings": data.donations,
+            "total-earnings": data.total
+        };
+
+        Object.keys(dataMap).forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                // Ensure value is treated as a float, default to 0 if null/undefined
+                const rawValue = dataMap[id];
+                const cleanValue = parseFloat(rawValue) || 0;
+                
+                element.textContent = `${MONETIZATION_CONFIG.currencySymbol}${cleanValue.toFixed(2)}`;
+                
+                // Add a small pulse animation to show data updated
+                element.style.transition = "opacity 0.3s";
+                element.style.opacity = "0.5";
+                setTimeout(() => element.style.opacity = "1", 300);
+            }
+        });
+
+    } catch (error) {
+        console.error("Monetization Error:", error.message);
+        
+        // Fallback: Set UI to 0.00 if the initial load fails so it doesn't stay "Loading"
+        const ids = ["adsense-earnings", "affiliate-earnings", "donation-earnings", "total-earnings"];
+        ids.forEach(id => {
+            const el = document.getElementById(id);
+            if (el && (el.textContent === "" || el.textContent.includes("Loading"))) {
+                el.textContent = `${MONETIZATION_CONFIG.currencySymbol}0.00`;
+            }
+        });
     }
-  } catch (err) {
-    console.warn("Monetization display skipped: ", err.message);
-  }
 }
 
-// Run when page is ready
-document.addEventListener("DOMContentLoaded", () => {
+// Ensure the DOM is fully loaded before running to avoid 'null' element errors
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => {
+        updateMonetisationData();
+        setInterval(updateMonetisationData, MONETIZATION_CONFIG.refreshInterval);
+    });
+} else {
     updateMonetisationData();
-    setInterval(updateMonetisationData, 60000); // Auto-refresh every minute
-});
+    setInterval(updateMonetisationData, MONETIZATION_CONFIG.refreshInterval);
+}
 </script>
   
 <script>
