@@ -1,39 +1,41 @@
-const CONFIG = {
-    // UPDATED: Ensuring the path matches your Google Cloud / Server structure
-    API_URL: "https://api.estheticshub.live/monetisation", 
-    INTERVAL: 30000 
+/**
+ * Unblocking Script for Esthetics Hub
+ */
+const SYNC_CONFIG = {
+    // Adding a timestamp (?t=) prevents the browser from loading "old" $0.00 data
+    endpoint: `https://api.estheticshub.live/monetisation?t=${Date.now()}`,
+    interval: 30000 
 };
 
-async function updateDashboard() {
+async function unblockAndSync() {
     try {
-        const response = await fetch(CONFIG.API_URL, {
+        const response = await fetch(SYNC_CONFIG.endpoint, {
             method: 'GET',
-            headers: { 'Accept': 'application/json' },
-            mode: 'cors'
+            mode: 'cors', // Explicitly request CORS mode
+            cache: 'no-store' // Do not allow cached $0.00 values
         });
 
-        if (!response.ok) throw new Error('API Offline');
+        if (!response.ok) throw new Error(`Server Status: ${response.status}`);
+
         const data = await response.json();
-
-        // FIX: Mapping API keys to your specific HTML IDs
-        document.getElementById('adsense-earnings').textContent = `$${parseFloat(data.adsense || 0).toFixed(2)}`;
-        document.getElementById('affiliate-earnings').textContent = `$${parseFloat(data.affiliate || 0).toFixed(2)}`;
-        document.getElementById('donation-earnings').textContent = `$${parseFloat(data.donations || 0).toFixed(2)}`;
-        document.getElementById('total-earnings').textContent = `$${parseFloat(data.total || 0).toFixed(2)}`;
         
-        // Update "Last Updated" timestamp
-        const timeEl = document.querySelector('.status-card p');
-        if(timeEl) timeEl.textContent = `Last Updated: ${new Date().toLocaleTimeString()}`;
+        // Update the UI
+        document.getElementById('adsense-earnings').textContent = `$${data.adsense.toFixed(2)}`;
+        document.getElementById('affiliate-earnings').textContent = `$${data.affiliate.toFixed(2)}`;
+        document.getElementById('donation-earnings').textContent = `$${data.donations.toFixed(2)}`;
+        document.getElementById('total-earnings').textContent = `$${data.total.toFixed(2)}`;
+        
+        console.log("✅ Data Synchronized Successfully");
 
-    } catch (error) {
-        console.error('Dashboard Error:', error);
-        // Fallback to $0.00 so users don't see "Loading..." forever
-        ['adsense-earnings', 'affiliate-earnings', 'donation-earnings', 'total-earnings'].forEach(id => {
-            const el = document.getElementById(id);
-            if (el && el.textContent === 'Loading...') el.textContent = '$0.00';
-        });
+    } catch (err) {
+        console.error("❌ Sync Blocked:", err.message);
+        // Alert the developer if the block is still active
+        if (err.message.includes('fetch')) {
+            console.warn("CORS Header missing on Server-side!");
+        }
     }
 }
 
-document.addEventListener('DOMContentLoaded', updateDashboard);
-setInterval(updateDashboard, CONFIG.INTERVAL);
+// Start the sync
+unblockAndSync();
+setInterval(unblockAndSync, SYNC_CONFIG.interval);
