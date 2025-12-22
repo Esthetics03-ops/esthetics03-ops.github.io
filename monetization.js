@@ -1,57 +1,49 @@
-/**
- * Esthetics Hub - Diagnostic Sync Script
- */
-const API_URL = "https://api.estheticshub.live/monetisation";
+const CONFIG = {
+    // Optimization: Added a cache-buster to ensure you get real-time revenue
+    URL: "https://api.estheticshub.live/monetisation?cache=" + Date.now(),
+    TIMEOUT: 5000 // 5 seconds
+};
 
-async function runDiagnostics() {
-    const statusText = document.querySelector('.section-subtitle');
-    
+async function syncDashboard() {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), CONFIG.TIMEOUT);
+
     try {
-        statusText.textContent = "🔍 Checking connection to Google Cloud...";
-        
-        const response = await fetch(API_URL, {
-            method: 'GET',
-            mode: 'cors'
+        const response = await fetch(CONFIG.URL, { 
+            signal: controller.signal,
+            mode: 'cors' 
         });
 
-        if (response.ok) {
-            const data = await response.json();
-            statusText.textContent = "✅ Synchronization Active";
-            statusText.style.color = "#48bb78"; // Success Green
-            updateUI(data);
-        } else {
-            throw new Error(`Server Error: ${response.status}`);
-        }
+        if (!response.ok) throw new Error("Server Unreachable");
 
-    } catch (error) {
-        statusText.style.color = "#f56565"; // Error Red
-        
-        if (error.message.includes('fetch')) {
-            statusText.textContent = "❌ Blocked by CORS: Check server.js headers";
-        } else if (error.message.includes('404')) {
-            statusText.textContent = "❌ API URL Not Found: Check Google Cloud path";
-        } else {
-            statusText.textContent = `❌ Error: ${error.message}`;
-        }
-        
-        // Zero out the display so it doesn't stay on "Loading..."
-        setZeroDisplay();
+        const data = await response.json();
+        updateUI(data);
+    } catch (err) {
+        console.warn("Sync blocked/timeout. Falling back to 0.00 stats.");
+        setFallbackValues();
     }
 }
 
 function updateUI(data) {
-    document.getElementById('adsense-earnings').textContent = `$${data.adsense.toFixed(2)}`;
-    document.getElementById('affiliate-earnings').textContent = `$${data.affiliate.toFixed(2)}`;
-    document.getElementById('donation-earnings').textContent = `$${data.donations.toFixed(2)}`;
-    document.getElementById('total-earnings').textContent = `$${data.total.toFixed(2)}`;
-}
+    // Map API keys to your Dashboard IDs
+    const mappings = {
+        'adsense-earnings': data.adsense,
+        'affiliate-earnings': data.affiliate,
+        'donation-earnings': data.donations,
+        'total-earnings': data.total
+    };
 
-function setZeroDisplay() {
-    const ids = ['adsense-earnings', 'affiliate-earnings', 'donation-earnings', 'total-earnings'];
-    ids.forEach(id => {
+    Object.entries(mappings).forEach(([id, val]) => {
         const el = document.getElementById(id);
-        if (el) el.textContent = "$0.00";
+        if (el) el.innerText = `$${parseFloat(val || 0).toFixed(2)}`;
     });
 }
 
-document.addEventListener('DOMContentLoaded', runDiagnostics);
+function setFallbackValues() {
+    ['adsense-earnings', 'affiliate-earnings', 'donation-earnings', 'total-earnings'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.innerText = "$0.00";
+    });
+}
+
+document.addEventListener('DOMContentLoaded', syncDashboard);
