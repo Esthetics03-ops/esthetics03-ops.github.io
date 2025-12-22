@@ -1,3 +1,21 @@
+// Add this middleware to your server.js
+app.use((req, res, next) => {
+    // 1. Allow your specific GitHub domain
+    res.header("Access-Control-Allow-Origin", "https://esthetics03-ops.github.io");
+    
+    // 2. Allow the standard methods
+    res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    
+    // 3. Allow standard headers
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
+    // 4. Handle "Preflight" requests (Browsers send an OPTIONS request first)
+    if (req.method === 'OPTIONS') {
+        return res.sendStatus(200);
+    }
+    
+    next();
+});
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 8080;
