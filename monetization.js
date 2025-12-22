@@ -1,70 +1,39 @@
-/**
- * Esthetics Hub - Live Monetization Dashboard
- * Handles real-time revenue fetching from api.estheticshub.live
- */
-
 const CONFIG = {
-    API_URL: "https://api.estheticshub.live/monetisation?refresh=true",
-    INTERVAL: 60000, // Refresh every 60 seconds
-    FALLBACK_VALUE: "0.00"
+    // UPDATED: Ensuring the path matches your Google Cloud / Server structure
+    API_URL: "https://api.estheticshub.live/monetisation", 
+    INTERVAL: 30000 
 };
 
-async function fetchRevenue() {
-    const dashboard = document.getElementById('monetization-dashboard');
-    console.log("Syncing with Esthetics Hub API...");
-
+async function updateDashboard() {
     try {
         const response = await fetch(CONFIG.API_URL, {
             method: 'GET',
-            mode: 'cors', // Required for cross-domain requests
-            headers: { 'Accept': 'application/json' }
+            headers: { 'Accept': 'application/json' },
+            mode: 'cors'
         });
 
-        if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
-
+        if (!response.ok) throw new Error('API Offline');
         const data = await response.json();
-        updateDisplay(data);
+
+        // FIX: Mapping API keys to your specific HTML IDs
+        document.getElementById('adsense-earnings').textContent = `$${parseFloat(data.adsense || 0).toFixed(2)}`;
+        document.getElementById('affiliate-earnings').textContent = `$${parseFloat(data.affiliate || 0).toFixed(2)}`;
+        document.getElementById('donation-earnings').textContent = `$${parseFloat(data.donations || 0).toFixed(2)}`;
+        document.getElementById('total-earnings').textContent = `$${parseFloat(data.total || 0).toFixed(2)}`;
+        
+        // Update "Last Updated" timestamp
+        const timeEl = document.querySelector('.status-card p');
+        if(timeEl) timeEl.textContent = `Last Updated: ${new Date().toLocaleTimeString()}`;
 
     } catch (error) {
-        console.error("Dashboard Sync Failed:", error.message);
-        setFallbackDisplay();
+        console.error('Dashboard Error:', error);
+        // Fallback to $0.00 so users don't see "Loading..." forever
+        ['adsense-earnings', 'affiliate-earnings', 'donation-earnings', 'total-earnings'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el && el.textContent === 'Loading...') el.textContent = '$0.00';
+        });
     }
 }
 
-function updateDisplay(data) {
-    const fields = {
-        'adsense-earnings': data.adsense,
-        'affiliate-earnings': data.affiliate,
-        'donation-earnings': data.donations,
-        'total-earnings': data.total
-    };
-
-    for (const [id, value] of Object.entries(fields)) {
-        const el = document.getElementById(id);
-        if (el) {
-            // Force conversion to number and format to 2 decimal places
-            const amount = parseFloat(value) || 0;
-            el.textContent = `$${amount.toFixed(2)}`;
-            
-            // Optional: Visual pulse effect on update
-            el.classList.add('data-updated');
-            setTimeout(() => el.classList.remove('data-updated'), 1000);
-        }
-    }
-}
-
-function setFallbackDisplay() {
-    const ids = ['adsense-earnings', 'affiliate-earnings', 'donation-earnings', 'total-earnings'];
-    ids.forEach(id => {
-        const el = document.getElementById(id);
-        if (el && (el.textContent === "" || el.textContent.includes("Loading"))) {
-            el.textContent = `$${CONFIG.FALLBACK_VALUE}`;
-        }
-    });
-}
-
-// Initialise on Page Load
-document.addEventListener("DOMContentLoaded", () => {
-    fetchRevenue();
-    setInterval(fetchRevenue, CONFIG.INTERVAL);
-});
+document.addEventListener('DOMContentLoaded', updateDashboard);
+setInterval(updateDashboard, CONFIG.INTERVAL);
