@@ -39,6 +39,57 @@ footer { text-align:center; padding:1rem; background:#222; color:#fff; margin-to
 .chart-section canvas { background:#fff; border-radius:8px; padding:1rem; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
 
 @media (max-width:600px) { .dashboard-section { grid-template-columns:1fr; } }
+
+  /* Glassmorphism Dashboard Styling */
+.glass-container {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 2rem;
+    margin: 20px auto;
+    max-width: 1100px;
+}
+
+.earnings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.stat-card {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1.5rem;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.stat-card.highlighted {
+    background: linear-gradient(135deg, rgba(107, 70, 193, 0.2), rgba(183, 33, 255, 0.2));
+    border: 1px solid rgba(183, 33, 255, 0.3);
+}
+
+.stat-icon { font-size: 2rem; margin-right: 1rem; }
+.stat-label { font-size: 0.85rem; color: #cbd5e0; text-transform: uppercase; }
+.stat-value { font-size: 1.5rem; font-weight: bold; margin: 0; color: #fff; }
+
+/* Pulse animation for data updates */
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+.data-updated { animation: pulse 1s ease-in-out; }
 </style>
 </head>
 <body>
@@ -146,6 +197,49 @@ footer { text-align:center; padding:1rem; background:#222; color:#fff; margin-to
     <h2>Revenue & Visits Overview</h2>
     <canvas id="revenueChart" height="150"></canvas>
   </section>
+
+  <section id="revenue-dashboard" class="glass-container">
+    <div class="dashboard-header">
+        <h2 class="section-title">Live Revenue Tracking</h2>
+        <p class="section-subtitle">Real-time synchronization with Esthetics Hub API</p>
+    </div>
+
+    <div class="earnings-grid">
+        <div class="stat-card">
+            <div class="stat-icon">💰</div>
+            <div class="stat-info">
+                <span class="stat-label">Google AdSense</span>
+                <h3 id="adsense-earnings" class="stat-value">Loading...</h3>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">🔗</div>
+            <div class="stat-info">
+                <span class="stat-label">Affiliate Revenue</span>
+                <h3 id="affiliate-earnings" class="stat-value">Loading...</h3>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">🙏</div>
+            <div class="stat-info">
+                <span class="stat-label">Community Support</span>
+                <h3 id="donation-earnings" class="stat-value">Loading...</h3>
+            </div>
+        </div>
+
+        <div class="stat-card highlighted">
+            <div class="stat-icon">🚀</div>
+            <div class="stat-info">
+                <span class="stat-label">Total Impact</span>
+                <h3 id="total-earnings" class="stat-value">Loading...</h3>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="monetization.js"></script>
 
   <section id="dashboard-tracker-live" style="margin:20px auto; max-width:900px;">
   <div style="display:flex; flex-direction:column; gap:20px;">
