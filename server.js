@@ -1,3 +1,11 @@
+// This MUST be placed BEFORE your app.get routes
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', 'https://esthetics03-ops.github.io');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+});
+
 // Add this middleware to your server.js
 app.use((req, res, next) => {
     // 1. Allow your specific GitHub domain
