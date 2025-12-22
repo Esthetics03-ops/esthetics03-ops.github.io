@@ -1,41 +1,57 @@
 /**
- * Unblocking Script for Esthetics Hub
+ * Esthetics Hub - Diagnostic Sync Script
  */
-const SYNC_CONFIG = {
-    // Adding a timestamp (?t=) prevents the browser from loading "old" $0.00 data
-    endpoint: `https://api.estheticshub.live/monetisation?t=${Date.now()}`,
-    interval: 30000 
-};
+const API_URL = "https://api.estheticshub.live/monetisation";
 
-async function unblockAndSync() {
+async function runDiagnostics() {
+    const statusText = document.querySelector('.section-subtitle');
+    
     try {
-        const response = await fetch(SYNC_CONFIG.endpoint, {
+        statusText.textContent = "🔍 Checking connection to Google Cloud...";
+        
+        const response = await fetch(API_URL, {
             method: 'GET',
-            mode: 'cors', // Explicitly request CORS mode
-            cache: 'no-store' // Do not allow cached $0.00 values
+            mode: 'cors'
         });
 
-        if (!response.ok) throw new Error(`Server Status: ${response.status}`);
-
-        const data = await response.json();
-        
-        // Update the UI
-        document.getElementById('adsense-earnings').textContent = `$${data.adsense.toFixed(2)}`;
-        document.getElementById('affiliate-earnings').textContent = `$${data.affiliate.toFixed(2)}`;
-        document.getElementById('donation-earnings').textContent = `$${data.donations.toFixed(2)}`;
-        document.getElementById('total-earnings').textContent = `$${data.total.toFixed(2)}`;
-        
-        console.log("✅ Data Synchronized Successfully");
-
-    } catch (err) {
-        console.error("❌ Sync Blocked:", err.message);
-        // Alert the developer if the block is still active
-        if (err.message.includes('fetch')) {
-            console.warn("CORS Header missing on Server-side!");
+        if (response.ok) {
+            const data = await response.json();
+            statusText.textContent = "✅ Synchronization Active";
+            statusText.style.color = "#48bb78"; // Success Green
+            updateUI(data);
+        } else {
+            throw new Error(`Server Error: ${response.status}`);
         }
+
+    } catch (error) {
+        statusText.style.color = "#f56565"; // Error Red
+        
+        if (error.message.includes('fetch')) {
+            statusText.textContent = "❌ Blocked by CORS: Check server.js headers";
+        } else if (error.message.includes('404')) {
+            statusText.textContent = "❌ API URL Not Found: Check Google Cloud path";
+        } else {
+            statusText.textContent = `❌ Error: ${error.message}`;
+        }
+        
+        // Zero out the display so it doesn't stay on "Loading..."
+        setZeroDisplay();
     }
 }
 
-// Start the sync
-unblockAndSync();
-setInterval(unblockAndSync, SYNC_CONFIG.interval);
+function updateUI(data) {
+    document.getElementById('adsense-earnings').textContent = `$${data.adsense.toFixed(2)}`;
+    document.getElementById('affiliate-earnings').textContent = `$${data.affiliate.toFixed(2)}`;
+    document.getElementById('donation-earnings').textContent = `$${data.donations.toFixed(2)}`;
+    document.getElementById('total-earnings').textContent = `$${data.total.toFixed(2)}`;
+}
+
+function setZeroDisplay() {
+    const ids = ['adsense-earnings', 'affiliate-earnings', 'donation-earnings', 'total-earnings'];
+    ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = "$0.00";
+    });
+}
+
+document.addEventListener('DOMContentLoaded', runDiagnostics);
