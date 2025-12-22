@@ -1,3 +1,24 @@
+const express = require('express');
+const cors = require('cors'); // Use the cors middleware for optimization
+const app = express();
+
+// OPTIMIZATION: Only allow your specific GitHub domain
+app.use(cors({
+    origin: 'https://esthetics03-ops.github.io'
+}));
+
+app.get('/monetisation', (req, res) => {
+    res.json({
+        adsense: 0.00, // Your logic here
+        affiliate: 0.00,
+        donations: 0.00,
+        total: 0.00
+    });
+});
+
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => console.log(`Server optimized on port ${PORT}`));
+
 // This MUST be placed BEFORE your app.get routes
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', 'https://esthetics03-ops.github.io');
