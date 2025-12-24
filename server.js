@@ -1,20 +1,30 @@
 const express = require('express');
-const cors = require('cors'); // Use the cors middleware for optimization
 const app = express();
 
-// OPTIMIZATION: Only allow your specific GitHub domain
-app.use(cors({
-    origin: 'https://esthetics03-ops.github.io'
-}));
+// UNBLOCKER MIDDLEWARE
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "https://esthetics03-ops.github.io");
+    res.header("Access-Control-Allow-Methods", "GET, OPTIONS");
+    res.header("Access-Control-Allow-Headers", "Content-Type");
+    if (req.method === 'OPTIONS') return res.sendStatus(200);
+    next();
+});
 
+// HEALTH CHECK (Visit this in your browser to test)
+app.get('/health', (req, res) => res.send("API is Live and Unblocked"));
+
+// THE DATA ENDPOINT
 app.get('/monetisation', (req, res) => {
     res.json({
-        adsense: 0.00, // Your logic here
-        affiliate: 0.00,
+        adsense: 1.25, // Replace with your logic
+        affiliate: 5.50,
         donations: 0.00,
-        total: 0.00
+        total: 6.75
     });
 });
+
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => console.log(`Server running on ${PORT}`));
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => console.log(`Server optimized on port ${PORT}`));
