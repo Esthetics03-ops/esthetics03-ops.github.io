@@ -206,42 +206,7 @@ footer{background:var(--primary-color);color:var(--white);padding:24px 16px;marg
   color: #fff;
 }
 @keyframes fadeIn {
-  from {opacity: 0; transform: scale(0.9);}
-  to {opacity: 1; transform: scale(1);}
-}
 
-.footer-links {
-  display: block;
-}
-.footer-links a {
-  color: #fff;
-  text-decoration: none;
-}
-.footer-links a:hover {
-  text-decoration: underline;
-}
-.footer-contact ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-.footer-contact li {
-  margin: 8px 0;
-}
-.footer-contact a {
-  color: #fff;
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.footer-contact a:hover {
-  text-decoration: underline;
-}
-.footer-contact i {
-  font-size: 1.2em;
-  color: var(--accent-color);
-      }
 /* --- Mobile Menu & Icon Animation --- */
 
 /* Hamburger Icon Animation */
