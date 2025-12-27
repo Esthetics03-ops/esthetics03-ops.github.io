@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>SleepSync | AI Sleep Hygiene Tech & Circadian Optimization</title>
+    <meta name="description" content="Master your sleep with MindSync Sleep Tech. AI-powered sleep debt calculators, smart mattress reviews, and wearable data optimization for deep recovery.">
+    <meta name="keywords" content="sleep hygiene tech, smart mattress, Oura ring affiliate, sleep debt calculator, circadian rhythm, deep sleep tech">
+    <meta name="author" content="MindSync Tech">
+    <meta name="affiliate-id" content="esthetics-hub-affiliate">
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1959507280210179" crossorigin="anonymous"></script>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QCX3G9KSPC"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-QCX3G9KSPC');
+      gtag('config', 'G-PSW1MY7HB4');
+    </script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root { --midnight: #0b1120; --electric-purple: #7c3aed; --cool-gray: #f1f5f9; --star-gold: #fde047; }
+        body { font-family: 'Outfit', sans-serif; background-color: var(--midnight); color: white; scroll-behavior: smooth; }
+        h1, h2, h3, .heading { font-family: 'Space Grotesk', sans-serif; }
+        
+        .reveal { opacity: 0; transform: translateY(30px); transition: 1.2s all ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* Modern Nav */
+        .navbar { background: rgba(11, 17, 32, 0.9) !important; backdrop-filter: blur(10px); }
+        .navbar-brand { font-weight: 800; color: var(--star-gold) !important; font-size: 1.6rem; }
+
+        /* Sleep Calculator Widget */
+        .calculator-card { background: #1e293b; border-radius: 24px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+        .form-control-dark { background: #0f172a; border: 1px solid #334155; color: white; }
+        .form-control-dark:focus { background: #0f172a; border-color: var(--electric-purple); color: white; box-shadow: none; }
+
+        /* Product Comparison */
+        .tech-card { background: #1e293b; border-radius: 20px; border: none; transition: 0.3s; height: 100%; }
+        .tech-card:hover { transform: translateY(-10px); background: #2d3748; }
+
+        /* Buttons */
+        .btn-amazon { background: #ff9900; color: white; border-radius: 12px; font-weight: 700; border: none; padding: 10px 20px; }
+        .btn-purple { background: var(--electric-purple); color: white; border-radius: 12px; padding: 14px 32px; font-weight: 600; border: none; }
+        .btn-purple:hover { opacity: 0.9; color: white; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">SLEEPSYNC</a>
+            <div class="d-flex align-items-center">
+                <ul class="navbar-nav d-none d-lg-flex me-4">
+                    <li class="nav-item"><a class="nav-link" href="#calculator">Debt Tool</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#tech">Wearables</a></li>
+                </ul>
+                <button class="btn btn-purple btn-sm" data-bs-toggle="modal" data-bs-target="#sleepModal">Optimize Now</button>
+            </div>
+        </div>
+    </nav>
+
+    <header class="py-5 text-center position-relative overflow-hidden">
+        <div class="container reveal py-5 position-relative z-index-1">
+            <h1 class="display-2 fw-bold mb-4">Master Your <span style="color: var(--star-gold)">Deep Sleep.</span></h1>
+            <p class="lead mb-5 mx-auto text-light opacity-75" style="max-width: 600px;">Optimize your biological clock with AI-driven insights and the world's most advanced sleep technology.</p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="#calculator" class="btn btn-purple btn-lg">Calculate Sleep Debt</a>
+                <a href="#tech" class="btn btn-outline-light btn-lg">View Top Tech</a>
+            </div>
+        </div>
+    </header>
+
+    <section id="calculator" class="py-5">
+        <div class="container reveal">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card calculator-card p-4 p-md-5">
+                        <div class="text-center mb-5">
+                            <h2 class="h1">Circadian Efficiency Tool</h2>
+                            <p class="text-secondary">Input your recent patterns to calculate your recovery requirements.</p>
+                        </div>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label class="small fw-bold text-uppercase mb-2">Hours Slept (Last Night)</label>
+                                <input type="number" id="lastNight" class="form-control form-control-lg form-control-dark" placeholder="e.g. 6">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small fw-bold text-uppercase mb-2">Desired Wake Time</label>
+                                <input type="time" id="wakeTime" class="form-control form-control-lg form-control-dark">
+                            </div>
+                            <div class="col-12 mt-4">
+                                <button onclick="calculateSleep()" class="btn btn-purple w-100 py-3 fs-5 fw-bold">Generate Recovery Protocol</button>
+                            </div>
+                        </div>
+                        <div id="sleepResult" class="mt-5 d-none animate__animated animate__fadeIn">
+                            <div class="p-4 rounded-4" style="background: rgba(124, 58, 237, 0.1); border: 1px solid var(--electric-purple);">
+                                <h4 class="text-purple"><i class="bi bi-moon-stars me-2"></i>AI Recommendation:</h4>
+                                <p id="sleepText" class="mb-0"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container my-5 text-center">
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1959507280210179" data-ad-slot="SLEEP_TECH_BANNER" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <section id="tech" class="py-5">
+        <div class="container reveal">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold">Top Performance Tech 2025</h2>
+                <p class="text-secondary">Vetted hardware for elite sleep hygiene.</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card tech-card p-4">
+                        <div class="mb-3 text-star-gold fs-1"><i class="bi bi-person-bounding-box"></i></div>
+                        <h4>Biometric Wearables</h4>
+                        <p class="small text-secondary">Track HRV, SpO2, and Sleep Stages with precision accuracy.</p>
+                        <a href="https://www.amazon.com/s?k=oura+ring+gen3&tag=esthetics-hub-affiliate" target="_blank" class="btn btn-amazon mt-auto w-100">Shop on Amazon</a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card tech-card p-4">
+                        <div class="mb-3 text-star-gold fs-1"><i class="bi bi-thermometer-snow"></i></div>
+                        <h4>Cooling Systems</h4>
+                        <p class="small text-secondary">Active thermal regulation for deeper non-REM cycles.</p>
+                        <a href="https://www.amazon.com/s?k=eight+sleep+pod+cover&tag=esthetics-hub-affiliate" target="_blank" class="btn btn-amazon mt-auto w-100">Shop on Amazon</a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card tech-card p-4">
+                        <div class="mb-3 text-star-gold fs-1"><i class="bi bi-earbuds"></i></div>
+                        <h4>Noise Masking</h4>
+                        <p class="small text-secondary">Clinical-grade white noise to protect your sleep environment.</p>
+                        <a href="https://www.amazon.com/s?k=bose+sleepbuds&tag=esthetics-hub-affiliate" target="_blank" class="btn btn-amazon mt-auto w-100">Shop on Amazon</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="modal fade" id="sleepModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-dark border-0 p-4 rounded-4 shadow-lg">
+                <h3 class="fw-bold mb-3">7-Day Sleep Reset</h3>
+                <p class="text-secondary small">Get our AI-optimized schedule to fix your circadian rhythm in one week.</p>
+                <form id="sleepNewsletter">
+                    <input type="email" id="email" class="form-control form-control-dark mb-3 rounded-3" placeholder="email@example.com" required>
+                    <button type="submit" class="btn btn-purple w-100 fw-bold">Send My Reset Plan</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer class="py-5 border-top border-secondary mt-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start">
+                    <h5 class="mb-1 text-star-gold">SleepSync by MindSync</h5>
+                    <p class="x-small text-secondary mb-0">The intersection of neuroscience and elite performance tech.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end mt-4 mt-md-0">
+                    <p class="x-small text-secondary mb-0">© 2025 SleepSync | Part of the Esthetics Hub Affiliate Network.</p>
+                    <p class="x-small text-secondary" style="font-size: 0.65rem;">Disclosure: We earn from qualifying Amazon purchases. Tracking via G-QCX3G9KSPC & G-PSW1MY7HB4.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Reveal Animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Sleep Logic
+        function calculateSleep() {
+            const lastNight = document.getElementById('lastNight').value;
+            const resBox = document.getElementById('sleepResult');
+            const resText = document.getElementById('sleepText');
+
+            if(!lastNight) return alert("Please enter your sleep hours");
+
+            const debt = 8 - lastNight;
+            const recoveryNeeded = debt > 0 ? (debt * 1.5).toFixed(1) : 0;
+
+            resText.innerHTML = debt > 0 
+                ? `You have a <strong>${debt} hour sleep debt</strong>. To stabilize your circadian rhythm, we recommend a <strong>${recoveryNeeded} hour</strong> total recovery window tonight, with a blue-light lockout starting 90 minutes before bedtime.`
+                : `Perfect sleep consistency! Your circadian rhythm is optimized. Focus on maintenance with biometric tracking.`;
+            
+            resBox.classList.remove('d-none');
+            
+            // GA4 Event
+            gtag('event', 'sleep_calc_use', { 'debt_level': debt, 'send_to': ['G-QCX3G9KSPC', 'G-PSW1MY7HB4'] });
+        }
+
+        // Tracking Form
+        document.getElementById('sleepNewsletter').addEventListener('submit', function(e) {
+            e.preventDefault();
+            gtag('event', 'sign_up', { 'method': 'Sleep_Reset_Lead', 'send_to': ['G-QCX3G9KSPC', 'G-PSW1MY7HB4'] });
+            alert("Optimization plan sent!");
+        });
+    </script>
+</body>
+  </html>
