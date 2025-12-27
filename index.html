@@ -1506,7 +1506,45 @@ This site uses cookies to improve your experience.
         <i class="bi bi-stars"></i> Shop Travel Wellness Gear
     </a>
 </div>
+<div id="exitPopup">
+    <div class="popup-content shadow-lg">
+        <span class="popup-close" onclick="closePopup()">&times;</span>
+        <div class="mb-3 text-warning fs-1"><i class="bi bi-gift"></i></div>
+        <h2>Wait! Don't Miss Out</h2>
+        <p>Get our <strong>2025 Wellness Travel Checklist</strong> and exclusive Booking.com discounts delivered to your inbox.</p>
+        <form id="popupForm">
+            <input type="email" class="form-control mb-3 rounded-pill py-3 px-4" placeholder="Enter your best email" required>
+            <button type="submit" class="btn btn-popup">Send Me the Checklist</button>
+        </form>
+    </div>
+</div>
 
+  <script>
+    // Show popup when mouse leaves the window
+    document.addEventListener("mouseleave", function(e) {
+        if (e.clientY < 0 && !localStorage.getItem('popupShown')) {
+            showPopup();
+        }
+    }, false);
+
+    function showPopup() {
+        document.getElementById('exitPopup').style.display = 'flex';
+        localStorage.setItem('popupShown', 'true'); // Show only once per session
+        gtag('event', 'popup_view', { 'send_to': ['G-QCX3G9KSPC', 'G-PSW1MY7HB4'] });
+    }
+
+    function closePopup() {
+        document.getElementById('exitPopup').style.display = 'none';
+    }
+
+    // Handle Form Submission
+    document.getElementById('popupForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        gtag('event', 'lead_captured', { 'type': 'Exit_Intent', 'send_to': ['G-QCX3G9KSPC', 'G-PSW1MY7HB4'] });
+        alert("Success! Your checklist is on the way.");
+        closePopup();
+    });
+  </script>
 
 <script>
 /**
