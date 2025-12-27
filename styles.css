@@ -79,3 +79,48 @@
     .navbar-collapse.show .nav-item:nth-child(3) { transition-delay: 0.3s; }
     .navbar-collapse.show .nav-item:nth-child(4) { transition-delay: 0.4s; }
 }
+
+/* --- Sticky Mobile CTA --- */
+.sticky-mobile-cta {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    z-index: 9999;
+    display: none; /* Hidden by default on desktop */
+}
+
+.cta-button {
+    background: #2c3e50; /* Matches your Ocean Blue */
+    color: white !important;
+    text-align: center;
+    padding: 15px;
+    border-radius: 50px;
+    font-weight: 700;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    border: 2px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(5px);
+}
+
+.cta-button i {
+    margin-right: 10px;
+    font-size: 1.2rem;
+    color: #fde047; /* Star Gold */
+}
+
+@media (max-width: 991px) {
+    .sticky-mobile-cta {
+        display: block;
+        animation: slideUp 0.5s ease-out;
+    }
+}
+
+@keyframes slideUp {
+    from { transform: translate(-50%, 100px); opacity: 0; }
+    to { transform: translate(-50%, 0); opacity: 1; }
+    }
