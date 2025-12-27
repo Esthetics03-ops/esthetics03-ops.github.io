@@ -1,0 +1,81 @@
+/* --- Mobile Menu & Icon Animation --- */
+
+/* Hamburger Icon Animation */
+.navbar-toggler {
+    border: none;
+    padding: 0;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Custom animated hamburger icon */
+.navbar-toggler-icon {
+    background-image: none !important;
+    position: relative;
+    width: 24px;
+    height: 2px;
+    background-color: #2c3e50;
+    display: inline-block;
+    transition: all 0.3s ease-in-out;
+}
+
+.navbar-toggler-icon::before,
+.navbar-toggler-icon::after {
+    content: "";
+    position: absolute;
+    width: 24px;
+    height: 2px;
+    background-color: #2c3e50;
+    transition: all 0.3s ease-in-out;
+}
+
+.navbar-toggler-icon::before { top: -8px; left: 0; }
+.navbar-toggler-icon::after { top: 8px; left: 0; }
+
+/* Transform icon to 'X' when menu is open */
+.navbar-toggler:not(.collapsed) .navbar-toggler-icon {
+    background-color: transparent;
+}
+
+.navbar-toggler:not(.collapsed) .navbar-toggler-icon::before {
+    transform: rotate(45deg);
+    top: 0;
+}
+
+.navbar-toggler:not(.collapsed) .navbar-toggler-icon::after {
+    transform: rotate(-45deg);
+    top: 0;
+}
+
+/* Smooth Slide-Down Menu */
+@media (max-width: 991px) {
+    .navbar-collapse {
+        background: white;
+        padding: 1rem 1.5rem;
+        border-radius: 0 0 20px 20px;
+        box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .navbar-nav .nav-item {
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: 0.3s all ease;
+    }
+
+    .navbar-collapse.show .nav-item {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Staggered entry for links */
+    .navbar-collapse.show .nav-item:nth-child(1) { transition-delay: 0.1s; }
+    .navbar-collapse.show .nav-item:nth-child(2) { transition-delay: 0.2s; }
+    .navbar-collapse.show .nav-item:nth-child(3) { transition-delay: 0.3s; }
+    .navbar-collapse.show .nav-item:nth-child(4) { transition-delay: 0.4s; }
+}
