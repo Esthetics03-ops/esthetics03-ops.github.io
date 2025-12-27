@@ -124,3 +124,58 @@
     from { transform: translate(-50%, 100px); opacity: 0; }
     to { transform: translate(-50%, 0); opacity: 1; }
     }
+/* --- Lead Capture Popup --- */
+#exitPopup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(11, 17, 32, 0.8); /* Dark overlay */
+    backdrop-filter: blur(8px);
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+}
+
+.popup-content {
+    background: white;
+    padding: 40px;
+    border-radius: 30px;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+}
+
+.popup-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: #cbd5e1;
+}
+
+.popup-content h2 {
+    font-family: 'Playfair Display', serif;
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+
+.popup-content p {
+    color: #64748b;
+    margin-bottom: 25px;
+}
+
+.btn-popup {
+    background: #c5a880; /* Your Accent Gold */
+    color: white;
+    border-radius: 50px;
+    padding: 12px 30px;
+    font-weight: 700;
+    width: 100%;
+    border: none;
+    }
