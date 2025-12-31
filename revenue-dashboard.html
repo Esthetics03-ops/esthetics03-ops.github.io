@@ -3,181 +3,213 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bio-Sync | Elite Revenue Dashboard</title>
+    <title>Bio-Sync | Financial Intelligence Dashboard</title>
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=pub-1959507280210179" crossorigin="anonymous"></script>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QCX3G9KSPC"></script>
-    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
     <style>
         :root {
             --primary: #2d5a27;
             --accent: #b721ff;
-            --glass: rgba(255, 255, 255, 0.1);
             --bg: #0f172a;
+            --glass: rgba(255, 255, 255, 0.05);
         }
 
         body { 
-            font-family: 'Inter', sans-serif; 
-            margin:0; background: var(--bg); 
-            color: white; overflow-x: hidden;
+            font-family: 'Inter', system-ui, sans-serif; 
+            background: var(--bg); 
+            color: white; 
+            margin: 0; 
+            padding: 20px;
         }
 
-        /* Glassmorphism Layout */
-        .glass-container {
+        .dashboard-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Glassmorphism UI */
+        .glass-panel {
             background: var(--glass);
-            backdrop-filter: blur(15px);
+            backdrop-filter: blur(12px);
             border: 1px solid rgba(255,255,255,0.1);
             border-radius: 24px;
             padding: 2rem;
-            margin: 20px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
         }
 
-        .dashboard-grid {
+        .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+            gap: 20px;
+            margin-bottom: 30px;
         }
 
-        .stat-card {
-            background: rgba(255,255,255,0.05);
+        .card {
+            background: rgba(255,255,255,0.03);
             padding: 1.5rem;
-            border-radius: 18px;
-            border: 1px solid rgba(255,255,255,0.05);
-            transition: 0.3s;
-        }
-
-        .stat-card:hover { transform: translateY(-5px); background: rgba(255,255,255,0.1); }
-
-        .stat-label { color: #94a3b8; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
-        .stat-value { font-size: 1.8rem; font-weight: 800; margin: 5px 0; color: #f8fafc; }
-
-        /* Chart Styling */
-        .chart-box { background: rgba(15, 23, 42, 0.5); padding: 20px; border-radius: 20px; }
-
-        .status-badge {
-            padding: 5px 12px;
             border-radius: 20px;
-            font-size: 0.75rem;
-            background: var(--primary);
-            color: #fff;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: 0.3s ease;
         }
 
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
-        .syncing { animation: pulse 1.5s infinite; }
+        .card:hover { transform: translateY(-5px); background: rgba(255,255,255,0.08); }
+
+        .label { color: #94a3b8; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; }
+        .value { font-size: 2rem; font-weight: 800; margin: 10px 0; display: block; }
+        
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            background: rgba(45, 90, 39, 0.2);
+            border-radius: 50px;
+            font-size: 0.8rem;
+            color: #4ade80;
+        }
+
+        .chart-container { height: 300px; width: 100%; }
+
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        .sync-active { animation: pulse 1.5s infinite; }
     </style>
 </head>
 <body>
 
-<main class="glass-container">
+<div class="dashboard-wrapper">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
-        <h2>Financial Intelligence <span id="sync-indicator" class="status-badge">Live</span></h2>
+        <div>
+            <h1 style="margin:0; font-size: 1.5rem;">The Esthetics Hub</h1>
+            <div class="status-pill" id="sync-status">
+                <i class="bi bi-broadcast"></i> <span id="sync-text">Live Monitoring</span>
+            </div>
+        </div>
         <div style="text-align:right">
-            <small style="color:#94a3b8">Last Sync</small><br>
-            <span id="last-updated">--:--:--</span>
+            <span class="label">Last Update</span><br>
+            <span id="timestamp" style="font-weight:600;">--:--:--</span>
         </div>
     </div>
 
-    <div class="dashboard-grid">
-        <div class="stat-card">
-            <span class="stat-label">Google AdSense (Est.)</span>
-            <div id="adsense-earnings" class="stat-value">$0.00</div>
-            <small style="color:#28a745">Next Payout: Jan 21</small>
+    <div class="stats-grid">
+        <div class="card">
+            <span class="label">AdSense Revenue (Dec 2025)</span>
+            <span id="adsense-val" class="value">$0.00</span>
+            <div id="payout-progress" style="height:4px; background:#334155; border-radius:2px;">
+                <div id="progress-bar" style="width:0%; height:100%; background:var(--accent); border-radius:2px;"></div>
+            </div>
+            <small style="display:block; margin-top:8px; color:#94a3b8;">Threshold: $100.00</small>
         </div>
-        <div class="stat-card">
-            <span class="stat-label">Affiliate Revenue</span>
-            <div id="affiliate-earnings" class="stat-value">$0.00</div>
-            <small style="color:#28a745">3 Active Streams</small>
+
+        <div class="card">
+            <span class="label">Affiliate (Oura/Thrive)</span>
+            <span id="affiliate-val" class="value">$0.00</span>
+            <small style="color:#4ade80"><i class="bi bi-graph-up"></i> +12% vs last month</small>
         </div>
-        <div class="stat-card" style="border-left: 4px solid var(--accent)">
-            <span class="stat-label">Total Impact</span>
-            <div id="total-earnings" class="stat-value">$0.00</div>
-            <small>Combined Monthly ROI</small>
+
+        <div class="card" style="background: linear-gradient(135deg, rgba(183, 33, 255, 0.1), transparent);">
+            <span class="label">Total Est. Earnings</span>
+            <span id="total-val" class="value" style="color:#f8fafc;">$0.00</span>
+            <small style="color:#94a3b8">January Payout Ready: <span id="payout-ready">Checking...</span></small>
         </div>
     </div>
 
-    <div class="chart-box">
-        <canvas id="revenueChart" height="120"></canvas>
+    <div class="glass-panel">
+        <span class="label">Revenue Velocity (Real-Time)</span>
+        <div class="chart-container">
+            <canvas id="revenueChart"></canvas>
+        </div>
     </div>
-</main>
+</div>
 
 <script>
-    // Configuration
-    const API_URL = 'https://api.estheticshub.live/monetisation'; // Replace with your actual backend
-    
-    // Initialize Chart.js
-    const ctx = document.getElementById('revenueChart').getContext('2d');
-    const revenueChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: [],
-            datasets: [{
-                label: 'Real-time Revenue ($)',
-                data: [],
-                borderColor: '#b721ff',
-                backgroundColor: 'rgba(183, 33, 255, 0.1)',
-                fill: true,
-                tension: 0.4
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: { legend: { display: false } },
-            scales: {
-                y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } },
-                x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
-            }
-        }
-    });
+    let revenueChart;
+    let config = {};
 
-    async function syncData() {
-        const indicator = document.getElementById('sync-indicator');
-        indicator.classList.add('syncing');
-        
+    // 1. Initialize Dashboard Configuration
+    async function init() {
         try {
-            // In live, replace this with: const res = await fetch(API_URL);
-            // Simulation for visual testing:
-            const mockData = {
-                adsense: (Math.random() * 50 + 300).toFixed(2),
-                affiliate: (Math.random() * 20 + 450).toFixed(2),
-                total: 0
-            };
-            mockData.total = (parseFloat(mockData.adsense) + parseFloat(mockData.affiliate)).toFixed(2);
+            const response = await fetch('config.json');
+            config = await response.json();
+            console.log("Configuration Loaded for Publisher:", config.ADSENSE_PUB_ID);
+            
+            setupChart();
+            startSyncLoop();
+        } catch (err) {
+            console.error("Critical: Could not load config.json", err);
+            document.getElementById('sync-text').innerText = "Offline Mode";
+        }
+    }
+
+    // 2. Setup Chart.js
+    function setupChart() {
+        const ctx = document.getElementById('revenueChart').getContext('2d');
+        revenueChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'USD/Hour',
+                    data: [],
+                    borderColor: '#b721ff',
+                    backgroundColor: 'rgba(183, 33, 255, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { display: false }, ticks: { color: '#64748b' } },
+                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748b' } }
+                }
+            }
+        });
+    }
+
+    // 3. Live Sync Logic
+    async function startSyncLoop() {
+        const syncAction = async () => {
+            document.getElementById('sync-status').classList.add('sync-active');
+            
+            // Simulation: In Production, replace with: await fetch(config.API_ENDPOINTS.monetization)
+            const adsense = (Math.random() * 5 + 85.50).toFixed(2);
+            const affiliate = (Math.random() * 2 + 120.20).toFixed(2);
+            const total = (parseFloat(adsense) + parseFloat(affiliate)).toFixed(2);
 
             // Update UI
-            document.getElementById('adsense-earnings').innerText = `$${mockData.adsense}`;
-            document.getElementById('affiliate-earnings').innerText = `$${mockData.affiliate}`;
-            document.getElementById('total-earnings').innerText = `$${mockData.total}`;
-            document.getElementById('last-updated').innerText = new Date().toLocaleTimeString();
+            document.getElementById('adsense-val').innerText = `$${adsense}`;
+            document.getElementById('affiliate-val').innerText = `$${affiliate}`;
+            document.getElementById('total-val').innerText = `$${total}`;
+            document.getElementById('timestamp').innerText = new Date().toLocaleTimeString();
+
+            // Payout Readiness
+            const progress = (adsense / config.PAYMENT_THRESHOLD) * 100;
+            document.getElementById('progress-bar').style.width = `${Math.min(progress, 100)}%`;
+            document.getElementById('payout-ready').innerText = adsense >= config.PAYMENT_THRESHOLD ? "Yes ✅" : "Pending ⏳";
 
             // Update Chart
-            updateChart(mockData.total);
+            const label = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            if(revenueChart.data.labels.length > 15) {
+                revenueChart.data.labels.shift();
+                revenueChart.data.datasets[0].data.shift();
+            }
+            revenueChart.data.labels.push(label);
+            revenueChart.data.datasets[0].data.push(total);
+            revenueChart.update();
 
-        } catch (err) {
-            console.error("Sync Error:", err);
-        } finally {
-            setTimeout(() => indicator.classList.remove('syncing'), 1000);
-        }
+            setTimeout(() => document.getElementById('sync-status').classList.remove('sync-active'), 1000);
+        };
+
+        syncAction();
+        setInterval(syncAction, 30000); // Sync every 30 seconds
     }
 
-    function updateChart(value) {
-        const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        if(revenueChart.data.labels.length > 8) {
-            revenueChart.data.labels.shift();
-            revenueChart.data.datasets[0].data.shift();
-        }
-        revenueChart.data.labels.push(time);
-        revenueChart.data.datasets[0].data.push(value);
-        revenueChart.update();
-    }
-
-    // Start Lifecycle
-    window.onload = () => {
-        syncData();
-        setInterval(syncData, 30000); // 30s Refresh
-    };
+    init();
 </script>
 </body>
-              </html>
+</html>
