@@ -1,3 +1,23 @@
+# ========================================================
+# Robots.txt for The Esthetics Hub
+# Optimized for AdSense Revenue & GitHub Pages SEO
+# ========================================================
+
+# 1. ALLOW ADSENSE CRAWLERS (Priority)
+# This ensures the AdSense bot can "read" your page to show high-paying ads.
+User-agent: Mediapartners-Google
+Allow: /
+
+# 2. GENERAL SEARCH ENGINES (Google, Bing, etc.)
 User-agent: *
 Allow: /
+# Disallow private GitHub/Development files
+Disallow: /README.md
+Disallow: /LICENSE
+Disallow: /SECURITY.md
+Disallow: /.github/
+Disallow: /private/
+
+# 3. SITEMAP LOCATION
+# Directly points search engines to your updated sitemap for faster indexing.
 Sitemap: https://esthetics03-ops.github.io/sitemap.xml
