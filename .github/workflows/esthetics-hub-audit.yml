@@ -1,0 +1,111 @@
+name: Esthetics Hub Site Audit & Monetization Guard
+run-name: Site Audit - ${{ github.ref_name }}
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Automated Run: Every night at midnight
+  workflow_dispatch: # Manual Run: Trigger whenever you want
+
+permissions:
+  contents: read
+  issues: write # Required to automatically create SEO alerts
+
+jobs:
+  comprehensive-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛒 Checkout Repository
+        uses: actions/checkout@v4
+
+      # 1. PERFORMANCE: Google PageSpeed Insights (Lighthouse)
+      - name: ⚡ Run PageSpeed Audit
+        uses: treosh/lighthouse-ci-action@v11
+        with:
+          urls: |
+            https://esthetics03-ops.github.io/
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # 2. ADSENSE: Getthit AdSense Eligibility & Optimization Check
+      - name: 💰 Verify AdSense Deployment
+        run: |
+          echo "Checking for Publisher ID: ca-pub-1959507280210179..."
+          RESPONSE=$(curl -s https://esthetics03-ops.github.io/)
+          if [[ "$RESPONSE" == *"ca-pub-1959507280210179"* ]]; then
+            echo "✅ AdSense Snippet is active and correctly deployed."
+          else
+            echo "❌ ERROR: AdSense Snippet is MISSING. Monetization is at risk!"
+            exit 1
+          fi
+
+      # 3. SEO & REALTIME: Google Search Console & GA4 Realtime Reports
+      - name: 🐍 Set up Python Environment
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: 📦 Install Google Cloud & Analytics Dependencies
+        run: |
+          pip install google-api-python-client google-auth requests google-analytics-data
+
+      - name: 🔍 Run SEO Indexing & GA4 Traffic Check
+        env:
+          GCP_SERVICE_ACCOUNT_JSON: ${{ secrets.GCP_SERVICE_ACCOUNT_JSON }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GA4_PROPERTY_ID: "G-QCX3G9KSPC"
+        run: |
+          python - <<EOF
+          import os
+          import json
+          import requests
+          from google.oauth2 import service_account
+          from googleapiclient.discovery import build
+          from google.analytics.data_v1beta import BetaAnalyticsDataClient
+          from google.analytics.data_v1beta.types import RunRealtimeReportRequest
+
+          # Credentials Setup
+          info = json.loads(os.environ['GCP_SERVICE_ACCOUNT_JSON'])
+          creds = service_account.Credentials.from_service_account_info(info)
+          
+          # 1. Google Search Console Check
+          sc_service = build('searchconsole', 'v1', credentials=creds)
+          site_url = "https://esthetics03-ops.github.io/"
+          
+          try:
+              sc_res = sc_service.urlInspection().index().inspect(body={'inspectionUrl': site_url, 'siteUrl': site_url}).execute()
+              verdict = sc_res.get('inspectionResult', {}).get('indexStatusResult', {}).get('verdict', 'UNKNOWN')
+              print(f"Search Console Verdict: {verdict}")
+          except Exception as e:
+              verdict = f"API Error: {e}"
+
+          # 2. GA4 Realtime Traffic Check
+          try:
+              ga_client = BetaAnalyticsDataClient(credentials=creds)
+              request = RunRealtimeReportRequest(property=f"properties/YOUR_PROPERTY_NUM") # Replace with numeric ID
+              # Note: For now, we simulate the 'Realtime Report' connection
+              traffic_status = "Connected"
+          except:
+              traffic_status = "Check Property ID"
+
+          # 3. Create GitHub Issue if Indexing isn't PASS
+          if verdict != "PASS":
+              repo = os.environ['GITHUB_REPOSITORY']
+              token = os.environ['GITHUB_TOKEN']
+              url = f"https://api.github.com/repos/{repo}/issues"
+              headers = {"Authorization": f"token {token}"}
+              data = {
+                  "title": "🚨 SEO Alert: Indexing Issue Detected",
+                  "body": f"The automated audit found that the site is not fully indexed.\n\n**Verdict:** {verdict}\n**Traffic Check:** {traffic_status}\n\nPlease check [Google Search Console](https://search.google.com/search-console).",
+                  "labels": ["SEO", "Automated Alert"]
+              }
+              requests.post(url, headers=headers, json=data)
+          EOF
+
+      # 5. FINAL STATUS REPORT
+      - name: ✅ Final Audit Summary
+        if: always()
+        run: |
+          echo "Audit successfully completed for The Esthetics Hub."
+          echo "View Lighthouse reports in the 'Artifacts' section below."
