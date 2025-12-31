@@ -1,761 +1,183 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Esthetics Hub - Revenue Dashboard</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=pub-1959507280210179" crossorigin="anonymous"></script>
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebApplication",
-  "name": "Esthetics Hub Revenue Tracker",
-  "url": "https://esthetics03-ops.github.io/revenue-dashboard.html",
-  "applicationCategory": "BusinessApplication"
-}
-</script>
-  
-  <script>
-    // Configuration: Replace with your Google Cloud Service URL
-    const API_CONFIG = {
-        url: 'https://api.estheticshub.live/monetisation', 
-        pollInterval: 60000 // Refresh data every minute
-    };
-
-    /**
-     * Fetches live revenue data from the Node.js server
-     */
-    async function syncRevenueMetrics() {
-        try {
-            const response = await fetch(API_CONFIG.url, {
-                method: 'GET',
-                mode: 'cors',
-                headers: { 'Accept': 'application/json' }
-            });
-
-            if (!response.ok) throw new Error('Network response was not ok');
-            
-            const data = await response.json();
-            
-            // Update UI elements if they exist
-            updateElement('adsense-earnings', data.adsense);
-            updateElement('affiliate-earnings', data.affiliate);
-            updateElement('donation-earnings', data.donations);
-            updateElement('total-earnings', data.total);
-            
-            console.log('Metrics Synchronized:', new Date().toLocaleTimeString());
-        } catch (error) {
-            console.warn('Revenue Sync Paused:', error.message);
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bio-Sync | Elite Revenue Dashboard</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=pub-1959507280210179" crossorigin="anonymous"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QCX3G9KSPC"></script>
+    
+    <style>
+        :root {
+            --primary: #2d5a27;
+            --accent: #b721ff;
+            --glass: rgba(255, 255, 255, 0.1);
+            --bg: #0f172a;
         }
-    }
 
-    function updateElement(id, value) {
-        const el = document.getElementById(id);
-        if (el) {
-            const num = parseFloat(value) || 0;
-            el.textContent = `$${num.toFixed(2)}`;
-            el.style.opacity = '1'; // Ensure visibility
+        body { 
+            font-family: 'Inter', sans-serif; 
+            margin:0; background: var(--bg); 
+            color: white; overflow-x: hidden;
         }
-    }
 
-    // Initialize immediately when head is parsed, then wait for DOM to update values
-    window.addEventListener('DOMContentLoaded', () => {
-        syncRevenueMetrics();
-        setInterval(syncRevenueMetrics, API_CONFIG.pollInterval);
-    });
-  </script>
+        /* Glassmorphism Layout */
+        .glass-container {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            padding: 2rem;
+            margin: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-QCX3G9KSPC"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-QCX3G9KSPC');
-    </script>
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
 
-<!-- === Modular CSS Sections === -->
-<style>
-body { font-family: Arial,sans-serif; margin:0; padding:0; background:#f4f4f4; }
-header { background:#222; color:#fff; padding:1rem; text-align:center; }
-main { padding:1rem; max-width:1200px; margin:auto; }
-h2 { margin:2rem 0 1rem 0; }
-footer { text-align:center; padding:1rem; background:#222; color:#fff; margin-top:2rem; }
+        .stat-card {
+            background: rgba(255,255,255,0.05);
+            padding: 1.5rem;
+            border-radius: 18px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: 0.3s;
+        }
 
-.dashboard-section { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:1rem; }
+        .stat-card:hover { transform: translateY(-5px); background: rgba(255,255,255,0.1); }
 
-.config-item { background:#fff; padding:1rem; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
-.config-item .label { font-size:0.9rem; color:#555; }
-.config-item .value { font-weight:bold; color:#222; }
+        .stat-label { color: #94a3b8; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
+        .stat-value { font-size: 1.8rem; font-weight: 800; margin: 5px 0; color: #f8fafc; }
 
-#live-metrics-section .metric-card, #monetization-section .metric-card { background:#fff; padding:1rem; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
-#live-metrics-section .metric-card { border-left:5px solid #007bff; }
-#live-metrics-section .metric-value { font-size:1.5rem; color:#007bff; }
-#monetization-section .metric-card { border-left:5px solid #28a745; }
-#monetization-section .metric-value { font-size:1.5rem; color:#28a745; }
+        /* Chart Styling */
+        .chart-box { background: rgba(15, 23, 42, 0.5); padding: 20px; border-radius: 20px; }
 
-.chart-section canvas { background:#fff; border-radius:8px; padding:1rem; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            background: var(--primary);
+            color: #fff;
+        }
 
-@media (max-width:600px) { .dashboard-section { grid-template-columns:1fr; } }
-
-  /* Glassmorphism Dashboard Styling */
-.glass-container {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
-    padding: 2rem;
-    margin: 20px auto;
-    max-width: 1100px;
-}
-
-.earnings-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1.5rem;
-    margin-top: 1.5rem;
-}
-
-.stat-card {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 1.5rem;
-    border-radius: 15px;
-    display: flex;
-    align-items: center;
-    transition: transform 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.stat-card:hover {
-    transform: translateY(-5px);
-    background: rgba(255, 255, 255, 0.15);
-}
-
-.stat-card.highlighted {
-    background: linear-gradient(135deg, rgba(107, 70, 193, 0.2), rgba(183, 33, 255, 0.2));
-    border: 1px solid rgba(183, 33, 255, 0.3);
-}
-
-.stat-icon { font-size: 2rem; margin-right: 1rem; }
-.stat-label { font-size: 0.85rem; color: #cbd5e0; text-transform: uppercase; }
-.stat-value { font-size: 1.5rem; font-weight: bold; margin: 0; color: #fff; }
-
-/* Pulse animation for data updates */
-@keyframes pulse {
-    0% { opacity: 1; }
-    50% { opacity: 0.5; }
-    100% { opacity: 1; }
-}
-.data-updated { animation: pulse 1s ease-in-out; }
-</style>
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+        .syncing { animation: pulse 1.5s infinite; }
+    </style>
 </head>
 <body>
 
-<header>
-  <h1>The Esthetics Hub Revenue Dashboard</h1>
-</header>
-
-<main>
-  <!-- Live Payment Status Panel -->
-<div id="payment-dashboard" style="font-family: Roboto, sans-serif; max-width: 450px; margin: 20px auto; padding: 1rem; border: 1px solid #ccc; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); background: #fff;">
-  <h2 style="text-align:center; margin-bottom: 1rem;">💳 Live Payment Status</h2>
-  
-  <div style="margin-bottom: 0.5rem;"><strong>AdSense Pending:</strong> <span id="adsense-pending">Loading...</span></div>
-  <div style="margin-bottom: 0.5rem;"><strong>Affiliate Pending:</strong> <span id="affiliate-pending">Loading...</span></div>
-  <div style="margin-bottom: 0.5rem;"><strong>Total Pending:</strong> <span id="total-pending">Loading...</span></div>
-  
-  <div style="margin-bottom: 0.5rem;"><strong>Next AdSense Payout:</strong> <span id="adsense-payout">Loading...</span></div>
-  <div style="margin-bottom: 0.5rem;"><strong>Next Affiliate Payout:</strong> <span id="affiliate-payout">Loading...</span></div>
-  
-  <div style="margin-top: 1rem; font-size: 0.85rem; color: #666; text-align:center;">
-    Last Updated: <span id="payment-last-updated">--:--:--</span>
-  </div>
-</div>
-
-<script>
-  function updatePaymentStatus() {
-    try {
-      // Simulated AdSense pending
-      const adsensePending = 356.78;
-      document.getElementById('adsense-pending').innerText = `$${adsensePending.toFixed(2)}`;
-
-      // Simulated Affiliate pending
-      const affiliatePending = 478.90;
-      document.getElementById('affiliate-pending').innerText = `$${affiliatePending.toFixed(2)}`;
-
-      // Total Pending
-      const totalPending = adsensePending + affiliatePending;
-      document.getElementById('total-pending').innerText = `$${totalPending.toFixed(2)}`;
-
-      // Next Payout Estimates
-      const adsensePayout = new Date("2025-11-25");
-      document.getElementById('adsense-payout').innerText = adsensePayout.toDateString();
-
-      const affiliatePayout = new Date("2025-11-27");
-      document.getElementById('affiliate-payout').innerText = affiliatePayout.toDateString();
-
-      // Update timestamp
-      const now = new Date();
-      document.getElementById('payment-last-updated').innerText = now.toLocaleTimeString();
-    } catch (err) {
-      console.error("Payment Dashboard Error:", err);
-    }
-  }
-
-  // Initial load
-  updatePaymentStatus();
-
-  // Refresh every 60 seconds
-  setInterval(updatePaymentStatus, 60000);
-</script>
-
-  <!-- Configuration Status -->
-  <section id="config-section" class="dashboard-section">
-    <div class="config-item">
-      <span class="label">API Key</span>
-      <span class="value" id="api-key-status">Checking...</span>
-    </div>
-    <div class="config-item">
-      <span class="label">GA4 Properties</span>
-      <span class="value" id="ga4-properties-status">Checking...</span>
-    </div>
-  </section>
-
-  <!-- Live Metrics -->
-  <section id="live-metrics-section" class="dashboard-section">
-    <div class="metric-card">
-      <p class="metric-label">Real-Time Users</p>
-      <p class="metric-value" id="real-time-users">-</p>
-    </div>
-    <div class="metric-card">
-      <p class="metric-label">Visits Today</p>
-      <p class="metric-value" id="daily-visits">-</p>
-    </div>
-  </section>
-
-  <!-- Monetization Metrics -->
-  <section id="monetization-section" class="dashboard-section">
-    <div class="metric-card">
-      <p class="metric-label">AdSense (Today)</p>
-      <p class="metric-value" id="adsense-today">-</p>
-    </div>
-    <div class="metric-card">
-      <p class="metric-label">Estimated Earnings (Month)</p>
-      <p class="metric-value" id="adsense-month">-</p>
-    </div>
-    <div class="metric-card">
-      <p class="metric-label">Affiliate Earnings</p>
-      <p class="metric-value" id="affiliate-earnings">-</p>
-    </div>
-  </section>
-
-  <!-- Revenue Chart -->
-  <section class="chart-section">
-    <h2>Revenue & Visits Overview</h2>
-    <canvas id="revenueChart" height="150"></canvas>
-  </section>
-
-  <section id="revenue-dashboard" class="glass-container">
-    <div class="dashboard-header">
-        <h2 class="section-title">Live Revenue Tracking</h2>
-        <p class="section-subtitle">Real-time synchronization with Esthetics Hub API</p>
+<main class="glass-container">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
+        <h2>Financial Intelligence <span id="sync-indicator" class="status-badge">Live</span></h2>
+        <div style="text-align:right">
+            <small style="color:#94a3b8">Last Sync</small><br>
+            <span id="last-updated">--:--:--</span>
+        </div>
     </div>
 
-    <div class="earnings-grid">
+    <div class="dashboard-grid">
         <div class="stat-card">
-            <div class="stat-icon">💰</div>
-            <div class="stat-info">
-                <span class="stat-label">Google AdSense</span>
-                <h3 id="adsense-earnings" class="stat-value">Loading...</h3>
-            </div>
+            <span class="stat-label">Google AdSense (Est.)</span>
+            <div id="adsense-earnings" class="stat-value">$0.00</div>
+            <small style="color:#28a745">Next Payout: Jan 21</small>
         </div>
-
         <div class="stat-card">
-            <div class="stat-icon">🔗</div>
-            <div class="stat-info">
-                <span class="stat-label">Affiliate Revenue</span>
-                <h3 id="affiliate-earnings" class="stat-value">Loading...</h3>
-            </div>
+            <span class="stat-label">Affiliate Revenue</span>
+            <div id="affiliate-earnings" class="stat-value">$0.00</div>
+            <small style="color:#28a745">3 Active Streams</small>
         </div>
-
-        <div class="stat-card">
-            <div class="stat-icon">🙏</div>
-            <div class="stat-info">
-                <span class="stat-label">Community Support</span>
-                <h3 id="donation-earnings" class="stat-value">Loading...</h3>
-            </div>
-        </div>
-
-        <div class="stat-card highlighted">
-            <div class="stat-icon">🚀</div>
-            <div class="stat-info">
-                <span class="stat-label">Total Impact</span>
-                <h3 id="total-earnings" class="stat-value">Loading...</h3>
-            </div>
+        <div class="stat-card" style="border-left: 4px solid var(--accent)">
+            <span class="stat-label">Total Impact</span>
+            <div id="total-earnings" class="stat-value">$0.00</div>
+            <small>Combined Monthly ROI</small>
         </div>
     </div>
-</section>
 
-<script src="monetization.js"></script>
-
-  <section id="dashboard-tracker-live" style="margin:20px auto; max-width:900px;">
-
-
-    <!-- 2️⃣ Enhancement Tracker -->
-    <div class="tracker-container" style="background:#f9f9f9;padding:20px;border-radius:12px;box-shadow:0 3px 12px rgba(0,0,0,0.08);">
-    
-  <!-- Toast Notifications -->
-  <div id="payment-toast-container" style="position:fixed;top:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:10px;"></div>
-
-  <script>
-    let config = {};
-
-    async function loadConfig() {
-      try {
-        const res = await fetch('/config.json');
-        config = await res.json();
-      } catch(err) {
-        console.error('Failed to load config.json:', err);
-      }
-    }
-
-    function togglePanel(id){
-      const panel = document.getElementById(id);
-      panel.style.display = panel.style.display==="none"?"block":"none";
-    }
-
-    function showToast(msg){
-      const container = document.getElementById('payment-toast-container');
-      const toast = document.createElement('div');
-      toast.style.background='#4caf50'; toast.style.color='white'; toast.style.padding='12px 18px';
-      toast.style.borderRadius='8px'; toast.style.boxShadow='0 2px 6px rgba(0,0,0,0.2)';
-      toast.style.opacity='0'; toast.style.transform='translateX(100%)';
-      toast.style.transition='all 0.5s';
-      toast.innerText = msg;
-      container.appendChild(toast);
-      setTimeout(()=>{ toast.style.opacity='1'; toast.style.transform='translateX(0)'; },10);
-      setTimeout(()=>{ toast.style.opacity='0'; toast.style.transform='translateX(100%)'; setTimeout(()=>container.removeChild(toast),500); },5000);
-    }
-
-    async function fetchLiveMetrics(){
-      try {
-        if(!config.adsense || !config.affiliate || !config.ga4) return;
-
-        const [adsenseRes, affiliateRes, ga4Res] = await Promise.all([
-          fetch(config.adsense.endpoint).then(r=>r.json()),
-          fetch(config.affiliate.endpoint).then(r=>r.json()),
-          fetch(config.ga4.endpoint).then(r=>r.json())
-        ]);
-
-        // Update dashboard
-        document.getElementById('adsense-pending').innerText = `$${adsenseRes.pending}`;
-        document.getElementById('affiliate-pending').innerText = `$${affiliateRes.pending}`;
-        document.getElementById('total-pending').innerText = `$${(adsenseRes.pending + affiliateRes.pending).toFixed(2)}`;
-        document.getElementById('adsense-payout').innerText = adsenseRes.nextPayout;
-        document.getElementById('affiliate-payout').innerText = affiliateRes.nextPayout;
-        document.getElementById('users-today').innerText = ga4Res.users;
-        document.getElementById('sessions-today').innerText = ga4Res.sessions;
-        document.getElementById('pageviews-today').innerText = ga4Res.pageviews;
-        document.getElementById('bounce-rate').innerText = ga4Res.bounceRate + '%';
-        document.getElementById('session-duration').innerText = ga4Res.avgSessionDuration;
-        document.getElementById('site-health').innerText = "✅ All Systems Functional";
-
-        // Toast notifications for payments
-        if(adsenseRes.paid || affiliateRes.paid){
-          if(adsenseRes.paid) showToast(`💰 AdSense payment received: $${adsenseRes.paid}`);
-          if(affiliateRes.paid) showToast(`💰 Affiliate payment received: $${affiliateRes.paid}`);
-        }
-
-        // Auto-check enhancement tracker checkboxes
-        if(adsenseRes.pending >= config.adsense.minPaymentThreshold ||
-           affiliateRes.pending >= config.affiliate.minPaymentThreshold)
-          document.getElementById('real-payments').checked = true;
-
-        document.getElementById('live-api').checked = true;
-        if(ga4Res.pageviews > 0) document.getElementById('charts').checked = true;
-
-        // Update timestamps
-        const now = new Date().toLocaleTimeString();
-        document.getElementById('dashboard-last-updated').innerText = now;
-        document.getElementById('tracker-last-updated').innerText = now;
-
-        // Payments Ready Status
-        const adsenseReady = adsenseRes.pending >= config.adsense.minPaymentThreshold;
-        const affiliateReady = affiliateRes.pending >= config.affiliate.minPaymentThreshold;
-        const overallReady = adsenseReady || affiliateReady;
-
-        const statusDiv = document.getElementById('payment-ready-status');
-        statusDiv.innerHTML = `
-          AdSense Ready: ${adsenseReady ? '✅' : '❌'} | 
-          Affiliate Ready: ${affiliateReady ? '✅' : '❌'} | 
-          Overall Ready for Tomorrow: ${overallReady ? '✅' : '❌'}
-        `;
-        statusDiv.style.background = overallReady ? '#d4edda' : '#f8d7da';
-        statusDiv.style.color = overallReady ? '#155724' : '#721c24';
-
-      } catch(err){
-        console.error('Error fetching live metrics:', err);
-        const statusDiv = document.getElementById('payment-ready-status');
-        statusDiv.innerText = "⚠️ Unable to check payment readiness";
-        statusDiv.style.background = '#f8d7da';
-        statusDiv.style.color = '#721c24';
-        document.getElementById('site-health').innerText = "⚠️ Error fetching metrics";
-      }
-    }
-
-    async function initDashboard() {
-      await loadConfig();
-      fetchLiveMetrics();
-      setInterval(fetchLiveMetrics, 60000); // auto-refresh every 60s
-    }
-
-    initDashboard();
-  </script>
-     
-<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-
-<script>
-  // Replace this with your actual Published CSV link from Step 1
-  const SHEET_URL = 'YOUR_PUBLISHED_CSV_LINK_HERE';
-
-  function fetchLiveData() {
-    Papa.parse(SHEET_URL, {
-      download: true,
-      header: true, // Uses the first row of your sheet as keys
-      complete: function(results) {
-        const data = results.data;
-        console.log("Live Data Loaded:", data);
-        updateDashboard(data);
-      },
-      error: function(err) {
-        console.error("Error fetching data:", err);
-      }
-    });
-  }
-
-  function updateDashboard(data) {
-    // Example: Update a "Total Revenue" element if your sheet has a 'Revenue' column
-    // Let's assume you want to sum up a column named "Amount"
-    let totalRevenue = data.reduce((sum, row) => sum + parseFloat(row.Amount || 0), 0);
-    
-    // Replace 'revenue-id' with the actual ID of your dashboard's revenue text
-    const revenueElement = document.getElementById('total-revenue');
-    if (revenueElement) {
-      revenueElement.innerText = `KSh ${totalRevenue.toLocaleString()}`;
-    }
-  }
-
-  // Load data on page start
-  window.addEventListener('DOMContentLoaded', fetchLiveData);
-</script>
-
-
+    <div class="chart-box">
+        <canvas id="revenueChart" height="120"></canvas>
+    </div>
 </main>
 
-<footer>&copy; 2025 The Esthetics Hub</footer>
-
 <script>
-// === Dynamic Config Loader ===
-let GOOGLE_API_KEY = "";
-let GA4_PROPERTIES = [];
-let ADSENSE_PUB_ID = "";
-let AFFILIATE_ID = "";
+    // Configuration
+    const API_URL = 'https://api.estheticshub.live/monetisation'; // Replace with your actual backend
+    
+    // Initialize Chart.js
+    const ctx = document.getElementById('revenueChart').getContext('2d');
+    const revenueChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'Real-time Revenue ($)',
+                data: [],
+                borderColor: '#b721ff',
+                backgroundColor: 'rgba(183, 33, 255, 0.1)',
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } },
+                x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
+            }
+        }
+    });
 
-async function loadConfig() {
-  try {
-    const res = await fetch("/config.json?cache=" + Date.now());
-    const config = await res.json();
+    async function syncData() {
+        const indicator = document.getElementById('sync-indicator');
+        indicator.classList.add('syncing');
+        
+        try {
+            // In live, replace this with: const res = await fetch(API_URL);
+            // Simulation for visual testing:
+            const mockData = {
+                adsense: (Math.random() * 50 + 300).toFixed(2),
+                affiliate: (Math.random() * 20 + 450).toFixed(2),
+                total: 0
+            };
+            mockData.total = (parseFloat(mockData.adsense) + parseFloat(mockData.affiliate)).toFixed(2);
 
-    GOOGLE_API_KEY = config.GOOGLE_API_KEY || "MISSING_KEY";
-    GA4_PROPERTIES = config.GA4_PROPERTIES || [];
-    ADSENSE_PUB_ID = config.ADSENSE_PUB_ID || "MISSING_PUB_ID";
-    AFFILIATE_ID = config.AFFILIATE_ID || "MISSING_AFFILIATE";
+            // Update UI
+            document.getElementById('adsense-earnings').innerText = `$${mockData.adsense}`;
+            document.getElementById('affiliate-earnings').innerText = `$${mockData.affiliate}`;
+            document.getElementById('total-earnings').innerText = `$${mockData.total}`;
+            document.getElementById('last-updated').innerText = new Date().toLocaleTimeString();
 
-    document.getElementById("api-key-status").textContent =
-      GOOGLE_API_KEY !== "MISSING_KEY" ? "Connected ✅" : "Missing ❌";
+            // Update Chart
+            updateChart(mockData.total);
 
-    document.getElementById("ga4-properties-status").textContent =
-      GA4_PROPERTIES.length > 0 ? `${GA4_PROPERTIES.length} Loaded ✅` : "Missing ❌";
+        } catch (err) {
+            console.error("Sync Error:", err);
+        } finally {
+            setTimeout(() => indicator.classList.remove('syncing'), 1000);
+        }
+    }
 
-    updateMetrics();
-  } catch (err) {
-    console.error("Failed to load config:", err);
-    document.getElementById("api-key-status").textContent = "Config Error ❌";
-    document.getElementById("ga4-properties-status").textContent = "Config Error ❌";
-  }
-}
+    function updateChart(value) {
+        const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        if(revenueChart.data.labels.length > 8) {
+            revenueChart.data.labels.shift();
+            revenueChart.data.datasets[0].data.shift();
+        }
+        revenueChart.data.labels.push(time);
+        revenueChart.data.datasets[0].data.push(value);
+        revenueChart.update();
+    }
 
-// === Chart Setup ===
-const ctx = document.getElementById('revenueChart').getContext('2d');
-const revenueChart = new Chart(ctx, {
-  type: 'line',
-  data: {
-    labels: [],
-    datasets: [
-      { label: 'Visits', data: [], borderColor: '#007bff', backgroundColor:'rgba(0,123,255,0.2)', fill:true, tension:0.4 },
-      { label: 'Revenue ($)', data: [], borderColor: '#28a745', backgroundColor:'rgba(40,167,69,0.2)', fill:true, tension:0.4 }
-    ]
-  },
-  options: {
-    responsive:true,
-    plugins:{ legend:{ position:'top' } },
-    scales:{ x:{ title:{ display:true, text:'Time' } }, y:{ title:{ display:true, text:'Value' }, beginAtZero:true } }
-  }
-});
-
-function addChartData(visits, revenue){
-  const now = new Date();
-  const label = now.getHours() + ":" + String(now.getMinutes()).padStart(2,'0');
-  if(revenueChart.data.labels.length >= 10){
-    revenueChart.data.labels.shift();
-    revenueChart.data.datasets[0].data.shift();
-    revenueChart.data.datasets[1].data.shift();
-  }
-  revenueChart.data.labels.push(label);
-  revenueChart.data.datasets[0].data.push(visits);
-  revenueChart.data.datasets[1].data.push(revenue);
-  revenueChart.update();
-}
-
-// === Placeholder Fetch Functions (simulate live) ===
-async function fetchGA4Metrics(propertyId){ return Math.floor(Math.random()*100); }
-async function fetchAdsenseMetrics(){ return (Math.random()*25).toFixed(2); }
-async function fetchAffiliateEarnings(){ return (Math.random()*200).toFixed(2); }
-
-// === Update All Metrics ===
-async function updateMetrics(){
-  let totalActiveUsers = 0;
-  for(const property of GA4_PROPERTIES){
-    totalActiveUsers += await fetchGA4Metrics(property);
-  }
-
-  const dailyVisits = totalActiveUsers * 12;
-  const adsenseToday = await fetchAdsenseMetrics();
-  const adsenseMonth = (adsenseToday*22).toFixed(2);
-  const affiliate = await fetchAffiliateEarnings();
-
-  document.getElementById('real-time-users').textContent = totalActiveUsers;
-  document.getElementById('daily-visits').textContent = dailyVisits;
-  document.getElementById('adsense-today').textContent = `$${adsenseToday}`;
-  document.getElementById('adsense-month').textContent = `$${adsenseMonth}`;
-  document.getElementById('affiliate-earnings').textContent = `$${affiliate}`;
-
-  addChartData(dailyVisits, parseFloat(adsenseToday) + parseFloat(affiliate));
-}
-
-// Initialize dashboard
-document.addEventListener('DOMContentLoaded', ()=>{
-  loadConfig();
-  setInterval(updateMetrics,60000);
-});
+    // Start Lifecycle
+    window.onload = () => {
+        syncData();
+        setInterval(syncData, 30000); // 30s Refresh
+    };
 </script>
-
- <script>
-// === LIVE SIMULATION SCRIPT (FETCH CONFIG FROM /config.json) ===
-
-let SIM_CONFIG = null;
-let revenueChart = null;
-
-// Chart initialization (runs once config is loaded)
-function initChart() {
-  const ctx = document.getElementById('revenueChart').getContext('2d');
-  revenueChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: [],
-      datasets: [
-        { label: 'Visits', data: [], borderColor: '#007bff', backgroundColor: 'rgba(0,123,255,0.2)', fill: true, tension: 0.4 },
-        { label: 'Revenue ($)', data: [], borderColor: '#28a745', backgroundColor: 'rgba(40,167,69,0.2)', fill: true, tension: 0.4 }
-      ]
-    },
-    options: {
-      responsive: true,
-      plugins: { legend: { position: 'top' } },
-      scales: {
-        x: { title: { display: true, text: 'Time' } },
-        y: { title: { display: true, text: 'Value' }, beginAtZero: true }
-      }
-    }
-  });
-}
-
-// Add data to chart
-function addChartData(visits, revenue) {
-  const now = new Date();
-  const label = now.getHours() + ':' + String(now.getMinutes()).padStart(2, '0');
-  if (revenueChart.data.labels.length >= 10) {
-    revenueChart.data.labels.shift();
-    revenueChart.data.datasets[0].data.shift();
-    revenueChart.data.datasets[1].data.shift();
-  }
-  revenueChart.data.labels.push(label);
-  revenueChart.data.datasets[0].data.push(visits);
-  revenueChart.data.datasets[1].data.push(revenue);
-  revenueChart.update();
-}
-
-// Simulate GA4 active users
-function simulateGA4() {
-  if (!SIM_CONFIG || !SIM_CONFIG.GA4_PROPERTIES) return 0;
-  return SIM_CONFIG.GA4_PROPERTIES.reduce((sum) => sum + Math.floor(Math.random() * 100), 0);
-}
-
-// Simulate AdSense earnings
-function simulateAdsense() {
-  return (Math.random() * 25).toFixed(2);
-}
-
-// Simulate Affiliate earnings
-function simulateAffiliate() {
-  return (Math.random() * 200).toFixed(2);
-}
-
-// Update all dashboard metrics
-function updateMetrics() {
-  if (!SIM_CONFIG) return;
-
-  // API / GA4 status
-  document.getElementById('api-key-status').textContent =
-    SIM_CONFIG.GOOGLE_API_KEY && SIM_CONFIG.GOOGLE_API_KEY !== "MISSING_KEY" ? "Connected ✅" : "Missing ❌";
-
-  document.getElementById('ga4-properties-status').textContent =
-    SIM_CONFIG.GA4_PROPERTIES && SIM_CONFIG.GA4_PROPERTIES.length > 0
-      ? `${SIM_CONFIG.GA4_PROPERTIES.length} Loaded ✅`
-      : "Missing ❌";
-
-  // Simulate data
-  const totalActiveUsers = simulateGA4();
-  const dailyVisits = totalActiveUsers * 12;
-  const adsenseToday = parseFloat(simulateAdsense());
-  const adsenseMonth = (adsenseToday * 22).toFixed(2);
-  const affiliate = parseFloat(simulateAffiliate());
-
-  // Update DOM
-  document.getElementById('real-time-users').textContent = totalActiveUsers;
-  document.getElementById('daily-visits').textContent = dailyVisits;
-  document.getElementById('adsense-today').textContent = `$${adsenseToday}`;
-  document.getElementById('adsense-month').textContent = `$${adsenseMonth}`;
-  document.getElementById('affiliate-earnings').textContent = `$${affiliate.toFixed(2)}`;
-
-  // Update chart
-  if (revenueChart) addChartData(dailyVisits, adsenseToday + affiliate);
-}
-
-// Initialize live simulation after config loaded
-async function initLiveSimulation() {
-  try {
-    const res = await fetch('/config.json?cache=' + Date.now());
-    SIM_CONFIG = await res.json();
-
-    if (!revenueChart) initChart();
-    updateMetrics();
-    setInterval(updateMetrics, 10000); // update every 10s
-
-  } catch (err) {
-    console.error('[Live Simulation] Failed to fetch config:', err);
-    document.getElementById('api-key-status').textContent = "Config Error ❌";
-    document.getElementById('ga4-properties-status').textContent = "Config Error ❌";
-  }
-}
-
-document.addEventListener('DOMContentLoaded', initLiveSimulation);
-
-</script> 
-
-  <script>
-// === LIVE SIMULATION SCRIPT ===
-
-// Simulated configuration (replace with real config if available)
-const CONFIG = {
-  GOOGLE_API_KEY: "AIzaSyD-EXAMPLE-LIVE-KEY12345",
-  GA4_PROPERTIES: ["G-QCX3G9KSPC","G-PSW1MY7HB4"],
-  ADSENSE_PUB_ID: "pub-1959507280210179",
-  AFFILIATE_ID: "esthetics-hub-affiliate"
-};
-
-// Chart reference
-const ctx = document.getElementById('revenueChart').getContext('2d');
-const revenueChart = new Chart(ctx, {
-  type: 'line',
-  data: {
-    labels: [],
-    datasets: [
-      { label: 'Visits', data: [], borderColor: '#007bff', backgroundColor: 'rgba(0,123,255,0.2)', fill: true, tension: 0.4 },
-      { label: 'Revenue ($)', data: [], borderColor: '#28a745', backgroundColor: 'rgba(40,167,69,0.2)', fill: true, tension: 0.4 }
-    ]
-  },
-  options: {
-    responsive: true,
-    plugins: { legend: { position: 'top' } },
-    scales: {
-      x: { title: { display: true, text: 'Time' } },
-      y: { title: { display: true, text: 'Value' }, beginAtZero: true }
-    }
-  }
-});
-
-// Helper: Add data to chart
-function addChartData(visits, revenue){
-  const now = new Date();
-  const label = now.getHours() + ':' + String(now.getMinutes()).padStart(2,'0');
-  if(revenueChart.data.labels.length >= 10){
-    revenueChart.data.labels.shift();
-    revenueChart.data.datasets[0].data.shift();
-    revenueChart.data.datasets[1].data.shift();
-  }
-  revenueChart.data.labels.push(label);
-  revenueChart.data.datasets[0].data.push(visits);
-  revenueChart.data.datasets[1].data.push(revenue);
-  revenueChart.update();
-}
-
-// Simulate GA4 active users
-function simulateGA4(){
-  return CONFIG.GA4_PROPERTIES.reduce((sum) => sum + Math.floor(Math.random() * 100), 0);
-}
-
-// Simulate AdSense earnings
-function simulateAdsense(){
-  return (Math.random() * 25).toFixed(2);
-}
-
-// Simulate Affiliate earnings
-function simulateAffiliate(){
-  return (Math.random() * 200).toFixed(2);
-}
-
-// Update all dashboard metrics
-function updateMetrics(){
-  // API / GA4 status
-  document.getElementById('api-key-status').textContent = "Connected ✅";
-  document.getElementById('ga4-properties-status').textContent = `${CONFIG.GA4_PROPERTIES.length} Loaded ✅`;
-
-  // Simulate data
-  const totalActiveUsers = simulateGA4();
-  const dailyVisits = totalActiveUsers * 12; // scaling factor
-  const adsenseToday = parseFloat(simulateAdsense());
-  const adsenseMonth = (adsenseToday * 22).toFixed(2);
-  const affiliate = parseFloat(simulateAffiliate());
-
-  // Update DOM
-  document.getElementById('real-time-users').textContent = totalActiveUsers;
-  document.getElementById('daily-visits').textContent = dailyVisits;
-  document.getElementById('adsense-today').textContent = `$${adsenseToday}`;
-  document.getElementById('adsense-month').textContent = `$${adsenseMonth}`;
-  document.getElementById('affiliate-earnings').textContent = `$${affiliate.toFixed(2)}`;
-
-  // Update chart
-  addChartData(dailyVisits, adsenseToday + affiliate);
-}
-
-// Initialize live simulation
-document.addEventListener('DOMContentLoaded', ()=>{
-  updateMetrics();
-  setInterval(updateMetrics, 10000); // update every 10s
-});
-  </script>
-
 </body>
-</html>
+              </html>
