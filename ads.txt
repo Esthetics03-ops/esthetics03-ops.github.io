@@ -1,1 +1,2 @@
+# ads.txt for The Esthetics Hub
 google.com, pub-1959507280210179, DIRECT, f08c47fec0942fa0
