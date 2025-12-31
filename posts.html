@@ -2,11 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>What's The Fate Of Humans? | The Esthetics Hub</title>
 
     <meta name="description" content="An exploration into human survival, technological evolution, and global sustainability research by The Esthetics Hub.">
-    <meta name="keywords" content="humanity future, AI ethics, climate change, holistic survival, UN SDGs, The Esthetics Hub">
     
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     
@@ -27,15 +26,25 @@
             --accent: #b58d3d;
             --dark: #1a1a1a;
             --light: #fdfdfd;
-            --glass: rgba(255, 255, 255, 0.8);
+            --glass: rgba(255, 255, 255, 0.95);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        /* Prevent Horizontal Overflow */
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        * { box-sizing: border-box; }
+
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
             background-color: var(--light); 
             color: var(--dark); 
-            line-height: 1.8; 
+            line-height: 1.6; 
+            -webkit-font-smoothing: antialiased;
         }
 
         /* Navigation */
@@ -43,7 +52,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.5rem 5%;
+            padding: 1rem 5%;
             background: var(--glass);
             backdrop-filter: blur(10px);
             position: sticky;
@@ -51,179 +60,212 @@
             z-index: 1000;
             border-bottom: 1px solid #eee;
         }
-        nav h1 a { text-decoration: none; color: var(--primary); font-family: 'Playfair Display', serif; font-size: 1.5rem; }
-        nav ul { display: flex; list-style: none; gap: 2rem; }
-        nav ul a { text-decoration: none; color: var(--dark); font-weight: 600; transition: 0.3s; }
-        nav ul a:hover { color: var(--primary); }
+        .logo-container { display: flex; align-items: center; text-decoration: none; }
+        .logo-img { height: 40px; width: auto; margin-right: 10px; }
+        .logo-text { color: var(--primary); font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; }
+
+        /* Mobile Menu Toggle (Simplified for this layout) */
+        nav ul { display: flex; list-style: none; gap: 1.5rem; }
+        nav ul a { text-decoration: none; color: var(--dark); font-weight: 600; font-size: 0.9rem; }
 
         /* Hero Section */
         .post-hero {
-            height: 60vh;
+            height: 50vh;
+            min-height: 300px;
             position: relative;
             display: flex;
             align-items: flex-end;
-            padding: 4rem 5%;
-            background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.8)), url('../images/post-cover.jpg') center/cover;
+            padding: 2rem 5%;
+            background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.8)), url('../images/post-cover.jpg') center/cover;
             color: white;
-            margin-bottom: 3rem;
         }
-        .post-meta h2 { font-family: 'Playfair Display', serif; font-size: 3.5rem; margin-bottom: 1rem; }
+        .post-meta h2 { font-family: 'Playfair Display', serif; font-size: 2rem; line-height: 1.2; margin-bottom: 0.5rem; }
 
-        /* Content Layout */
+        /* Responsive Layout */
         .main-container {
-            display: grid;
-            grid-template-columns: 1fr 300px;
-            gap: 3rem;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 5%;
+            padding: 2rem 5%;
+            display: flex;
+            flex-direction: column;
         }
 
-        article h3 { margin: 2rem 0 1rem; color: var(--primary); font-size: 1.8rem; }
-        article p { margin-bottom: 1.5rem; font-size: 1.1rem; color: #444; }
-        .highlight { color: var(--accent); font-weight: 700; }
+        @media (min-width: 992px) {
+            .main-container { flex-direction: row; gap: 3rem; }
+            main { flex: 1; }
+            .sidebar { width: 320px; }
+            .post-meta h2 { font-size: 3.5rem; }
+        }
 
-        /* Sidebar & Affiliate Cards */
-        .sidebar { display: flex; flex-direction: column; gap: 2rem; }
+        /* Content Styling */
+        article h3 { margin: 1.5rem 0 1rem; color: var(--primary); font-size: 1.5rem; }
+        article p { margin-bottom: 1.2rem; font-size: 1.05rem; color: #333; }
+        .highlight { color: var(--accent); font-weight: 700; }
+        img { max-width: 100%; height: auto; border-radius: 12px; }
+
+        /* Widgets & Affiliates */
         .widget-card {
             background: #fff;
             padding: 1.5rem;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
             border: 1px solid #f0f0f0;
+            margin-bottom: 2rem;
         }
-        .widget-card h4 { margin-bottom: 1rem; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
         .affiliate-link {
-            display: block;
-            padding: 0.8rem;
-            margin-bottom: 0.5rem;
-            background: #f9f9f9;
-            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            margin-bottom: 0.8rem;
+            background: #f8f9fa;
+            border-radius: 12px;
             text-decoration: none;
             color: var(--dark);
             font-weight: 600;
-            font-size: 0.9rem;
-            transition: 0.3s;
+            transition: 0.2s;
         }
-        .affiliate-link:hover { background: var(--primary); color: white; }
+        .affiliate-link i { margin-right: 12px; color: var(--primary); font-size: 1.2rem; }
+        .affiliate-link:active { transform: scale(0.98); background: #eee; }
 
-        /* AdSense Placeholder */
-        .adsense-box { background: #eee; text-align: center; padding: 20px; border-radius: 10px; margin: 2rem 0; }
+        /* AdSense & Footer */
+        .adsense-box { background: #f1f1f1; text-align: center; padding: 15px; border-radius: 12px; margin: 1.5rem 0; font-size: 0.8rem; color: #888; overflow: hidden; }
+        .site-footer { background: var(--dark); color: white; padding: 3rem 5%; text-align: center; font-size: 0.9rem; }
+        .site-footer a { color: var(--accent); text-decoration: none; margin: 0 5px; }
 
-        /* Footer */
-        .site-footer { background: var(--dark); color: white; padding: 4rem 5%; text-align: center; }
-        .site-footer a { color: var(--accent); text-decoration: none; }
-        
-        @media (max-width: 992px) {
-            .main-container { grid-template-columns: 1fr; }
-            .post-meta h2 { font-size: 2.5rem; }
+        /* Mobile specific adjustments */
+        @media (max-width: 768px) {
+            nav ul { display: none; } /* Hide nav on mobile for clean look, or use a burger menu */
+            .post-hero { height: 40vh; }
+            article h3 { font-size: 1.3rem; }
+            .main-container { padding: 1.5rem 5%; }
         }
     </style>
 </head>
 <body>
 
     <nav>
-        <h1><a href="index.html">The Esthetics Hub</a></h1>
+        <a href="index.html" class="logo-container">
+            <img src="g1.png" alt="The Esthetics Hub Logo" class="logo-img">
+            <span class="logo-text">Esthetics Hub</span>
+        </a>
         <ul>
             <li><a href="index.html">Home</a></li>
             <li><a href="../posts.html">Posts</a></li>
-            <li><a href="../about.html">About</a></li>
-            <li><a href="../contact.html">Contact</a></li>
         </ul>
     </nav>
 
     <header class="post-hero">
         <div class="post-meta">
-            <span class="highlight">Existential Research</span>
+            <span class="highlight" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px;">Existential Series</span>
             <h2>What's The Fate Of Humans?</h2>
-            <p>By The Esthetics Hub | September 25, 2025</p>
+            <p style="font-size: 0.9rem; opacity: 0.9;">By The Esthetics Hub | Sept 25, 2025</p>
         </div>
     </header>
 
     <div class="main-container">
         <main>
             <article>
-                <h3>The Great Transition</h3>
-                <p>The fate of <span class="highlight">Humanity</span> currently rests on a razor's edge. Our survival depends on the synthesis of four pillars: technological advancement, environmental stewardship as outlined by the <a href="https://sdgs.un.org/goals" target="_blank">United Nations Sustainable Development Goals</a>, and societal resilience.</p>
+                <h3>The Anthropocene Challenge</h3>
+                <p>The fate of <span class="highlight">Humanity</span> currently rests on a razor's edge. Our survival depends on the synthesis of four pillars: technological advancement, environmental stewardship as outlined by the <a href="https://sdgs.un.org/goals" target="_blank" style="color:var(--primary);">UN Sustainable Development Goals</a>, and global societal resilience.</p>
 
                 <div class="adsense-box">
-                    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1959507280210179" data-ad-slot="YOUR_SLOT_ID" data-ad-format="auto"></ins>
+                    <p>ADVERTISEMENT</p>
+                    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1959507280210179" data-ad-slot="YOUR_SLOT" data-ad-format="auto" data-full-width-responsive="true"></ins>
                     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
                 </div>
 
-                <h3>Existential Threats</h3>
+                <h3>Survival Risks</h3>
                 <p>In alignment with global risk reports, we identify these primary threats:</p>
-                <ul>
+                <ul style="padding-left: 1.2rem; margin-bottom: 1.5rem;">
                     <li><strong>Climate Instability:</strong> Resource depletion fueled by overconsumption.</li>
-                    <li><strong>Technological Misalignment:</strong> The "Black Box" risk of unmanaged Artificial Intelligence.</li>
-                    <li><strong>Biogenic Risks:</strong> The increasing threat of synthetic pandemics.</li>
+                    <li><strong>AI Misalignment:</strong> The ethical risks of unmanaged automation.</li>
+                    <li><strong>Resource Scarcity:</strong> Water and food security in an overpopulated world.</li>
                 </ul>
 
-                <h3 style="background: #f0f4f0; padding: 20px; border-radius: 10px;">The Path of Hope</h3>
-                <p>Despite the challenges, a "Backup Plan" for humanity is emerging through space exploration and green biotechnology. Scientific advancements in longevity and renewable energy offer a blueprint for a millennia-long civilization.</p>
+                <h3 style="background: #f0f4f0; padding: 1.5rem; border-radius: 15px;">A Blueprint for Hope</h3>
+                <p>Despite these challenges, a "Backup Plan" for humanity is emerging through green biotechnology and outer-space colonization efforts. According to the <a href="https://www.un.org/en/climatechange" target="_blank" style="color:var(--primary);">UN Climate Action Report</a>, global cooperation is the single most critical factor in ensuring human longevity.</p>
                 
-                <p><em>Reference: See the <a href="https://www.un.org/en/climatechange" target="_blank">UN Climate Action Report</a> for data on global adaptation.</em></p>
-
-                <div class="fb-share-button" data-href="https://esthetics03-ops.github.io" data-layout="button_count" data-size="large"></div>
-            </article>
-
-            <section style="margin-top: 4rem;">
-                <h3>Read Next</h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
-                    <a href="nutrition-tips.html" style="text-decoration:none; color:inherit;">
-                        <img src="eat.jpg" style="width:100%; border-radius:10px; height:150px; object-fit:cover;">
-                        <h4 style="font-size:1rem; margin-top:10px;">10 Longevity Nutrition Tips</h4>
-                    </a>
-                    <a href="mental-health.html" style="text-decoration:none; color:inherit;">
-                        <img src="mental-health.jpg" style="width:100%; border-radius:10px; height:150px; object-fit:cover;">
-                        <h4 style="font-size:1rem; margin-top:10px;">Mastering Stress Clarity</h4>
-                    </a>
+                <div style="margin: 2rem 0; padding: 1.5rem; border: 1px solid #eee; border-radius: 15px; text-align: center;">
+                    <p style="font-weight: 600; margin-bottom: 1rem;">Share this research:</p>
+                    <div class="fb-share-button" data-href="https://esthetics03-ops.github.io" data-layout="button_count" data-size="large"></div>
                 </div>
-            </section>
+            </article>
         </main>
 
         <aside class="sidebar">
             <div class="widget-card">
-                <h4>Survival Toolkit</h4>
-                <a href="http://thrivemarket.com/esthetics-hub-affiliate" class="affiliate-link">
-                    <i class="bi bi-basket"></i> Thrive Market - 40% Off
-                </a>
-                <a href="https://www.amazon.com/s?k=survival+gear&tag=esthetics-hub-affiliate" class="affiliate-link">
-                    <i class="bi bi-backpack"></i> Amazon Survival Gear
-                </a>
-                <a href="https://www.inaturalist.org/" class="affiliate-link">
-                    <i class="bi bi-flower1"></i> iNaturalist - ID Flora
-                </a>
-                <a href="https://www.booking.com/wellness-retreats" class="affiliate-link">
-                    <i class="bi bi-geo-alt"></i> Wellness Retreats
-                </a>
+    <h4 style="font-size: 0.75rem; color: var(--accent); letter-spacing: 1.5px; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 20px;">
+        <i class="bi bi-cpu me-2"></i>BIO-SYNC SELECTIONS
+    </h4>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <a href="https://www.amazon.com/s?k=oura+ring&tag=esthetics-hub-affiliate" style="text-decoration: none; color: inherit;">
+            <div style="background: #fcfcfc; border: 1px solid #f0f0f0; border-radius: 12px; padding: 10px; text-align: center; transition: 0.3s;" onmouseover="this.style.borderColor='#10b981'" onmouseout="this.style.borderColor='#f0f0f0'">
+                <img src="https://m.media-amazon.com/images/I/41D9K1A1eAL._AC_SL1000_.jpg" alt="Sleep Tracker" style="width: 100%; height: 80px; object-fit: contain; margin-bottom: 8px;">
+                <p style="font-size: 0.7rem; font-weight: 700; margin: 0;">Oura Ring Gen3</p>
+                <span style="font-size: 0.6rem; color: #888;">Track HRV</span>
             </div>
+        </a>
 
-            <div class="widget-card" style="background:#f9f9f9; text-align:center;">
-                <p style="font-size: 0.7rem; color: #999;">SPONSORED</p>
-                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1959507280210179" data-ad-slot="SIDEBAR_SLOT" data-ad-format="rectangle"></ins>
+        <a href="http://thrivemarket.com/esthetics-hub-affiliate" style="text-decoration: none; color: inherit;">
+            <div style="background: #fcfcfc; border: 1px solid #f0f0f0; border-radius: 12px; padding: 10px; text-align: center; transition: 0.3s;" onmouseover="this.style.borderColor='#10b981'" onmouseout="this.style.borderColor='#f0f0f0'">
+                <img src="https://images.thrivemarket.com/media/catalog/product/7/5/753656711516_1.jpg" alt="Magnesium" style="width: 100%; height: 80px; object-fit: contain; margin-bottom: 8px;">
+                <p style="font-size: 0.7rem; font-weight: 700; margin: 0;">Magnesium</p>
+                <span style="font-size: 0.6rem; color: #888;">Sleep Fuel</span>
             </div>
+        </a>
+
+        <a href="https://www.amazon.com/s?k=blue+light+blocking+glasses&tag=esthetics-hub-affiliate" style="text-decoration: none; color: inherit;">
+            <div style="background: #fcfcfc; border: 1px solid #f0f0f0; border-radius: 12px; padding: 10px; text-align: center; transition: 0.3s;" onmouseover="this.style.borderColor='#10b981'" onmouseout="this.style.borderColor='#f0f0f0'">
+                <img src="https://m.media-amazon.com/images/I/61G+p8+kH9L._AC_SX679_.jpg" alt="Blue Light Glasses" style="width: 100%; height: 80px; object-fit: contain; margin-bottom: 8px;">
+                <p style="font-size: 0.7rem; font-weight: 700; margin: 0;">Sync Glasses</p>
+                <span style="font-size: 0.6rem; color: #888;">Circadian Aid</span>
+            </div>
+        </a>
+
+        <a href="https://www.inaturalist.org/" style="text-decoration: none; color: inherit;">
+            <div style="background: #fcfcfc; border: 1px solid #f0f0f0; border-radius: 12px; padding: 10px; text-align: center; transition: 0.3s;" onmouseover="this.style.borderColor='#10b981'" onmouseout="this.style.borderColor='#f0f0f0'">
+                <div style="height: 80px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px;">
+                    <i class="bi bi-camera" style="font-size: 2rem; color: var(--primary);"></i>
+                </div>
+                <p style="font-size: 0.7rem; font-weight: 700; margin: 0;">iNaturalist</p>
+                <span style="font-size: 0.6rem; color: #888;">Scan Flora</span>
+            </div>
+        </a>
+    </div>
+
+    <div style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px;">
+        <p style="font-size: 0.7rem; color: #999; margin-bottom: 10px;">FEATURED ADAPTATION DESTINATION</p>
+        <a href="https://www.booking.com/wellness-retreats?aid=esthetics-hub-affiliate" style="text-decoration: none;">
+            <div style="position: relative; border-radius: 12px; overflow: hidden; height: 100px;">
+                <div style="position: absolute; background: rgba(0,0,0,0.4); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+                    <span style="color: white; font-weight: 800; font-size: 0.8rem; text-transform: uppercase;">Holistic Retreats</span>
+                </div>
+                <img src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/295244569.jpg" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+        </a>
+    </div>
+</div>
 
             <div class="widget-card" style="background: var(--primary); color: white;">
-                <h4>Stay Inspired</h4>
-                <p style="font-size: 0.8rem; margin-bottom: 1rem;">Join 15,000+ subscribers for holistic insights.</p>
-                <input type="email" placeholder="Email Address" style="width:100%; padding: 10px; border-radius: 5px; border:none; margin-bottom:10px;">
-                <button style="width:100%; padding: 10px; background: var(--accent); color:white; border:none; border-radius:5px; font-weight:bold; cursor:pointer;">Subscribe</button>
+                <h4 style="color: white;">Join The Hub</h4>
+                <p style="font-size: 0.85rem; margin-bottom: 1rem;">Get research-backed wellness tips delivered weekly.</p>
+                <input type="email" placeholder="Email Address" style="width:100%; padding: 12px; border-radius: 8px; border:none; margin-bottom:10px;">
+                <button style="width:100%; padding: 12px; background: var(--accent); color:white; border:none; border-radius:8px; font-weight:bold;">Subscribe</button>
             </div>
         </aside>
     </div>
 
     <footer class="site-footer">
-        <div class="container">
-            <p>&copy; 2025 The Esthetics Hub | Holistic Wellness, Nairobi 🇰🇪</p>
-            <div style="margin: 1.5rem 0;">
-                <a href="/SECURITY.md">Security</a> | 
-                <a href="mailto:esthetics03@gmail.com">Contact</a> | 
-                <a href="https://wa.me/254113379488">WhatsApp</a>
-            </div>
-            <p style="font-size: 0.7rem; opacity: 0.6;">Disclosure: We earn from qualifying purchases through our affiliate partners. This supports our independent research.</p>
+        <p>&copy; 2025 The Esthetics Hub | Nairobi, Kenya 🇰🇪</p>
+        <div style="margin: 1rem 0;">
+            <a href="/SECURITY.md">Security</a> | 
+            <a href="mailto:esthetics03@gmail.com">Email</a> | 
+            <a href="https://wa.me/254113379488">WhatsApp</a>
         </div>
+        <p style="font-size: 0.7rem; opacity: 0.5; max-width: 80% ; margin: 0 auto;">Disclosure: We earn from qualifying purchases through our affiliate partners. This supports our independent holistic research.</p>
     </footer>
 
+    <script src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v13.0" async defer crossorigin="anonymous"></script>
 </body>
-                    </html>
+                </html>
