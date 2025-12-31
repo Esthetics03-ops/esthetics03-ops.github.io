@@ -1,0 +1,27 @@
+name: Deploy Revenue Dashboard
+on:
+  push:
+    branches:
+      - main  # Triggered whenever you push to the main branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Validate JSON Configuration
+        run: |
+          if jq empty config.json; then
+            echo "Config JSON is valid."
+          else
+            echo "Error: Invalid JSON in config.json"
+            exit 1
+          fi
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+            folder: . # The folder the action should deploy.
+            branch: gh-pages # The branch the action should deploy to.
