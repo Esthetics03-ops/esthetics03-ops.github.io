@@ -1153,7 +1153,68 @@ crossorigin="anonymous"></script>
         article { background:#fff; padding:15px; margin-bottom:20px; border-radius:10px; box-shadow:0 1px 4px rgba(0,0,0,0.08); }
         footer { text-align:center; padding:20px; margin-top:30px; box-shadow:0 -2px 5px rgba(0,0,0,0.1); }
         ins.adsbygoogle { display:block; text-align:center; margin:15px 0; }
-    </style>
+        .signup-container { display: flex; justify-content: center; padding: 20px; }
+
+    .glass-form {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        padding: 15px;
+        border-radius: 30px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .form-main { display: flex; gap: 10px; width: 100%; }
+
+    .input-group { position: relative; flex-grow: 1; display: flex; align-items: center; }
+    .input-group i { position: absolute; left: 15px; color: var(--primary); opacity: 0.6; }
+
+    #email {
+        width: 100%;
+        padding: 12px 15px 12px 40px;
+        border-radius: 40px;
+        border: 1px solid #eee;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        outline: none;
+    }
+
+    /* GDPR Text Styling */
+    .compliance-group {
+        margin-top: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0 10px;
+    }
+
+    .compliance-group label {
+        font-size: 0.75rem;
+        color: #64748b;
+        cursor: pointer;
+    }
+
+    .compliance-group a { color: var(--primary); text-decoration: none; font-weight: 600; }
+
+    .btn-pulse {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 40px;
+        font-weight: 700;
+        cursor: pointer;
+        font-size: 0.8rem;
+        animation: pulse-green 2s infinite;
+        white-space: nowrap;
+    }
+
+    @media (max-width: 480px) {
+        .form-main { flex-direction: column; }
+        .btn-pulse { width: 100%; }
+    }
+</style>
 
 </body>
 </html>
@@ -1250,10 +1311,24 @@ crossorigin="anonymous"></script>
  <h2>Free 14-Day Wellness Reset</h2>
  <p>Daily nutrition & mental clarity steps delivered to your inbox.</p>
 
-<form id="signup">
-       <input type="email" id="email" placeholder="Enter email" required>
-       <button>Join Reset</button>
-     </form>
+<div class="signup-container">
+    <form id="signup" class="glass-form">
+        <div class="form-main">
+            <div class="input-group">
+                <i class="bi bi-envelope"></i>
+                <input type="email" id="email" placeholder="Enter email" required>
+            </div>
+            <button type="submit" class="btn-pulse">Join Reset</button>
+        </div>
+        
+        <div class="compliance-group">
+            <input type="checkbox" id="consent" required>
+            <label for="consent">I agree to the <a href="legal.html">Privacy Policy</a> & to receive Bio-Sync updates.</label>
+        </div>
+    </form>
+</div>
+
+
      <script type="module">
        import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
        const auth = getAuth();
