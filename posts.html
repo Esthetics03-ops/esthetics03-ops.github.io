@@ -1,201 +1,215 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Esthetics Hub | Post Title Here</title>
+" crossorigin="anonymous"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QCX3G9KSPC"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-QCX3G9KSPC');
+    </script>
 
-  <!-- SEO -->
-  <meta name="description" content="An engaging research-based article from The Esthetics Hub.">
-  <meta name="keywords" content="wellness, nutrition, mental health, esthetics blog, holistic living">
-  <meta name="author" content="The Esthetics Hub">
+    <style>
+        :root {
+            --primary: #2d5a27;
+            --accent: #b58d3d;
+            --dark: #1a1a1a;
+            --light: #fdfdfd;
+            --glass: rgba(255, 255, 255, 0.8);
+        }
 
-  <!-- Open Graph -->
-  <meta property="og:title" content="The Esthetics Hub | Post Title Here">
-  <meta property="og:description" content="Research-based article from The Esthetics Hub.">
-  <meta property="og:type" content="article">
-  <meta property="og:url" content="https://esthetics03-ops.github.io/posts/post.html">
-  <meta property="og:image" content="../images/post-cover.jpg">
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: var(--light); 
+            color: var(--dark); 
+            line-height: 1.8; 
+        }
 
-  <!-- Styles -->
-  <link rel="stylesheet" href="post.css">
-  <link rel="icon" type="image/png" href="../images/favicon.png">
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #eee;
+        }
+        nav h1 a { text-decoration: none; color: var(--primary); font-family: 'Playfair Display', serif; font-size: 1.5rem; }
+        nav ul { display: flex; list-style: none; gap: 2rem; }
+        nav ul a { text-decoration: none; color: var(--dark); font-weight: 600; transition: 0.3s; }
+        nav ul a:hover { color: var(--primary); }
 
-	<!-- ✅ Structured Data for Blog Posts -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://esthetics03-ops.github.io/blog/example-post"
-  },
-  "headline": "How Nutrition Shapes Mental Clarity and Longevity",
-  "description": "Explore the deep link between diet, mental performance, and long-term health, based on research-backed insights from The Esthetics Hub.",
-  "image": "https://esthetics03-ops.github.io/assets/blog/nutrition-clarity.jpg",
-  "author": {
-    "@type": "Organization",
-    "name": "The Esthetics Hub"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "The Esthetics Hub",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://esthetics03-ops.github.io/assets/logo.png"
-    }
-  },
-  "datePublished": "2025-11-10",
-  "dateModified": "2025-11-11"
-}
-</script>
+        /* Hero Section */
+        .post-hero {
+            height: 60vh;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            padding: 4rem 5%;
+            background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.8)), url('../images/post-cover.jpg') center/cover;
+            color: white;
+            margin-bottom: 3rem;
+        }
+        .post-meta h2 { font-family: 'Playfair Display', serif; font-size: 3.5rem; margin-bottom: 1rem; }
 
-	<script async defer crossorigin="anonymous" 
-        src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v13.0">
-	</script>
-  
-  <!-- Google AdSense -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1959507280210179" crossorigin="anonymous"></script>
- 
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QCX3G9KSPC"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-QCX3G9KSPC');
-  </script>
-	<script src="esthetics-structured-data-auto.js" defer></script>
+        /* Content Layout */
+        .main-container {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 5%;
+        }
+
+        article h3 { margin: 2rem 0 1rem; color: var(--primary); font-size: 1.8rem; }
+        article p { margin-bottom: 1.5rem; font-size: 1.1rem; color: #444; }
+        .highlight { color: var(--accent); font-weight: 700; }
+
+        /* Sidebar & Affiliate Cards */
+        .sidebar { display: flex; flex-direction: column; gap: 2rem; }
+        .widget-card {
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border: 1px solid #f0f0f0;
+        }
+        .widget-card h4 { margin-bottom: 1rem; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
+        .affiliate-link {
+            display: block;
+            padding: 0.8rem;
+            margin-bottom: 0.5rem;
+            background: #f9f9f9;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+        .affiliate-link:hover { background: var(--primary); color: white; }
+
+        /* AdSense Placeholder */
+        .adsense-box { background: #eee; text-align: center; padding: 20px; border-radius: 10px; margin: 2rem 0; }
+
+        /* Footer */
+        .site-footer { background: var(--dark); color: white; padding: 4rem 5%; text-align: center; }
+        .site-footer a { color: var(--accent); text-decoration: none; }
+        
+        @media (max-width: 992px) {
+            .main-container { grid-template-columns: 1fr; }
+            .post-meta h2 { font-size: 2.5rem; }
+        }
+    </style>
 </head>
 <body>
-  <!-- Header -->
-  <header>
+
     <nav>
-      <h1><a href="index.html">The Esthetics Hub</a></h1>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="../posts.html" class="active">Posts</a></li>
-        <li><a href="../about.html">About</a></li>
-        <li><a href="../contact.html">Contact</a></li>
-      </ul>
+        <h1><a href="index.html">The Esthetics Hub</a></h1>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="../posts.html">Posts</a></li>
+            <li><a href="../about.html">About</a></li>
+            <li><a href="../contact.html">Contact</a></li>
+        </ul>
     </nav>
-  </header>
 
-  <!-- Post Hero -->
-  <section class="post-hero">
-    <img src="../images/post-cover.jpg" alt="Post Cover Image" loading="lazy">
-    <div class="post-meta">
-      <h2>What's The Fate Of Humans?</h2>
-      <p><span class="author">By The Esthetics Hub</span> | <span class="date">September 25, 2025</span></p>
+    <header class="post-hero">
+        <div class="post-meta">
+            <span class="highlight">Existential Research</span>
+            <h2>What's The Fate Of Humans?</h2>
+            <p>By The Esthetics Hub | September 25, 2025</p>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <main>
+            <article>
+                <h3>The Great Transition</h3>
+                <p>The fate of <span class="highlight">Humanity</span> currently rests on a razor's edge. Our survival depends on the synthesis of four pillars: technological advancement, environmental stewardship as outlined by the <a href="https://sdgs.un.org/goals" target="_blank">United Nations Sustainable Development Goals</a>, and societal resilience.</p>
+
+                <div class="adsense-box">
+                    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1959507280210179" data-ad-slot="YOUR_SLOT_ID" data-ad-format="auto"></ins>
+                    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+                </div>
+
+                <h3>Existential Threats</h3>
+                <p>In alignment with global risk reports, we identify these primary threats:</p>
+                <ul>
+                    <li><strong>Climate Instability:</strong> Resource depletion fueled by overconsumption.</li>
+                    <li><strong>Technological Misalignment:</strong> The "Black Box" risk of unmanaged Artificial Intelligence.</li>
+                    <li><strong>Biogenic Risks:</strong> The increasing threat of synthetic pandemics.</li>
+                </ul>
+
+                <h3 style="background: #f0f4f0; padding: 20px; border-radius: 10px;">The Path of Hope</h3>
+                <p>Despite the challenges, a "Backup Plan" for humanity is emerging through space exploration and green biotechnology. Scientific advancements in longevity and renewable energy offer a blueprint for a millennia-long civilization.</p>
+                
+                <p><em>Reference: See the <a href="https://www.un.org/en/climatechange" target="_blank">UN Climate Action Report</a> for data on global adaptation.</em></p>
+
+                <div class="fb-share-button" data-href="https://esthetics03-ops.github.io" data-layout="button_count" data-size="large"></div>
+            </article>
+
+            <section style="margin-top: 4rem;">
+                <h3>Read Next</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+                    <a href="nutrition-tips.html" style="text-decoration:none; color:inherit;">
+                        <img src="eat.jpg" style="width:100%; border-radius:10px; height:150px; object-fit:cover;">
+                        <h4 style="font-size:1rem; margin-top:10px;">10 Longevity Nutrition Tips</h4>
+                    </a>
+                    <a href="mental-health.html" style="text-decoration:none; color:inherit;">
+                        <img src="mental-health.jpg" style="width:100%; border-radius:10px; height:150px; object-fit:cover;">
+                        <h4 style="font-size:1rem; margin-top:10px;">Mastering Stress Clarity</h4>
+                    </a>
+                </div>
+            </section>
+        </main>
+
+        <aside class="sidebar">
+            <div class="widget-card">
+                <h4>Survival Toolkit</h4>
+                <a href="http://thrivemarket.com/esthetics-hub-affiliate" class="affiliate-link">
+                    <i class="bi bi-basket"></i> Thrive Market - 40% Off
+                </a>
+                <a href="https://www.amazon.com/s?k=survival+gear&tag=esthetics-hub-affiliate" class="affiliate-link">
+                    <i class="bi bi-backpack"></i> Amazon Survival Gear
+                </a>
+                <a href="https://www.inaturalist.org/" class="affiliate-link">
+                    <i class="bi bi-flower1"></i> iNaturalist - ID Flora
+                </a>
+                <a href="https://www.booking.com/wellness-retreats" class="affiliate-link">
+                    <i class="bi bi-geo-alt"></i> Wellness Retreats
+                </a>
+            </div>
+
+            <div class="widget-card" style="background:#f9f9f9; text-align:center;">
+                <p style="font-size: 0.7rem; color: #999;">SPONSORED</p>
+                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1959507280210179" data-ad-slot="SIDEBAR_SLOT" data-ad-format="rectangle"></ins>
+            </div>
+
+            <div class="widget-card" style="background: var(--primary); color: white;">
+                <h4>Stay Inspired</h4>
+                <p style="font-size: 0.8rem; margin-bottom: 1rem;">Join 15,000+ subscribers for holistic insights.</p>
+                <input type="email" placeholder="Email Address" style="width:100%; padding: 10px; border-radius: 5px; border:none; margin-bottom:10px;">
+                <button style="width:100%; padding: 10px; background: var(--accent); color:white; border:none; border-radius:5px; font-weight:bold; cursor:pointer;">Subscribe</button>
+            </div>
+        </aside>
     </div>
-  </section>
 
-  <!-- Post Content -->
-  <main class="post-content">
-    <article>
-      <h3>Introduction</h3>
-       <p><span>The fate of Humans</span> depends on various factors: technological advancement,enviromental sustainability,societal progress and how we handle challenges like climate change,inequality and resource depletion.
-	Some envision a future where we thrive with renewable energy,space exploration and AI intergration. Others warn of potential risks like ecological collapse or misuse of technology.</p>
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2025 The Esthetics Hub | Holistic Wellness, Nairobi 🇰🇪</p>
+            <div style="margin: 1.5rem 0;">
+                <a href="/SECURITY.md">Security</a> | 
+                <a href="mailto:esthetics03@gmail.com">Contact</a> | 
+                <a href="https://wa.me/254113379488">WhatsApp</a>
+            </div>
+            <p style="font-size: 0.7rem; opacity: 0.6;">Disclosure: We earn from qualifying purchases through our affiliate partners. This supports our independent research.</p>
+        </div>
+    </footer>
 
-      <h3>Threats To Survival !</h3>
-    <ul>
-    <li>Climate Change</li>
-  			<li><span>Nuclear War</span> - Ongoing geopolitical tensions make large scale conflict a risk.</p>
-							<li> <span>Pandemics & Bioweapons</span> - Emerging diseases or bioengineered viruses could pose serious threats.</P>
-							<li><span>Artificaial Inteligence & Automation</span> - If not managed properly, AI could lead to job loss, social unrest, or even existential risks.</p>
-							<li><span>Resource Depletion</span> - Overpopulation and overconsumption could lead to food, water, and energy shortages.</P>
-							<li><span>Asteroids & Cosmic Events</span> - Low probability, but an asteroid impact or solar flare could be devastating.</p>
-		
-          </ul>
-      
-        <h2><b></b>Reasons For Hope</b></h2>
-							  <p>1. <span>Scientific & Medical Advancements</span> -  Innovatons in Healthcare, genetics, and longevity research could extend human life.</p>
-							  <p>2. <span>Renewable Energy & Sustainability</span> - Green technology can help reduce climate impact and preserve resources.</P>
-							  <p>3. <span>Space Exploration</span> - Colonizing Mars or the Moon could provide  a "backup plan" for humanity.</p>
-							  <p>4. <span>Artificaial Inteligence & Automation</span> - If used resbonsibly , AI could solve many global problems.</p>
-							  <p>5. <span>Global Cooperation</span> - Nation working together can tackle global threats more effectively.</p>
-                           
-
-     	<h3><span>THE MOST LIKELY SCENARIO</span></h3>
-							  <P>We will likely face major challenges, but humanity has always adapted. If we make smart choices-embracing technology while protecting the environment and managing risks-we could survive and thrive for centuries, even millennia.</P>
-<div class="fb-share-button" 
-     data-href="https://esthetics03-ops.github.io" 
-     data-layout="button_count" 
-     data-size="large">
-</div>
-						
-      <!-- Call-to-Action -->
-      <div class="cta-box">
-        <p>💡 Did you enjoy this article? <a href="../newsletter.html">Subscribe</a> to get wellness insights every week!</p>
-      </div>
-    </article>
-  </main>
-
-  <!-- Related Posts -->
-  <section class="related-posts">
-    <h3>Related Articles</h3>
-    <div class="posts-grid">
-      <article>
-        <a href="nutrition-tips.html"><img src="eat.jpg" alt="Nutrition tips" loading="lazy"></a>
-        <h4><a href="nutrition-tips.html">10 Nutrition Tips for a Healthier Life</a></h4>
-      </article>
-      <article>
-        <a href="mental-health.html"><img src="mental-health.jpg" alt="Mental health" loading="lazy"></a>
-        <h4><a href="managing-stress.html">Managing Stress for Mental Clarity</a></h4>
-      </article>
-      <article>
-        <a href="holistic-living.html"><img src="humanity.webp" alt="Holistic living" loading="lazy"></a>
-        <h4><a href="holistic-living.html">Holistic Living: Balance Mind, Body, and Soul</a></h4>
-      </article>
-    </div>
-  </section>
-
-  <!-- Newsletter -->
-  <section class="newsletter">
-    <h3>Stay Inspired</h3>
-    <p>Subscribe for wellness tips and holistic living insights delivered straight to your inbox.</p>
-    <form action="#" method="post" class="newsletter-form">
-      <input type="email" name="email" placeholder="Enter your email" required>
-      <button type="submit">Subscribe</button>
-    </form>
-  </section>
-
-  <!-- Footer -->
-<footer class="site-footer">
-  <div class="container">
-    <p>&copy; 2025 The Esthetics Hub | <a href="/SECURITY.md">🔒 Security</a> | <a href="mailto:esthetics03@gmail.com">Contact</a></p>
-    <p>
-      Follow us: 
-      <a href="https:                                                        
-      <a href="https://wa.me/254113379488" target="_blank">WhatsApp</a>
-    </p>
-    <small>🌿 Holistic Wellness, Nairobi 🇰🇪</small>
-  </div>
-  
-<style>
-  .site-footer {
-    text-align: center;
-    padding: 1rem;
-    background: #000000;
-    font-size: 0.9rem;
-    color: white;
-  }
-  .site-footer a {
-    color: #4caf50;
-    text-decoration: none;
-    margin: 0 0.5rem;
-  }
-  .site-footer a:hover {
-    text-decoration: underline;
-  }
-</style>
-
-</footer>
 </body>
 </html>
-
-
-
-
-
-
