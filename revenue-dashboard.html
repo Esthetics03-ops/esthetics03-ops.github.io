@@ -12,6 +12,7 @@
         :root {
             --primary: #2d5a27;
             --accent: #b721ff;
+            --secondary: #21d4fd;
             --bg: #030712;
             --glass: rgba(255, 255, 255, 0.03);
             --border: rgba(255, 255, 255, 0.1);
@@ -28,11 +29,9 @@
 
         .dashboard-wrapper { max-width: 1400px; margin: 0 auto; }
 
-        /* Liquid Glass UI */
         .glass-panel {
             background: var(--glass);
             backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
             border: 1px solid var(--border);
             border-radius: 28px;
             padding: 2.5rem;
@@ -41,7 +40,7 @@
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 24px;
             margin-bottom: 32px;
         }
@@ -53,35 +52,35 @@
             border: 1px solid var(--border);
             position: relative;
             overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.4s ease;
         }
 
         .card:hover { 
-            transform: translateY(-8px); 
+            transform: translateY(-5px); 
             border-color: var(--accent);
-            background: rgba(255,255,255,0.08); 
         }
 
         .label { color: #94a3b8; font-size: 0.75rem; text-transform: uppercase; font-weight: 600; letter-spacing: 1.5px; }
-        .value { font-size: 2.5rem; font-weight: 900; margin: 12px 0; color: #fff; text-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        .value { font-size: 2.5rem; font-weight: 900; margin: 8px 0; color: #fff; display: block; }
         
         .status-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 16px;
-            background: rgba(183, 33, 255, 0.15);
-            border-radius: 50px;
-            font-size: 0.85rem;
-            color: #d8b4fe;
+            display: inline-flex; align-items: center; gap: 10px;
+            padding: 8px 16px; background: rgba(183, 33, 255, 0.15);
+            border-radius: 50px; font-size: 0.85rem; color: #d8b4fe;
             border: 1px solid rgba(183, 33, 255, 0.3);
         }
 
-        .chart-box { height: 350px; margin-top: 2rem; }
+        /* Article List Styling */
+        .article-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 14px 0; border-bottom: 1px solid var(--border);
+        }
+        .article-item:last-child { border: none; }
+        .art-name { font-size: 0.95rem; color: #cbd5e1; }
+        .art-stat { color: var(--secondary); font-family: monospace; font-weight: bold; }
 
-        /* Progress Bar Enhancements */
         .progress-track { height: 8px; background: #1e293b; border-radius: 10px; margin-top: 15px; overflow: hidden; }
-        .progress-fill { height: 100%; background: linear-gradient(90deg, #b721ff, #21d4fd); transition: width 1s ease-in-out; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #b721ff, #21d4fd); transition: width 1s ease; }
 
         @keyframes scan { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
         .sync-active::after {
@@ -89,87 +88,100 @@
             background: linear-gradient(90deg, transparent, var(--accent), transparent);
             animation: scan 2s linear infinite;
         }
+
+        .layout-split { display: grid; grid-template-columns: 2fr 1.2fr; gap: 24px; margin-top: 24px; }
+        @media (max-width: 1024px) { .layout-split { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
 <div class="dashboard-wrapper">
-    <header style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:3rem; padding: 0 10px;">
+    <header style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:3rem;">
         <div>
-            <h1 style="margin:0; font-size: 2rem; font-weight: 900; letter-spacing: -1px;">Bio-Sync <span style="color:var(--accent)">Ops</span></h1>
+            <h1 style="margin:0; font-size: 2rem; font-weight: 900;">Bio-Sync <span style="color:var(--accent)">Ops</span></h1>
             <div class="status-pill" id="sync-status">
-                <i class="bi bi-cpu-fill"></i> <span id="sync-text">System Active</span>
+                <i class="bi bi-cpu-fill"></i> <span id="sync-text">Loading Config...</span>
             </div>
         </div>
         <div style="text-align:right">
-            <span class="label">Telemetry Sync</span><br>
-            <span id="timestamp" style="font-weight:700; color:var(--accent);">--:--:--</span>
+            <span class="label" id="live-date">...</span><br>
+            <span id="timestamp" style="font-weight:700; color:var(--accent); font-size: 1.2rem;">00:00:00</span>
         </div>
     </header>
 
     <div class="stats-grid">
         <div class="card">
-            <span class="label">AdSense Intelligence</span>
-            <span id="adsense-val" class="value">$0.00</span>
-            <div class="progress-track"><div id="progress-bar" class="progress-fill" style="width: 0%"></div></div>
-            <div style="display:flex; justify-content:space-between; margin-top:10px;">
-                <small style="color:#94a3b8">Threshold: $100</small>
-                <small id="payout-status" style="color:var(--accent)">Checking...</small>
-            </div>
+            <span class="label">Live Conversations</span>
+            <span id="conv-val" class="value">0</span>
+            <span class="status-pill" style="background:rgba(74, 222, 128, 0.1); color:#4ade80; border:none; padding:4px 10px; font-size: 0.7rem;">
+                <i class="bi bi-person-pulse"></i> Real-time Active
+            </span>
         </div>
 
         <div class="card">
-            <span class="label">Affiliate Velocity</span>
-            <span id="affiliate-val" class="value">$0.00</span>
-            <div style="margin-top:15px; display:flex; gap:10px;">
-                <span class="status-pill" style="background:rgba(74, 222, 128, 0.1); color:#4ade80; border-color:rgba(74, 222, 128, 0.2)">
-                    Oura: Active
-                </span>
-                <span class="status-pill" style="background:rgba(56, 189, 248, 0.1); color:#38bdf8; border-color:rgba(56, 189, 248, 0.2)">
-                    Thrive: Ready
-                </span>
-            </div>
+            <span class="label">Monetization Clicks</span>
+            <span id="click-val" class="value">0</span>
+            <small style="color:#94a3b8">Avg CTR: <span id="ctr-val" style="color:var(--secondary)">0.00</span>%</small>
         </div>
 
         <div class="card" style="background: linear-gradient(135deg, rgba(183, 33, 255, 0.15), transparent);">
             <span class="label">Total ROI Forecast</span>
-            <span id="total-val" class="value" style="color:#fff;">$0.00</span>
-            <small style="color:#94a3b8"><i class="bi bi-lightning-charge-fill"></i> Jan 21 Payout: <span id="payout-ready" style="color:#fff">--</span></small>
+            <span id="total-val" class="value">$0.00</span>
+            <small style="color:#94a3b8"><i class="bi bi-lightning-charge-fill"></i> Status: <span id="payout-ready" style="color:#fff">PENDING</span></small>
         </div>
     </div>
 
-    <div class="glass-panel">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span class="label">Revenue Trajectory (60s Intervals)</span>
-            <div id="active-properties" style="font-size:0.7rem; color:#64748b;">Properties: G-QCX3G9KSPC, G-PSW1MY7HB4</div>
+    <div class="layout-split">
+        <div class="glass-panel">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span class="label">Revenue Trajectory (Live)</span>
+                <div id="active-properties" style="font-size:0.7rem; color:#64748b;">Syncing Properties...</div>
+            </div>
+            <div style="height: 350px; margin-top: 2rem;">
+                <canvas id="revenueChart"></canvas>
+            </div>
         </div>
-        <div class="chart-box">
-            <canvas id="revenueChart"></canvas>
+
+        <div class="glass-panel">
+            <span class="label">Top 5 Monetized Articles</span>
+            <div id="article-list" style="margin-top: 1rem;">
+                </div>
+            <div class="progress-track"><div id="progress-bar" class="progress-fill" style="width: 0%"></div></div>
+            <div style="display:flex; justify-content:space-between; margin-top:10px;">
+                <small id="threshold-label" style="color:#94a3b8">AdSense Goal: $100</small>
+                <small id="payout-status" style="color:var(--accent)">Checking...</small>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
     let revenueChart;
-    let config = {};
+    let config = { 
+        GA4_PROPERTIES: ["G-QCX3G9KSPC", "G-PSW1MY7HB4"],
+        PAYMENT_THRESHOLD: 100 
+    };
 
-    async function init() {
+    async function loadConfig() {
         try {
             const response = await fetch('config.json');
-            config = await response.json();
+            const externalConfig = await response.json();
+            config = { ...config, ...externalConfig };
+            document.getElementById('sync-text').innerText = "System Active";
+            document.getElementById('threshold-label').innerText = `AdSense Goal: $${config.PAYMENT_THRESHOLD}`;
             
-            // Handle Multiple GA4 properties visually
-            const propList = config.GA4_PROPERTIES ? config.GA4_PROPERTIES.join(', ') : 'Primary';
-            document.getElementById('active-properties').innerText = `Active Properties: ${propList}`;
-            
-            setupChart();
-            startSyncLoop();
+            const propList = config.GA4_PROPERTIES.join(' | ');
+            document.getElementById('active-properties').innerText = `Properties: ${propList}`;
         } catch (err) {
-            console.error("Dashboard Offline:", err);
-            document.getElementById('sync-text').innerText = "Simulated Mode";
-            setupChart();
-            startSyncLoop();
+            console.warn("Config.json not found, using defaults.");
+            document.getElementById('sync-text').innerText = "Local Mode";
         }
+    }
+
+    function updateTime() {
+        const now = new Date();
+        document.getElementById('timestamp').innerText = now.toLocaleTimeString();
+        document.getElementById('live-date').innerText = now.toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' });
     }
 
     function setupChart() {
@@ -183,71 +195,86 @@
             data: {
                 labels: [],
                 datasets: [{
-                    label: 'Live Yield',
                     data: [],
                     borderColor: '#b721ff',
                     borderWidth: 3,
                     backgroundColor: gradient,
                     fill: true,
                     tension: 0.5,
-                    pointRadius: 0,
-                    pointHitRadius: 20
+                    pointRadius: 0
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                animation: { duration: 2000, easing: 'easeOutQuart' },
+                responsive: true, maintainAspectRatio: false,
                 plugins: { legend: { display: false } },
                 scales: {
-                    x: { grid: { display: false }, ticks: { color: '#475569', font: { size: 10 } } },
+                    x: { display: false },
                     y: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: '#475569' } }
                 }
             }
         });
     }
 
-    async function startSyncLoop() {
-        const syncAction = async () => {
-            const syncIcon = document.getElementById('sync-status');
-            syncIcon.classList.add('sync-active');
-            
-            // Logic: In Production, combine data from multiple GA4 sources
-            const adsense = (Math.random() * 2 + 91.40).toFixed(2);
-            const affiliate = (Math.random() * 1.5 + 145.20).toFixed(2);
-            const total = (parseFloat(adsense) + parseFloat(affiliate)).toFixed(2);
+    async function syncData() {
+        const syncStatus = document.getElementById('sync-status');
+        syncStatus.classList.add('sync-active');
+        
+        // Data logic - this is where you'd fetch from your API bridge
+        const convs = Math.floor(Math.random() * 8 + 3);
+        const visits = Math.floor(Math.random() * 300 + 950);
+        const clicks = Math.floor(Math.random() * 25 + 5);
+        const adsense = (Math.random() * 1.2 + 94.45).toFixed(2);
+        const total = (parseFloat(adsense) + (clicks * 0.12)).toFixed(2);
+        const ctr = ((clicks / visits) * 100).toFixed(2);
 
-            // Update DOM
-            document.getElementById('adsense-val').innerText = `$${adsense}`;
-            document.getElementById('affiliate-val').innerText = `$${affiliate}`;
-            document.getElementById('total-val').innerText = `$${total}`;
-            document.getElementById('timestamp').innerText = new Date().toLocaleTimeString();
+        // Update Cards
+        document.getElementById('conv-val').innerText = convs;
+        document.getElementById('click-val').innerText = clicks;
+        document.getElementById('ctr-val').innerText = ctr;
+        document.getElementById('total-val').innerText = `$${total}`;
 
-            // Payout Logic (Aggregated)
-            const threshold = config.PAYMENT_THRESHOLD || 100;
-            const progress = (adsense / threshold) * 100;
-            document.getElementById('progress-bar').style.width = `${Math.min(progress, 100)}%`;
-            document.getElementById('payout-status').innerText = adsense >= threshold ? "Threshold Met" : `${Math.round(100-progress)}% To Go`;
-            document.getElementById('payout-ready').innerText = adsense >= threshold ? "CONFIRMED" : "PENDING";
+        // Update Articles
+        const articles = [
+            { name: "Biohacking 2026 Guide", val: "142 vps" },
+            { name: "AI Wellness Tech", val: "98 vps" },
+            { name: "Mastering Sleep Debt", val: "76 vps" },
+            { name: "Longevity Protocols", val: "54 vps" },
+            { name: "MindSync Recovery", val: "41 vps" }
+        ];
+        document.getElementById('article-list').innerHTML = articles.map(a => `
+            <div class="article-item">
+                <span class="art-name">${a.name}</span>
+                <span class="art-stat">${a.val}</span>
+            </div>
+        `).join('');
 
-            // Update Chart with Real-time Decimation
-            const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            if(revenueChart.data.labels.length > 20) {
-                revenueChart.data.labels.shift();
-                revenueChart.data.datasets[0].data.shift();
-            }
-            revenueChart.data.labels.push(now);
-            revenueChart.data.datasets[0].data.push(total);
-            revenueChart.update('none'); // Update without full re-animation for performance
+        // Progress Tracking
+        const progress = (adsense / config.PAYMENT_THRESHOLD) * 100;
+        document.getElementById('progress-bar').style.width = `${Math.min(progress, 100)}%`;
+        document.getElementById('payout-status').innerText = adsense >= config.PAYMENT_THRESHOLD ? "Ready" : `${Math.round(100 - progress)}% Left`;
+        document.getElementById('payout-ready').innerText = adsense >= config.PAYMENT_THRESHOLD ? "CONFIRMED" : "PENDING";
 
-            setTimeout(() => syncIcon.classList.remove('sync-active'), 1500);
-        };
+        // Chart Sync
+        if(revenueChart.data.labels.length > 20) {
+            revenueChart.data.labels.shift();
+            revenueChart.data.datasets[0].data.shift();
+        }
+        revenueChart.data.labels.push(new Date().toLocaleTimeString());
+        revenueChart.data.datasets[0].data.push(total);
+        revenueChart.update('none');
 
-        syncAction();
-        setInterval(syncAction, 60000); // 1-minute sync for efficiency
+        setTimeout(() => syncStatus.classList.remove('sync-active'), 2000);
     }
 
-    init();
+    // Initialize
+    (async () => {
+        await loadConfig();
+        setupChart();
+        setInterval(updateTime, 1000);
+        setInterval(syncData, 60000); // Sync every minute
+        updateTime();
+        syncData();
+    })();
 </script>
 </body>
-</html>
+    </html>
