@@ -1352,41 +1352,48 @@ crossorigin="anonymous"></script>
   <a class="cta-button" href="posts.html">Start Your Wellness Journey</a>
 </section>
 
-<section id="wellness-reset" style="padding: 40px; background: #f9fbfb; border-radius: 12px; max-width: 500px; margin: 20px auto; text-align: center; border: 1px solid #e0e0e0;">
-    <h3 style="color: #2c3e50; font-family: sans-serif;">Join the 14-Day Reset</h3>
-    <p style="color: #666; font-size: 14px; margin-bottom: 20px;">Get daily biohacking protocols delivered to your inbox.</p>
+<section id="wellness-reset" style="padding: 40px; background: #f9fbfb; border-radius: 12px; max-width: 500px; margin: 40px auto; text-align: center; border: 1px solid #e0e0e0; font-family: 'Helvetica Neue', Arial, sans-serif;">
+
+    <h3 style="color: #2c3e50; margin-top: 0; letter-spacing: 1px;">Join the 14-Day Reset</h3>
+    <p style="color: #666; font-size: 14px; margin-bottom: 25px;">Daily biohacking & nutritional protocols delivered to your inbox.</p>
     
-    <form action="https://formspree.io/f/YOUR_UNIQUE_ID_HERE" method="POST" id="reset-form">
+    <form action="https://formspree.io/f/mqakpzez" method="POST" id="reset-form">
+        
+        <input type="text" name="_gotcha" style="display:none">
+
         <div style="margin-bottom: 15px;">
-            <input type="text" name="name" placeholder="Your Name" required 
-                style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
+            <input type="text" name="First Name" placeholder="Your Name" required 
+                style="width: 100%; padding: 14px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px;">
         </div>
+        
         <div style="margin-bottom: 20px;">
-            <input type="email" name="email" placeholder="Your Email Address" required 
-                style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
+            <input type="email" name="Email Address" placeholder="Your Email Address" required 
+                style="width: 100%; padding: 14px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px;">
         </div>
         
         <input type="hidden" name="_next" value="https://esthetics03-ops.github.io/thank-you.html">
-        <input type="hidden" name="_subject" value="New Wellness Reset Signup!">
+        
+        <input type="hidden" name="_subject" value="New MindSync Reset Lead!">
 
-        <button type="submit" style="background: #2c3e50; color: white; padding: 14px 28px; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s;">
+        <button type="submit" id="submit-btn" style="background: #2c3e50; color: white; padding: 16px 30px; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; width: 100%; font-size: 16px; transition: all 0.3s ease;">
             START MY RESET
         </button>
     </form>
-  <script>
-  const form = document.getElementById('reset-form');
-  
-  form.onsubmit = async (e) => {
-    const button = form.querySelector('button');
-    button.disabled = true;
-    button.innerText = 'Syncing...';
-    
-    // Formspree handles the data here
-    // If you don't use a redirect (_next), you can handle the response here:
-    console.log("Form submitted successfully to the MindSync Network.");
-  };
-  </script>
-</section>
+
+    <script>
+        const resetForm = document.getElementById('reset-form');
+        const submitBtn = document.getElementById('submit-btn');
+
+        resetForm.addEventListener("submit", function() {
+            // Visual feedback for the user
+            submitBtn.disabled = true;
+            submitBtn.style.backgroundColor = "#76b852";
+            submitBtn.innerText = "Syncing with MindSync...";
+            
+            // The browser will now redirect to your thank-you.html via Formspree's _next hidden input
+        });
+    </script>
+  </section>
 
     <!-- ✅ Visible AdSense Ad Block -->
 <section id="sponsored">
