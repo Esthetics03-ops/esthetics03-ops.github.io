@@ -1,3 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /assets/private/
+
+# SITEMAP 2026
+Sitemap: https://esthetics03-ops.github.io/sitemap.xml
 # ========================================================
 # Robots.txt for The Esthetics Hub
 # Optimized for AdSense Revenue & GitHub Pages SEO
