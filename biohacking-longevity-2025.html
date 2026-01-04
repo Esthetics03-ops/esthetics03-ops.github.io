@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Biohacking Longevity 2026: The Cellular Revolution | The Esthetics Hub</title>
+    <title>Biohacking Longevity 2026 | The Esthetics Hub Labs</title>
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -15,7 +15,7 @@
             --deep-purple: #6366f1;
             --dna-green: #10b981;
             --void: #020617;
-            --glass: rgba(15, 23, 42, 0.8);
+            --glass: rgba(15, 23, 42, 0.85);
             --border: rgba(255, 255, 255, 0.1);
         }
 
@@ -28,197 +28,197 @@
             line-height: 1.8;
         }
 
-        h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; }
+        h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; letter-spacing: -1px; }
 
         .header-futurism {
-            height: 60vh;
+            height: 65vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            background: radial-gradient(circle at center, #1e293b 0%, #020617 100%);
+            position: relative;
+            background: radial-gradient(circle at 50% 50%, #1e293b 0%, #020617 100%);
             border-bottom: 1px solid var(--border);
         }
 
         .glitch-text {
-            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-size: clamp(3rem, 8vw, 6rem);
             font-weight: 700;
-            background: linear-gradient(to right, var(--neon-blue), var(--dna-green));
+            background: linear-gradient(to right, var(--neon-blue), var(--dna-green), var(--deep-purple));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin: 0;
+            filter: drop-shadow(0 0 10px rgba(0,242,255,0.3));
         }
 
-        .wrap { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+        .wrap { max-width: 1100px; margin: 0 auto; padding: 0 25px; }
 
-        /* Modern Grid */
+        .longevity-slider {
+            width: 100%; height: 550px;
+            border-radius: 40px; overflow: hidden;
+            position: relative; margin: -60px 0 80px;
+            box-shadow: 0 50px 100px -20px rgba(0,0,0,0.5);
+        }
+
+        .slider-track { display: flex; height: 100%; transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1); }
+        .slide { min-width: 100%; height: 100%; }
+        .slide img { width: 100%; height: 100%; object-fit: cover; }
+
         .bio-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 30px;
-            margin: -50px 0 100px;
+            margin-bottom: 100px;
         }
 
         .glass-module {
             background: var(--glass);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            padding: 40px;
-            border-radius: 30px;
+            padding: 45px;
+            border-radius: 35px;
             border: 1px solid var(--border);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: 0.4s ease;
         }
 
-        .glass-module:hover {
-            border-color: var(--neon-blue);
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0, 242, 255, 0.1);
-        }
-
-        /* Animated Icon */
         .pulse-icon {
-            font-size: 2.5rem;
+            font-size: 3rem;
             color: var(--neon-blue);
-            animation: pulse-glow 2s infinite;
+            animation: pulse-glow 2.5s infinite ease-in-out;
         }
 
         @keyframes pulse-glow {
-            0% { transform: scale(1); filter: drop-shadow(0 0 5px var(--neon-blue)); }
-            50% { transform: scale(1.1); filter: drop-shadow(0 0 20px var(--neon-blue)); }
-            100% { transform: scale(1); filter: drop-shadow(0 0 5px var(--neon-blue)); }
+            0%, 100% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.1); filter: brightness(1.3) drop-shadow(0 0 10px var(--neon-blue)); }
         }
-
-        /* Slider */
-        .longevity-slider {
-            width: 100%;
-            height: 500px;
-            border-radius: 40px;
-            overflow: hidden;
-            position: relative;
-            margin: 50px 0;
-        }
-
-        .slider-track { display: flex; height: 100%; transition: transform 0.8s ease; }
-        .slide { min-width: 100%; height: 100%; }
-        .slide img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; }
 
         .affiliate-btn {
             display: inline-flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             background: linear-gradient(45deg, var(--deep-purple), var(--neon-blue));
             color: white;
-            padding: 15px 30px;
-            border-radius: 50px;
+            padding: 18px 35px;
+            border-radius: 100px;
             text-decoration: none;
             font-weight: 700;
-            margin-top: 20px;
-            transition: 0.3s;
-        }
-
-        .affiliate-btn:hover { letter-spacing: 1px; box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4); }
-
-        /* Dark Mode Toggle */
-        #themeToggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            background: var(--glass);
-            border: 1px solid var(--border);
-            color: white;
-            padding: 10px;
-            border-radius: 50%;
+            transition: 0.4s;
+            border: none;
             cursor: pointer;
+            margin-top: 20px;
         }
+
+        .affiliate-btn:hover { transform: scale(1.05); filter: hue-rotate(15deg); }
+
+        .download-footer {
+            background: var(--dna-green);
+            color: var(--void);
+            padding: 60px 20px;
+            text-align: center;
+            border-radius: 40px 40px 0 0;
+            margin-top: 80px;
+        }
+
+        footer { background: #000; padding: 60px 0; text-align: center; }
     </style>
 </head>
 <body>
 
-    <button id="themeToggle"><i class="bi bi-cpu"></i></button>
-
     <header class="header-futurism">
-        <p data-aos="fade-down">THE ESTHETICS HUB | LABS 2026</p>
-        <h1 class="glitch-text" data-aos="zoom-in">BIOHACKING <br>LONGEVITY</h1>
-        <p style="max-width: 600px; opacity: 0.7;" data-aos="fade-up">Reprogramming human biology through cellular intelligence and AI integration.</p>
+        <p data-aos="fade-down" style="letter-spacing: 3px; font-weight: 700; color: var(--neon-blue);">ESTHETICS HUB | LABS 2026</p>
+        <h1 class="glitch-text" data-aos="zoom-in">BIOHACKING <br>PROTOCOL</h1>
     </header>
 
     <main class="wrap">
         
         <section class="longevity-slider" data-aos="fade-up">
             <div class="slider-track" id="mainSlider">
-                <div class="slide"><img src="https://images.unsplash.com/photo-1530210124550-912dc1381cb8?auto=format&fit=crop&w=1200" alt="Lab Research"></div>
-                <div class="slide"><img src="https://images.unsplash.com/photo-1507413245164-6160d8298b31?auto=format&fit=crop&w=1200" alt="Futuristic Tech"></div>
-                <div class="slide"><img src="https://images.unsplash.com/photo-1581093588401-fbb62a02f120?auto=format&fit=crop&w=1200" alt="AI Wellness"></div>
-            </div>
-            <div style="position:absolute; bottom:20px; left:50%; transform:translateX(-50%); display:flex; gap:15px;">
-                <button onclick="move(-1)" style="background:var(--glass); border:none; color:white; border-radius:50%; width:50px; height:50px;"><i class="bi bi-chevron-left"></i></button>
-                <button onclick="move(1)" style="background:var(--glass); border:none; color:white; border-radius:50%; width:50px; height:50px;"><i class="bi bi-chevron-right"></i></button>
+                <div class="slide"><img src="https://images.unsplash.com/photo-1628595351029-c2bf17511435?auto=format&fit=crop&w=1200" alt="DNA Tech"></div>
+                <div class="slide"><img src="https://images.unsplash.com/photo-1579154235602-3c2c24460572?auto=format&fit=crop&w=1200" alt="Cryotherapy"></div>
+                <div class="slide"><img src="https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&w=1200" alt="Molecular Bio"></div>
             </div>
         </section>
 
         <div class="bio-grid">
             <article class="glass-module" data-aos="fade-right">
-                <i class="bi bi-activity pulse-icon"></i>
-                <h2>NAD+ Optimization</h2>
-                <p>Advanced NR and NMN protocols to stabilize mitochondrial decay and enhance cellular ATP production.</p>
-                
-                <a href="https://www.iherb.com/c/nad-nmn" class="affiliate-btn">Shop NAD+ Precursors</a>
+                <i class="bi bi-shield-shaded pulse-icon"></i>
+                <h2>NAD+ Cellular Repair</h2>
+                <p>NMN and NR are critical for ATP synthesis and Sirtuin activation.</p>
+                <a href="https://www.iherb.com/c/nad-nmn" class="affiliate-btn" target="_blank" rel="sponsored">iHerb Global <i class="bi bi-globe"></i></a>
+            </article>
+
+            <article class="glass-module" data-aos="fade-up">
+                <i class="bi bi-smartwatch pulse-icon"></i>
+                <h2>AI Wearables</h2>
+                <p>Track your HRV and epigenetic data with Oura and Whoop equivalents.</p>
+                <a href="https://www.amazon.com/b?node=17342502011" class="affiliate-btn" target="_blank" rel="sponsored">Amazon Tech <i class="bi bi-amazon"></i></a>
             </article>
 
             <article class="glass-module" data-aos="fade-left">
-                <i class="bi bi-virus pulse-icon"></i>
-                <h2>Senolytic Clearing</h2>
-                <p>The "Zombie Cell" protocol: Using Fisetin and Quercetin to clear metabolic waste and systemic inflammation.</p>
-                
-                <a href="https://amzn.to/longevity" class="affiliate-btn">Amazon Longevity Kit</a>
+                <i class="bi bi-lightning-charge pulse-icon"></i>
+                <h2>Performance Stack</h2>
+                <p>Urolithin A and Creatine for mitochondrial mitophagy.</p>
+                <a href="https://www.myprotein.com/nutrition/vitamins.list" class="affiliate-btn" target="_blank" rel="sponsored">MyProtein Elite <i class="bi bi-bag-check"></i></a>
             </article>
         </div>
 
-        <section style="margin: 100px 0;" data-aos="zoom-in-up">
-            <h2 style="text-align: center;">Bio-Age AI Analysis</h2>
-            <div style="position: relative; padding-bottom: 56.25%; height: 0; border-radius: 40px; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.5);">
+        <section style="margin: 100px 0;" data-aos="zoom-in">
+            <h2 style="text-align: center; color: var(--neon-blue);">2026 Longevity Blueprint</h2>
+            <div style="position: relative; padding-bottom: 56.25%; height: 0; border-radius: 40px; overflow: hidden;">
                 <iframe src="https://www.youtube.com/embed/SPrpX52kRzI" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameborder="0" allowfullscreen></iframe>
             </div>
         </section>
-
-        <section class="glass-module" style="margin-bottom: 100px;" data-aos="fade-up">
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; align-items: center;">
-                <div>
-                    <h2>Postbiotic Gut-Brain Axis</h2>
-                    <p>Moving beyond probiotics into <strong>Urolithin A</strong> and mitophagy—triggering the body to recycle old mitochondria for peak brain performance.</p>
-                    <a href="https://www.myprotein.com" class="affiliate-btn">Shop Recovery <i class="bi bi-bag-check"></i></a>
-                </div>
-                <div>
-                    
-                </div>
-            </div>
-        </section>
-
     </main>
 
-    <footer style="background: #000; padding: 100px 0; text-align: center; border-top: 1px solid var(--border);">
-        <h2 style="letter-spacing: 5px; color: var(--neon-blue);">ESTHETICS HUB 2026</h2>
-        <p style="opacity: 0.5;">NAIROBI | GLOBAL | DECENTRALIZED HEALTH</p>
-        <div style="margin-top: 30px; display: flex; justify-content: center; gap: 20px; font-size: 1.5rem;">
-            <i class="bi bi-instagram"></i><i class="bi bi-twitter-x"></i><i class="bi bi-github"></i>
+    <section class="download-footer" data-aos="fade-up">
+        <div class="wrap">
+            <h2 style="font-size: 2.5rem; margin-bottom: 10px;">The 2026 Biohacker List</h2>
+            <p style="margin-bottom: 30px; font-weight: 500;">Download our curated global shopping list for longevity essentials.</p>
+            <button onclick="downloadList()" class="affiliate-btn" style="background: var(--void); color: var(--dna-green);">
+                <i class="bi bi-file-earmark-pdf-fill"></i> Download PDF Protocol
+            </button>
         </div>
-        <p style="margin-top: 50px; font-size: 0.8rem; opacity: 0.4;">Disclaimer: Biohacking protocols require professional consultation. Affiliate links help support our lab research.</p>
+    </section>
+
+    <footer>
+        <h2 style="letter-spacing: 5px; color: var(--neon-blue);">THE ESTHETICS HUB</h2>
+        <p style="opacity: 0.6;">Global Biohacking Standards | 2026 Edition</p>
+        <div style="margin: 30px 0; display: flex; justify-content: center; gap: 30px; font-size: 1.5rem;">
+            <i class="bi bi-instagram"></i><i class="bi bi-twitter-x"></i><i class="bi bi-youtube"></i>
+        </div>
+        <p style="opacity: 0.3; font-size: 0.7rem;">&copy; 2026 The Esthetics Hub Labs. Professional Medical Disclaimer Applies.</p>
     </footer>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         AOS.init({ duration: 1000, once: true });
 
-        // Slider logic
+        // Slider
         let current = 0;
-        function move(dir) {
-            const track = document.getElementById('mainSlider');
-            current = (current + dir + 3) % 3;
-            track.style.transform = `translateX(-${current * 100}%)`;
+        setInterval(() => {
+            current = (current + 1) % 3;
+            document.getElementById('mainSlider').style.transform = `translateX(-${current * 100}%)`;
+        }, 7000);
+
+        // PDF Generation Logic
+        function downloadList() {
+            const content = `
+                ESTHETICS HUB 2026 - BIOHACKER SHOPPING LIST
+                -------------------------------------------
+                1. CELLULAR REPAIR: NAD+ Precursors (NMN/NR) - Available at iHerb
+                2. MITOCHONDRIAL FUEL: Urolithin A & Creatine - Available at MyProtein
+                3. SENOLYTICS: Fisetin & Quercetin Stack - Available at Amazon
+                4. TRACKING: Oura Ring Gen 4 / WHOOP 5.0 - Available at Amazon
+                5. LIGHT: 660nm Red Light Panel - Available at Amazon
+                -------------------------------------------
+                Official Protocol: https://esthetics03-ops.github.io/
+            `;
+            const blob = new Blob([content], { type: 'text/plain' });
+            const anchor = document.createElement('a');
+            anchor.download = '2026-Biohacker-List.txt';
+            anchor.href = window.URL.createObjectURL(blob);
+            anchor.click();
         }
-        setInterval(() => move(1), 8000);
     </script>
 </body>
 </html>
