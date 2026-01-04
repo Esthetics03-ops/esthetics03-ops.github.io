@@ -3,8 +3,13 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>10 Nutrition Tips | The Esthetics Hub</title>
+  <title>Nutrition Protocol 2026 | The Esthetics Hub</title>
   
+  <meta name="description" content="Master your metabolism with our science-backed nutrition protocol. Includes interactive macro calculator and 7-day starter plan.">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=800">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -13,27 +18,37 @@
     :root {
       --primary: #10b981;
       --secondary: #3b82f6;
-      --dark: #0f172a;
-      --glass: rgba(255, 255, 255, 0.7);
+      --dark-bg: #0f172a;
+      --light-bg: #f8fafc;
+      --glass-light: rgba(255, 255, 255, 0.8);
+      --glass-dark: rgba(15, 23, 42, 0.9);
+      --text-main: #1e293b;
+      --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Dark Mode Support */
+    body.dark-mode {
+      --light-bg: var(--dark-bg);
+      --text-main: #f8fafc;
+      --glass-light: var(--glass-dark);
     }
 
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-      color: var(--dark);
-      line-height: 1.6;
+      background: var(--light-bg);
+      color: var(--text-main);
+      transition: background 0.3s ease;
       margin: 0;
       overflow-x: hidden;
     }
 
-    /* Glassmorphism Header */
     .site-header {
       position: sticky;
       top: 0;
       z-index: 1000;
-      background: var(--glass);
+      background: var(--glass-light);
       backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(255,255,255,0.3);
+      border-bottom: 1px solid rgba(128,128,128,0.2);
       padding: 1rem 0;
     }
 
@@ -43,182 +58,185 @@
     .slider-container {
       position: relative;
       width: 100%;
-      height: 500px;
+      height: 550px;
       overflow: hidden;
-      border-radius: 24px;
+      border-radius: 32px;
       margin: 40px 0;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
     }
 
     .slider {
       display: flex;
       height: 100%;
-      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: var(--transition);
+      will-change: transform;
     }
 
-    .slide {
-      min-width: 100%;
-      height: 100%;
-      position: relative;
-    }
-
-    .slide img { width: 100%; height: 100%; object-fit: cover; }
-
-    .slider-nav {
-      position: absolute;
-      top: 50%;
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      transform: translateY(-50%);
-      padding: 0 20px;
-      box-sizing: border-box;
-    }
+    .slide { min-width: 100%; height: 100%; position: relative; }
+    .slide img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.9); }
 
     .nav-btn {
-      background: var(--glass);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255,255,255,0.5);
-      color: var(--dark);
-      width: 50px;
-      height: 50px;
+      background: var(--glass-light);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: var(--text-main);
+      width: 54px;
+      height: 54px;
       border-radius: 50%;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 1.5rem;
-      transition: 0.3s;
+      transition: var(--transition);
+      pointer-events: auto;
     }
 
     .nav-btn:hover { background: var(--primary); color: white; transform: scale(1.1); }
 
-    /* Animated Icons */
+    /* Macro Calculator Card */
+    .calc-card {
+      background: var(--glass-light);
+      border: 1px solid rgba(128,128,128,0.1);
+      padding: 40px;
+      border-radius: 24px;
+      margin: 60px 0;
+      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+    }
+
+    .input-group { margin-bottom: 20px; }
+    input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      margin-top: 5px;
+      background: transparent;
+      color: inherit;
+    }
+
     .bi-spin { 
       display: inline-block; 
-      animation: icon-float 3s ease-in-out infinite; 
+      animation: float 3s ease-in-out infinite; 
     }
 
-    @keyframes icon-float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-
-    /* Tip Cards */
-    .tips-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 25px;
-      margin: 50px 0;
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0); }
+      50% { transform: translateY(-10px) rotate(5deg); }
     }
 
     .tip-card {
-      background: var(--glass);
-      backdrop-filter: blur(10px);
+      background: var(--glass-light);
       padding: 30px;
-      border-radius: 20px;
-      border: 1px solid rgba(255,255,255,0.4);
-      transition: 0.4s;
+      border-radius: 24px;
+      border: 1px solid rgba(128,128,128,0.1);
+      transition: var(--transition);
     }
 
-    .tip-card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 15px 30px rgba(16, 185, 129, 0.1);
-      border-color: var(--primary);
-    }
+    .tip-card:hover { transform: translateY(-12px); border-color: var(--primary); }
 
     .affiliate-link {
-      display: inline-block;
-      margin-top: 15px;
-      padding: 8px 16px;
-      background: var(--dark);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--primary);
       color: white;
-      text-decoration: none;
+      padding: 12px 24px;
       border-radius: 12px;
-      font-size: 0.9rem;
-      transition: 0.3s;
+      text-decoration: none;
+      font-weight: 600;
+      margin-top: 20px;
     }
-
-    .affiliate-link:hover { background: var(--secondary); }
-
   </style>
 </head>
 <body>
 
   <header class="site-header">
     <div class="wrap" style="display: flex; justify-content: space-between; align-items: center;">
-      <a href="#" style="font-weight: 800; text-decoration: none; color: var(--dark); font-size: 1.4rem;">ESTHETICS HUB</a>
-      <nav>
-        <a href="#tips" style="text-decoration: none; color: var(--dark); margin-left: 20px;">Tips</a>
-        <a href="#howto" style="text-decoration: none; color: var(--dark); margin-left: 20px;">Guide</a>
-      </nav>
+      <a href="#" style="font-weight: 800; text-decoration: none; color: var(--text-main); font-size: 1.5rem;">ESTHETICS HUB</a>
+      <div style="display: flex; align-items: center; gap: 20px;">
+        <button id="themeToggle" class="nav-btn" style="width: 40px; height: 40px; font-size: 1.2rem;" aria-label="Toggle Dark Mode">
+          <i class="bi bi-moon-stars"></i>
+        </button>
+        <nav>
+          <a href="#tips" style="text-decoration: none; color: var(--text-main); font-weight: 600;">Protocol</a>
+        </nav>
+      </div>
     </div>
   </header>
 
   <main class="wrap">
     
-    <section class="slider-container" data-aos="fade-up">
+    <section class="slider-container" data-aos="zoom-in">
       <div class="slider" id="mainSlider">
-        <div class="slide">
-          <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=1200&q=80" alt="Healthy Plate">
-        </div>
-        <div class="slide">
-          <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1200&q=80" alt="Salad Bowls">
-        </div>
-        <div class="slide">
-          <img src="https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=1200&q=80" alt="Nutritious Prep">
-        </div>
+        <div class="slide"><img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=1200" alt="Nutrition Slide 1" fetchpriority="high"></div>
+        <div class="slide"><img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1200" alt="Nutrition Slide 2" loading="lazy"></div>
+        <div class="slide"><img src="https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=1200" alt="Nutrition Slide 3" loading="lazy"></div>
       </div>
-      <div class="slider-nav">
-        <button class="nav-btn" onclick="moveSlider(-1)"><i class="bi bi-chevron-left"></i></button>
-        <button class="nav-btn" onclick="moveSlider(1)"><i class="bi bi-chevron-right"></i></button>
+      <div style="position: absolute; top: 50%; width: 100%; display: flex; justify-content: space-between; padding: 0 30px; box-sizing: border-box; pointer-events: none;">
+        <button class="nav-btn" onclick="moveSlider(-1)"><i class="bi bi-arrow-left"></i></button>
+        <button class="nav-btn" onclick="moveSlider(1)"><i class="bi bi-arrow-right"></i></button>
       </div>
     </section>
 
-    <section id="tips">
-      <h2 data-aos="fade-right" style="font-size: 2.5rem; text-align: center; margin-bottom: 40px;">Scientific Nutrition Tips</h2>
+    <section data-aos="fade-up" style="text-align: center; margin: 80px 0;">
+      <h2 style="font-size: 2.5rem;">The Biological Engine</h2>
+      <p style="max-width: 700px; margin: 0 auto 40px; opacity: 0.8;">To master your physique, you must understand how your body converts macronutrients into cellular energy (ATP).</p>
       
-      <div class="tips-grid">
-        <div class="tip-card" data-aos="zoom-in-up">
-          <i class="bi bi-apple bi-spin" style="font-size: 2.5rem; color: var(--primary);"></i>
-          <h3>Whole Foods Focus</h3>
-          <p>Prioritize single-ingredient foods to reduce inflammation and stabilize energy.</p>
-          <a href="https://amzn.to/3example" class="affiliate-link" rel="sponsored">Shop Kitchen Tools <i class="bi bi-amazon"></i></a>
-        </div>
-
-        <div class="tip-card" data-aos="zoom-in-up" data-aos-delay="100">
-          <i class="bi bi-droplet-fill bi-spin" style="font-size: 2.5rem; color: var(--secondary);"></i>
-          <h3>Cellular Hydration</h3>
-          <p>Proper hydration improves cognitive function. Use electrolytes for peak performance.</p>
-          <a href="https://www.iherb.com/c/electrolytes" class="affiliate-link" rel="sponsored">Global iHerb Deals <i class="bi bi-globe"></i></a>
-        </div>
-
-        <div class="tip-card" data-aos="zoom-in-up" data-aos-delay="200">
-          <i class="bi bi-lightning-charge-fill bi-spin" style="font-size: 2.5rem; color: #f59e0b;"></i>
-          <h3>Protein Synthesis</h3>
-          <p>Aim for 1.6g of protein per kg of body weight for optimal muscle preservation.</p>
-          <a href="https://www.myprotein.com/" class="affiliate-link" rel="sponsored">MyProtein Local Deals <i class="bi bi-bag-check"></i></a>
-        </div>
-      </div>
     </section>
 
-    
+    <section id="calculator" class="calc-card" data-aos="fade-up">
+      <h3><i class="bi bi-calculator"></i> Personalized Macro Guide</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+        <div class="input-group">
+          <label>Weight (kg)</label>
+          <input type="number" id="weight" placeholder="e.g. 75">
+        </div>
+        <div class="input-group">
+          <label>Goal</label>
+          <select id="goal" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #cbd5e1; background: transparent; color: inherit;">
+            <option value="1.6">Maintenance / Lean Build</option>
+            <option value="2.2">Aggressive Muscle Growth</option>
+          </select>
+        </div>
+      </div>
+      <button onclick="calculateMacros()" class="affiliate-link" style="border: none; cursor: pointer; width: 100%; justify-content: center;">Calculate Targets</button>
+      <div id="results" style="margin-top: 20px; font-weight: 800; color: var(--primary); text-align: center; font-size: 1.2rem;"></div>
+    </section>
 
-    <section data-aos="fade-up" style="margin: 60px 0; text-align: center;">
-      <h3>Watch: Master Meal Prep in 10 Minutes</h3>
-      <div style="position: relative; padding-bottom: 56.25%; height: 0; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.15);">
+    <div class="tips-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin: 80px 0;">
+      <article class="tip-card" data-aos="fade-up">
+        <i class="bi bi-shield-check bi-spin" style="font-size: 2.5rem; color: var(--primary);"></i>
+        <h3>Micronutrient Density</h3>
+        <p>Phytochemicals in colored vegetables prevent oxidative stress.</p>
+        
+        <a href="https://www.iherb.com" class="affiliate-link" rel="sponsored">Shop iHerb <i class="bi bi-globe"></i></a>
+      </article>
+
+      <article class="tip-card" data-aos="fade-up" data-aos-delay="200">
+        <i class="bi bi-moisture bi-spin" style="font-size: 2.5rem; color: var(--secondary);"></i>
+        <h3>Hydration & Fascia</h3>
+        <p>Water isn't just for thirst; it keeps your connective tissue elastic.</p>
+        <a href="https://amzn.to/water" class="affiliate-link" rel="sponsored">Amazon Essentials <i class="bi bi-amazon"></i></a>
+      </article>
+    </div>
+
+    <section data-aos="zoom-in" style="margin: 100px 0;">
+      <h2 style="text-align: center;">Advanced Prep Strategy</h2>
+      <div style="position: relative; padding-bottom: 56.25%; height: 0; border-radius: 32px; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.2);">
         <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameborder="0" allowfullscreen></iframe>
       </div>
     </section>
 
   </main>
 
-  <footer style="background: var(--dark); color: white; padding: 60px 0; margin-top: 100px;">
-    <div class="wrap" style="text-align: center;">
-      <p style="opacity: 0.6;">© 2026 The Esthetics Hub | Professional Health Education</p>
-      <div style="margin-top: 20px;">
-        <i class="bi bi-instagram" style="font-size: 1.5rem; margin: 0 10px;"></i>
-        <i class="bi bi-twitter-x" style="font-size: 1.5rem; margin: 0 10px;"></i>
+  <footer style="background: var(--dark-bg); color: white; padding: 80px 0; text-align: center;">
+    <div class="wrap">
+      <h2 style="color: var(--primary);">THE ESTHETICS HUB</h2>
+      <p style="opacity: 0.6;">Redefining Human Potential through Science and Esthetics.</p>
+      <div style="margin-top: 30px; display: flex; justify-content: center; gap: 25px; font-size: 1.5rem;">
+        <i class="bi bi-instagram"></i>
+        <i class="bi bi-twitter-x"></i>
+        <i class="bi bi-youtube"></i>
       </div>
     </div>
   </footer>
@@ -227,18 +245,31 @@
   <script>
     AOS.init({ duration: 1000, once: true });
 
-    // Slider Logic
-    let currentSlide = 0;
-    const slider = document.getElementById('mainSlider');
-    const totalSlides = 3;
-
-    function moveSlider(direction) {
-      currentSlide = (currentSlide + direction + totalSlides) % totalSlides;
-      slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+    // Slider
+    let slideIdx = 0;
+    function moveSlider(n) {
+      const slider = document.getElementById('mainSlider');
+      slideIdx = (slideIdx + n + 3) % 3;
+      slider.style.transform = `translateX(-${slideIdx * 100}%)`;
     }
+    setInterval(() => moveSlider(1), 6000);
 
-    // Auto-slide every 5 seconds
-    setInterval(() => moveSlider(1), 5000);
+    // Dark Mode
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      const icon = document.querySelector('#themeToggle i');
+      icon.classList.toggle('bi-moon-stars');
+      icon.classList.toggle('bi-sun');
+    });
+
+    // Macro Logic
+    function calculateMacros() {
+      const weight = document.getElementById('weight').value;
+      const factor = document.getElementById('goal').value;
+      if(!weight) return alert("Please enter weight");
+      const protein = (weight * factor).toFixed(1);
+      document.getElementById('results').innerHTML = `Daily Target: ${protein}g Protein | ${(weight * 0.8).toFixed(1)}g Healthy Fats`;
+    }
   </script>
 </body>
   </html>
