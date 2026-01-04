@@ -3,60 +3,241 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Holistic Living: Balance Mind, Body, and Soul | The Esthetics Hub</title>
-  <meta name="description" content="A practical guide to holistic living — combining movement, nutrition, rest, and meaning. HOW TO build a balanced routine." />
-  <meta name="keywords" content="holistic living, well-being, how to, lifestyle" />
-  <link rel="stylesheet" href="holistic.css" />
-  <meta property="og:title" content="Holistic Living: Balance Mind, Body, and Soul" />
-  <meta property="og:description" content="A practical guide to holistic living — combining movement, nutrition, rest, and meaning." />
-  <meta property="og:image" content="../images/holistic-cover.jpg" />
-  <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"Holistic Living: Balance Mind, Body, and Soul","author":{"@type":"Person","name":"The Esthetics Hub"},"datePublished":"2025-09-25"}
-  </script>
-  <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://esthetics03-ops.github.io/" },
-    { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://esthetics03-ops.github.io/blog.html" }
-  ]
-}
-</script>
-  <script src="esthetics-structured-data-auto.js" defer></script>
+  <title>Holistic Living & Longevity Protocol | The Esthetics Hub</title>
+  
+  <meta name="description" content="A 2026 guide to balancing the mind-body-soul triad. Includes interactive daily routines, circadian rhythm optimization, and professional holistic tools.">
+  <meta property="og:image" content="holistic-cover.jpg">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --earth-green: #065f46;
+      --sunset-orange: #fb923c;
+      --zen-white: #fafaf9;
+      --ink: #1c1917;
+      --glass: rgba(250, 250, 249, 0.85);
+      --transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    /* Interactive Night Filter for Digital Sunset */
+    body.digital-sunset {
+      filter: sepia(0.4) saturate(0.8);
+      background: #fef3c7;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: #f5f5f4;
+      color: var(--ink);
+      margin: 0;
+      transition: var(--transition);
+      overflow-x: hidden;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      padding: 1rem 0;
+    }
+
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 0 25px; }
+
+    /* Modern Slider */
+    .slider-container {
+      position: relative;
+      height: 550px;
+      border-radius: 40px;
+      overflow: hidden;
+      margin: 40px 0;
+      box-shadow: 0 40px 80px -20px rgba(0,0,0,0.1);
+    }
+
+    .slider { display: flex; height: 100%; transition: var(--transition); will-change: transform; }
+    .slide { min-width: 100%; height: 100%; position: relative; }
+    .slide img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* The "Path" Cards */
+    .path-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin: 60px 0;
+    }
+
+    .path-card {
+      background: white;
+      padding: 40px;
+      border-radius: 32px;
+      border: 1px solid rgba(0,0,0,0.03);
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .path-card:hover {
+      transform: translateY(-15px);
+      box-shadow: 0 30px 60px rgba(6, 95, 70, 0.08);
+      border-color: var(--earth-green);
+    }
+
+    .affiliate-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--ink);
+      color: white;
+      padding: 14px 28px;
+      border-radius: 100px;
+      text-decoration: none;
+      font-weight: 600;
+      margin-top: 25px;
+      transition: 0.3s;
+    }
+
+    .affiliate-link:hover { background: var(--earth-green); transform: translateX(5px); }
+
+    /* Digital Sunset Toggle */
+    .sunset-btn {
+      background: var(--sunset-orange);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .bi-float { animation: floating 4s ease-in-out infinite; }
+    @keyframes floating {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+  </style>
 </head>
 <body>
-  <header class="site-header"><div class="wrap"><a class="brand" href="../index.html">The Esthetics Hub</a><nav class="top-nav"><a href="../index.html">Home</a><a href="../posts.html">Posts</a></nav></div></header>
-  <div class="progress" id="progressBar"></div>
-  <main class="wrap content">
-    <article class="post">
-      <header class="post-header">
-        <h1>Holistic Living: Balance Mind, Body, and Soul</h1>
-        <p class="meta">By <strong>The Esthetics Hub</strong> • Sept 25, 2025 • 9 min read</p>
-        <img src="holistic-cover.jpg" alt="Nature and wellness" class="hero" loading="lazy">
-      </header>
 
-      <nav class="toc" id="toc"><strong>On this page</strong><ul><li><a href="#principles">Core principles</a></li><li><a href="#routine">Daily routine (HOW TO)</a></li><li><a href="#tips">Practical tips</a></li></ul></nav>
+  <header class="site-header">
+    <div class="wrap" style="display: flex; justify-content: space-between; align-items: center;">
+      <a href="../index.html" style="font-weight: 800; text-decoration: none; color: var(--ink); font-size: 1.4rem; letter-spacing: -1px;">ESTHETICS HUB</a>
+      <div style="display: flex; align-items: center; gap: 15px;">
+        <button id="sunsetToggle" class="sunset-btn" aria-label="Digital Sunset Mode">
+          <i class="bi bi-sun-fill"></i> Sunset Mode
+        </button>
+        <nav><a href="../posts.html" style="text-decoration: none; color: var(--ink);"><i class="bi bi-list"></i></a></nav>
+      </div>
+    </div>
+  </header>
 
-      <section id="principles"><h2>Core principles of holistic living</h2><p>Short intro explaining integration of mind, body, and spirit.</p></section>
+  <main class="wrap">
+    
+    <section class="slider-container" data-aos="zoom-in">
+      <div class="slider" id="mainSlider">
+        <div class="slide"><img src="https://images.unsplash.com/photo-1545239351-ef35f43d514b?auto=format&fit=crop&w=1200" alt="Mindful Living"></div>
+        <div class="slide"><img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=1200" alt="Body Balance"></div>
+        <div class="slide"><img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1200" alt="Nature Soul"></div>
+      </div>
+      <div style="position: absolute; bottom: 30px; right: 30px; display: flex; gap: 10px;">
+        <button class="nav-btn" onclick="moveSlider(-1)" style="background:var(--glass); border:none; width:50px; height:50px; border-radius:50%; cursor:pointer;"><i class="bi bi-arrow-left"></i></button>
+        <button class="nav-btn" onclick="moveSlider(1)" style="background:var(--glass); border:none; width:50px; height:50px; border-radius:50%; cursor:pointer;"><i class="bi bi-arrow-right"></i></button>
+      </div>
+    </section>
 
-      <section id="routine"><h2>HOW TO: Build a balanced daily routine</h2>
-        <p>Sample structure and practices to include.</p>
-        <ul>
-          <li><strong>Morning:</strong> Hydrate, movement, 10-min mindfulness.</li>
-          <li><strong>Midday:</strong> Nourishing meal, short walk.</li>
-          <li><strong>Evening:</strong> Wind-down routine, digital sunset, reflection.</li>
-        </ul>
-      </section>
+    <section id="principles" style="text-align: center; margin: 100px 0;" data-aos="fade-up">
+      <h1 style="font-size: 3.5rem; letter-spacing: -2px;">Balance Mind, Body, & Soul</h1>
+      <p style="font-size: 1.3rem; max-width: 800px; margin: 20px auto; opacity: 0.7;">Holistic living isn't a destination; it's the optimization of your biology and spirit in unison.</p>
+    </section>
 
-      <section id="tips"><h2>Practical tips</h2>
-        <p>Integrate micro-practices: breath breaks, posture checks, gratitude journaling.</p>
-      </section>
+    <section data-aos="fade-right" style="margin: 80px 0; background: white; padding: 50px; border-radius: 40px;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; align-items: center;">
+        <div>
+          <h2>Mastering Your Clock</h2>
+          <p>The foundation of holistic health is your <strong>Circadian Rhythm</strong>. Aligning your habits with the sun regulates everything from hormone production to fat metabolism.</p>
+        </div>
+        <div>
+          
+        </div>
+      </div>
+    </section>
 
-      <footer class="post-footer"><div class="share"><button id="copyLink">Copy link</button><a id="shareTwitter" href="#" target="_blank" rel="noopener">Share on Twitter</a></div></footer>
-    </article>
+    <section class="path-grid">
+      <article class="path-card" data-aos="fade-up">
+        <div>
+          <i class="bi bi-sunrise-fill bi-float" style="font-size: 3rem; color: var(--sunset-orange);"></i>
+          <h3>Rise: Activate</h3>
+          <p>Morning sunlight and hydration trigger the cortisol spike needed for focus.</p>
+        </div>
+        <a href="https://amzn.to/3example-sunrise" class="affiliate-link" rel="sponsored">Sunrise Lamps <i class="bi bi-amazon"></i></a>
+      </article>
+
+      <article class="path-card" data-aos="fade-up" data-aos-delay="200">
+        <div>
+          <i class="bi bi-leaf bi-float" style="font-size: 3rem; color: var(--earth-green);"></i>
+          <h3>Noon: Nourish</h3>
+          <p>High-density nutrition to fuel the gut-brain axis without the afternoon crash.</p>
+        </div>
+        <a href="https://www.iherb.com/c/superfoods" class="affiliate-link" rel="sponsored">Shop Superfoods <i class="bi bi-globe"></i></a>
+      </article>
+
+      <article class="path-card" data-aos="fade-up" data-aos-delay="400">
+        <div>
+          <i class="bi bi-stars bi-float" style="font-size: 3rem; color: #6366f1;"></i>
+          <h3>Night: Restore</h3>
+          <p>Protecting your melatonin through a digital sunset and temperature regulation.</p>
+        </div>
+        <a href="https://www.myprotein.com/nutrition/vitamins.list" class="affiliate-link" rel="sponsored">Recovery Aids <i class="bi bi-bag-check"></i></a>
+      </article>
+    </section>
+
+    <section data-aos="zoom-in" style="margin: 100px 0;">
+      <div style="position: relative; padding-bottom: 56.25%; height: 0; border-radius: 40px; overflow: hidden; box-shadow: 0 40px 100px rgba(0,0,0,0.15);">
+        <iframe src="https://www.youtube.com/embed/z6X5oEIg6Ak" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameborder="0" allowfullscreen></iframe>
+      </div>
+    </section>
+
+    [Image showing the interaction between the gut microbiome and brain health]
+
   </main>
 
-  <script src="holistic.js"></script>
+  <footer style="background: var(--ink); color: white; padding: 100px 0; margin-top: 100px; text-align: center;">
+    <div class="wrap">
+      <h2 style="letter-spacing: 5px;">THE ESTHETICS HUB</h2>
+      <p style="opacity: 0.5; margin-bottom: 40px;">Integrated Well-being for the 21st Century.</p>
+      <div style="display: flex; justify-content: center; gap: 30px; font-size: 1.5rem;">
+        <i class="bi bi-instagram"></i><i class="bi bi-twitter-x"></i><i class="bi bi-spotify"></i>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init({ duration: 1200, once: true });
+
+    // Slider Logic
+    let currentSlide = 0;
+    const slider = document.getElementById('mainSlider');
+    function moveSlider(n) {
+      currentSlide = (currentSlide + n + 3) % 3;
+      slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+    }
+
+    // Digital Sunset Logic
+    document.getElementById('sunsetToggle').addEventListener('click', function() {
+      document.body.classList.toggle('digital-sunset');
+      this.innerHTML = document.body.classList.contains('digital-sunset') ? 
+        '<i class="bi bi-moon-fill"></i> Restore Normal' : '<i class="bi bi-sun-fill"></i> Sunset Mode';
+    });
+  </script>
 </body>
-</html>
+               </html>
