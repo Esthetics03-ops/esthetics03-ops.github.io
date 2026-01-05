@@ -2,261 +2,250 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bio-Sync | 2026 Master Intelligence Suite</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bio-Sync | Master Admin 2026</title>
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
     <style>
         :root {
-            --primary: #2d5a27;
-            --accent: #b721ff;
-            --secondary: #21d4fd;
-            --bg: #030712;
-            --glass: rgba(255, 255, 255, 0.03);
-            --border: rgba(255, 255, 255, 0.1);
-            --success: #4ade80;
-            --warning: #fbbf24;
-            --danger: #f87171;
+            --primary: #2d5a27; --accent: #b721ff; --secondary: #21d4fd;
+            --bg: #030712; --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.1); --success: #4ade80; --danger: #ff4b2b;
         }
 
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+        
         body { 
             font-family: 'Inter', system-ui, sans-serif; 
             background: radial-gradient(circle at 0% 0%, #1e1b4b 0%, #030712 100%);
-            color: #f8fafc; margin: 0; min-height: 100vh; padding: 20px;
+            color: #f8fafc; margin: 0; min-height: 100vh; overflow-x: hidden;
         }
 
-        .dashboard-wrapper { max-width: 1500px; margin: 0 auto; }
-
-        .glass-panel {
-            background: var(--glass);
-            backdrop-filter: blur(25px) saturate(180%);
-            border: 1px solid var(--border);
-            border-radius: 30px; padding: 2rem; margin-bottom: 24px;
+        /* --- AUTH SCREEN --- */
+        #lock-screen {
+            position: fixed; inset: 0; z-index: 9999; background: var(--bg);
+            display: flex; align-items: center; justify-content: center; transition: 0.5s;
         }
-
-        /* Time Filter Tabs */
-        .tab-bar { display: flex; gap: 12px; margin: 20px 0; }
-        .tab {
+        .lock-card {
+            background: var(--glass); border: 1px solid var(--border); padding: 3rem;
+            border-radius: 30px; text-align: center; width: 90%; max-width: 420px;
+            backdrop-filter: blur(20px);
+        }
+        .lock-input {
             background: rgba(255,255,255,0.05); border: 1px solid var(--border);
-            color: #94a3b8; padding: 10px 20px; border-radius: 14px;
-            cursor: pointer; font-size: 0.8rem; font-weight: 700; transition: 0.3s;
+            padding: 15px; border-radius: 12px; color: white; width: 100%;
+            margin: 20px 0; text-align: center; font-size: 1.5rem; letter-spacing: 5px;
         }
-        .tab.active { background: var(--accent); color: white; border-color: var(--accent); box-shadow: 0 0 15px rgba(183, 33, 255, 0.4); }
+        .lock-btn {
+            background: var(--accent); color: white; border: none; padding: 15px;
+            border-radius: 12px; font-weight: 800; cursor: pointer; width: 100%;
+            transition: transform 0.2s;
+        }
+        .lock-btn:active { transform: scale(0.98); }
 
-        /* Stats Grid */
-        .stats-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 20px; margin-bottom: 24px;
-        }
+        /* --- MAIN DASHBOARD --- */
+        #main-dashboard { display: none; opacity: 0; transition: 1s ease; }
+        .dashboard-wrapper { width: 100%; max-width: 1400px; margin: 0 auto; padding: 15px; }
+
+        header { display: flex; flex-direction: column; gap: 15px; margin-bottom: 2rem; }
+        @media (min-width: 768px) { header { flex-direction: row; justify-content: space-between; align-items: center; } }
+
+        /* Stats Grid - Responsive Clamp */
+        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 16px; }
+        @media (min-width: 992px) { .stats-grid { grid-template-columns: repeat(4, 1fr); } }
 
         .card {
             background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.01));
-            padding: 2rem; border-radius: 28px; border: 1px solid var(--border);
+            padding: 1.5rem; border-radius: 24px; border: 1px solid var(--border);
             position: relative; overflow: hidden;
         }
+        .value { font-size: clamp(1.4rem, 4vw, 2.2rem); font-weight: 900; margin: 5px 0; }
+        .label { color: #94a3b8; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; }
 
-        .label { color: #94a3b8; font-size: 0.75rem; text-transform: uppercase; font-weight: 700; letter-spacing: 1.5px; }
-        .value { font-size: 2.6rem; font-weight: 900; margin: 8px 0; color: #fff; display: block; }
-        .trend { font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 5px; }
-        .up { color: var(--success); }
-
-        .layout-main { display: grid; grid-template-columns: 1fr; gap: 24px; }
+        .layout-main { display: grid; grid-template-columns: 1fr; gap: 16px; }
         @media (min-width: 1200px) { .layout-main { grid-template-columns: 2fr 1fr; } }
 
-        /* Webhook Notifications */
-        .webhook-feed {
-            height: 300px; overflow-y: auto; margin-top: 15px; padding-right: 10px;
-        }
-        .feed-item {
-            background: rgba(255,255,255,0.03); border-radius: 12px;
-            padding: 12px; margin-bottom: 10px; border-left: 4px solid var(--accent);
-            font-size: 0.85rem; animation: slideIn 0.3s ease-out;
-        }
-        @keyframes slideIn { from { transform: translateX(20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .glass-panel { background: var(--glass); border: 1px solid var(--border); border-radius: 28px; padding: 1.5rem; }
+        
+        .webhook-feed { height: 250px; overflow-y: auto; scrollbar-width: none; }
+        .feed-item { background: rgba(255,255,255,0.02); padding: 12px; border-radius: 12px; margin-bottom: 8px; border-left: 3px solid var(--accent); font-size: 0.8rem; }
+        
+        .sync-active { color: var(--success); animation: blink 2s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
 
-        /* Data Analysis Table */
-        .analysis-table {
-            width: 100%; border-collapse: collapse; margin-top: 20px;
-        }
-        .analysis-table th { text-align: left; color: #64748b; padding: 15px; border-bottom: 1px solid var(--border); font-size: 0.8rem; }
-        .analysis-table td { padding: 15px; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
-
-        .bi-spin { animation: spin 2s infinite linear; }
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        /* Zero Overflow Fix */
+        .chart-container { height: 320px; width: 100%; position: relative; }
     </style>
 </head>
 <body>
 
-<div class="dashboard-wrapper">
-    <header style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:2rem;">
-        <div>
-            <h1 style="margin:0; font-size: 2rem; font-weight: 900; letter-spacing: -1px;">Bio-Sync <span style="color:var(--accent)">Master AI</span></h1>
-            <div class="tab-bar">
-                <div class="tab" onclick="updateView('hourly')">HOURLY</div>
-                <div class="tab active" onclick="updateView('daily')">DAILY</div>
-                <div class="tab" onclick="updateView('weekly')">WEEKLY</div>
-                <div class="tab" onclick="updateView('monthly')">MONTHLY</div>
-            </div>
-        </div>
-        <div style="text-align:right">
-            <div id="status-pill" style="padding: 6px 16px; background: rgba(74, 222, 128, 0.1); color: var(--success); border-radius: 50px; font-size: 0.75rem; border: 1px solid rgba(74, 222, 128, 0.2);">
-                <i class="bi bi-broadcast" id="sync-icon"></i> <span id="sync-text">LIVE STREAM ACTIVE</span>
-            </div>
-            <h2 id="clock" style="margin: 10px 0 0 0; color: var(--secondary); font-family: monospace;">00:00:00</h2>
-        </div>
-    </header>
-
-    <div class="stats-grid">
-        <div class="card">
-            <span class="label">Total Revenue</span>
-            <span id="stat-revenue" class="value">$0.00</span>
-            <span class="trend up"><i class="bi bi-arrow-up-right"></i> +14.2%</span>
-        </div>
-        <div class="card">
-            <span class="label">Lead Conversations</span>
-            <span id="stat-conv" class="value">0</span>
-            <span class="trend up"><i class="bi bi-people"></i> Real-time</span>
-        </div>
-        <div class="card">
-            <span class="label">System Latency</span>
-            <span id="stat-latency" class="value">14ms</span>
-            <span class="trend" style="color: var(--secondary)"><i class="bi bi-cpu"></i> Node: Nairobi-Alpha</span>
-        </div>
-        <div class="card">
-            <span class="label">CTR Efficiency</span>
-            <span id="stat-ctr" class="value">0.0%</span>
-            <span class="trend" style="color: var(--warning)"><i class="bi bi-lightning"></i> Optimal</span>
+    <div id="lock-screen">
+        <div class="lock-card">
+            <div style="font-size: 3.5rem; color: var(--accent); margin-bottom: 10px;"><i class="bi bi-fingerprint"></i></div>
+            <h2 style="margin:0;">Ops Authorization</h2>
+            <p style="color: #64748b; font-size: 0.85rem;">Accessing The Esthetics Hub Intelligence Node</p>
+            <input type="password" id="pass-field" class="lock-input" placeholder="••••">
+            <button onclick="checkAuth()" class="lock-btn">UNLOCK DASHBOARD</button>
+            <p id="auth-err" style="color: var(--danger); font-size: 0.75rem; margin-top: 15px; display: none;">Invalid Key Access Logged.</p>
         </div>
     </div>
 
-    <div class="layout-main">
-        <div class="glass-panel">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 2rem;">
-                <span class="label">Performance Trajectory</span>
-                <span id="chart-legend" style="font-size: 0.7rem; color: #64748b;">Syncing GA4 + AdSense</span>
-            </div>
-            <div style="height: 350px;">
-                <canvas id="performanceChart"></canvas>
-            </div>
-            
-            <table class="analysis-table">
-                <thead>
-                    <tr>
-                        <th>Period Node</th>
-                        <th>Earnings (Net)</th>
-                        <th>Conversion Rate</th>
-                        <th>Engagement Score</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody id="analysis-list">
-                    </tbody>
-            </table>
-        </div>
+    <div id="main-dashboard">
+        <div class="dashboard-wrapper">
+            <header>
+                <div>
+                    <h1 style="margin:0; letter-spacing: -1px;">Bio-Sync <span style="color:var(--accent)">Master AI</span></h1>
+                    <div style="margin-top: 5px; cursor: pointer;" onclick="logout()">
+                        <small style="color:var(--secondary)"><i class="bi bi-shield-check"></i> Encrypted Session (Click to Logout)</small>
+                    </div>
+                </div>
+                <div style="text-align:right">
+                    <div id="status" style="font-size: 0.75rem; font-weight: 700;">
+                        <i class="bi bi-broadcast sync-active"></i> SYNCING LIVE TRACKERS
+                    </div>
+                    <h2 id="clock" style="margin:5px 0 0; font-family: monospace; color: var(--secondary);">00:00:00</h2>
+                </div>
+            </header>
 
-        <div class="glass-panel">
-            <span class="label">Live Webhook Notifications</span>
-            <div class="webhook-feed" id="webhook-feed">
+            <div class="stats-grid">
+                <div class="card">
+                    <span class="label">Total Revenue</span>
+                    <div id="stat-revenue" class="value">$0.00</div>
                 </div>
-            
-            <div style="margin-top: 2rem; padding: 2rem; background: linear-gradient(145deg, rgba(183, 33, 255, 0.1), transparent); border-radius: 24px; border: 1px solid var(--border);">
-                <span class="label" style="color: var(--accent);">Predictive Analysis</span>
-                <p style="font-size: 0.9rem; margin: 15px 0;">Next payout forecast: <b id="forecast-val">$0.00</b></p>
-                <div style="height: 6px; background: #1e293b; border-radius: 3px;">
-                    <div id="forecast-progress" style="width: 0%; height: 100%; background: var(--accent); border-radius: 3px; transition: 1s;"></div>
+                <div class="card">
+                    <span class="label">Conversions</span>
+                    <div id="stat-conv" class="value">0</div>
                 </div>
-                <small style="display:block; margin-top:10px; color:#64748b;">Confidence Level: 94%</small>
+                <div class="card">
+                    <span class="label">Node Latency</span>
+                    <div id="stat-latency" class="value">0ms</div>
+                </div>
+                <div class="card">
+                    <span class="label">CTR Efficiency</span>
+                    <div id="stat-ctr" class="value">0.0%</div>
+                </div>
+            </div>
+
+            <div class="layout-main">
+                <div class="glass-panel">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 1.5rem;">
+                        <span class="label">Engagement Trajectory</span>
+                        <i class="bi bi-graph-up-arrow" style="color:var(--accent)"></i>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="mainChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="glass-panel">
+                    <span class="label">Operational Log (Webhooks)</span>
+                    <div id="webhook-feed" class="webhook-feed" style="margin-top: 1rem;"></div>
+                    
+                    <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(183, 33, 255, 0.05); border-radius: 20px; border: 1px solid var(--border);">
+                        <span class="label" style="color: var(--accent); font-size: 0.6rem;">Forecast Engine</span>
+                        <p style="margin: 8px 0; font-size: 0.95rem;">Expected Payout: <b id="forecast-val">$0.00</b></p>
+                        <div style="height: 4px; background: #1e293b; border-radius: 2px; overflow: hidden;">
+                            <div style="width: 78%; height: 100%; background: var(--accent); box-shadow: 0 0 10px var(--accent);"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 <script>
-    let perfChart;
-    const analyticsModel = {
-        hourly: { rev: 85.20, conv: 12, ctr: 4.2, data: [4, 8, 6, 12, 15, 11], labels: ['00:00','04:00','08:00','12:00','16:00','20:00'], forecast: 500 },
-        daily: { rev: 412.50, conv: 88, ctr: 5.8, data: [320, 450, 410, 520, 480, 590, 610], labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], forecast: 3200 },
-        weekly: { rev: 2840.00, conv: 540, ctr: 6.1, data: [2100, 2400, 2650, 2840], labels: ['Week 1','Week 2','Week 3','Week 4'], forecast: 12000 },
-        monthly: { rev: 14200.00, conv: 2100, ctr: 5.9, data: [11000, 12500, 13200, 14200, 15100, 14800], labels: ['Jan','Feb','Mar','Apr','May','Jun'], forecast: 185000 }
-    };
+    const MASTER_KEY = "1234"; // Update this to your secret key
+    let mainChart;
+
+    // AUTH SYSTEM
+    function checkAuth() {
+        const input = document.getElementById('pass-field').value;
+        const error = document.getElementById('auth-err');
+        
+        if(input === MASTER_KEY) {
+            sessionStorage.setItem('ops_session', 'active');
+            reveal();
+        } else {
+            error.style.display = 'block';
+            setTimeout(() => error.style.display = 'none', 2000);
+        }
+    }
+
+    function reveal() {
+        document.getElementById('lock-screen').style.opacity = '0';
+        setTimeout(() => {
+            document.getElementById('lock-screen').style.display = 'none';
+            const dash = document.getElementById('main-dashboard');
+            dash.style.display = 'block';
+            setTimeout(() => dash.style.opacity = '1', 50);
+            init();
+        }, 500);
+    }
+
+    function logout() {
+        sessionStorage.removeItem('ops_session');
+        location.reload();
+    }
+
+    // DATA SYNC
+    async function sync() {
+        try {
+            const response = await fetch(`./config.json?cache=${Date.now()}`);
+            const data = await response.json();
+
+            // Sync Static Cards
+            data.trackers.forEach(t => {
+                const el = document.getElementById(t.id);
+                if(el) el.innerText = `${t.prefix || ''}${t.value.toLocaleString()}${t.suffix || ''}`;
+            });
+
+            // Update Chart
+            if(data.chartData) {
+                mainChart.data.labels = data.chartData.labels;
+                mainChart.data.datasets[0].data = data.chartData.points;
+                mainChart.update('none');
+            }
+
+            document.getElementById('forecast-val').innerText = `$${(data.forecast || 0).toLocaleString()}`;
+            log("Sync Protocol: Success. All trackers online.");
+        } catch (err) {
+            log("Critical Error: Tracker sync failed.");
+        }
+    }
 
     function init() {
-        renderChart();
-        updateClock();
-        updateView('daily');
-        setInterval(updateClock, 1000);
-        setInterval(generateWebhook, 8000);
-        generateWebhook("System initializing... Handshake established.");
-    }
-
-    function updateClock() {
-        document.getElementById('clock').innerText = new Date().toLocaleTimeString();
-    }
-
-    function renderChart() {
-        const ctx = document.getElementById('performanceChart').getContext('2d');
-        perfChart = new Chart(ctx, {
+        const ctx = document.getElementById('mainChart').getContext('2d');
+        mainChart = new Chart(ctx, {
             type: 'line',
-            data: { labels: [], datasets: [{ data: [], borderColor: '#b721ff', backgroundColor: 'rgba(183, 33, 255, 0.05)', fill: true, tension: 0.4 }] },
-            options: {
-                responsive: true, maintainAspectRatio: false,
+            data: { labels: [], datasets: [{ data: [], borderColor: '#b721ff', tension: 0.4, fill: true, backgroundColor: 'rgba(183, 33, 255, 0.05)', pointRadius: 0 }] },
+            options: { 
+                responsive: true, maintainAspectRatio: false, 
                 plugins: { legend: { display: false } },
-                scales: {
-                    x: { grid: { display: false }, ticks: { color: '#64748b' } },
-                    y: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: '#64748b' } }
-                }
+                scales: { 
+                    x: { grid: { display: false }, ticks: { color: '#64748b' } }, 
+                    y: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: '#64748b' } } 
+                } 
             }
         });
+
+        sync();
+        setInterval(sync, 15000); // 15s refresh
+        setInterval(() => document.getElementById('clock').innerText = new Date().toLocaleTimeString(), 1000);
     }
 
-    function updateView(mode) {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        event?.target.classList.add('active');
-
-        const meta = analyticsModel[mode];
-        document.getElementById('stat-revenue').innerText = `$${meta.rev.toLocaleString()}`;
-        document.getElementById('stat-conv').innerText = meta.conv;
-        document.getElementById('stat-ctr').innerText = `${meta.ctr}%`;
-        document.getElementById('forecast-val').innerText = `$${meta.forecast.toLocaleString()}`;
-        document.getElementById('forecast-progress').style.width = '75%';
-
-        perfChart.data.labels = meta.labels;
-        perfChart.data.datasets[0].data = meta.data;
-        perfChart.update();
-
-        // Update Analysis List
-        const list = document.getElementById('analysis-list');
-        list.innerHTML = meta.labels.map((l, i) => `
-            <tr>
-                <td>${l}</td>
-                <td style="color:var(--success); font-weight:700;">$${(meta.data[i] * 0.12).toFixed(2)}</td>
-                <td>${(meta.ctr + (Math.random())).toFixed(1)}%</td>
-                <td>${Math.floor(Math.random() * 20 + 80)}/100</td>
-                <td><span style="color:var(--success)">● Stable</span></td>
-            </tr>
-        `).join('');
-    }
-
-    function generateWebhook(msg) {
+    function log(msg) {
         const feed = document.getElementById('webhook-feed');
-        const items = [
-            "New Conversion: Bio-Sleep Protocol via iHerb",
-            "AdSense Threshold Reached: $100.00 Payout Pending",
-            "Traffic Spike Detected: Nairobi Central Node",
-            "Webhook: New Newsletter Subscriber (Lead-Capture)",
-            "System: Mitophagy Article Trending in Longevity"
-        ];
-        const message = msg || items[Math.floor(Math.random() * items.length)];
-        const div = document.createElement('div');
-        div.className = 'feed-item';
-        div.innerHTML = `<strong>[${new Date().toLocaleTimeString()}]</strong> ${message}`;
-        feed.prepend(div);
-        if(feed.children.length > 10) feed.lastChild.remove();
+        const item = document.createElement('div');
+        item.className = 'feed-item';
+        item.innerHTML = `<strong>[${new Date().toLocaleTimeString()}]</strong> ${msg}`;
+        feed.prepend(item);
+        if(feed.children.length > 6) feed.lastChild.remove();
     }
 
-    init();
+    // Auto-login check
+    if(sessionStorage.getItem('ops_session') === 'active') reveal();
 </script>
 </body>
-                        </html>
+        </html>
