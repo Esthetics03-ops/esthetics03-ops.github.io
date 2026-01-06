@@ -1,3 +1,6 @@
-
 google-api-python-client>=2.118.0
 google-auth>=2.25.0
+google-analytics-data
+oauth2client
+GitPython
+python-telegram-bot
