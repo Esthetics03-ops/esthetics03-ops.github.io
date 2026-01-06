@@ -1,0 +1,17 @@
+# Google Cloud Credentials (EXTREMELY SENSITIVE)
+credentials.json
+
+# Local Python Environment
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+venv/
+.venv/
+
+# Local OS Files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
