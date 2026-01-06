@@ -1,26 +1,55 @@
 import json
-import time
 import os
 import threading
+import time
 from datetime import datetime
 from git import Repo
-import requests
+from googleapiclient.discovery import build
+from oauth2client.file import Storage
+from oauth2client.client import flow_from_clientsecrets
+from oauth2client.tools import run_flow
 from google.analytics.data_v1beta import BetaAnalyticsDataClient
 from google.analytics.data_v1beta.types import RunRealtimeReportRequest, Metric
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
-# --- PRODUCTION CONFIGURATION ---
+# --- CONFIGURATION ---
 JSON_PATH = "config.json"
 REPO_PATH = "./"
-TOKEN = "YOUR_TELEGRAM_BOT_TOKEN" # Replace with your @BotFather token
-CHAT_ID = "YOUR_CHAT_ID"           # Replace with your numeric Chat ID
+ADSENSE_PUB = "pub-1959507280210179"
+GA4_PROPERTY_ID = "319520471"
+CLIENT_SECRETS = 'client_secrets.json' # OAuth2 File from Google Cloud
+ADSENSE_SCOPE = ['https://www.googleapis.com/auth/adsense.readonly']
 
-# Mapped Numeric Property ID for G-QCX3G9KSPC
-GA4_PROPERTY_ID = "319520471" 
+# Credentials for Telegram & Service Account
+TOKEN = "YOUR_TELEGRAM_BOT_TOKEN" 
+CHAT_ID = "YOUR_CHAT_ID"           
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "credentials.json"
 
-# --- CORE LOGIC FUNCTIONS ---
+# --- API HELPERS ---
+
+def get_adsense_service():
+    """Authenticates and returns the AdSense API service."""
+    storage = Storage('adsense_auth_token.dat')
+    credentials = storage.get()
+    if not credentials or credentials.invalid:
+        flow = flow_from_clientsecrets(CLIENT_SECRETS, scope=ADSENSE_SCOPE)
+        credentials = run_flow(flow, storage)
+    return build('adsense', 'v2', credentials=credentials)
+
+def get_live_adsense_earnings():
+    """Pulls ACTUAL estimated earnings for TODAY from AdSense."""
+    try:
+        service = get_adsense_service()
+        result = service.accounts().reports().generate(
+            account=f"accounts/{ADSENSE_PUB}",
+            dateRange="TODAY",
+            metrics=["ESTIMATED_EARNINGS"]
+        ).execute()
+        return float(result['totals']['cells'][0]['value']) if 'totals' in result else 0.00
+    except Exception as e:
+        print(f"⚠️ AdSense API Error: {e}")
+        return 0.00
 
 def get_active_users():
     """Fetches real-time active users from GA4."""
@@ -36,105 +65,93 @@ def get_active_users():
         print(f"GA4 Error: {e}")
         return 0
 
+# --- CORE DATA LOGIC ---
+
 def handle_monthly_turnover(config_data):
-    """Detects month change and updates the history log."""
     current_month_name = datetime.now().strftime("%B %Y")
     last_entry = config_data["history"][-1]
-    
     if last_entry["month"] != current_month_name:
-        last_entry["status"] = "PENDING"  # Close previous month for payout cycle
-        new_month = {
-            "month": current_month_name,
-            "revenue": 0.00,
-            "status": "ACTIVE",
-            "method": "Electronic"
-        }
+        last_entry["status"] = "PENDING"
+        new_month = {"month": current_month_name, "revenue": 0.00, "status": "ACTIVE", "method": "Electronic"}
         config_data["history"].append(new_month)
-        if len(config_data["history"]) > 4: 
-            config_data["history"].pop(0)
-        return True, config_data
-    return False, config_data
-
-def update_audit_logic(config_data, current_total):
-    """Calculates rolling 3-month totals and future projections."""
-    config_data["history"][-1]["revenue"] = current_total
-    total_gross = sum(item["revenue"] for item in config_data["history"])
-    avg_monthly = total_gross / len(config_data["history"])
-    
-    # Update Chart Data
-    config_data["chartData"]["labels"] = [item["month"].split()[0] for item in config_data["history"]]
-    config_data["chartData"]["points"] = [item["revenue"] for item in config_data["history"]]
-    
-    # Add trend projection
-    config_data["chartData"]["labels"].append("Proj.")
-    config_data["chartData"]["points"].append(avg_monthly * 1.10)
-    
-    return total_gross, avg_monthly
+        if len(config_data["history"]) > 4: config_data["history"].pop(0)
+        return True
+    return False
 
 def perform_sync():
+    print(f"🔄 Sync Started: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     active_now = get_active_users()
+    live_adsense = get_live_adsense_earnings()
     
-    # Production IDs for The Esthetics Hub
-    ADSENSE_PUB = "pub-1959507280210179"
-    AFFILIATE_ID = "esthetics-hub-affiliate"
-    
-    # Simulated current month earnings (Replace with your scraper/API data)
-    current_adsense = 156.45 
-    current_affiliate = 89.30
-    total_current = current_adsense + current_affiliate
+    # Placeholder for Affiliate (replace with your scraper/API logic if needed)
+    current_affiliate = 89.30 
 
     try:
         with open(JSON_PATH, "r") as f:
             config_data = json.load(f)
 
         handle_monthly_turnover(config_data)
-        total_gross, avg_monthly = update_audit_logic(config_data, total_current)
+        
+        # Update current month revenue
+        config_data["history"][-1]["revenue"] = live_adsense + current_affiliate
+        total_gross = sum(item["revenue"] for item in config_data["history"])
+        
+        # Calculate RPM
+        current_rpm = (live_adsense / active_now * 1000) if active_now > 0 else 0.00
 
-        # Update Trackers
+        # Update Trackers Mapping
         id_map = {
-            "stat-adsense": current_adsense,
+            "stat-adsense": live_adsense,
             "stat-affiliate": current_affiliate,
-            "stat-payout": total_gross,
-            "stat-active": active_now
+            "stat-active": active_now,
+            "stat-rpm": current_rpm,
+            "stat-total-gross": total_gross
         }
 
         for tracker in config_data.get("trackers", []):
             if tracker["id"] in id_map:
                 tracker["value"] = id_map[tracker["id"]]
 
+        # Meta Updates
         config_data["project_info"]["last_audit"] = datetime.now().strftime("%Y-%m-%d %H:%M")
+        config_data["chartData"]["labels"] = [i["month"][:3] for i in config_data["history"]]
+        config_data["chartData"]["points"] = [i["revenue"] for i in config_data["history"]]
 
         with open(JSON_PATH, "w") as f:
             json.dump(config_data, f, indent=4)
         
+        # Git Push
         repo = Repo(REPO_PATH)
         repo.git.add(JSON_PATH)
         if repo.is_dirty():
-            repo.index.commit(f"⚡ Esthetics Hub Sync: {total_gross:.2f} Gross | {active_now} Live")
+            repo.index.commit(f"⚡ Sync: ${total_gross:.2f} Gross | {active_now} Active | RPM: ${current_rpm:.2f}")
             repo.remote(name='origin').push()
             return True
-        return True
-
-    except Exception as e:
-        print(f"Master Sync Failure: {e}")
         return False
 
-# --- TELEGRAM & BACKGROUND ENGINE ---
+    except Exception as e:
+        print(f"❌ Master Sync Failure: {e}")
+        return False
 
-async def sync_command(update, context):
+# --- TELEGRAM & SCHEDULER ---
+
+async def sync_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if str(update.effective_chat.id) == CHAT_ID:
-        await update.message.reply_text("🔄 *Syncing Esthetics Hub GA4 & AdSense...*", parse_mode='Markdown')
+        await update.message.reply_text("🔄 *Manual Sync Triggered...*")
         if perform_sync():
-            await update.message.reply_text("✅ *Sync Complete.* Dashboard updated.")
+            await update.message.reply_text("✅ *Dashboard Updated via GitHub.*")
+        else:
+            await update.message.reply_text("ℹ️ *Data synced (No changes to push).*")
 
 def background_timer():
     while True:
         perform_sync()
-        time.sleep(300)
+        time.sleep(600) # Sync every 10 minutes
 
 if __name__ == "__main__":
-    print(f"🚀 Master Engine Online | Targeting: {GA4_PROPERTY_ID}")
+    print(f"🚀 Esthetics Hub Engine Online | Targeting: {GA4_PROPERTY_ID}")
     threading.Thread(target=background_timer, daemon=True).start()
+    
     app = ApplicationBuilder().token(TOKEN).build()
     app.add_handler(CommandHandler("sync", sync_command))
     app.run_polling()
