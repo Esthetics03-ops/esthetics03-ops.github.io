@@ -2,12 +2,43 @@
   "project_info": {
     "name": "The Esthetics Hub",
     "version": "2.0.1",
-    "last_audit": "2025-12-31"
+    "last_audit": "2025-12-31",
+    "status": "active"
   },
   "auth": {
     "GA4_PROPERTIES": ["G-QCX3G9KSPC", "G-PSW1MY7HB4"],
     "ADSENSE_PUB_ID": "pub-1959507280210179",
     "AFFILIATE_ID": "esthetics-hub-affiliate"
+  },
+  "trackers": [
+    {
+      "id": "stat-revenue",
+      "value": 124.50,
+      "prefix": "$",
+      "suffix": ""
+    },
+    {
+      "id": "stat-conv",
+      "value": 412,
+      "prefix": "",
+      "suffix": ""
+    },
+    {
+      "id": "stat-latency",
+      "value": 22,
+      "prefix": "",
+      "suffix": "ms"
+    },
+    {
+      "id": "stat-ctr",
+      "value": 4.2,
+      "prefix": "",
+      "suffix": "%"
+    }
+  ],
+  "chartData": {
+    "labels": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    "points": [65, 59, 80, 81, 56, 55, 92]
   },
   "targets": {
     "monthly_adsense_goal": 100.00,
