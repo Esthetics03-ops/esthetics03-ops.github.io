@@ -15,17 +15,22 @@ TOKEN = "YOUR_TELEGRAM_BOT_TOKEN"
 CHAT_ID = "YOUR_CHAT_ID"
 
 # --- SAFETY THRESHOLDS ---
-REVENUE_MINIMUM = 50.00  # Notify if revenue falls below this
-LATENCY_MAXIMUM = 100    # Notify if server latency exceeds 100ms
+REVENUE_MINIMUM = 5.00  # Alert if AdSense drops below $5
+ACTIVE_USER_MIN = 1     # Alert if site traffic hits 0
 
-# 1. THE CORE SYNC LOGIC
 def perform_sync():
-    # Simulated metrics - Connect your real API or Scraper here
+    # --- DATA ACQUISITION ---
+    # Replace these simulated values with your actual API calls or scrapers
     metrics = {
-        "revenue": 142.75, 
-        "conversions": 485, 
-        "latency": 20, 
-        "ctr": 5.4
+        "adsense": 52.40,
+        "affiliate": 88.10,
+        "active": 24,
+        "payout": 140.50, # Combined calculation
+        "trending": [
+            {"title": "Bio-Sync Survival Guide", "views": "2.4k"},
+            {"title": "2026 Revenue Trends", "views": "1.8k"},
+            {"title": "Affiliate Marketing Pro", "views": "950"}
+        ]
     }
     
     try:
@@ -36,41 +41,51 @@ def perform_sync():
         with open(JSON_PATH, "r") as f:
             config_data = json.load(f)
 
-        # SAFETY CHECK LOGIC
+        # 1. SAFETY ALERTS
         alerts = []
-        if metrics['revenue'] < REVENUE_MINIMUM:
-            alerts.append(f"📉 *CRITICAL:* Revenue dropped to ${metrics['revenue']}")
-        if metrics['latency'] > LATENCY_MAXIMUM:
-            alerts.append(f"⚠️ *LATENCY:* High delay detected: {metrics['latency']}ms")
+        if metrics['adsense'] < REVENUE_MINIMUM:
+            alerts.append(f"📉 *LOW REVENUE:* AdSense at ${metrics['adsense']}")
+        if metrics['active'] < ACTIVE_USER_MIN:
+            alerts.append(f"🚨 *TRAFFIC LOSS:* 0 Active Users detected.")
         
         if alerts:
             send_immediate_alert("\n".join(alerts))
 
-        # UPDATE TRACKERS (Preserving Auth/Metadata)
-        for tracker in config_data.get("trackers", []):
-            tid = tracker["id"]
-            if tid in ["stat-revenue", "stat-conv", "stat-latency", "stat-ctr"]:
-                key = tid.replace("stat-", "")
-                tracker["value"] = metrics[key]
+        # 2. UPDATE TRACKERS (Matches the new Dashboard IDs)
+        # Mapping metrics to specific HTML IDs
+        id_map = {
+            "stat-adsense": metrics["adsense"],
+            "stat-affiliate": metrics["affiliate"],
+            "stat-active": metrics["active"],
+            "stat-payout": metrics["payout"]
+        }
 
-        # UPDATE ROLLING CHART
+        for tracker in config_data.get("trackers", []):
+            if tracker["id"] in id_map:
+                tracker["value"] = id_map[tracker["id"]]
+
+        # 3. UPDATE TRENDING ARTICLES
+        config_data["trending_articles"] = metrics["trending"]
+
+        # 4. UPDATE ROLLING CHART (Tracking Total Revenue)
         new_label = datetime.now().strftime("%H:%M")
         config_data["chartData"]["labels"].append(new_label)
-        config_data["chartData"]["points"].append(metrics["revenue"])
+        config_data["chartData"]["points"].append(metrics["payout"])
         
-        if len(config_data["chartData"]["labels"]) > 12: # Keep 1 hour of 5-min data
+        if len(config_data["chartData"]["labels"]) > 12: 
             config_data["chartData"]["labels"].pop(0)
             config_data["chartData"]["points"].pop(0)
 
-        # WRITE AND PUSH
+        # 5. SAVE AND PUSH
         with open(JSON_PATH, "w") as f:
             json.dump(config_data, f, indent=4)
         
         repo = Repo(REPO_PATH)
         repo.git.add(JSON_PATH)
         if repo.is_dirty():
-            repo.index.commit(f"⚡ Bio-Sync Auto-Update: {new_label}")
+            repo.index.commit(f"📊 Dashboard Auto-Sync: {new_label}")
             repo.remote(name='origin').push()
+            print(f"✅ Push Successful: {new_label}")
             return True
         return True
 
@@ -78,33 +93,33 @@ def perform_sync():
         print(f"❌ Sync Error: {e}")
         return False
 
-# 2. TELEGRAM TOOLS
+# --- TELEGRAM SYSTEM ---
 def send_immediate_alert(text):
     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
-    requests.post(url, json={"chat_id": CHAT_ID, "text": text, "parse_mode": "Markdown"})
+    try:
+        requests.post(url, json={"chat_id": CHAT_ID, "text": text, "parse_mode": "Markdown"})
+    except:
+        pass
 
 async def sync_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if str(update.effective_chat.id) == CHAT_ID:
-        await update.message.reply_text("🔄 *Manual Override Initiated...*", parse_mode='Markdown')
+        await update.message.reply_text("🔄 *Force Syncing Repo...*", parse_mode='Markdown')
         if perform_sync():
-            await update.message.reply_text("✅ *GitHub & Dashboard Synchronized.*", parse_mode='Markdown')
+            await update.message.reply_text("✅ *Sync Complete. Dashboard updated.*", parse_mode='Markdown')
         else:
-            await update.message.reply_text("❌ *Manual Sync Failed.*")
+            await update.message.reply_text("❌ *Sync Failed.*")
 
-# 3. SERVICE THREADS
 def background_timer():
     while True:
         perform_sync()
-        time.sleep(300) 
+        time.sleep(300) # Every 5 mins
 
 if __name__ == "__main__":
-    send_immediate_alert("🚀 *Bio-Sync Master Engine Online*")
+    print("🚀 Bio-Sync Master Engine Starting...")
+    send_immediate_alert("🖥️ *Bio-Sync Node Online:* Monitoring AdSense & Traffic.")
     
-    # Background Thread for Auto-Sync
     threading.Thread(target=background_timer, daemon=True).start()
 
-    # Main Thread for Telegram Listener
-    print("🤖 Dashboard Controller Active...")
     app = ApplicationBuilder().token(TOKEN).build()
     app.add_handler(CommandHandler("sync", sync_command))
     app.run_polling()
