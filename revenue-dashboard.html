@@ -21,94 +21,109 @@
             color: #f8fafc; margin: 0; min-height: 100vh; overflow-x: hidden;
         }
 
+        /* Lock Screen */
         #lock-screen {
             position: fixed; inset: 0; z-index: 9999; background: var(--bg);
             display: flex; align-items: center; justify-content: center; transition: 0.8s;
         }
 
-        .dashboard-wrapper { width: 100%; max-width: 1400px; margin: 0 auto; padding: 25px; display: none; }
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 25px; }
+        /* Dashboard Layout */
+        .dashboard-wrapper { width: 100%; max-width: 1400px; margin: 0 auto; padding: 15px; display: none; box-sizing: border-box; }
+        
+        .stats-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); 
+            gap: 15px; 
+            margin-bottom: 25px; 
+        }
         
         .card {
             background: var(--glass); border: 1px solid var(--border);
-            padding: 1.8rem; border-radius: 28px; backdrop-filter: blur(15px);
+            padding: 1.2rem; border-radius: 24px; backdrop-filter: blur(15px);
             transition: 0.3s ease; position: relative; overflow: hidden;
         }
-        .card:hover { border-color: var(--accent); transform: translateY(-5px); }
+        .card:hover { border-color: var(--accent); transform: translateY(-3px); }
 
-        .value { font-size: 2.4rem; font-weight: 900; color: #fff; margin: 8px 0; font-variant-numeric: tabular-nums; }
-        .label { color: #94a3b8; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; }
+        .value { font-size: 1.8rem; font-weight: 900; color: #fff; margin: 5px 0; font-variant-numeric: tabular-nums; word-break: break-all; }
+        .label { color: #94a3b8; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; display: block; }
 
+        /* Responsive Grid Split */
         .layout-split { display: grid; grid-template-columns: 1fr; gap: 20px; }
         @media (min-width: 1100px) { .layout-split { grid-template-columns: 2fr 1fr; } }
 
-        .audit-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.85rem; }
+        /* Audit Table */
+        .audit-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.8rem; }
         .audit-table th { text-align: left; color: #64748b; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
         .audit-table td { padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
 
-        .progress-container { height: 6px; background: rgba(255,255,255,0.05); border-radius: 10px; margin-top: 10px; overflow: hidden; }
-        #threshold-bar { height: 100%; background: var(--accent); width: 0%; transition: 1.5s ease; box-shadow: 0 0 10px var(--accent); }
+        .status-pill { font-size: 0.6rem; padding: 2px 8px; border-radius: 8px; font-weight: 800; }
 
-        .sync-pulse { color: var(--success); animation: pulse 2s infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        /* Progress Bar */
+        .progress-container { height: 6px; background: rgba(255,255,255,0.05); border-radius: 10px; margin-top: 10px; overflow: hidden; }
+        #threshold-bar { height: 100%; background: linear-gradient(90deg, var(--accent), var(--secondary)); width: 0%; transition: 1.5s ease; box-shadow: 0 0 10px var(--accent); }
+
+        /* Mobile Adjustments */
+        @media (max-width: 600px) {
+            header { flex-direction: column; align-items: flex-start !important; gap: 15px; }
+            .value { font-size: 1.5rem; }
+            .card { padding: 1rem; }
+        }
     </style>
 </head>
 <body>
 
     <div id="lock-screen">
-        <div style="text-align: center; background: var(--glass); padding: 3.5rem; border-radius: 35px; border: 1px solid var(--border); max-width: 400px; width: 90%;">
-            <i class="bi bi-shield-check" style="font-size: 4rem; color: var(--accent);"></i>
-            <h2 style="letter-spacing: -1px;">Bio-Sync Auth</h2>
-            <input type="password" id="pass" placeholder="••••" maxlength="4" style="background: rgba(0,0,0,0.3); border: 1px solid var(--border); color: #fff; padding: 18px; border-radius: 15px; text-align: center; font-size: 1.8rem; width: 100%; margin: 25px 0; letter-spacing: 10px;">
-            <button onclick="unlock()" style="width: 100%; padding: 18px; border-radius: 15px; border: none; background: var(--accent); color: #fff; font-weight: 900; cursor: pointer;">INITIALIZE AUDIT</button>
+        <div style="text-align: center; background: var(--glass); padding: 2.5rem; border-radius: 35px; border: 1px solid var(--border); max-width: 350px; width: 85%;">
+            <i class="bi bi-fingerprint" style="font-size: 3.5rem; color: var(--accent);"></i>
+            <h2 style="letter-spacing: -1px; margin-bottom: 20px;">BIO-SYNC SECURE</h2>
+            <input type="password" id="pass" placeholder="PIN" maxlength="4" style="background: rgba(0,0,0,0.3); border: 1px solid var(--border); color: #fff; padding: 15px; border-radius: 15px; text-align: center; font-size: 1.5rem; width: 100%; margin-bottom: 20px;">
+            <button onclick="unlock()" style="width: 100%; padding: 15px; border-radius: 15px; border: none; background: var(--accent); color: #fff; font-weight: 900; cursor: pointer;">ACCESS AUDIT</button>
         </div>
     </div>
 
     <div class="dashboard-wrapper" id="dash">
-        <header style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 35px;">
+        <header style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 30px;">
             <div>
-                <h1 style="margin:0; font-size: 2.5rem; letter-spacing: -1.5px;">ESTHETICS <span style="color: var(--accent);">HUB</span></h1>
-                <span style="font-size: 0.75rem; font-weight: 800; color: #64748b;"><i class="bi bi-safe2"></i> 3-MONTH REVENUE AUDIT</span>
+                <h1 style="margin:0; font-size: 1.8rem; letter-spacing: -1px;">ESTHETICS <span style="color: var(--accent);">HUB</span></h1>
+                <span id="active-users-pill" style="font-size: 0.7rem; color: var(--success); font-weight: 800;"><i class="bi bi-broadcast"></i> <span id="stat-active">0</span> LIVE VISITORS</span>
             </div>
             <div style="text-align: right;">
-                <h2 id="clock" style="margin:0; font-family: 'Courier New', monospace; color: var(--secondary); font-size: 2rem;">00:00:00</h2>
-                <small id="last-sync" style="color: var(--accent); font-weight: 700;">FETCHING AUDIT...</small>
+                <h2 id="clock" style="margin:0; font-family: monospace; color: var(--secondary); font-size: 1.4rem;">00:00:00</h2>
+                <small id="last-sync" style="color: #64748b; font-size: 0.6rem;">SYNCING...</small>
             </div>
         </header>
 
         <div class="stats-grid">
             <div class="card">
-                <span class="label">AdSense (Accumulated)</span>
+                <span class="label">AdSense Balance</span>
                 <div id="stat-adsense" class="value">$0.00</div>
                 <div class="progress-container"><div id="threshold-bar"></div></div>
-                <small id="threshold-text" style="color: var(--accent); font-size: 0.65rem; margin-top: 5px; display: block;">0% to Threshold</small>
+                <small id="threshold-text" style="color: var(--accent); font-size: 0.6rem; margin-top: 5px; display: block;">0% to Threshold</small>
             </div>
             <div class="card">
-                <span class="label">Total 3-Month Gross</span>
+                <span class="label">Affiliate Revenue</span>
+                <div id="stat-affiliate" class="value" style="color: var(--secondary);">$0.00</div>
+            </div>
+            <div class="card">
+                <span class="label">3-Month Total Gross</span>
                 <div id="stat-total-gross" class="value" style="color: var(--success);">$0.00</div>
-                <small style="color: #64748b;">All Streams Combined</small>
             </div>
             <div class="card">
-                <span class="label">Average Monthly</span>
-                <div id="stat-avg" class="value" style="color: var(--secondary);">$0.00</div>
-            </div>
-            <div class="card">
-                <span class="label">Next Scheduled Payout</span>
-                <div id="stat-payout" class="value">$0.00</div>
-                <small style="color: #64748b;">Est: Jan 21, 2026</small>
+                <span class="label">Avg/Month</span>
+                <div id="stat-avg" class="value" style="color: #fff;">$0.00</div>
             </div>
         </div>
 
         <div class="layout-split">
-            <div class="card" style="min-height: 400px;">
-                <span class="label">90-Day Revenue Trend</span>
-                <div style="height: 350px; margin-top: 20px;">
+            <div class="card" style="min-height: 350px;">
+                <span class="label">Revenue Performance Trend</span>
+                <div style="height: 300px; margin-top: 15px;">
                     <canvas id="mainChart"></canvas>
                 </div>
             </div>
 
             <div class="card">
-                <span class="label">Historical Audit</span>
+                <span class="label">Audit Ledger</span>
                 <table class="audit-table">
                     <thead>
                         <tr>
@@ -117,8 +132,7 @@
                             <th>Status</th>
                         </tr>
                     </thead>
-                    <tbody id="audit-body">
-                        </tbody>
+                    <tbody id="audit-body"></tbody>
                 </table>
             </div>
         </div>
@@ -126,7 +140,7 @@
 
 <script>
     let mainChart;
-    const AUTH_KEY = "1234";
+    const AUTH_KEY = "1234"; // Update this PIN as needed
 
     function unlock() {
         if(document.getElementById('pass').value === AUTH_KEY) {
@@ -136,6 +150,8 @@
                 document.getElementById('dash').style.display = 'block';
                 init();
             }, 500);
+        } else {
+            alert("Unauthorized Access");
         }
     }
 
@@ -145,47 +161,52 @@
             if (!response.ok) throw new Error();
             const data = await response.json();
 
-            // 1. Core Stat Updates
+            // 1. Audit Calculations
             const totalGross = data.history.reduce((sum, m) => sum + m.revenue, 0);
-            document.getElementById('stat-total-gross').innerText = `$${totalGross.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
-            document.getElementById('stat-avg').innerText = `$${(totalGross / 3).toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+            const avg = totalGross / data.history.length;
+            
+            document.getElementById('stat-total-gross').innerText = `$${totalGross.toFixed(2)}`;
+            document.getElementById('stat-avg').innerText = `$${avg.toFixed(2)}`;
 
-            // Trackers (AdSense & Payout)
+            // 2. Map Tracker IDs to UI
             data.trackers.forEach(t => {
                 const el = document.getElementById(t.id);
                 if(el) {
                     const val = typeof t.value === 'number' ? t.value : 0;
-                    el.innerText = `${t.prefix || ''}${val.toLocaleString(undefined, {minimumFractionDigits: 2})}${t.suffix || ''}`;
+                    if(t.id === 'stat-active') {
+                        el.innerText = val;
+                    } else {
+                        el.innerText = `$${val.toFixed(2)}`;
+                    }
                 }
             });
 
-            // 2. Threshold Progress
-            const adsense = data.trackers.find(t => t.id === 'stat-adsense').value;
-            const goal = data.payout_threshold || 100;
-            const pct = Math.min((adsense / goal) * 100, 100);
+            // 3. Threshold Logic
+            const adsense = data.trackers.find(t => t.id === 'stat-adsense')?.value || 0;
+            const threshold = data.payout_threshold || 100;
+            const pct = Math.min((adsense / threshold) * 100, 100);
             document.getElementById('threshold-bar').style.width = pct + '%';
-            document.getElementById('threshold-text').innerText = `${pct.toFixed(1)}% to Payout ($${goal})`;
+            document.getElementById('threshold-text').innerText = `${pct.toFixed(1)}% to $${threshold} Goal`;
 
-            // 3. Historical Table Generation
-            const auditBody = document.getElementById('audit-body');
-            auditBody.innerHTML = data.history.map(m => `
+            // 4. Update Audit Ledger
+            document.getElementById('audit-body').innerHTML = data.history.map(m => `
                 <tr>
                     <td><span style="font-weight:700;">${m.month}</span></td>
                     <td style="color:var(--secondary); font-family:monospace;">$${m.revenue.toFixed(2)}</td>
-                    <td><span style="font-size:0.7rem; padding:3px 8px; border-radius:10px; background:rgba(74,222,128,0.1); color:var(--success); border:1px solid var(--success);">${m.status}</span></td>
+                    <td><span class="status-pill" style="background:${m.status === 'PAID' ? 'rgba(74,222,128,0.1)' : 'rgba(183,33,255,0.1)'}; color:${m.status === 'PAID' ? 'var(--success)' : 'var(--accent)'}; border:1px solid ${m.status === 'PAID' ? 'var(--success)' : 'var(--accent)'};">${m.status}</span></td>
                 </tr>
             `).join('');
 
-            // 4. Chart Update (90-Day View)
+            // 5. Sync Chart
             if(data.chartData && mainChart) {
                 mainChart.data.labels = data.chartData.labels;
                 mainChart.data.datasets[0].data = data.chartData.points;
                 mainChart.update('none');
             }
 
-            document.getElementById('last-sync').innerText = `AUDIT SYNCED: ${new Date().toLocaleTimeString()}`;
+            document.getElementById('last-sync').innerText = `LAST SYNC: ${new Date().toLocaleTimeString()}`;
         } catch (e) {
-            document.getElementById('last-sync').innerText = "AUDIT OFFLINE";
+            document.getElementById('last-sync').innerText = "OFFLINE - RECONNECTING...";
         }
     }
 
@@ -196,13 +217,13 @@
             data: {
                 labels: [],
                 datasets: [{
-                    label: '90-Day Revenue',
+                    label: 'Trend',
                     data: [],
                     borderColor: '#b721ff',
-                    borderWidth: 4,
+                    borderWidth: 3,
                     tension: 0.4,
                     fill: true,
-                    backgroundColor: 'rgba(183, 33, 255, 0.1)',
+                    backgroundColor: 'rgba(183, 33, 255, 0.05)',
                     pointRadius: 4,
                     pointBackgroundColor: '#21d4fd'
                 }]
@@ -211,16 +232,16 @@
                 responsive: true, maintainAspectRatio: false,
                 plugins: { legend: { display: false } },
                 scales: {
-                    x: { grid: { display: false }, ticks: { color: '#64748b' } },
+                    x: { grid: { display: false }, ticks: { color: '#64748b', font: { size: 10 } } },
                     y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748b' } }
                 }
             }
         });
 
         syncData();
-        setInterval(syncData, 15000); 
+        setInterval(syncData, 10000); 
         setInterval(() => document.getElementById('clock').innerText = new Date().toLocaleTimeString(), 1000);
     }
 </script>
 </body>
-</html>
+                                                              </html>
