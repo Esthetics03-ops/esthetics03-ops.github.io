@@ -1,40 +1,21 @@
 import json
 import time
-import os
+import requests
+import threading
 from datetime import datetime
 from git import Repo
+from telegram import Update
+from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
 # --- CONFIGURATION ---
 JSON_PATH = "config.json"
-REPO_PATH = "./"  # The path to your local git repository
-COMMIT_MESSAGE = "🤖 Bio-Sync: Live Data Update"
+REPO_PATH = "./" 
+TOKEN = "YOUR_TELEGRAM_BOT_TOKEN"
+CHAT_ID = "YOUR_CHAT_ID"
 
-def fetch_live_metrics():
-    # Insert your actual data logic here
-    return {
-        "revenue": 12850.75,
-        "conversions": 425,
-        "latency": 21,
-        "ctr": 4.5
-    }
-
-def push_to_github():
-    try:
-        repo = Repo(REPO_PATH)
-        repo.git.add(JSON_PATH)
-        # Only commit if there are changes
-        if repo.is_dirty(untracked_files=True):
-            repo.index.commit(COMMIT_MESSAGE)
-            origin = repo.remote(name='origin')
-            origin.push()
-            print(f"✅ Successfully pushed to Repository at {datetime.now()}")
-        else:
-            print("px No data changes detected. Skipping push.")
-    except Exception as e:
-        print(f"❌ Git Error: {e}")
-
-def update_config():
-    metrics = fetch_live_metrics()
+# 1. THE CORE SYNC LOGIC
+def perform_sync():
+    metrics = {"revenue": 13450.00, "conversions": 462, "latency": 18, "ctr": 5.1}
     
     config_data = {
         "trackers": [
@@ -44,8 +25,8 @@ def update_config():
             {"id": "stat-ctr", "value": metrics['ctr'], "prefix": "", "suffix": "%"}
         ],
         "chartData": {
-            "labels": ["14:00", "15:00", "16:00", "17:00", "18:00", "19:00", datetime.now().strftime("%H:%M")],
-            "points": [80, 85, 82, 90, 88, 95, 99]
+            "labels": ["20:00", "21:00", "22:00", "23:00", "00:00", datetime.now().strftime("%H:%M")],
+            "points": [90, 95, 105, 110, 108, 115]
         },
         "forecast": metrics['revenue'] * 1.15,
         "goal": 20000
@@ -54,12 +35,42 @@ def update_config():
     with open(JSON_PATH, "w") as f:
         json.dump(config_data, f, indent=4)
     
-    # Auto-Push to GitHub
-    push_to_github()
+    try:
+        repo = Repo(REPO_PATH)
+        repo.git.add(JSON_PATH)
+        if repo.is_dirty():
+            repo.index.commit(f"⚡ Remote Force Update: {datetime.now().strftime('%H:%M')}")
+            repo.remote(name='origin').push()
+            return True
+    except Exception as e:
+        print(f"Git Error: {e}")
+    return False
 
-if __name__ == "__main__":
-    print("🚀 Bio-Sync Auto-Deploy Engine Active...")
+# 2. TELEGRAM COMMAND HANDLER
+async def sync_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    # Security: Only respond if the message is from YOU
+    if str(update.effective_chat.id) == CHAT_ID:
+        await update.message.reply_text("🚀 *Sync Triggered Remotely...*", parse_mode='Markdown')
+        success = perform_sync()
+        if success:
+            await update.message.reply_text("✅ *Dashboard Updated & Pushed to GitHub.*", parse_mode='Markdown')
+        else:
+            await update.message.reply_text("❌ *Sync Failed. Check local logs.*")
+
+# 3. BACKGROUND TIMER THREAD
+def background_timer():
     while True:
-        update_config()
-        # Sleep for 5 minutes (300s) to avoid hitting GitHub rate limits
-        time.sleep(300)
+        perform_sync()
+        time.sleep(300) # Auto-sync every 5 mins
+
+# 4. MAIN EXECUTION
+if __name__ == "__main__":
+    # Start the 5-minute timer in a separate background thread
+    timer_thread = threading.Thread(target=background_timer, daemon=True)
+    timer_thread.start()
+
+    # Start the Telegram Listener
+    print("🤖 Remote Control Bot Active. Send /sync on Telegram.")
+    app = ApplicationBuilder().token(TOKEN).build()
+    app.add_handler(CommandHandler("sync", sync_command))
+    app.run_polling()
