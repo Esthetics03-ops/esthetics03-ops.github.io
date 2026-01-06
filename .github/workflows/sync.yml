@@ -1,0 +1,29 @@
+name: Bio-Sync Real-Time Update
+
+on:
+  schedule:
+    - cron: '0 * * * *' # Runs every hour
+  workflow_dispatch: # Allows manual trigger
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Run Update Script
+        run: python update_metrics.py
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name 'Bio-Sync-Bot'
+          git config --global user.email 'bot@esthetics03.io'
+          git add config.json
+          git commit -m "Automated Metric Sync: $(date)"
+          git push
