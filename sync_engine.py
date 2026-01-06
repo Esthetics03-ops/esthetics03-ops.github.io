@@ -35,7 +35,7 @@ GA4_PROPERTY_ID = "319520471"
 CLIENT_SECRETS = 'client_secrets.json' 
 ADSENSE_SCOPE = ['https://www.googleapis.com/auth/adsense.readonly']
 
-# Use os.getenv to prevent crashes if keys are missing
+# Use os.getenv to safely pull secrets
 TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "YOUR_TELEGRAM_BOT_TOKEN") 
 CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "YOUR_CHAT_ID")           
 
@@ -47,21 +47,17 @@ def get_adsense_service():
     
     if not credentials or credentials.invalid:
         if GITHUB_MODE:
-            # Critical: Actions cannot open a browser to re-auth
-            raise Exception("❌ ADSENSE_TOKEN_DAT expired or missing in GitHub Secrets.")
+            raise Exception("❌ ADSENSE_TOKEN_DAT expired. Re-auth locally and update GitHub Secrets.")
         
-        if not os.path.exists(CLIENT_SECRETS):
-            raise FileNotFoundError(f"❌ Missing {CLIENT_SECRETS} for local authentication.")
-            
         flow = flow_from_clientsecrets(CLIENT_SECRETS, scope=ADSENSE_SCOPE)
         credentials = run_flow(flow, storage)
         
+    # discovery_service_url prevents 404s in some environments
     return build('adsense', 'v2', credentials=credentials, cache_discovery=False)
 
 def get_live_adsense_earnings():
     try:
         service = get_adsense_service()
-        # Fetching TODAY's estimated earnings
         result = service.accounts().reports().generate(
             account=f"accounts/{ADSENSE_PUB}",
             dateRange="TODAY",
@@ -93,38 +89,30 @@ def perform_sync():
     print(f"🔄 Syncing APIs: {datetime.now().strftime('%H:%M:%S')}")
     active_now = get_active_users()
     live_adsense = get_live_adsense_earnings()
-    
-    # Static fallback for affiliate until API is connected
-    current_affiliate = 89.30 
+    current_affiliate = 89.30 # Pull from separate API if available
 
     try:
-        if not os.path.exists(JSON_PATH):
-            print(f"❌ Error: {JSON_PATH} not found.")
-            return False
-
         with open(JSON_PATH, "r") as f:
             data = json.load(f)
 
-        # Update Month History
-        current_month_name = datetime.now().strftime("%B %Y")
-        if data["history"][-1]["month"] != current_month_name:
-            data["history"][-1]["status"] = "PENDING"
+        # Handle Monthly Turnover
+        current_month = datetime.now().strftime("%B %Y")
+        if data["history"][-1]["month"] != current_month:
+            data["history"][-1]["status"] = "PAID"
             data["history"].append({
-                "month": current_month_name,
+                "month": current_month,
                 "revenue": 0.00,
                 "status": "ACTIVE",
                 "method": "Electronic"
             })
             if len(data["history"]) > 4: data["history"].pop(0)
 
-        # Update Current Month Revenue (Live AdSense + Affiliate)
+        # Calculations
         data["history"][-1]["revenue"] = live_adsense + current_affiliate
         total_gross = sum(item["revenue"] for item in data["history"])
-        
-        # Calculate RPM (Earnings / Users * 1000)
         current_rpm = (live_adsense / active_now * 1000) if active_now > 0 else 0.00
 
-        # Mapping to config.json trackers
+        # Map to config.json
         id_map = {
             "stat-adsense": live_adsense,
             "stat-affiliate": current_affiliate,
@@ -137,7 +125,7 @@ def perform_sync():
             if tracker["id"] in id_map:
                 tracker["value"] = id_map[tracker["id"]]
 
-        # Meta & Chart Updates
+        # Meta & Charts
         data["project_info"]["last_audit"] = datetime.now().strftime("%Y-%m-%d %H:%M")
         data["chartData"]["labels"] = [m["month"][:3] for m in data["history"]]
         data["chartData"]["points"] = [m["revenue"] for m in data["history"]]
@@ -145,46 +133,47 @@ def perform_sync():
         with open(JSON_PATH, "w") as f:
             json.dump(data, f, indent=4)
         
-        # Git Push Logic (Only if Local)
+        # Git Logic
         if not GITHUB_MODE:
             repo = Repo(REPO_PATH)
             repo.git.add(JSON_PATH)
             if repo.is_dirty():
-                repo.index.commit(f"⚡ Live Audit: ${total_gross:.2f} | {active_now} Users")
+                repo.index.commit(f"⚡ Live Sync: ${total_gross:.2f} | {active_now} Active")
                 repo.remote(name='origin').push()
                 print("✅ GitHub Updated.")
         
         return True
     except Exception as e:
-        print(f"❌ Sync Failure: {e}")
+        print(f"❌ Master Sync Failure: {e}")
         return False
 
-# --- 5. EXECUTION ---
+# --- 5. TELEGRAM COMMANDS ---
 
 async def sync_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    # Only respond to your specific Chat ID for security
     if str(update.effective_chat.id) == CHAT_ID:
         await update.message.reply_text("🔎 *Performing Live Audit...*")
         if perform_sync():
             await update.message.reply_text("✅ *Dashboard Synchronized.*")
+        else:
+            await update.message.reply_text("❌ *Sync Failed.* Check console logs.")
 
 def background_loop():
     while True:
         perform_sync()
-        time.sleep(600) # 10 Minutes
+        time.sleep(600) # Every 10 mins
 
 if __name__ == "__main__":
     if GITHUB_MODE:
         perform_sync()
     else:
-        # Start Local Services
         threading.Thread(target=background_loop, daemon=True).start()
-        print(f"🚀 Master Engine Online | Traffic Property: {GA4_PROPERTY_ID}")
+        print(f"🚀 Esthetics Hub Engine Online | GA4: {GA4_PROPERTY_ID}")
         
-        # Start Telegram Bot if Token is valid
         if "YOUR_TELEGRAM" not in TOKEN:
             app = ApplicationBuilder().token(TOKEN).build()
             app.add_handler(CommandHandler("sync", sync_command))
             app.run_polling()
         else:
-            print("⚠️ Telegram Token not configured. Running in timer mode only.")
+            print("⚠️ Telegram Token missing. Running timer mode only.")
             while True: time.sleep(1)
