@@ -3,10 +3,12 @@
     "name": "The Esthetics Hub",
     "version": "2.2.0",
     "last_audit": "2026-01-07",
+    "last_sync_timestamp": 1736205467,
     "status": "active"
   },
   "auth": {
     "GA4_PROPERTIES": ["G-QCX3G9KSPC", "G-PSW1MY7HB4"],
+    "GA4_NUMERIC_ID": "319520471",
     "ADSENSE_PUB_ID": "pub-1959507280210179",
     "AFFILIATE_ID": "esthetics-hub-affiliate"
   },
@@ -15,25 +17,36 @@
       "id": "stat-adsense",
       "value": 156.45,
       "prefix": "$",
-      "suffix": ""
+      "suffix": "",
+      "label": "AdSense Today"
+    },
+    {
+      "id": "stat-rpm",
+      "value": 4.25,
+      "prefix": "$",
+      "suffix": " RPM",
+      "note": "Efficiency per 1k users"
     },
     {
       "id": "stat-affiliate",
       "value": 89.30,
       "prefix": "$",
-      "suffix": ""
+      "suffix": "",
+      "label": "Affiliate Balance"
     },
     {
       "id": "stat-active",
-      "value": 0,
+      "value": 12,
       "prefix": "",
-      "suffix": " live"
+      "suffix": " LIVE",
+      "label": "Active Users"
     },
     {
-      "id": "stat-payout",
-      "value": 1245.80,
+      "id": "stat-total-gross",
+      "value": 3122.30,
       "prefix": "$",
-      "suffix": ""
+      "suffix": "",
+      "label": "3-Month Total"
     }
   ],
   "history": [
@@ -52,7 +65,7 @@
     {
       "month": "December 2025",
       "revenue": 1105.60,
-      "status": "PAID",
+      "status": "PENDING",
       "method": "Electronic"
     },
     {
@@ -62,23 +75,19 @@
       "method": "Electronic"
     }
   ],
-  "trending_articles": [
-    { "title": "Bio-Sync Survival Guide", "views": "2.4k" },
-    { "title": "2026 Revenue Trends", "views": "1.8k" },
-    { "title": "Affiliate Marketing Pro", "views": "950" }
-  ],
   "chartData": {
     "labels": ["Oct", "Nov", "Dec", "Jan"],
     "points": [850.40, 920.15, 1105.60, 245.75]
   },
   "payout_threshold": 100.00,
   "targets": {
-    "monthly_adsense_goal": 100.00,
+    "monthly_adsense_goal": 500.00,
     "payout_currency": "USD",
-    "payout_day": 21
+    "payout_day": 21,
+    "rpm_danger_zone": 1.50
   },
   "endpoints": {
     "status_check": "https://esthetics03-ops.github.io/health",
-    "revenue_stream": "https://api.estheticshub.live/v1/sync"
+    "github_pages": "https://esthetics03-ops.github.io/"
   }
 }
