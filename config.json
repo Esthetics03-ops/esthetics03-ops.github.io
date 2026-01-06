@@ -1,8 +1,8 @@
 {
   "project_info": {
     "name": "The Esthetics Hub",
-    "version": "2.0.1",
-    "last_audit": "2025-12-31",
+    "version": "2.1.0",
+    "last_audit": "2026-01-07",
     "status": "active"
   },
   "auth": {
@@ -12,34 +12,49 @@
   },
   "trackers": [
     {
-      "id": "stat-revenue",
-      "value": 124.50,
+      "id": "stat-adsense",
+      "value": 54.20,
       "prefix": "$",
       "suffix": ""
     },
     {
-      "id": "stat-conv",
-      "value": 412,
-      "prefix": "",
+      "id": "stat-affiliate",
+      "value": 89.30,
+      "prefix": "$",
       "suffix": ""
     },
     {
-      "id": "stat-latency",
-      "value": 22,
+      "id": "stat-active",
+      "value": 24,
       "prefix": "",
-      "suffix": "ms"
+      "suffix": " live"
     },
     {
-      "id": "stat-ctr",
-      "value": 4.2,
-      "prefix": "",
-      "suffix": "%"
+      "id": "stat-payout",
+      "value": 143.50,
+      "prefix": "$",
+      "suffix": ""
+    }
+  ],
+  "trending_articles": [
+    {
+      "title": "Bio-Sync Survival Guide",
+      "views": "2.4k"
+    },
+    {
+      "title": "2026 Revenue Trends",
+      "views": "1.8k"
+    },
+    {
+      "title": "Affiliate Marketing Pro",
+      "views": "950"
     }
   ],
   "chartData": {
-    "labels": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-    "points": [65, 59, 80, 81, 56, 55, 92]
+    "labels": ["18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "00:00"],
+    "points": [110, 115, 120, 135, 130, 140, 143.5]
   },
+  "payout_threshold": 100.00,
   "targets": {
     "monthly_adsense_goal": 100.00,
     "payout_currency": "USD",
