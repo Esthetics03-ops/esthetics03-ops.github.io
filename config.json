@@ -15,15 +15,25 @@
       "id": "stat-adsense",
       "value": 156.45,
       "prefix": "$",
-      "suffix": "",
-      "note": "Current unpaid balance"
+      "suffix": ""
+    },
+    {
+      "id": "stat-affiliate",
+      "value": 89.30,
+      "prefix": "$",
+      "suffix": ""
+    },
+    {
+      "id": "stat-active",
+      "value": 0,
+      "prefix": "",
+      "suffix": " live"
     },
     {
       "id": "stat-payout",
       "value": 1245.80,
       "prefix": "$",
-      "suffix": "",
-      "note": "Total expected across all streams"
+      "suffix": ""
     }
   ],
   "history": [
@@ -42,7 +52,13 @@
     {
       "month": "December 2025",
       "revenue": 1105.60,
-      "status": "PENDING",
+      "status": "PAID",
+      "method": "Electronic"
+    },
+    {
+      "month": "January 2026",
+      "revenue": 245.75,
+      "status": "ACTIVE",
       "method": "Electronic"
     }
   ],
@@ -52,8 +68,8 @@
     { "title": "Affiliate Marketing Pro", "views": "950" }
   ],
   "chartData": {
-    "labels": ["Oct", "Nov", "Dec", "Jan (Projected)"],
-    "points": [850.40, 920.15, 1105.60, 1245.80]
+    "labels": ["Oct", "Nov", "Dec", "Jan"],
+    "points": [850.40, 920.15, 1105.60, 245.75]
   },
   "payout_threshold": 100.00,
   "targets": {
