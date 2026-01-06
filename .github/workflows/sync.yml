@@ -1,44 +1,26 @@
-name: Bio-Sync Live API Update
-
+name: Bio-Sync Live Audit
 on:
   schedule:
-    - cron: '0 * * * *' # Runs exactly at the start of every hour
-  workflow_dispatch: # Allows you to click "Run Workflow" manually in GitHub
+    - cron: '0 * * * *'
+  workflow_dispatch:
 
 jobs:
-  sync-data:
+  audit:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
+      - uses: actions/checkout@v4
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
-
-      - name: Install Dependencies
-        run: |
-          pip install google-api-python-client>=2.118.0 \
-                      google-auth>=2.25.0 \
-                      google-analytics-data \
-                      oauth2client \
-                      GitPython \
-                      python-telegram-bot
-
-      - name: Run Master Engine
-        env:
-          # These pull from your Settings > Secrets > Actions
-          GOOGLE_CREDENTIALS_JSON: ${{ secrets.GOOGLE_CREDENTIALS_JSON }}
-          ADSENSE_TOKEN_DAT: ${{ secrets.ADSENSE_TOKEN_DAT }}
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      - name: Install Google SDK
+        run: pip install google-analytics-data
+      - name: Execute Live Pull
         run: python main.py
-
-      - name: Commit and Push Changes
+      - name: Push Dynamic Changes
         run: |
           git config --global user.name "Bio-Sync Bot"
           git config --global user.email "bot@bio-sync.live"
           git add config.json
-          # Only push if config.json actually changed to avoid empty commits
-          git diff --quiet && git diff --staged --quiet || (git commit -m "⚡ Live API Pull: $(date)" && git push)
+          git commit -m "⚡ API Update: $(date)" || exit 0
+          git push
