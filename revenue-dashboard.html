@@ -2,261 +2,211 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Bio-Sync | Master Admin Audit</title>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Esthetics Hub | Financial Core</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-
     <style>
         :root {
-            --primary: #2d5a27; --accent: #b721ff; --secondary: #21d4fd;
-            --bg: #030712; --glass: rgba(255, 255, 255, 0.05);
-            --border: rgba(255, 255, 255, 0.1); --success: #4ade80; --danger: #ff4b2b;
-            --warning: #facc15;
+            --bg: #050505; --card: #111111; --primary: #00ff88; --accent: #7000ff;
+            --text: #ffffff; --dim: #888888; --border: #222222;
+            --success: #00ff88; --warning: #ffaa00; --danger: #ff4444;
         }
-
-        body { 
-            font-family: 'Inter', system-ui, sans-serif; 
-            background: radial-gradient(circle at top left, #1e1b4b 0%, #030712 100%);
-            color: #f8fafc; margin: 0; min-height: 100vh; overflow-x: hidden;
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif; background: var(--bg);
+            color: var(--text); margin: 0; overflow-x: hidden;
         }
-
-        #lock-screen {
-            position: fixed; inset: 0; z-index: 9999; background: var(--bg);
-            display: flex; align-items: center; justify-content: center; transition: 0.8s;
+        /* Secure Entrance */
+        #gate {
+            position: fixed; inset: 0; background: var(--bg); z-index: 100;
+            display: flex; align-items: center; justify-content: center;
         }
-
-        .dashboard-wrapper { width: 100%; max-width: 1400px; margin: 0 auto; padding: 15px; display: none; box-sizing: border-box; }
+        .gate-card {
+            background: var(--card); padding: 40px; border-radius: 30px;
+            border: 1px solid var(--border); text-align: center;
+        }
+        /* Layout */
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; display: none; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 20px; }
         
-        .stats-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
-            gap: 15px; 
-            margin-bottom: 25px; 
-        }
-        
+        /* Cards */
         .card {
-            background: var(--glass); border: 1px solid var(--border);
-            padding: 1.2rem; border-radius: 24px; backdrop-filter: blur(15px);
-            transition: 0.3s ease; position: relative; overflow: hidden;
+            background: var(--card); border: 1px solid var(--border);
+            padding: 24px; border-radius: 20px; position: relative;
         }
-        .card:hover { border-color: var(--accent); transform: translateY(-3px); }
+        .val { font-size: 2.2rem; font-weight: 800; margin: 10px 0; font-variant-numeric: tabular-nums; }
+        .label { font-size: 0.75rem; color: var(--dim); text-transform: uppercase; letter-spacing: 1px; }
 
-        .value { font-size: 1.7rem; font-weight: 900; color: #fff; margin: 5px 0; font-variant-numeric: tabular-nums; }
-        .label { color: #94a3b8; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; display: block; }
-
-        .layout-split { display: grid; grid-template-columns: 1fr; gap: 20px; }
-        @media (min-width: 1100px) { .layout-split { grid-template-columns: 2fr 1fr; } }
-
-        .audit-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.8rem; }
-        .audit-table th { text-align: left; color: #64748b; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
-        .audit-table td { padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
-
-        .status-pill { font-size: 0.6rem; padding: 2px 8px; border-radius: 8px; font-weight: 800; border: 1px solid transparent; }
-
-        .progress-container { height: 6px; background: rgba(255,255,255,0.05); border-radius: 10px; margin-top: 10px; overflow: hidden; }
-        #threshold-bar { height: 100%; background: linear-gradient(90deg, var(--accent), var(--secondary)); width: 0%; transition: 1.5s ease; }
-
-        /* Efficiency Alert Styling */
-        .alert-low-rpm { border-color: var(--danger) !important; animation: border-pulse 2s infinite; }
-        @keyframes border-pulse { 
-            0% { box-shadow: 0 0 0 0 rgba(255, 75, 43, 0.4); } 
-            70% { box-shadow: 0 0 0 10px rgba(255, 75, 43, 0); } 
-            100% { box-shadow: 0 0 0 0 rgba(255, 75, 43, 0); } 
+        /* Bank Reconciler Specifics */
+        .recon-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .recon-table th { text-align: left; font-size: 0.7rem; color: var(--dim); padding-bottom: 10px; }
+        .recon-table td { padding: 12px 0; border-top: 1px solid var(--border); font-size: 0.9rem; }
+        .status-pill {
+            padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 700;
         }
+        .status-estimated { background: rgba(255,170,0,0.1); color: var(--warning); border: 1px solid var(--warning); }
+        .status-finalized { background: rgba(112,0,255,0.1); color: var(--accent); border: 1px solid var(--accent); }
+        .status-transit { background: rgba(0,255,136,0.1); color: var(--primary); border: 1px solid var(--primary); animation: blink 1.5s infinite; }
+        .status-paid { background: #222; color: #fff; opacity: 0.6; }
 
-        @media (max-width: 600px) {
-            header { flex-direction: column; align-items: flex-start !important; gap: 15px; }
-            .value { font-size: 1.5rem; }
+        @keyframes blink { 50% { opacity: 0.4; } }
+
+        /* Payout Timeline UI */
+        .timeline-bar {
+            height: 8px; background: #222; border-radius: 4px; margin: 20px 0; overflow: hidden;
         }
+        .timeline-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--primary)); width: 0%; transition: 1s ease; }
     </style>
 </head>
 <body>
 
-    <div id="lock-screen">
-        <div style="text-align: center; background: var(--glass); padding: 2.5rem; border-radius: 35px; border: 1px solid var(--border); max-width: 350px; width: 85%;">
-            <i class="bi bi-shield-lock" style="font-size: 3.5rem; color: var(--accent);"></i>
-            <h2 style="letter-spacing: -1px; margin-bottom: 20px;">BIO-SYNC AUTH</h2>
-            <input type="password" id="pass" placeholder="PIN" maxlength="4" style="background: rgba(0,0,0,0.3); border: 1px solid var(--border); color: #fff; padding: 15px; border-radius: 15px; text-align: center; font-size: 1.5rem; width: 100%; margin-bottom: 20px; letter-spacing: 5px;">
-            <button onclick="unlock()" style="width: 100%; padding: 15px; border-radius: 15px; border: none; background: var(--accent); color: #fff; font-weight: 900; cursor: pointer;">ACCESS AUDIT</button>
+    <div id="gate">
+        <div class="gate-card">
+            <i class="bi bi-shield-lock" style="font-size: 3rem; color: var(--primary);"></i>
+            <h3>Master Ledger Access</h3>
+            <input type="password" id="pin" placeholder="Enter PIN" style="background:#000; border:1px solid var(--border); color:#fff; padding:12px; border-radius:10px; width:100%; box-sizing:border-box; text-align:center; font-size:1.2rem; margin:20px 0;">
+            <button onclick="auth()" style="background:var(--primary); color:#000; font-weight:800; border:none; padding:12px 30px; border-radius:10px; cursor:pointer; width:100%;">UNLOCK SYSTEM</button>
         </div>
     </div>
 
-    <div class="dashboard-wrapper" id="dash">
-        <header style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 30px;">
+    <div class="container" id="app">
+        <header style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:40px;">
             <div>
-                <h1 style="margin:0; font-size: 1.8rem; letter-spacing: -1px;">BIO-SYNC <span style="color: var(--accent);">HUB</span></h1>
-                <span style="font-size: 0.7rem; color: var(--success); font-weight: 800;"><i class="bi bi-broadcast"></i> <span id="stat-active">0</span> LIVE VISITORS</span>
+                <h1 style="margin:0;">ESTHETICS <span style="color:var(--primary)">HUB</span></h1>
+                <p id="audit-string" style="color:var(--dim); font-size:0.8rem; margin:5px 0;">ID: 319520471 | API: CONNECTED</p>
             </div>
-            <div style="text-align: right;">
-                <h2 id="clock" style="margin:0; font-family: monospace; color: var(--secondary); font-size: 1.4rem;">00:00:00</h2>
-                <small id="last-sync" style="color: #64748b; font-size: 0.6rem;">INITIALIZING API...</small>
+            <div style="text-align:right">
+                <div class="label">Next Payment Window</div>
+                <div id="countdown" style="font-weight:800; color:var(--warning)">Calculating...</div>
             </div>
         </header>
 
-        <div class="stats-grid">
+        <div class="grid">
             <div class="card">
-                <span class="label">AdSense Today</span>
-                <div id="stat-adsense" class="value">$0.00</div>
-                <div class="progress-container"><div id="threshold-bar"></div></div>
-                <small id="threshold-text" style="color: var(--accent); font-size: 0.6rem; margin-top: 5px; display: block;">Loading Payout Progress...</small>
+                <div class="label">Live Traffic (Actual)</div>
+                <div id="stat-active" class="val">--</div>
+                <div style="font-size:0.7rem; color:var(--primary)"><i class="bi bi-broadcast"></i> Syncing from GA4 Properties</div>
             </div>
-
-            <div id="rpm-card" class="card">
-                <span class="label">Traffic Efficiency (RPM)</span>
-                <div id="stat-rpm" class="value" style="color: var(--accent);">$0.00</div>
-                <small id="rpm-status" style="color: #64748b; font-size: 0.6rem;">Real-time Efficiency</small>
-            </div>
-
             <div class="card">
-                <span class="label">Affiliate Revenue</span>
-                <div id="stat-affiliate" class="value" style="color: var(--secondary);">$0.00</div>
+                <div class="label">Today's Earnings</div>
+                <div id="stat-adsense" class="val">$0.00</div>
+                <div class="timeline-bar"><div id="threshold-progress" class="timeline-fill"></div></div>
+                <div style="font-size:0.7rem; color:var(--dim)">Target: $100.00 Payout Minimum</div>
             </div>
-
             <div class="card">
-                <span class="label">Total Gross</span>
-                <div id="stat-total-gross" class="value" style="color: var(--success);">$0.00</div>
+                <div class="label">Account Balance</div>
+                <div id="stat-total-gross" class="val" style="color:var(--primary)">$0.00</div>
+                <div style="font-size:0.7rem; color:var(--dim)">Verified Net Total</div>
             </div>
         </div>
 
-        <div class="layout-split">
-            <div class="card" style="min-height: 400px;">
-                <span class="label">Revenue Performance Trend</span>
-                <div style="height: 340px; margin-top: 15px;">
-                    <canvas id="mainChart"></canvas>
-                </div>
+        <div class="grid" style="grid-template-columns: 2fr 1fr;">
+            <div class="card">
+                <div class="label">Bank Reconciler & Fund Status</div>
+                <table class="recon-table">
+                    <thead>
+                        <tr>
+                            <th>REVENUE SOURCE</th>
+                            <th>PERIOD</th>
+                            <th>AMOUNT</th>
+                            <th>BANK STATUS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recon-body">
+                        </tbody>
+                </table>
             </div>
 
             <div class="card">
-                <span class="label">Historical Audit Trail</span>
-                <table class="audit-table">
-                    <thead>
-                        <tr>
-                            <th>Month</th>
-                            <th>Revenue</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="audit-body"></tbody>
-                </table>
+                <div class="label">Revenue Trend</div>
+                <canvas id="miniChart" style="margin-top:20px; height:150px;"></canvas>
+                <div style="margin-top:20px;">
+                    <div class="label">System Version</div>
+                    <div style="font-size:0.8rem;">Bio-Sync v2.4.0 Optimized</div>
+                </div>
             </div>
         </div>
     </div>
 
 <script>
-    let mainChart;
-    const AUTH_KEY = "1234";
-    const RPM_MIN_THRESHOLD = 1.50; 
+    const CONFIG = { pin: "1234", threshold: 100.00 };
+    let chart;
 
-    function unlock() {
-        if(document.getElementById('pass').value === AUTH_KEY) {
-            document.getElementById('lock-screen').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('lock-screen').style.display = 'none';
-                document.getElementById('dash').style.display = 'block';
-                init();
-            }, 500);
-        } else { alert("Unauthorized"); }
-    }
-
-    async function syncData() {
-        try {
-            // Added cache buster to ensure ACTUAL live pulls from GitHub
-            const response = await fetch(`./config.json?nocache=${Date.now()}`);
-            const data = await response.json();
-
-            // 1. Map Stats from Trackers Array
-            data.trackers.forEach(t => {
-                const el = document.getElementById(t.id);
-                if(el) {
-                    const val = parseFloat(t.value) || 0;
-                    if(t.id === 'stat-active') {
-                        el.innerText = Math.floor(val);
-                    } else {
-                        el.innerText = `$${val.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
-                    }
-
-                    // Low RPM Alert Logic
-                    if(t.id === 'stat-rpm') {
-                        const rpmCard = document.getElementById('rpm-card');
-                        const statusText = document.getElementById('rpm-status');
-                        if(val < RPM_MIN_THRESHOLD && val > 0) {
-                            rpmCard.classList.add('alert-low-rpm');
-                            statusText.innerHTML = '<i class="bi bi-exclamation-triangle-fill"></i> PERFORMANCE ALERT';
-                            statusText.style.color = 'var(--danger)';
-                        } else {
-                            rpmCard.classList.remove('alert-low-rpm');
-                            statusText.innerText = 'Efficiency (Revenue / 1k)';
-                            statusText.style.color = '#64748b';
-                        }
-                    }
-                }
-            });
-
-            // 2. Payout Progress Logic
-            const adsenseVal = data.trackers.find(t => t.id === 'stat-adsense')?.value || 0;
-            const threshold = data.payout_threshold || 100;
-            const progressPct = Math.min((adsenseVal / threshold) * 100, 100);
-            document.getElementById('threshold-bar').style.width = progressPct + '%';
-            document.getElementById('threshold-text').innerText = `${progressPct.toFixed(1)}% of $${threshold} goal`;
-
-            // 3. Historical Table
-            document.getElementById('audit-body').innerHTML = data.history.map(m => `
-                <tr>
-                    <td><span style="font-weight:700;">${m.month}</span></td>
-                    <td style="color:var(--secondary); font-family:monospace;">$${m.revenue.toFixed(2)}</td>
-                    <td><span class="status-pill" style="background:${m.status === 'PAID' ? 'rgba(74,222,128,0.1)' : 'rgba(183,33,255,0.1)'}; color:${m.status === 'PAID' ? 'var(--success)' : 'var(--accent)'}; border:1px solid ${m.status === 'PAID' ? 'var(--success)' : 'var(--accent)'};">${m.status}</span></td>
-                </tr>
-            `).join('');
-
-            // 4. Update Chart
-            if(mainChart && data.chartData) {
-                mainChart.data.labels = data.chartData.labels;
-                mainChart.data.datasets[0].data = data.chartData.points;
-                mainChart.update('none');
-            }
-
-            document.getElementById('last-sync').innerText = `LIVE AUDIT: ${new Date().toLocaleTimeString()}`;
-        } catch (e) { 
-            console.error("Sync Error:", e);
-            document.getElementById('last-sync').innerText = "RECONNECTING TO HUB..."; 
+    function auth() {
+        if(document.getElementById('pin').value === CONFIG.pin) {
+            document.getElementById('gate').style.display = 'none';
+            document.getElementById('app').style.display = 'block';
+            sync();
         }
     }
 
-    function init() {
-        const ctx = document.getElementById('mainChart').getContext('2d');
-        mainChart = new Chart(ctx, {
-            type: 'line',
+    async function sync() {
+        try {
+            const res = await fetch(`./config.json?v=${Date.now()}`);
+            const data = await res.json();
+
+            // Update Primary Stats
+            data.trackers.forEach(t => {
+                const el = document.getElementById(t.id);
+                if(el) el.innerText = t.id === 'stat-active' ? t.value : `$${t.value.toLocaleString()}`;
+            });
+
+            // Threshold Logic
+            const adsenseToday = data.trackers.find(t => t.id === 'stat-adsense').value;
+            const progress = (adsenseToday / CONFIG.threshold) * 100;
+            document.getElementById('threshold-progress').style.width = Math.min(progress, 100) + '%';
+
+            // Payout Countdown Logic (Target 21st)
+            const today = new Date();
+            const target = new Date(today.getFullYear(), today.getMonth(), 21);
+            if(today.getDate() > 21) target.setMonth(target.getMonth() + 1);
+            const diff = Math.ceil((target - today) / (1000*60*60*24));
+            document.getElementById('countdown').innerText = `${diff} Days to Payment`;
+
+            // Bank Reconciler Map
+            // This translates the history status into detailed bank phases
+            const statusMap = {
+                "ACTIVE": { text: "ESTIMATED", class: "status-estimated" },
+                "PENDING": { text: "FINALIZED", class: "status-finalized" },
+                "TRANSIT": { text: "IN TRANSIT", class: "status-transit" },
+                "PAID": { text: "SETTLED", class: "status-paid" }
+            };
+
+            document.getElementById('recon-body').innerHTML = data.history.reverse().map(item => {
+                const s = statusMap[item.status] || statusMap.ACTIVE;
+                return `
+                    <tr>
+                        <td><b>AdSense</b></td>
+                        <td>${item.month}</td>
+                        <td style="font-weight:700;">$${item.revenue.toFixed(2)}</td>
+                        <td><span class="status-pill ${s.class}">${s.text}</span></td>
+                    </tr>
+                `;
+            }).join('');
+
+            updateChart(data.chartData);
+        } catch(e) { console.error("Sync Error:", e); }
+    }
+
+    function updateChart(chartData) {
+        if(chart) chart.destroy();
+        const ctx = document.getElementById('miniChart').getContext('2d');
+        chart = new Chart(ctx, {
+            type: 'bar',
             data: {
-                labels: [],
+                labels: chartData.labels,
                 datasets: [{
-                    data: [],
-                    borderColor: '#b721ff',
-                    backgroundColor: 'rgba(183, 33, 255, 0.1)',
-                    borderWidth: 3,
-                    tension: 0.4,
-                    fill: true,
-                    pointRadius: 4,
-                    pointBackgroundColor: '#21d4fd'
+                    label: 'Revenue',
+                    data: chartData.points,
+                    backgroundColor: '#7000ff',
+                    borderRadius: 5
                 }]
             },
-            options: {
-                responsive: true, maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    x: { grid: { display: false }, ticks: { color: '#64748b' } },
-                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748b' } }
-                }
-            }
+            options: { plugins:{legend:{display:false}}, scales:{y:{display:false}, x:{grid:{display:false}, ticks:{color:'#888'}}} }
         });
-
-        syncData();
-        setInterval(syncData, 15000); 
-        setInterval(() => {
-            document.getElementById('clock').innerText = new Date().toLocaleTimeString();
-        }, 1000);
     }
+
+    setInterval(sync, 60000);
 </script>
 </body>
-    </html>
+                                                                    </html>
