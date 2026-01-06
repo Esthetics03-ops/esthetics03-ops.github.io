@@ -13,6 +13,7 @@
             --primary: #2d5a27; --accent: #b721ff; --secondary: #21d4fd;
             --bg: #030712; --glass: rgba(255, 255, 255, 0.05);
             --border: rgba(255, 255, 255, 0.1); --success: #4ade80; --danger: #ff4b2b;
+            --warning: #facc15;
         }
 
         body { 
@@ -21,18 +22,17 @@
             color: #f8fafc; margin: 0; min-height: 100vh; overflow-x: hidden;
         }
 
-        /* Lock Screen */
         #lock-screen {
             position: fixed; inset: 0; z-index: 9999; background: var(--bg);
             display: flex; align-items: center; justify-content: center; transition: 0.8s;
         }
 
-        /* Dashboard Layout */
         .dashboard-wrapper { width: 100%; max-width: 1400px; margin: 0 auto; padding: 15px; display: none; box-sizing: border-box; }
         
+        /* Updated Grid for 5 Cards */
         .stats-grid { 
             display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); 
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
             gap: 15px; 
             margin-bottom: 25px; 
         }
@@ -44,29 +44,28 @@
         }
         .card:hover { border-color: var(--accent); transform: translateY(-3px); }
 
-        .value { font-size: 1.8rem; font-weight: 900; color: #fff; margin: 5px 0; font-variant-numeric: tabular-nums; word-break: break-all; }
+        .value { font-size: 1.7rem; font-weight: 900; color: #fff; margin: 5px 0; font-variant-numeric: tabular-nums; word-break: break-all; }
         .label { color: #94a3b8; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; display: block; }
 
-        /* Responsive Grid Split */
         .layout-split { display: grid; grid-template-columns: 1fr; gap: 20px; }
         @media (min-width: 1100px) { .layout-split { grid-template-columns: 2fr 1fr; } }
 
-        /* Audit Table */
         .audit-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.8rem; }
         .audit-table th { text-align: left; color: #64748b; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
         .audit-table td { padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
 
         .status-pill { font-size: 0.6rem; padding: 2px 8px; border-radius: 8px; font-weight: 800; }
 
-        /* Progress Bar */
         .progress-container { height: 6px; background: rgba(255,255,255,0.05); border-radius: 10px; margin-top: 10px; overflow: hidden; }
-        #threshold-bar { height: 100%; background: linear-gradient(90deg, var(--accent), var(--secondary)); width: 0%; transition: 1.5s ease; box-shadow: 0 0 10px var(--accent); }
+        #threshold-bar { height: 100%; background: linear-gradient(90deg, var(--accent), var(--secondary)); width: 0%; transition: 1.5s ease; }
 
-        /* Mobile Adjustments */
+        /* Efficiency Alert Styling */
+        .alert-low-rpm { border-color: var(--danger) !important; animation: border-pulse 2s infinite; }
+        @keyframes border-pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 75, 43, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(255, 75, 43, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 75, 43, 0); } }
+
         @media (max-width: 600px) {
             header { flex-direction: column; align-items: flex-start !important; gap: 15px; }
             .value { font-size: 1.5rem; }
-            .card { padding: 1rem; }
         }
     </style>
 </head>
@@ -74,9 +73,9 @@
 
     <div id="lock-screen">
         <div style="text-align: center; background: var(--glass); padding: 2.5rem; border-radius: 35px; border: 1px solid var(--border); max-width: 350px; width: 85%;">
-            <i class="bi bi-fingerprint" style="font-size: 3.5rem; color: var(--accent);"></i>
-            <h2 style="letter-spacing: -1px; margin-bottom: 20px;">BIO-SYNC SECURE</h2>
-            <input type="password" id="pass" placeholder="PIN" maxlength="4" style="background: rgba(0,0,0,0.3); border: 1px solid var(--border); color: #fff; padding: 15px; border-radius: 15px; text-align: center; font-size: 1.5rem; width: 100%; margin-bottom: 20px;">
+            <i class="bi bi-shield-lock" style="font-size: 3.5rem; color: var(--accent);"></i>
+            <h2 style="letter-spacing: -1px; margin-bottom: 20px;">BIO-SYNC AUTH</h2>
+            <input type="password" id="pass" placeholder="PIN" maxlength="4" style="background: rgba(0,0,0,0.3); border: 1px solid var(--border); color: #fff; padding: 15px; border-radius: 15px; text-align: center; font-size: 1.5rem; width: 100%; margin-bottom: 20px; letter-spacing: 5px;">
             <button onclick="unlock()" style="width: 100%; padding: 15px; border-radius: 15px; border: none; background: var(--accent); color: #fff; font-weight: 900; cursor: pointer;">ACCESS AUDIT</button>
         </div>
     </div>
@@ -85,7 +84,7 @@
         <header style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 30px;">
             <div>
                 <h1 style="margin:0; font-size: 1.8rem; letter-spacing: -1px;">ESTHETICS <span style="color: var(--accent);">HUB</span></h1>
-                <span id="active-users-pill" style="font-size: 0.7rem; color: var(--success); font-weight: 800;"><i class="bi bi-broadcast"></i> <span id="stat-active">0</span> LIVE VISITORS</span>
+                <span style="font-size: 0.7rem; color: var(--success); font-weight: 800;"><i class="bi bi-broadcast"></i> <span id="stat-active">0</span> LIVE VISITORS</span>
             </div>
             <div style="text-align: right;">
                 <h2 id="clock" style="margin:0; font-family: monospace; color: var(--secondary); font-size: 1.4rem;">00:00:00</h2>
@@ -95,35 +94,44 @@
 
         <div class="stats-grid">
             <div class="card">
-                <span class="label">AdSense Balance</span>
+                <span class="label">AdSense Today</span>
                 <div id="stat-adsense" class="value">$0.00</div>
                 <div class="progress-container"><div id="threshold-bar"></div></div>
-                <small id="threshold-text" style="color: var(--accent); font-size: 0.6rem; margin-top: 5px; display: block;">0% to Threshold</small>
+                <small id="threshold-text" style="color: var(--accent); font-size: 0.6rem; margin-top: 5px; display: block;">Checking Threshold...</small>
             </div>
+
+            <div id="rpm-card" class="card">
+                <span class="label">Traffic Efficiency</span>
+                <div id="stat-rpm" class="value" style="color: var(--accent);">$0.00</div>
+                <small id="rpm-status" style="color: #64748b; font-size: 0.6rem;">Revenue / 1k Users</small>
+            </div>
+
             <div class="card">
                 <span class="label">Affiliate Revenue</span>
                 <div id="stat-affiliate" class="value" style="color: var(--secondary);">$0.00</div>
             </div>
+
             <div class="card">
-                <span class="label">3-Month Total Gross</span>
+                <span class="label">3-Month Total</span>
                 <div id="stat-total-gross" class="value" style="color: var(--success);">$0.00</div>
             </div>
+
             <div class="card">
-                <span class="label">Avg/Month</span>
-                <div id="stat-avg" class="value" style="color: #fff;">$0.00</div>
+                <span class="label">Monthly Average</span>
+                <div id="stat-avg" class="value">$0.00</div>
             </div>
         </div>
 
         <div class="layout-split">
             <div class="card" style="min-height: 350px;">
-                <span class="label">Revenue Performance Trend</span>
+                <span class="label">Performance Trend (90 Days)</span>
                 <div style="height: 300px; margin-top: 15px;">
                     <canvas id="mainChart"></canvas>
                 </div>
             </div>
 
             <div class="card">
-                <span class="label">Audit Ledger</span>
+                <span class="label">Historical Audit</span>
                 <table class="audit-table">
                     <thead>
                         <tr>
@@ -140,7 +148,8 @@
 
 <script>
     let mainChart;
-    const AUTH_KEY = "1234"; // Update this PIN as needed
+    const AUTH_KEY = "1234";
+    const RPM_MIN_THRESHOLD = 1.50; // Threshold for efficiency alerts
 
     function unlock() {
         if(document.getElementById('pass').value === AUTH_KEY) {
@@ -150,25 +159,20 @@
                 document.getElementById('dash').style.display = 'block';
                 init();
             }, 500);
-        } else {
-            alert("Unauthorized Access");
-        }
+        } else { alert("Unauthorized"); }
     }
 
     async function syncData() {
         try {
             const response = await fetch(`./config.json?v=${Date.now()}`);
-            if (!response.ok) throw new Error();
             const data = await response.json();
 
-            // 1. Audit Calculations
+            // 1. Audit Math
             const totalGross = data.history.reduce((sum, m) => sum + m.revenue, 0);
-            const avg = totalGross / data.history.length;
-            
             document.getElementById('stat-total-gross').innerText = `$${totalGross.toFixed(2)}`;
-            document.getElementById('stat-avg').innerText = `$${avg.toFixed(2)}`;
+            document.getElementById('stat-avg').innerText = `$${(totalGross / data.history.length).toFixed(2)}`;
 
-            // 2. Map Tracker IDs to UI
+            // 2. Dynamic Trackers
             data.trackers.forEach(t => {
                 const el = document.getElementById(t.id);
                 if(el) {
@@ -178,17 +182,32 @@
                     } else {
                         el.innerText = `$${val.toFixed(2)}`;
                     }
+
+                    // Emergency RPM Logic
+                    if(t.id === 'stat-rpm') {
+                        const rpmCard = document.getElementById('rpm-card');
+                        const statusText = document.getElementById('rpm-status');
+                        if(val < RPM_MIN_THRESHOLD && val > 0) {
+                            rpmCard.classList.add('alert-low-rpm');
+                            statusText.innerHTML = '<i class="bi bi-exclamation-triangle-fill"></i> LOW EFFICIENCY';
+                            statusText.style.color = 'var(--danger)';
+                        } else {
+                            rpmCard.classList.remove('alert-low-rpm');
+                            statusText.innerText = 'Revenue / 1k Users';
+                            statusText.style.color = '#64748b';
+                        }
+                    }
                 }
             });
 
-            // 3. Threshold Logic
+            // 3. Threshold Visuals
             const adsense = data.trackers.find(t => t.id === 'stat-adsense')?.value || 0;
             const threshold = data.payout_threshold || 100;
             const pct = Math.min((adsense / threshold) * 100, 100);
             document.getElementById('threshold-bar').style.width = pct + '%';
-            document.getElementById('threshold-text').innerText = `${pct.toFixed(1)}% to $${threshold} Goal`;
+            document.getElementById('threshold-text').innerText = `${pct.toFixed(1)}% to $${threshold} Payout`;
 
-            // 4. Update Audit Ledger
+            // 4. Historical Ledger
             document.getElementById('audit-body').innerHTML = data.history.map(m => `
                 <tr>
                     <td><span style="font-weight:700;">${m.month}</span></td>
@@ -197,17 +216,15 @@
                 </tr>
             `).join('');
 
-            // 5. Sync Chart
+            // 5. Chart Refresh
             if(data.chartData && mainChart) {
                 mainChart.data.labels = data.chartData.labels;
                 mainChart.data.datasets[0].data = data.chartData.points;
                 mainChart.update('none');
             }
 
-            document.getElementById('last-sync').innerText = `LAST SYNC: ${new Date().toLocaleTimeString()}`;
-        } catch (e) {
-            document.getElementById('last-sync').innerText = "OFFLINE - RECONNECTING...";
-        }
+            document.getElementById('last-sync').innerText = `SYNCED: ${new Date().toLocaleTimeString()}`;
+        } catch (e) { document.getElementById('last-sync').innerText = "RECONNECTING..."; }
     }
 
     function init() {
@@ -217,7 +234,7 @@
             data: {
                 labels: [],
                 datasets: [{
-                    label: 'Trend',
+                    label: 'Revenue',
                     data: [],
                     borderColor: '#b721ff',
                     borderWidth: 3,
@@ -239,9 +256,9 @@
         });
 
         syncData();
-        setInterval(syncData, 10000); 
+        setInterval(syncData, 15000); 
         setInterval(() => document.getElementById('clock').innerText = new Date().toLocaleTimeString(), 1000);
     }
 </script>
 </body>
-                                                              </html>
+                    </html>
