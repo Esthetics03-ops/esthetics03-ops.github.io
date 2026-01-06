@@ -1,93 +1,27 @@
 {
   "project_info": {
     "name": "The Esthetics Hub",
-    "version": "2.2.0",
-    "last_audit": "2026-01-07",
-    "last_sync_timestamp": 1736205467,
+    "version": "2.3.0 (Dynamic)",
+    "last_audit": "Pending First Sync...",
     "status": "active"
   },
+  "trackers": [
+    { "id": "stat-adsense", "value": 0.00, "label": "AdSense Today" },
+    { "id": "stat-rpm", "value": 0.00, "label": "Traffic Efficiency" },
+    { "id": "stat-affiliate", "value": 0.00, "label": "Affiliate Balance" },
+    { "id": "stat-active", "value": 0, "label": "Active Users" },
+    { "id": "stat-total-gross", "value": 0.00, "label": "Gross Ledger" }
+  ],
+  "history": [
+    { "month": "January 2026", "revenue": 0.00, "status": "ACTIVE" }
+  ]
+}
+
+
   "auth": {
     "GA4_PROPERTIES": ["G-QCX3G9KSPC", "G-PSW1MY7HB4"],
     "GA4_NUMERIC_ID": "319520471",
     "ADSENSE_PUB_ID": "pub-1959507280210179",
     "AFFILIATE_ID": "esthetics-hub-affiliate"
   },
-  "trackers": [
-    {
-      "id": "stat-adsense",
-      "value": 156.45,
-      "prefix": "$",
-      "suffix": "",
-      "label": "AdSense Today"
-    },
-    {
-      "id": "stat-rpm",
-      "value": 4.25,
-      "prefix": "$",
-      "suffix": " RPM",
-      "note": "Efficiency per 1k users"
-    },
-    {
-      "id": "stat-affiliate",
-      "value": 89.30,
-      "prefix": "$",
-      "suffix": "",
-      "label": "Affiliate Balance"
-    },
-    {
-      "id": "stat-active",
-      "value": 12,
-      "prefix": "",
-      "suffix": " LIVE",
-      "label": "Active Users"
-    },
-    {
-      "id": "stat-total-gross",
-      "value": 3122.30,
-      "prefix": "$",
-      "suffix": "",
-      "label": "3-Month Total"
-    }
-  ],
-  "history": [
-    {
-      "month": "October 2025",
-      "revenue": 850.40,
-      "status": "PAID",
-      "method": "Wire Transfer"
-    },
-    {
-      "month": "November 2025",
-      "revenue": 920.15,
-      "status": "PAID",
-      "method": "Wire Transfer"
-    },
-    {
-      "month": "December 2025",
-      "revenue": 1105.60,
-      "status": "PENDING",
-      "method": "Electronic"
-    },
-    {
-      "month": "January 2026",
-      "revenue": 245.75,
-      "status": "ACTIVE",
-      "method": "Electronic"
-    }
-  ],
-  "chartData": {
-    "labels": ["Oct", "Nov", "Dec", "Jan"],
-    "points": [850.40, 920.15, 1105.60, 245.75]
-  },
-  "payout_threshold": 100.00,
-  "targets": {
-    "monthly_adsense_goal": 500.00,
-    "payout_currency": "USD",
-    "payout_day": 21,
-    "rpm_danger_zone": 1.50
-  },
-  "endpoints": {
-    "status_check": "https://esthetics03-ops.github.io/health",
-    "github_pages": "https://esthetics03-ops.github.io/"
-  }
-}
+  
