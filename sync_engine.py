@@ -13,28 +13,46 @@ from google.analytics.data_v1beta.types import RunRealtimeReportRequest, Metric
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
-# --- CONFIGURATION ---
+# --- 1. ENVIRONMENT & CREDENTIALS CHECK ---
+# This block handles the "Secrets" if running on GitHub Actions
+if "GOOGLE_CREDENTIALS_JSON" in os.environ:
+    print("🌐 GitHub Actions Environment Detected")
+    with open("credentials.json", "w") as f:
+        f.write(os.environ["GOOGLE_CREDENTIALS_JSON"])
+    with open("adsense_auth_token.dat", "w") as f:
+        f.write(os.environ["ADSENSE_TOKEN_DAT"])
+else:
+    print("💻 Local Environment Detected")
+
+# Set the path for GA4 Auth
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "credentials.json"
+
+# --- 2. CONFIGURATION ---
 JSON_PATH = "config.json"
 REPO_PATH = "./"
 ADSENSE_PUB = "pub-1959507280210179"
 GA4_PROPERTY_ID = "319520471"
-CLIENT_SECRETS = 'client_secrets.json' # OAuth2 File from Google Cloud
+CLIENT_SECRETS = 'client_secrets.json' 
 ADSENSE_SCOPE = ['https://www.googleapis.com/auth/adsense.readonly']
 
-# Credentials for Telegram & Service Account
-TOKEN = "YOUR_TELEGRAM_BOT_TOKEN" 
-CHAT_ID = "YOUR_CHAT_ID"           
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "credentials.json"
+# Telegram Config (Should also be moved to secrets if running on GitHub)
+TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "YOUR_TELEGRAM_BOT_TOKEN") 
+CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "YOUR_CHAT_ID")           
 
-# --- API HELPERS ---
+# --- 3. API HELPERS ---
 
 def get_adsense_service():
     """Authenticates and returns the AdSense API service."""
     storage = Storage('adsense_auth_token.dat')
     credentials = storage.get()
+    
+    # Run Flow only if local; GitHub Actions must rely on the provided token
     if not credentials or credentials.invalid:
+        if "GOOGLE_CREDENTIALS_JSON" in os.environ:
+            raise Exception("AdSense Token expired in GitHub Actions. Re-auth locally first.")
         flow = flow_from_clientsecrets(CLIENT_SECRETS, scope=ADSENSE_SCOPE)
         credentials = run_flow(flow, storage)
+        
     return build('adsense', 'v2', credentials=credentials)
 
 def get_live_adsense_earnings():
@@ -65,7 +83,7 @@ def get_active_users():
         print(f"GA4 Error: {e}")
         return 0
 
-# --- CORE DATA LOGIC ---
+# --- 4. CORE DATA LOGIC ---
 
 def handle_monthly_turnover(config_data):
     current_month_name = datetime.now().strftime("%B %Y")
@@ -83,7 +101,7 @@ def perform_sync():
     active_now = get_active_users()
     live_adsense = get_live_adsense_earnings()
     
-    # Placeholder for Affiliate (replace with your scraper/API logic if needed)
+    # Placeholder for Affiliate (Or integrate an API if available)
     current_affiliate = 89.30 
 
     try:
@@ -92,14 +110,14 @@ def perform_sync():
 
         handle_monthly_turnover(config_data)
         
-        # Update current month revenue
+        # Update current month revenue logic
         config_data["history"][-1]["revenue"] = live_adsense + current_affiliate
         total_gross = sum(item["revenue"] for item in config_data["history"])
         
-        # Calculate RPM
+        # RPM Calculation
         current_rpm = (live_adsense / active_now * 1000) if active_now > 0 else 0.00
 
-        # Update Trackers Mapping
+        # Sync values to config.json structure
         id_map = {
             "stat-adsense": live_adsense,
             "stat-affiliate": current_affiliate,
@@ -112,7 +130,7 @@ def perform_sync():
             if tracker["id"] in id_map:
                 tracker["value"] = id_map[tracker["id"]]
 
-        # Meta Updates
+        # Dashboard Metadata
         config_data["project_info"]["last_audit"] = datetime.now().strftime("%Y-%m-%d %H:%M")
         config_data["chartData"]["labels"] = [i["month"][:3] for i in config_data["history"]]
         config_data["chartData"]["points"] = [i["revenue"] for i in config_data["history"]]
@@ -120,38 +138,43 @@ def perform_sync():
         with open(JSON_PATH, "w") as f:
             json.dump(config_data, f, indent=4)
         
-        # Git Push
-        repo = Repo(REPO_PATH)
-        repo.git.add(JSON_PATH)
-        if repo.is_dirty():
-            repo.index.commit(f"⚡ Sync: ${total_gross:.2f} Gross | {active_now} Active | RPM: ${current_rpm:.2f}")
-            repo.remote(name='origin').push()
-            return True
-        return False
+        # Handle Git Push ONLY if running locally. 
+        # (GitHub Actions handles the push via the .yml file)
+        if "GOOGLE_CREDENTIALS_JSON" not in os.environ:
+            repo = Repo(REPO_PATH)
+            repo.git.add(JSON_PATH)
+            if repo.is_dirty():
+                repo.index.commit(f"⚡ Sync: ${total_gross:.2f} | {active_now} Users")
+                repo.remote(name='origin').push()
+                print("✅ Local push successful")
+        
+        return True
 
     except Exception as e:
         print(f"❌ Master Sync Failure: {e}")
         return False
 
-# --- TELEGRAM & SCHEDULER ---
+# --- 5. EXECUTION ---
 
 async def sync_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if str(update.effective_chat.id) == CHAT_ID:
-        await update.message.reply_text("🔄 *Manual Sync Triggered...*")
+        await update.message.reply_text("🔄 *Syncing Live APIs...*")
         if perform_sync():
-            await update.message.reply_text("✅ *Dashboard Updated via GitHub.*")
-        else:
-            await update.message.reply_text("ℹ️ *Data synced (No changes to push).*")
+            await update.message.reply_text("✅ *Dashboard Sync Complete.*")
 
 def background_timer():
     while True:
         perform_sync()
-        time.sleep(600) # Sync every 10 minutes
+        time.sleep(600) # 10 minute intervals
 
 if __name__ == "__main__":
-    print(f"🚀 Esthetics Hub Engine Online | Targeting: {GA4_PROPERTY_ID}")
-    threading.Thread(target=background_timer, daemon=True).start()
-    
-    app = ApplicationBuilder().token(TOKEN).build()
-    app.add_handler(CommandHandler("sync", sync_command))
-    app.run_polling()
+    # If on GitHub Actions, just run once and exit
+    if "GOOGLE_CREDENTIALS_JSON" in os.environ:
+        perform_sync()
+    else:
+        # If local, run the background loop and Telegram bot
+        threading.Thread(target=background_timer, daemon=True).start()
+        app = ApplicationBuilder().token(TOKEN).build()
+        app.add_handler(CommandHandler("sync", sync_command))
+        print(f"🚀 Master Engine Running | Targeting Property: {GA4_PROPERTY_ID}")
+        app.run_polling()
