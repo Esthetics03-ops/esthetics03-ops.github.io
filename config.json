@@ -1,9 +1,9 @@
 {
   "project_info": {
     "name": "The Esthetics Hub",
-    "version": "2.3.1 (Dynamic)",
-    "last_audit": "Pending First Sync...",
-    "last_sync_timestamp": 0,
+    "version": "2.4.0",
+    "last_audit": "2026-01-07 03:00:00",
+    "last_sync_timestamp": 1736222400,
     "status": "active"
   },
   "auth": {
@@ -13,21 +13,66 @@
     "AFFILIATE_ID": "esthetics-hub-affiliate"
   },
   "trackers": [
-    { "id": "stat-adsense", "value": 0.00, "label": "AdSense Today", "prefix": "$", "suffix": "" },
-    { "id": "stat-rpm", "value": 0.00, "label": "Traffic Efficiency", "prefix": "$", "suffix": " RPM" },
-    { "id": "stat-affiliate", "value": 0.00, "label": "Affiliate Balance", "prefix": "$", "suffix": "" },
-    { "id": "stat-active", "value": 0, "label": "Active Users", "prefix": "", "suffix": " LIVE" },
-    { "id": "stat-total-gross", "value": 0.00, "label": "Gross Ledger", "prefix": "$", "suffix": "" }
+    {
+      "id": "stat-adsense",
+      "value": 156.45,
+      "label": "AdSense Today"
+    },
+    {
+      "id": "stat-rpm",
+      "value": 4.25,
+      "label": "Traffic Efficiency"
+    },
+    {
+      "id": "stat-affiliate",
+      "value": 89.30,
+      "label": "Affiliate Balance"
+    },
+    {
+      "id": "stat-active",
+      "value": 12,
+      "label": "Active Users"
+    },
+    {
+      "id": "stat-total-gross",
+      "value": 3122.30,
+      "label": "Account Balance"
+    }
   ],
   "history": [
-    { "month": "October 2025", "revenue": 850.40, "status": "PAID" },
-    { "month": "November 2025", "revenue": 920.15, "status": "PAID" },
-    { "month": "December 2025", "revenue": 1105.60, "status": "PAID" },
-    { "month": "January 2026", "revenue": 0.00, "status": "ACTIVE" }
+    {
+      "month": "October 2025",
+      "revenue": 850.40,
+      "status": "PAID",
+      "note": "Settled to Bank"
+    },
+    {
+      "month": "November 2025",
+      "revenue": 920.15,
+      "status": "PAID",
+      "note": "Settled to Bank"
+    },
+    {
+      "month": "December 2025",
+      "revenue": 1105.60,
+      "status": "PENDING",
+      "note": "Finalized - Awaiting Jan 21 Payout"
+    },
+    {
+      "month": "January 2026",
+      "revenue": 245.75,
+      "status": "ACTIVE",
+      "note": "Currently Accruing"
+    }
   ],
   "chartData": {
     "labels": ["Oct", "Nov", "Dec", "Jan"],
-    "points": [850.40, 920.15, 1105.60, 0.00]
+    "points": [850.40, 920.15, 1105.60, 245.75]
   },
-  "payout_threshold": 100.00
+  "payout_threshold": 100.00,
+  "system_logs": {
+    "ga4_status": "online",
+    "adsense_status": "online",
+    "reconciliation_ready": true
+  }
 }
