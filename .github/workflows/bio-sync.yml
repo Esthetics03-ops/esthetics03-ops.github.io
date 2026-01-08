@@ -37,3 +37,9 @@ jobs:
           git add config.json
           git commit -m "⚡ Live Audit: $(date +'%Y-%m-%d %H:%M:%S') [Actuals Sync]" || echo "No changes to commit"
           git push
+- name: Execute Live Pull & Bank Audit
+        env:
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+        run: |
+          python main.py
+          python monitor.py
