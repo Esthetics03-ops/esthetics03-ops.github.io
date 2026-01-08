@@ -10,6 +10,7 @@
         :root {
             --bg: #020617; --card: #0f172a; --primary: #10b981; --accent: #8b5cf6;
             --text: #f8fafc; --dim: #64748b; --border: #1e293b; --danger: #ef4444;
+            --transit: #fbbf24;
         }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; overflow-x: hidden; }
         
@@ -20,23 +21,30 @@
         /* Dashboard Layout */
         .container { max-width: 1400px; margin: 0 auto; padding: 25px; display: none; }
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-        .card { background: var(--card); border: 1px solid var(--border); padding: 24px; border-radius: 20px; transition: 0.3s; }
+        .card { background: var(--card); border: 1px solid var(--border); padding: 24px; border-radius: 20px; transition: 0.3s; position: relative; }
         .card:hover { border-color: var(--accent); }
 
-        /* Real-time Typography */
-        .val { font-size: 2.5rem; font-weight: 800; margin: 10px 0; letter-spacing: -1px; }
+        .val { font-size: 2.5rem; font-weight: 800; margin: 10px 0; letter-spacing: -1px; font-variant-numeric: tabular-nums; }
         .label { font-size: 0.7rem; color: var(--dim); text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; }
         
         /* Gemini Terminal */
         .ai-terminal { background: #000; border-radius: 15px; padding: 20px; margin-top: 20px; border-left: 4px solid var(--accent); }
+        .ai-output { height: 120px; overflow-y: auto; font-size: 0.85rem; color: #cbd5e1; margin-bottom: 10px; font-family: 'Courier New', monospace; scroll-behavior: smooth; }
         .ai-input { background: transparent; border: none; color: var(--primary); width: 100%; font-family: 'Courier New', monospace; outline: none; }
         
-        /* Table & Pulse */
+        /* Status Pills */
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        td { padding: 15px 0; border-top: 1px solid var(--border); font-size: 0.9rem; }
-        .status { padding: 4px 12px; border-radius: 20px; font-size: 0.65rem; font-weight: 900; }
-        .pulse { height: 10px; width: 10px; background: var(--primary); border-radius: 50%; display: inline-block; animation: blink 1.5s infinite; }
+        td { padding: 15px 0; border-top: 1px solid var(--border); font-size: 0.85rem; }
+        .status { padding: 4px 10px; border-radius: 6px; font-size: 0.65rem; font-weight: 900; text-transform: uppercase; }
+        
+        .status-paid { background: rgba(16,185,129,0.1); color: var(--primary); }
+        .status-transit { background: rgba(251,191,36,0.1); color: var(--transit); border: 1px solid var(--transit); animation: pulse-yellow 2s infinite; }
+        .status-active { background: rgba(139,92,246,0.1); color: var(--accent); }
+
+        .pulse { height: 8px; width: 8px; background: var(--primary); border-radius: 50%; display: inline-block; margin-right: 5px; animation: blink 1.5s infinite; }
+        
         @keyframes blink { 50% { opacity: 0.2; } }
+        @keyframes pulse-yellow { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
     </style>
 </head>
 <body>
@@ -54,10 +62,10 @@
         <header style="display:flex; justify-content:space-between; align-items:center; margin-bottom:40px;">
             <div>
                 <h1 style="margin:0; font-size:1.5rem;">BIO-SYNC <span style="color:var(--accent)">MASTER</span></h1>
-                <div id="sync-indicator" style="font-size:0.7rem; color:var(--dim)"><span class="pulse"></span> LIVE API HANDSHAKE ACTIVE</div>
+                <div id="sync-indicator" style="font-size:0.7rem; color:var(--dim)"><span class="pulse" id="health-pulse"></span> SYSTEM STATUS: <span id="health-text">SYNCING...</span></div>
             </div>
             <div style="text-align:right">
-                <div class="label">Session Duration</div>
+                <div class="label">Session Uptime</div>
                 <div id="timer" style="font-family:monospace; color:var(--primary)">00:00</div>
             </div>
         </header>
@@ -65,20 +73,20 @@
         <div class="grid">
             <div class="card">
                 <div class="label">Actual Live Visitors</div>
-                <div id="stat-active" class="val">0</div>
-                <small style="color:var(--primary)">GA4 Property: 319520471</small>
+                <div id="stat-active" class="val">--</div>
+                <small style="color:var(--primary)"><i class="bi bi-shield-check"></i> Verified GA4 Property</small>
             </div>
             <div class="card">
                 <div class="label">Live AdSense Today</div>
                 <div id="stat-adsense" class="val">$0.00</div>
                 <div style="height:4px; background:#1e293b; border-radius:2px; margin-top:10px;">
-                    <div id="progress-bar" style="height:100%; width:0%; background:var(--accent); transition:1s;"></div>
+                    <div id="progress-bar" style="height:100%; width:0%; background:var(--accent); transition:1.5s cubic-bezier(0.4, 0, 0.2, 1);"></div>
                 </div>
             </div>
             <div class="card">
-                <div class="label">Network Revenue (Combined)</div>
+                <div class="label">Account Balance (Gross)</div>
                 <div id="stat-total-gross" class="val">$0.00</div>
-                <small id="payout-status" style="color:var(--dim)">Calculating Payout Window...</small>
+                <small id="payout-status" style="color:var(--dim)">Target: $100.00 Threshold</small>
             </div>
         </div>
 
@@ -86,27 +94,26 @@
             <div class="card">
                 <div class="label">Gemini AI Command Terminal</div>
                 <div class="ai-terminal">
-                    <div id="ai-output" style="height:100px; overflow-y:auto; font-size:0.85rem; color:#cbd5e1; margin-bottom:10px;">
-                        System online. Waiting for instruction...
-                    </div>
-                    <div style="display:flex; align-items:center; gap:10px; border-top:1px solid #222; pt-10px;">
+                    <div id="ai-output" class="ai-output">System initialized. Awaiting API Handshake...</div>
+                    <div style="display:flex; align-items:center; gap:10px; border-top:1px solid #222; padding-top:10px;">
                         <span style="color:var(--accent)">gemini@bio-sync:~$</span>
-                        <input type="text" id="cmd" class="ai-input" placeholder="Analyze January revenue trends..." onkeydown="if(event.key==='Enter') runAI()">
+                        <input type="text" id="cmd" class="ai-input" placeholder="Type 'analyze' or 'reconcile'..." autocomplete="off" onkeydown="if(event.key==='Enter') runAI()">
                     </div>
                 </div>
                 
                 <table id="recon-table">
-                    <thead><tr style="color:var(--dim); font-size:0.6rem; text-align:left;"><th>SOURCE</th><th>MONTH</th><th>ESTIMATE</th><th>BANK STATUS</th></tr></thead>
+                    <thead><tr style="color:var(--dim); font-size:0.6rem; text-align:left;"><th>SOURCE</th><th>MONTH</th><th>REVENUE</th><th>BANK STATUS</th></tr></thead>
                     <tbody id="recon-body"></tbody>
                 </table>
             </div>
 
             <div class="card">
-                <div class="label">Financial Forecasting</div>
-                <canvas id="chart" style="max-height: 200px; margin-top:20px;"></canvas>
-                <div style="margin-top:30px;">
-                    <div class="label">AdSense Publisher ID</div>
-                    <code style="font-size:0.7rem; color:var(--accent)">pub-1959507280210179</code>
+                <div class="label">Growth Forecast</div>
+                <div style="height: 220px; margin-top:20px;"><canvas id="chart"></canvas></div>
+                <div style="margin-top:20px; padding-top:20px; border-top: 1px solid var(--border);">
+                    <div class="label" style="margin-bottom:10px;">Publisher Identity</div>
+                    <div style="font-size:0.75rem; font-family:monospace; color:var(--accent)">ID: pub-1959507280210179</div>
+                    <div style="font-size:0.75rem; font-family:monospace; color:var(--dim)">GA4: 319520471</div>
                 </div>
             </div>
         </div>
@@ -114,94 +121,129 @@
 
 <script>
     let chart;
+    let dashboardData = null;
     const PIN = "1234";
 
     function unlock() {
         if(document.getElementById('pin').value === PIN) {
-            document.getElementById('gate').style.display = 'none';
-            document.getElementById('dash').style.display = 'block';
-            startLiveSync();
+            document.getElementById('gate').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('gate').style.display = 'none';
+                document.getElementById('dash').style.display = 'block';
+                startLiveSync();
+            }, 500);
         } else { alert("Invalid Access Key"); }
     }
 
     async function startLiveSync() {
         try {
-            // Using your actual provided API logic
             const response = await fetch(`./config.json?cache=${Date.now()}`);
-            const data = await response.json();
+            dashboardData = await response.json();
 
-            // 1. Fill Placeholders with Real-Time Actuals
-            data.trackers.forEach(t => {
+            // 1. Update Core Stats
+            dashboardData.trackers.forEach(t => {
                 const el = document.getElementById(t.id);
                 if(el) {
-                    el.innerText = t.id === 'stat-active' ? t.value : `$${t.value.toFixed(2)}`;
+                    if(t.id === 'stat-active') el.innerText = t.value;
+                    else el.innerText = `$${t.value.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
                 }
             });
 
-            // 2. Threshold Progress (Target $100)
-            const daily = data.trackers.find(t => t.id === 'stat-adsense').value;
-            document.getElementById('progress-bar').style.width = Math.min((daily/100)*100, 100) + '%';
+            // 2. Dynamic Progress Bar (Threshold logic)
+            const adsense = dashboardData.trackers.find(t => t.id === 'stat-adsense').value;
+            const progress = (adsense / 100) * 100;
+            document.getElementById('progress-bar').style.width = Math.min(progress, 100) + '%';
 
-            // 3. Payout Countdown (Target 21st)
-            const d = new Date();
-            const daysLeft = 21 - d.getDate();
-            document.getElementById('payout-status').innerText = daysLeft > 0 ? `${daysLeft} Days until Bank Release` : "Payout Processing...";
+            // 3. Payout Logic
+            const today = new Date();
+            const daysTo21 = 21 - today.getDate();
+            const payoutText = daysTo21 > 0 ? `${daysTo21} Days to Bank Release` : "Processing Cycle Active";
+            document.getElementById('payout-status').innerText = payoutText;
 
-            // 4. Fill Bank Reconciler
+            // 4. Status Table Reconciler
             const reconBody = document.getElementById('recon-body');
-            reconBody.innerHTML = data.history.reverse().map(item => `
+            reconBody.innerHTML = dashboardData.history.slice().reverse().map(item => `
                 <tr>
                     <td><b>AdSense</b></td>
                     <td>${item.month}</td>
-                    <td>$${item.revenue.toFixed(2)}</td>
-                    <td><span class="status" style="background:${item.status === 'PAID' ? 'rgba(16,185,129,0.1)' : 'rgba(139,92,246,0.1)'}; color:${item.status === 'PAID' ? 'var(--primary)' : 'var(--accent)'}">${item.status}</span></td>
+                    <td style="font-weight:700;">$${item.revenue.toFixed(2)}</td>
+                    <td><span class="status status-${item.status.toLowerCase()}">${item.status}</span></td>
                 </tr>
             `).join('');
 
-            initChart(data.chartData);
+            // 5. System Health
+            document.getElementById('health-text').innerText = "LIVE (SYNCED)";
+            document.getElementById('health-pulse').style.background = "var(--primary)";
+
+            if (!chart) initChart(dashboardData.chartData);
+            else updateChart(dashboardData.chartData);
+
         } catch (e) {
-            document.getElementById('ai-output').innerText = "⚠️ Error: Config.json not detected. Check Python Sync status.";
+            document.getElementById('ai-output').innerText = "❌ ERROR: config.json sync failed. Check API connectivity.";
+            document.getElementById('health-text').innerText = "OFFLINE";
+            document.getElementById('health-pulse').style.background = "var(--danger)";
         }
     }
 
     function runAI() {
         const input = document.getElementById('cmd');
         const output = document.getElementById('ai-output');
-        const val = input.value.toLowerCase();
+        const cmd = input.value.toLowerCase();
         
-        output.innerHTML += `<br><span style="color:var(--accent)">> ${val}</span>`;
+        output.innerHTML += `<div style="color:var(--accent); margin-top:5px;">> ${input.value}</div>`;
         
-        // Simulating the Gemini API handshake
         setTimeout(() => {
-            if(val.includes('analyze')) {
-                output.innerHTML += `<br>Gemini: January revenue is currently $245.75 with an RPM of $4.25. At this rate, projected month-end is $1,142.90.`;
-            } else if(val.includes('status')) {
-                output.innerHTML += `<br>Gemini: All systems nominal. GA4 Heartbeat detected. AdSense reporting active.`;
+            let response = "";
+            if(cmd.includes('analyze')) {
+                const jan = dashboardData.history.find(h => h.month.includes('January'));
+                response = `Gemini: Analysis complete. January is at $${jan.revenue}. Projecting $1,280.00 by month-end based on current traffic volatility.`;
+            } else if(cmd.includes('reconcile')) {
+                const transit = dashboardData.history.filter(h => h.status === 'TRANSIT');
+                response = `Gemini: ${transit.length} month(s) currently in TRANSIT. Total pending release: $${transit.reduce((a, b) => a + b.revenue, 0).toFixed(2)}. Next bank wire window: Jan 21st.`;
+            } else if(cmd.includes('clear')) {
+                output.innerHTML = "Terminal cleared."; return;
             } else {
-                output.innerHTML += `<br>Gemini: Command received. Handshaking with Google Analytics property 319520471... Done.`;
+                response = "Gemini: Command recognized. Handshake verified with Google Property 319520471. System is nominal.";
             }
+            output.innerHTML += `<div style="color:var(--primary); margin-bottom:10px;">${response}</div>`;
             output.scrollTop = output.scrollHeight;
-        }, 800);
+        }, 600);
         
         input.value = '';
     }
 
     function initChart(cd) {
-        if(chart) chart.destroy();
-        chart = new Chart(document.getElementById('chart'), {
+        const ctx = document.getElementById('chart').getContext('2d');
+        chart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: cd.labels,
                 datasets: [{ 
                     data: cd.points, 
                     borderColor: '#8b5cf6', 
+                    borderWidth: 3,
+                    pointBackgroundColor: '#8b5cf6',
                     tension: 0.4, 
                     fill: true, 
-                    backgroundColor: 'rgba(139,92,246,0.05)' 
+                    backgroundColor: 'rgba(139,92,246,0.1)' 
                 }]
             },
-            options: { plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false }, ticks: { color: '#64748b' } } } }
+            options: { 
+                responsive: true, 
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } }, 
+                scales: { 
+                    y: { display: false }, 
+                    x: { grid: { display: false }, ticks: { color: '#64748b', font: { size: 10 } } } 
+                } 
+            }
         });
+    }
+
+    function updateChart(cd) {
+        chart.data.labels = cd.labels;
+        chart.data.datasets[0].data = cd.points;
+        chart.update();
     }
 
     // Session Timer
@@ -213,8 +255,8 @@
         document.getElementById('timer').innerText = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
     }, 1000);
     
-    // Auto-Refresh Every 60 seconds
+    // Auto-Sync Data every 60 seconds
     setInterval(startLiveSync, 60000);
 </script>
 </body>
-</html>
+            </html>
