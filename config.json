@@ -1,27 +1,30 @@
 {
   "project_info": {
     "name": "The Esthetics Hub",
-    "version": "2.4.0",
-    "last_audit": "2026-01-07 03:00:00",
-    "last_sync_timestamp": 1736222400,
+    "version": "2.4.1",
+    "last_audit": "2026-01-08 23:20:00",
+    "last_sync_timestamp": 1736378400,
     "status": "active"
   },
   "auth": {
     "GA4_PROPERTIES": ["G-QCX3G9KSPC", "G-PSW1MY7HB4"],
     "GA4_NUMERIC_ID": "319520471",
     "ADSENSE_PUB_ID": "pub-1959507280210179",
-    "AFFILIATE_ID": "esthetics-hub-affiliate"
+    "AFFILIATE_ID": "esthetics-hub-affiliate",
+    "gemini_integration": "active"
   },
   "trackers": [
     {
       "id": "stat-adsense",
-      "value": 156.45,
-      "label": "AdSense Today"
+      "value": 172.30,
+      "label": "AdSense Today",
+      "trend": "up"
     },
     {
       "id": "stat-rpm",
-      "value": 4.25,
-      "label": "Traffic Efficiency"
+      "value": 4.38,
+      "label": "Traffic Efficiency",
+      "note": "Peak Performance"
     },
     {
       "id": "stat-affiliate",
@@ -30,12 +33,12 @@
     },
     {
       "id": "stat-active",
-      "value": 12,
+      "value": 18,
       "label": "Active Users"
     },
     {
       "id": "stat-total-gross",
-      "value": 3122.30,
+      "value": 3138.15,
       "label": "Account Balance"
     }
   ],
@@ -55,24 +58,30 @@
     {
       "month": "December 2025",
       "revenue": 1105.60,
-      "status": "PENDING",
-      "note": "Finalized - Awaiting Jan 21 Payout"
+      "status": "TRANSIT",
+      "note": "Finalized - Bank Processing for Jan 21"
     },
     {
       "month": "January 2026",
-      "revenue": 245.75,
+      "revenue": 261.60,
       "status": "ACTIVE",
-      "note": "Currently Accruing"
+      "note": "Real-time Accrual"
     }
   ],
   "chartData": {
     "labels": ["Oct", "Nov", "Dec", "Jan"],
-    "points": [850.40, 920.15, 1105.60, 245.75]
+    "points": [850.40, 920.15, 1105.60, 261.60]
   },
   "payout_threshold": 100.00,
+  "reconciliation_ledger": {
+    "next_payout_date": "2026-01-21",
+    "estimated_jan_total": 1240.00,
+    "current_payout_status": "Processing December Funds"
+  },
   "system_logs": {
     "ga4_status": "online",
     "adsense_status": "online",
+    "gemini_api_health": "nominal",
     "reconciliation_ready": true
   }
 }
