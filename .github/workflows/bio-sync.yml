@@ -1,0 +1,39 @@
+name: Bio-Sync Live API Update
+
+on:
+  schedule:
+    - cron: '0 * * * *' # Runs exactly every hour
+  workflow_dispatch:      # Allows you to click "Run" manually in GitHub Actions
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write    # Required to push the updated config.json back to your site
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Dependencies
+        run: |
+          pip install google-analytics-data requests
+
+      - name: Execute Master Engine
+        env:
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          GA4_PROPERTY_ID: "319520471"
+        run: python main.py
+
+      - name: Commit and Push Actuals
+        run: |
+          git config --global user.name "Gemini-Bio-Sync"
+          git config --global user.email "bot@bio-sync.live"
+          git add config.json
+          git commit -m "⚡ Live Audit: $(date +'%Y-%m-%d %H:%M:%S') [Actuals Sync]" || echo "No changes to commit"
+          git push
