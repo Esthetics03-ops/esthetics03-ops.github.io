@@ -26,7 +26,8 @@
 
     <style>
         :root { 
-            --accent-gold: #c5a880; --deep-ocean: #0f172a; --glass: rgba(255, 255, 255, 0.08);
+            --accent-gold: #c5a880; --deep-ocean: #0f172a; --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.15);
             /* Brand Colors */
             --fb: #1877F2; --ig: #E4405F; --yt: #FF0000; --wa: #25D366;
             --amazon: #FF9900; --nike: #FFFFFF; --stripe: #635bff; --google: #4285F4;
@@ -41,33 +42,28 @@
         }
 
         /* Branding Colors Ticker */
-        .logo-ticker { background: rgba(0,0,0,0.5); padding: 25px 0; border-top: 1px solid rgba(255,255,255,0.1); overflow: hidden; }
+        .logo-ticker { background: rgba(0,0,0,0.5); padding: 25px 0; border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); overflow: hidden; }
         .logo-track { display: flex; width: calc(250px * 16); animation: scroll-left 35s linear infinite; }
         @keyframes scroll-left { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
         .logo-item { width: 250px; text-align: center; font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; }
         
-        /* High-Visibility Brand Styles */
+        /* Brand Icon Specifics */
         .ticker-amazon { color: var(--amazon); }
         .ticker-stripe { color: var(--stripe); }
         .ticker-google { color: var(--google); }
         .ticker-nike { color: var(--nike); }
         .ticker-booking { color: #003580; background: white; padding: 2px 10px; border-radius: 5px; }
 
-        .social-link-icon.fb { color: var(--fb); }
-        .social-link-icon.ig { color: var(--ig); }
-        .social-link-icon.wa { color: var(--wa); }
-
         .glass-panel {
-            background: var(--glass); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1);
+            background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border);
             border-radius: 25px; padding: 2rem; transition: 0.3s;
         }
         .glass-panel:hover { border-color: var(--accent-gold); transform: translateY(-5px); }
 
         .search-trigger {
-            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 50px; color: white; padding: 8px 20px; cursor: pointer; transition: 0.3s;
+            background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border);
+            border-radius: 50px; color: white; padding: 8px 20px; cursor: pointer;
         }
-        .search-trigger:hover { background: rgba(255,255,255,0.2); border-color: var(--accent-gold); }
 
         .whatsapp-float {
             position: fixed; bottom: 25px; right: 25px; background: var(--wa); color: white;
@@ -76,7 +72,6 @@
         }
 
         .nav-logo { height: 45px; width: auto; }
-        footer { background: rgba(0,0,0,0.9); border-top: 1px solid var(--accent-gold); }
 
         @media (max-width: 768px) {
             .display-1 { font-size: 3.5rem; }
@@ -94,7 +89,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top" style="background: rgba(0,0,0,0.85); backdrop-filter: blur(15px);">
         <div class="container">
             <a class="navbar-brand fw-bold d-flex align-items-center" href="index.html">
-                <img src="g1.png" class="nav-logo me-2" alt="Esthetics Hub Logo"> ESTHETICS HUB
+                <img src="g1.png" class="nav-logo me-2" alt="Logo"> ESTHETICS HUB
             </a>
             <div class="d-flex align-items-center order-lg-last">
                 <div class="search-trigger me-2" data-bs-toggle="modal" data-bs-target="#searchModal">
@@ -104,9 +99,9 @@
             </div>
             <div class="collapse navbar-collapse" id="mainNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="#guides">Protocol Guides</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#guides">Protocols</a></li>
                     <li class="nav-item"><a class="nav-link" href="#reset">14-Day Reset</a></li>
-                    <li class="nav-item ms-lg-3"><button class="btn btn-info btn-sm rounded-pill px-4 fw-bold text-white" data-bs-toggle="modal" data-bs-target="#donateModal">Support Research</button></li>
+                    <li class="nav-item ms-lg-3"><button class="btn btn-info btn-sm rounded-pill px-4 fw-bold text-white shadow" data-bs-toggle="modal" data-bs-target="#donateModal">Support Research</button></li>
                 </ul>
             </div>
         </div>
@@ -135,13 +130,13 @@
     <section id="reset" class="container py-5 mt-5">
         <div class="glass-panel text-center mx-auto" style="max-width: 850px;" data-aos="fade-up">
             <h2 class="fw-bold mb-3">The 14-Day <span class="text-info">Bio-Sync</span> Reset</h2>
-            <p class="mb-4 opacity-75">Join 5,000+ members receiving daily science-backed rituals for sleep, fasting, and focus.</p>
+            <p class="mb-4 opacity-75">Daily science-backed rituals for sleep, fasting, and focus delivered to your inbox.</p>
             <form action="https://formspree.io/f/esthetics03" method="POST" class="row g-2 justify-content-center">
                 <div class="col-md-8">
                     <input type="email" name="email" class="form-control form-control-lg bg-dark border-secondary text-white rounded-pill px-4" placeholder="Enter your email" required>
                 </div>
                 <div class="col-md-4">
-                    <button type="submit" class="btn btn-info btn-lg w-100 rounded-pill fw-bold text-white shadow">Start My Reset</button>
+                    <button type="submit" class="btn btn-info btn-lg w-100 rounded-pill fw-bold text-white shadow">Join the Reset</button>
                 </div>
             </form>
         </div>
@@ -151,59 +146,79 @@
         <div class="row g-4">
             <div class="col-md-4" data-aos="fade-up">
                 <div class="glass-panel text-center">
-                    <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=600" class="img-fluid rounded-4 mb-3" alt="Nutrition">
+                    <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=600" class="img-fluid rounded-4 mb-3" alt="Metabolism">
                     <h4 class="text-info fw-bold">Metabolism</h4>
-                    <p class="small opacity-75">Optimization of energy pathways through nutrient timing.</p>
-                    <a href="nutrition-guide.html" class="btn btn-outline-light btn-sm rounded-pill">View Guide</a>
+                    <p class="small opacity-75">Nutrient timing and energy optimization.</p>
+                    <a href="nutrition-guide.html" class="btn btn-outline-light btn-sm rounded-pill">View Protocol</a>
                 </div>
             </div>
             <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
                 <div class="glass-panel text-center">
                     <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=600" class="img-fluid rounded-4 mb-3" alt="Sleep">
-                    <h4 class="text-info fw-bold">Deep Recovery</h4>
-                    <p class="small opacity-75">Science-backed sleep protocols for cognitive repair.</p>
-                    <a href="sleep-tech.html" class="btn btn-outline-light btn-sm rounded-pill">View Guide</a>
+                    <h4 class="text-info fw-bold">Sleep Lab</h4>
+                    <p class="small opacity-75">Optimizing the circadian biology of recovery.</p>
+                    <a href="sleep-tech.html" class="btn btn-outline-light btn-sm rounded-pill">View Protocol</a>
                 </div>
             </div>
             <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
                 <div class="glass-panel text-center">
-                    <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=600" class="img-fluid rounded-4 mb-3" alt="Stress">
+                    <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=600" class="img-fluid rounded-4 mb-3" alt="MindSync">
                     <h4 class="text-info fw-bold">MindSync</h4>
-                    <p class="small opacity-75">Vagus nerve stimulation and nervous system regulation.</p>
-                    <a href="stress-management.html" class="btn btn-outline-light btn-sm rounded-pill">View Guide</a>
+                    <p class="small opacity-75">Nervous system and Vagus nerve reset.</p>
+                    <a href="stress-management.html" class="btn btn-outline-light btn-sm rounded-pill">View Protocol</a>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer class="py-5 mt-5">
+    <footer class="py-5 mt-5" style="background: rgba(0,0,0,0.5); border-top: 1px solid var(--glass-border);">
         <div class="container">
             <div class="row g-4">
-                <div class="col-md-4 text-center text-md-start">
-                    <img src="g1.png" style="height: 60px;" class="mb-3" alt="Logo">
-                    <h5 class="fw-bold">THE ESTHETICS HUB</h5>
-                    <p class="small opacity-50 pe-md-4">Empowering longevity through AI research and localized wellness protocols in Nairobi, Kenya.</p>
-                </div>
-                <div class="col-md-4 text-center">
-                    <h6 class="text-info fw-bold mb-3">Legal & Privacy</h6>
-                    <ul class="list-unstyled small opacity-75">
-                        <li class="mb-2"><a href="privacy.html" class="text-white text-decoration-none">Privacy Policy</a></li>
-                        <li class="mb-2"><a href="terms.html" class="text-white text-decoration-none">Terms of Service</a></li>
-                        <li class="mb-2"><a href="disclaimer.html" class="text-white text-decoration-none">Affiliate Disclosure</a></li>
+                <div class="col-md-4">
+                    <h4 class="fw-bold mb-4">Quick Links</h4>
+                    <ul class="list-unstyled">
+                        <li><a href="about.html" class="text-white opacity-75 text-decoration-none">About Us</a></li>
+                        <li><a href="privacy.html" class="text-white opacity-75 text-decoration-none">Privacy Policy</a></li>
+                        <li><a href="policy.html" class="text-white opacity-75 text-decoration-none">Privacy & Disclosure</a></li>
+                        <li><a href="terms.html" class="text-white opacity-75 text-decoration-none">Terms of Service</a></li>
+                        <li><a href="legal.html" class="text-white opacity-75 text-decoration-none">Privacy & Terms</a></li>
+                        <li><a href="disclaimer.html" class="text-white opacity-75 text-decoration-none">Affiliate Disclaimer</a></li>
+                        <li><a href="contact.html" class="text-white opacity-75 text-decoration-none">Contact</a></li>
                     </ul>
                 </div>
-                <div class="col-md-4 text-center text-md-end">
-                    <h6 class="text-info fw-bold mb-3">Connect</h6>
-                    <p class="small mb-2">esthetics03@gmail.com</p>
-                    <div class="d-flex justify-content-center justify-content-md-end">
-                        <a href="https://facebook.com/esthetics_hub" class="social-link-icon fb me-3 fs-5"><i class="bi bi-facebook"></i></a>
-                        <a href="https://instagram.com/esthetics_hub" class="social-link-icon ig me-3 fs-5"><i class="bi bi-instagram"></i></a>
-                        <a href="https://chat.whatsapp.com/BmBFZe4Xu7g73QBstg256C" class="social-link-icon wa fs-5"><i class="bi bi-whatsapp"></i></a>
+                
+                <div class="col-md-4 footer-contact">
+                    <h4 class="fw-bold mb-4">Contact</h4>
+                    <ul class="list-unstyled">
+                        <li><a href="https://www.google.com/maps?q=Nairobi+Kenya&output=embed" target="_blank" class="text-white opacity-75 text-decoration-none"><i class="bi bi-geo-alt"></i> Nairobi, Kenya</a></li>
+                        <li><a href="mailto:esthetics03@gmail.com" class="text-white opacity-75 text-decoration-none"><i class="bi bi-envelope-fill"></i> esthetics03@gmail.com</a></li>
+                        <li><a href="tel:+254113379488" class="text-white opacity-75 text-decoration-none"><i class="bi bi-telephone-fill"></i> +254 113 379488</a></li>
+                        <li><a href="https://chat.whatsapp.com/BmBFZe4Xu7g73QBstg256C" class="text-white opacity-75 text-decoration-none"><i class="bi bi-whatsapp"></i> Chat on WhatsApp</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-md-4 text-md-end">
+                    <h4 class="fw-bold mb-4">The Esthetics Hub</h4>
+                    <div class="footer-bottom opacity-50 small">
+                        <p>© <span id="year"></span> All rights reserved.</p>
+                        <p>
+                            <a href="/SECURITY.md" class="text-white">🔒 Security</a> |
+                            <a href="cookies.html" class="text-white">Cookie Policy</a>
+                        </p>
+                        <p>🌿 Holistic Wellness, Nairobi 🇰🇪</p>
                     </div>
                 </div>
             </div>
-            <hr class="my-5 border-secondary opacity-25">
-            <div class="text-center small opacity-50">© <span id="year"></span> The Esthetics Hub. All Rights Reserved.</div>
+
+            <div class="mt-5 text-center pt-4 border-top border-secondary">
+                <p class="small text-secondary mb-4"><em>This site contains affiliate links. We may earn a small commission at no extra cost to you.</em></p>
+                <ins class="adsbygoogle"
+                     style="display:block; text-align:center;"
+                     data-ad-client="ca-pub-1959507280210179"
+                     data-ad-slot="4567890123"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+            </div>
         </div>
     </footer>
 
@@ -217,7 +232,7 @@
                 <div class="modal-body p-4">
                     <div class="d-flex align-items-center border-bottom border-info pb-2 mb-4">
                         <i class="bi bi-stars text-info me-3 fs-4"></i>
-                        <input type="text" id="aiInput" class="form-control bg-transparent border-0 text-white shadow-none p-0" placeholder="Ask about sleep, fasting, or nike..." onkeyup="runSearch()">
+                        <input type="text" id="aiInput" class="form-control bg-transparent border-0 text-white shadow-none p-0" placeholder="Ask MindSync (fasting, sleep, gear)..." onkeyup="runMindSync()">
                     </div>
                     <div id="aiOut"></div>
                 </div>
@@ -229,12 +244,12 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content bg-dark border-success" style="border-radius: 25px;">
                 <div class="modal-body p-5 text-center">
-                    <h3 class="fw-bold mb-4">Support Our Network</h3>
+                    <h3 class="fw-bold mb-4 text-white">Support Network</h3>
                     <div class="p-3 bg-success bg-opacity-10 border border-success rounded-4 mb-4">
                         <span class="text-success small fw-bold">LIPA NA M-PESA TILL</span>
-                        <h1 class="display-4 fw-bold">3421580</h1>
+                        <h1 class="display-4 fw-bold text-white">3421580</h1>
                     </div>
-                    <a href="https://paypal.me/esthetics03" class="btn btn-primary rounded-pill w-100 py-3 fw-bold">PayPal Support</a>
+                    <a href="https://paypal.me/esthetics03" class="btn btn-primary rounded-pill w-100 py-3 fw-bold">Support via PayPal</a>
                 </div>
             </div>
         </div>
@@ -247,13 +262,13 @@
         document.getElementById('year').textContent = new Date().getFullYear();
 
         const data = [
-            { t: "Metabolic Nutrition", l: "nutrition-guide.html", s: "fasting diet glucose" },
-            { t: "Deep Sleep Protocol", l: "sleep-tech.html", s: "recovery circadian sleep" },
-            { t: "MindSync Vagus Tech", l: "stress-management.html", s: "stress breathing mental" },
-            { t: "Nike Elite Shop", l: "https://nike.com", s: "shoes gear gym training" }
+            { t: "Metabolic Nutrition", l: "nutrition-guide.html", s: "fasting diet glucose food" },
+            { t: "Deep Sleep Protocol", l: "sleep-tech.html", s: "recovery circadian sleep lab" },
+            { t: "MindSync Stress Tech", l: "stress-management.html", s: "stress breathing mental vagus" },
+            { t: "Elite Nike Performance", l: "https://nike.com", s: "shoes gear training" }
         ];
 
-        function runSearch() {
+        function runMindSync() {
             let q = document.getElementById('aiInput').value.toLowerCase();
             let out = document.getElementById('aiOut');
             out.innerHTML = '';
@@ -261,11 +276,11 @@
             data.forEach(i => {
                 if(i.t.toLowerCase().includes(q) || i.s.toLowerCase().includes(q)) {
                     out.innerHTML += `<a href="${i.l}" class="d-block p-3 mb-2 bg-white bg-opacity-10 rounded-3 text-info text-decoration-none">
-                        <strong>${i.t}</strong><br><span class="small text-secondary">View Protocol →</span>
+                        <strong>${i.t}</strong><br><span class="small text-secondary">Explore Protocol →</span>
                     </a>`;
                 }
             });
         }
     </script>
 </body>
-    </html>
+        </html>
