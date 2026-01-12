@@ -31,28 +31,38 @@
             --glass-border: rgba(255, 255, 255, 0.15);
             --accent-gold: #c5a880; 
             --deep-ocean: #0f172a;
-            --facebook: #1877F2; --instagram: #E4405F; --youtube: #FF0000;
-            --whatsapp: #25D366; --amazon: #FF9900; --stripe: #635bff;
-            --google: #4285F4; --nike: #FFFFFF;
+            /* Brand Identity Colors */
+            --facebook: #1877F2; --instagram: #E4405F; --whatsapp: #25D366;
+            --amazon: #FF9900; --nike: #000000; --stripe: #635bff; --google: #4285F4;
         }
 
         body { font-family: 'Outfit', sans-serif; color: white; background-color: var(--deep-ocean); overflow-x: hidden; }
 
-        /* Enhanced Image Slider Styles */
-        #mainCarousel { height: 75vh; min-height: 500px; }
-        .carousel-item { height: 75vh; min-height: 500px; background-size: cover; background-position: center; }
-        .carousel-item::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(0deg, var(--deep-ocean) 0%, rgba(15, 23, 42, 0.4) 100%); }
-        .carousel-caption { bottom: 20%; z-index: 10; padding: 2rem; background: rgba(0,0,0,0.4); backdrop-filter: blur(10px); border-radius: 25px; border: 1px solid var(--glass-border); max-width: 700px; margin: 0 auto; }
-        
-        /* General Styling Updates */
-        .social-top-bar { background: rgba(0,0,0,0.8); backdrop-filter: blur(15px); border-bottom: 1px solid var(--glass-border); padding: 10px 0; }
+        /* sliding section header */
+        .hero-slider { position: relative; width: 100%; height: 80vh; overflow: hidden; margin-bottom: 2rem; }
+        .carousel-item { height: 80vh; background-size: cover; background-position: center; }
+        .carousel-item::before {
+            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(0deg, var(--deep-ocean) 5%, rgba(15, 23, 42, 0.3) 100%);
+        }
+        .carousel-caption {
+            bottom: 15%; z-index: 10; background: rgba(0,0,0,0.45); backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border); border-radius: 30px; padding: 3rem; max-width: 800px; margin: 0 auto;
+        }
+
+        /* controls */
+        .carousel-control-prev-icon, .carousel-control-next-icon { 
+            background-color: var(--accent-gold); border-radius: 50%; padding: 25px; 
+        }
+
+        .social-top-bar { background: rgba(0,0,0,0.6); backdrop-filter: blur(15px); border-bottom: 1px solid var(--glass-border); padding: 10px 0; }
         .social-link-icon { margin-left: 20px; font-size: 1.25rem; transition: 0.3s; text-decoration: none; display: inline-block; }
-        .social-link-icon.fb { color: var(--facebook); } .social-link-icon.ig { color: var(--instagram); }
-        .social-link-icon.wa { color: var(--whatsapp); } .social-link-icon:hover { transform: translateY(-3px); filter: brightness(1.2); }
+        .social-link-icon.fb { color: var(--facebook); } .social-link-icon.ig { color: var(--instagram); } .social-link-icon.wa { color: var(--whatsapp); }
 
         .glass-panel { background: var(--glass-bg); backdrop-filter: blur(25px); border: 1px solid var(--glass-border); border-radius: 30px; padding: 2rem; transition: 0.4s ease; height: 100%; }
         .glass-panel:hover { border-color: var(--accent-gold); transform: translateY(-7px); }
 
+        /* Logo Ticker Animation */
         .logo-ticker { background: rgba(0,0,0,0.4); padding: 25px 0; border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); overflow: hidden; }
         .logo-track { display: flex; width: calc(250px * 16); animation: scroll-left 35s linear infinite; }
         @keyframes scroll-left { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
@@ -77,54 +87,54 @@
         </div>
     </div>
 
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top" style="background: rgba(0,0,0,0.85); backdrop-filter: blur(15px);">
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top" style="background: rgba(0,0,0,0.8); backdrop-filter: blur(15px);">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center fw-bold fs-3" href="index.html">
                 <img src="g1.png" alt="Logo" class="nav-logo me-2"> ESTHETICS HUB
             </a>
             <div class="d-flex align-items-center order-lg-last ms-lg-3">
-                <button class="btn btn-outline-info rounded-pill px-3 me-2 d-none d-md-block" data-bs-toggle="modal" data-bs-target="#searchModal"><i class="bi bi-stars"></i> MindSync AI</button>
+                <button class="btn btn-outline-info rounded-pill px-3 me-2" data-bs-toggle="modal" data-bs-target="#searchModal"><i class="bi bi-search me-1"></i> <span class="d-none d-md-inline">MindSync AI</span></button>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent"><span class="navbar-toggler-icon"></span></button>
             </div>
             <div class="collapse navbar-collapse" id="navContent">
                 <ul class="navbar-nav ms-auto align-items-center">
                     <li class="nav-item"><a class="nav-link" href="#reset">14-Day Reset</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#shop">Shop Elite</a></li>
-                    <li class="nav-item ms-lg-3"><button class="btn btn-info rounded-pill px-4 fw-bold text-white shadow-sm" data-bs-toggle="modal" data-bs-target="#donateModal">Support Research</button></li>
+                    <li class="nav-item"><a class="nav-link" href="#legal">Legal</a></li>
+                    <li class="nav-item ms-lg-3"><button class="btn btn-info rounded-pill px-4 fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#donateModal">Support Research</button></li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <div id="mainCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+    <div id="heroCarousel" class="carousel slide carousel-fade hero-slider" data-bs-ride="carousel">
         <div class="carousel-inner">
-            <div class="carousel-item active" style="background-image: url('https://images.unsplash.com/photo-1518611012118-296032bb91fe?auto=format&fit=crop&w=1920');">
+            <div class="carousel-item active" style="background-image: url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1920&q=80');">
                 <div class="carousel-caption">
-                    <h1 class="display-3 fw-bold animate__animated animate__fadeInDown">Performance <span style="color: var(--accent-gold);">Optimized.</span></h1>
-                    <p class="lead mb-4">Elite Nike training gear selected for high-intensity biohacking protocols.</p>
-                    <a href="https://www.nike.com/" class="btn btn-light btn-lg rounded-pill px-5 fw-bold text-dark shadow">Shop Nike Official</a>
+                    <h1 class="display-3 fw-bold animate__animated animate__fadeInDown">Performance <span style="color: var(--accent-gold);">Reimagined.</span></h1>
+                    <p class="lead mb-4">Science-backed protocols paired with elite Nike training equipment for peak human performance.</p>
+                    <a href="https://www.nike.com/" target="_blank" class="btn btn-light btn-lg rounded-pill px-5 fw-bold shadow">Shop Nike Elite</a>
                 </div>
             </div>
-            <div class="carousel-item" style="background-image: url('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=1920');">
+            <div class="carousel-item" style="background-image: url('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=1920&q=80');">
                 <div class="carousel-caption">
-                    <h1 class="display-3 fw-bold">Deep <span class="text-info">Circadian</span> Rest.</h1>
-                    <p class="lead mb-4">Discover curated wellness retreats on Booking.com to reset your biological clock.</p>
-                    <a href="https://www.booking.com/flexsearch.html?aid=2311235" class="btn btn-info btn-lg rounded-pill px-5 fw-bold text-white shadow">Book Your Retreat</a>
+                    <h1 class="display-3 fw-bold animate__animated animate__fadeInUp">Deep <span class="text-info">Bio-Recovery.</span></h1>
+                    <p class="lead mb-4">Book curated wellness retreats via Booking.com to reset your circadian biology and stress response.</p>
+                    <a href="https://www.booking.com/flexsearch.html?aid=2311235" target="_blank" class="btn btn-info btn-lg rounded-pill px-5 fw-bold text-white shadow">Find Wellness Escapes</a>
                 </div>
             </div>
-            <div class="carousel-item" style="background-image: url('https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1920');">
+            <div class="carousel-item" style="background-image: url('https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1920&q=80');">
                 <div class="carousel-caption">
-                    <h1 class="display-3 fw-bold">Metabolic <span style="color: var(--accent-gold);">Fuel.</span></h1>
-                    <p class="lead mb-4">High-quality supplements and biohacking tools available via our Amazon selection.</p>
-                    <a href="https://amazon.com" class="btn btn-warning btn-lg rounded-pill px-5 fw-bold text-dark shadow">Browse Amazon Shop</a>
+                    <h1 class="display-3 fw-bold animate__animated animate__zoomIn">Metabolic <span style="color: var(--accent-gold);">Longevity.</span></h1>
+                    <p class="lead mb-4">Access our curated Amazon biohacking shop for energy-optimizing tools and nutritional supplements.</p>
+                    <a href="https://amazon.com" target="_blank" class="btn btn-warning btn-lg rounded-pill px-5 fw-bold shadow">Shop Biohacking Gear</a>
                 </div>
             </div>
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon bg-dark rounded-circle p-3"></span>
+        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon bg-dark rounded-circle p-3"></span>
+        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
         </button>
     </div>
 
@@ -147,7 +157,7 @@
             <p class="mb-4">Get daily science-backed protocols for sleep, fasting, and focus delivered to your inbox.</p>
             <form action="https://formspree.io/f/esthetics03" method="POST" class="row g-2 justify-content-center">
                 <div class="col-md-8">
-                    <input type="email" name="email" class="form-control bg-dark border-secondary text-white rounded-pill p-3" placeholder="Enter your email" required>
+                    <input type="email" name="email" class="form-control bg-dark border-secondary text-white rounded-pill p-3" placeholder="Enter your best email..." required>
                 </div>
                 <div class="col-md-4">
                     <button type="submit" class="btn btn-info w-100 rounded-pill p-3 fw-bold text-white shadow">Join the Reset</button>
@@ -156,7 +166,7 @@
         </div>
     </section>
 
-    <footer class="py-5 mt-5" style="background: rgba(0,0,0,0.5); border-top: 1px solid var(--glass-border);">
+    <footer id="legal" class="py-5 mt-5" style="background: rgba(0,0,0,0.5); border-top: 1px solid var(--glass-border);">
         <div class="container">
             <div class="row g-4">
                 <div class="col-md-4">
@@ -169,24 +179,35 @@
                         <li><a href="contact.html" class="text-white opacity-75 text-decoration-none">Contact</a></li>
                     </ul>
                 </div>
+                
                 <div class="col-md-4">
                     <h4 class="fw-bold mb-4">Contact</h4>
                     <ul class="list-unstyled">
-                        <li class="mb-2 text-white opacity-75"><i class="bi bi-geo-alt me-2"></i> Nairobi, Kenya</li>
-                        <li class="mb-2"><a href="mailto:esthetics03@gmail.com" class="text-white opacity-75 text-decoration-none"><i class="bi bi-envelope-fill me-2"></i> esthetics03@gmail.com</a></li>
-                        <li class="mb-2"><a href="tel:+254113379488" class="text-white opacity-75 text-decoration-none"><i class="bi bi-telephone-fill me-2"></i> +254 113 379488</a></li>
+                        <li><a href="https://www.google.com/maps?q=Nairobi+Kenya&output=embed" target="_blank" class="text-white opacity-75 text-decoration-none"><i class="bi bi-geo-alt"></i> Nairobi, Kenya</a></li>
+                        <li><a href="mailto:esthetics03@gmail.com" class="text-white opacity-75 text-decoration-none"><i class="bi bi-envelope-fill"></i> esthetics03@gmail.com</a></li>
+                        <li><a href="tel:+254113379488" class="text-white opacity-75 text-decoration-none"><i class="bi bi-telephone-fill"></i> +254 113 379488</a></li>
+                        <li><a href="https://chat.whatsapp.com/BmBFZe4Xu7g73QBstg256C" class="text-white opacity-75 text-decoration-none"><i class="bi bi-whatsapp"></i> Chat on WhatsApp</a></li>
                     </ul>
                 </div>
+                
                 <div class="col-md-4 text-md-end">
                     <h4 class="fw-bold mb-4">The Esthetics Hub</h4>
                     <div class="footer-bottom opacity-50 small">
                         <p>© <span id="year"></span> All rights reserved.</p>
-                        <p>🌿 Holistic Wellness & Bio-Research</p>
+                        <p>🔒 Security & Privacy Encrypted</p>
+                        <p>🌿 Holistic Wellness, Nairobi 🇰🇪</p>
                     </div>
                 </div>
             </div>
+
             <div class="mt-5 text-center pt-4 border-top border-secondary">
-                <ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-client="ca-pub-1959507280210179" data-ad-slot="4567890123" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                <p class="small text-secondary mb-4"><em>This site contains affiliate links. We may earn a small commission at no extra cost to you.</em></p>
+                <ins class="adsbygoogle"
+                     style="display:block; text-align:center;"
+                     data-ad-client="ca-pub-1959507280210179"
+                     data-ad-slot="4567890123"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
             </div>
         </div>
     </footer>
@@ -213,9 +234,9 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0" style="background: var(--deep-ocean); border-radius: 30px;">
                 <div class="modal-body p-5 text-center">
-                    <h3 class="fw-bold mb-4">Support Our Research</h3>
-                    <div class="p-4 border border-success rounded-4 bg-dark mb-4">
-                        <span class="text-success small fw-bold">LIPA NA M-PESA TILL</span>
+                    <h3 class="fw-bold mb-4">Support Our Network</h3>
+                    <div class="p-4 border border-success rounded-4 bg-dark mb-4 shadow-sm">
+                        <span class="text-success small fw-bold text-uppercase">Lipa Na M-PESA Till</span>
                         <h1 class="display-4 fw-bold text-white my-2">3421580</h1>
                     </div>
                     <a href="https://paypal.me/esthetics03" class="btn btn-primary rounded-pill w-100 py-3 shadow">Donate via PayPal</a>
@@ -230,11 +251,13 @@
         AOS.init({ duration: 1000, once: true });
         document.getElementById('year').textContent = new Date().getFullYear();
 
+        // MindSync Search DB
         const hubDB = [
-            { t: "Metabolic Nutrition", l: "nutrition-guide.html", tag: "diet glucose fasting" },
-            { t: "Vagus Nerve Protocol", l: "stress-management.html", tag: "breathing stress mental" },
-            { t: "Nike Performance", l: "https://nike.com", tag: "shoes gear training" },
-            { t: "Booking Retreats", l: "https://booking.com", tag: "hotel travel spa" }
+            { t: "Metabolic Nutrition Protocol", l: "nutrition-guide.html", tag: "fasting diet glucose metabolism" },
+            { t: "Vagus Nerve Reset", l: "stress-management.html", tag: "stress breathing mental mind" },
+            { t: "Deep Sleep Lab", l: "sleep-tech.html", tag: "sleep recovery circadian tech" },
+            { t: "Nike Performance Shop", l: "https://nike.com", tag: "shoes training gear gym" },
+            { t: "Wellness Retreats", l: "https://booking.com", tag: "travel spa hotel getaway" }
         ];
 
         function runMindSync() {
@@ -244,10 +267,13 @@
             if (input.length < 2) return;
             hubDB.forEach(item => {
                 if (item.t.toLowerCase().includes(input) || item.tag.toLowerCase().includes(input)) {
-                    output.innerHTML += `<a href="${item.l}" class="d-block p-3 mb-2 bg-white bg-opacity-10 rounded-3 text-info text-decoration-none animate__animated animate__fadeInUp"><strong>${item.t}</strong><br><span class="small text-secondary">Explore →</span></a>`;
+                    output.innerHTML += `
+                    <a href="${item.l}" class="d-block p-3 mb-2 bg-white bg-opacity-10 rounded-3 text-info text-decoration-none animate__animated animate__fadeInUp">
+                        <strong>${item.t}</strong><br><span class="x-small text-secondary">View Protocol →</span>
+                    </a>`;
                 }
             });
         }
     </script>
 </body>
-    </html>
+        </html>
