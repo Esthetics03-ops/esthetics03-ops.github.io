@@ -10,34 +10,12 @@
     <meta name="google-site-verification" content="jdHjDlPyxv80L8s9prO2TcThpHy2ApVXvXl4vfnWQWU" />
     <meta name="google-adsense-account" content="ca-pub-1959507280210179">
 
-    <script async src="https://fundingchoicesmessages.google.com/i/pub-1959507280210179?ers=1"></script>
-    <script>
-      (function() {
-        function signalGooglefcPresent() {
-          if (!window.frames['googlefcPresent']) {
-            if (document.body) {
-              const iframe = document.createElement('iframe');
-              iframe.style = 'width: 0; height: 0; border: none; z-index: -1000; left: -1000px; top: -1000px;';
-              iframe.style.display = 'none';
-              iframe.name = 'googlefcPresent';
-              document.body.appendChild(iframe);
-            } else {
-              setTimeout(signalGooglefcPresent, 0);
-            }
-          }
-        }
-        signalGooglefcPresent();
-      })();
-    </script>
-
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-QCX3G9KSPC"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
-      gtag('consent', 'default', { 'ad_storage': 'denied', 'analytics_storage': 'denied' });
       gtag('js', new Date());
       gtag('config', 'G-QCX3G9KSPC');
-      gtag('config', 'G-PSW1MY7HB4');
     </script>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1959507280210179" crossorigin="anonymous"></script>
 
@@ -53,94 +31,92 @@
             --glass-border: rgba(255, 255, 255, 0.15);
             --accent-gold: #c5a880; 
             --deep-ocean: #0f172a;
+            /* Brand Colors for Icons */
+            --facebook: #1877F2;
+            --instagram: #E4405F;
+            --youtube: #FF0000;
+            --whatsapp: #25D366;
+            --amazon: #FF9900;
         }
 
         body { font-family: 'Outfit', sans-serif; color: white; background-color: var(--deep-ocean); overflow-x: hidden; }
 
-        /* Background Video */
+        /* Background Video - Fixed Rendering */
         #video-bg {
-            position: fixed; top: 50%; left: 50%; min-width: 100%; min-height: 100%; width: auto; height: auto;
-            z-index: -100; transform: translateX(-50%) translateY(-50%); filter: brightness(0.25) grayscale(0.2);
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -100; object-fit: cover; filter: brightness(0.3) contrast(1.1);
         }
-
-        /* Branding Styles */
-        .nav-logo { height: 45px; width: auto; }
-        .footer-logo { height: 80px; width: auto; margin-bottom: 1.5rem; filter: drop-shadow(0 0 10px rgba(197, 168, 128, 0.3)); }
 
         .social-top-bar {
-            background: rgba(0,0,0,0.5); backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--glass-border); padding: 8px 0; font-size: 0.9rem;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--glass-border); padding: 10px 0;
         }
-        .social-link-icon { color: #cbd5e1; margin-left: 18px; transition: 0.3s; }
-        .social-link-icon:hover { color: var(--accent-gold); transform: scale(1.2); }
+        
+        /* High Visibility Icons */
+        .social-link-icon { margin-left: 20px; font-size: 1.25rem; transition: 0.3s; text-decoration: none; display: inline-block; }
+        .social-link-icon.fb { color: var(--facebook); }
+        .social-link-icon.ig { color: var(--instagram); }
+        .social-link-icon.yt { color: var(--youtube); }
+        .social-link-icon.wa { color: var(--whatsapp); }
+        .social-link-icon:hover { transform: translateY(-3px) scale(1.2); filter: brightness(1.2); }
 
         .glass-panel {
             background: var(--glass-bg); backdrop-filter: blur(25px); border: 1px solid var(--glass-border);
-            border-radius: 30px; padding: 2.5rem; transition: 0.4s ease;
+            border-radius: 30px; padding: 2rem; transition: 0.4s ease; height: 100%;
         }
-        .glass-panel:hover { border-color: var(--accent-gold); transform: translateY(-5px); }
+        .glass-panel:hover { border-color: var(--accent-gold); transform: translateY(-7px); }
 
-        .search-trigger {
-            background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border);
-            border-radius: 50px; color: #cbd5e1; padding: 8px 24px; cursor: pointer; transition: 0.3s;
-        }
+        .nav-logo { height: 45px; width: auto; }
+        .footer-logo { height: 70px; width: auto; filter: drop-shadow(0 0 8px var(--accent-gold)); margin-bottom: 1rem; }
 
-        .logo-ticker { overflow: hidden; background: rgba(0,0,0,0.4); padding: 25px 0; }
-        .logo-track { display: flex; width: calc(250px * 12); animation: scroll-left 35s linear infinite; }
-        @keyframes scroll-left { 0% { transform: translateX(-100%); } 100% { transform: translateX(0); } }
-        .logo-item { width: 250px; text-align: center; font-size: 1.1rem; color: #cbd5e1; opacity: 0.7; font-weight: 700; }
+        .btn-amazon { background: var(--amazon); color: white; border-radius: 50px; font-weight: 700; border: none; }
+        .btn-nike { background: #000; color: white; border-radius: 50px; font-weight: 700; border: 1px solid #fff; }
+
+        .logo-ticker { background: rgba(0,0,0,0.4); padding: 20px 0; border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); }
+        .logo-track { display: flex; width: calc(250px * 12); animation: scroll-left 40s linear infinite; }
+        @keyframes scroll-left { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .logo-item { width: 250px; text-align: center; font-weight: 700; color: #cbd5e1; opacity: 0.6; }
 
         .whatsapp-float {
-            position: fixed; bottom: 30px; right: 30px; background-color: #25d366; color: white;
-            width: 65px; height: 65px; border-radius: 50px; display: flex; align-items: center; justify-content: center;
-            font-size: 32px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); z-index: 9999;
+            position: fixed; bottom: 30px; right: 30px; background-color: var(--whatsapp); color: white;
+            width: 60px; height: 60px; border-radius: 50px; display: flex; align-items: center; justify-content: center;
+            font-size: 30px; box-shadow: 0 10px 20px rgba(0,0,0,0.4); z-index: 9999; text-decoration: none;
         }
-        
-        .footer-contact i { color: var(--accent-gold); margin-right: 12px; }
-        .btn-amazon { background: #ff9900; color: white; border-radius: 50px; font-weight: 700; border: none; }
+
+        footer a { transition: 0.3s; }
+        footer a:hover { color: var(--accent-gold) !important; }
     </style>
 </head>
 
 <body>
 
-    <video autoplay muted loop id="video-bg">
+    <video autoplay muted loop playsinline id="video-bg">
         <source src="https://assets.mixkit.co/videos/preview/mixkit-serene-lake-landscape-with-mountains-and-mist-4438-large.mp4" type="video/mp4">
     </video>
 
     <div class="social-top-bar d-none d-lg-block">
         <div class="container d-flex justify-content-between align-items-center">
-            <span class="opacity-75 small fw-bold"><i class="bi bi-geo-alt me-1 text-info"></i> Nairobi, Kenya</span>
+            <span class="small fw-bold"><i class="bi bi-geo-alt-fill text-info me-1"></i> Nairobi, Kenya</span>
             <div class="d-flex align-items-center">
-                <a href="https://facebook.com/esthetics_hub" class="social-link-icon"><i class="bi bi-facebook"></i></a>
-                <a href="https://instagram.com/esthetics_hub" class="social-link-icon"><i class="bi bi-instagram"></i></a>
-                <a href="https://youtube.com/@esthetics_hub" class="social-link-icon"><i class="bi bi-youtube"></i></a>
-                <a href="https://chat.whatsapp.com/BmBFZe4Xu7g73QBstg256C" class="social-link-icon"><i class="bi bi-whatsapp"></i></a>
+                <a href="mailto:esthetics03@gmail.com" class="social-link-icon text-white"><i class="bi bi-envelope-at-fill"></i></a>
+                <a href="https://facebook.com/esthetics_hub" class="social-link-icon fb"><i class="bi bi-facebook"></i></a>
+                <a href="https://instagram.com/esthetics_hub" class="social-link-icon ig"><i class="bi bi-instagram"></i></a>
+                <a href="https://youtube.com/@esthetics_hub" class="social-link-icon yt"><i class="bi bi-youtube"></i></a>
+                <a href="https://chat.whatsapp.com/BmBFZe4Xu7g73QBstg256C" class="social-link-icon wa"><i class="bi bi-whatsapp"></i></a>
             </div>
         </div>
     </div>
 
-    <a href="https://chat.whatsapp.com/BmBFZe4Xu7g73QBstg256C" class="whatsapp-float animate__animated animate__bounceIn" target="_blank">
-        <i class="bi bi-whatsapp"></i>
-    </a>
-
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top" style="background: rgba(0,0,0,0.65); backdrop-filter: blur(15px);">
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top" style="background: rgba(0,0,0,0.75); backdrop-filter: blur(15px);">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center fw-bold fs-3" href="index.html">
-                <img src="g1.png" alt="Logo" class="nav-logo me-2">
-                ESTHETICS HUB
+                <img src="g1.png" alt="Logo" class="nav-logo me-2"> ESTHETICS HUB
             </a>
-            
-            <div class="d-flex align-items-center order-lg-last ms-lg-4">
-                <div class="search-trigger me-2" data-bs-toggle="modal" data-bs-target="#aiSearchModal">
-                    <i class="bi bi-stars me-2 text-info"></i><span class="d-none d-md-inline small">AI Search</span><i class="bi bi-search ms-2"></i>
-                </div>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent"><span class="navbar-toggler-icon"></span></button>
-            </div>
-
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navContent">
                 <ul class="navbar-nav ms-auto align-items-center">
                     <li class="nav-item"><a class="nav-link" href="#articles">Guides</a></li>
-                    <li class="nav-item"><a class="nav-link" href="sleep-tech.html">Sleep Tech</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#shop">Shop</a></li>
                     <li class="nav-item ms-lg-3"><button class="btn btn-info rounded-pill px-4 fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#donateModal">Support Us</button></li>
                 </ul>
             </div>
@@ -148,147 +124,139 @@
     </nav>
 
     <header class="py-5 text-center">
-        <div class="container py-5" data-aos="fade-up">
-            <h1 class="display-1 fw-bold mb-4 animate__animated animate__fadeInDown">Live <span style="color: var(--accent-gold);">Better.</span></h1>
-            <p class="lead opacity-75 mx-auto mb-5" style="max-width: 800px;">Science-backed nutrition, mental health, and holistic performance strategies curated for your peak longevity.</p>
+        <div class="container py-5" data-aos="zoom-in">
+            <h1 class="display-1 fw-bold mb-3">Live <span style="color: var(--accent-gold);">Better.</span></h1>
+            <p class="lead opacity-100 mx-auto mb-5" style="max-width: 750px; font-weight: 500;">Science-backed nutrition, mental health, and holistic performance strategies.</p>
         </div>
     </header>
 
     <div class="logo-ticker">
         <div class="logo-track">
-            <div class="logo-item"><i class="bi bi-stripe me-2"></i> STRIPE</div>
             <div class="logo-item"><i class="bi bi-amazon me-2"></i> AMAZON</div>
+            <div class="logo-item"><i class="bi bi-stripe me-2"></i> STRIPE</div>
             <div class="logo-item"><i class="bi bi-google me-2"></i> GOOGLE</div>
-            <div class="logo-item"><i class="bi bi-apple me-2"></i> APPLE HEALTH</div>
             <div class="logo-item"><i class="bi bi-airplane-fill me-2"></i> BOOKING.COM</div>
+            <div class="logo-item"><i class="bi bi-apple me-2"></i> APPLE HEALTH</div>
             <div class="logo-item"><i class="bi bi-meta me-2"></i> META</div>
-            <div class="logo-item"><i class="bi bi-stripe me-2"></i> STRIPE</div>
             <div class="logo-item"><i class="bi bi-amazon me-2"></i> AMAZON</div>
-            <div class="logo-item"><i class="bi bi-google me-2"></i> GOOGLE</div>
+            <div class="logo-item"><i class="bi bi-stripe me-2"></i> STRIPE</div>
         </div>
     </div>
 
-    <section id="travel" class="py-5 mt-5 container">
-        <div class="row g-4 align-items-stretch">
-            <div class="col-md-7" data-aos="fade-right">
-                <div class="glass-panel h-100 p-0 overflow-hidden" style="border-radius: 30px;">
-                    <img src="https://images.unsplash.com/photo-1540553016722-983e48a2cd10?auto=format&fit=crop&w=1200" 
-                         class="img-fluid h-100 w-100" 
-                         style="object-fit: cover; min-height: 400px;" 
-                         alt="Wellness Retreat">
+    <section id="articles" class="container py-5 mt-4">
+        <div class="row g-4">
+            <div class="col-md-4" data-aos="fade-up">
+                <div class="glass-panel text-center">
+                    <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=600" class="img-fluid rounded-4 mb-3" alt="Nutrition">
+                    <h4 class="fw-bold text-info">Metabolic Health</h4>
+                    <p class="small opacity-75">Hacking your energy through glucose monitoring and nutrient timing.</p>
+                    <a href="nutrition-guide.html" class="btn btn-outline-light btn-sm rounded-pill mt-2">View Guide</a>
                 </div>
             </div>
-            
-            <div class="col-md-5" data-aos="fade-left">
-                <div class="glass-panel h-100 d-flex flex-column justify-content-center text-center">
-                    <i class="bi bi-airplane-fill display-4 text-info mb-3"></i>
-                    <h2 class="fw-bold mb-3">Wellness Travel</h2>
-                    <p class="opacity-75 mb-4">Discover world-class spa retreats and holistic sanctuaries. Book your next healing journey via our partner.</p>
-                    
-                    <a href="https://www.booking.com/flexsearch.html?aid=2311235" 
-                       target="_blank" 
-                       class="btn btn-info rounded-pill py-3 fw-bold mb-3">
-                       <i class="bi bi-search me-2"></i>Search Retreats
-                    </a>
-                    
-                    <div class="mt-auto">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/b/be/Booking.com_logo.svg" 
-                             style="height: 25px; filter: brightness(0) invert(1);" 
-                             alt="Booking.com Partner">
-                    </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="glass-panel text-center">
+                    <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=600" class="img-fluid rounded-4 mb-3" alt="Breathwork">
+                    <h4 class="fw-bold text-info">The Vagus Nerve</h4>
+                    <p class="small opacity-75">Scientifically proven breathwork to reset your nervous system in 5 minutes.</p>
+                    <a href="stress-management.html" class="btn btn-outline-light btn-sm rounded-pill mt-2">View Guide</a>
+                </div>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="glass-panel text-center">
+                    <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=600" class="img-fluid rounded-4 mb-3" alt="Longevity">
+                    <h4 class="fw-bold text-info">Deep Sleep Protocol</h4>
+                    <p class="small opacity-75">Optimizing your circadian rhythm for peak recovery and cognitive function.</p>
+                    <a href="sleep-tech.html" class="btn btn-outline-light btn-sm rounded-pill mt-2">View Guide</a>
                 </div>
             </div>
         </div>
     </section>
-    <section id="shop" class="py-5 container">
+
+    <section id="shop" class="container py-5">
         <div class="row g-4">
             <div class="col-md-6" data-aos="fade-right">
-                <div class="glass-panel h-100 text-center">
-                    <img src="images/eco-friendly-yoga-mat.webp" class="img-fluid rounded-4 mb-4" alt="Yoga Mat">
-                    <h4 class="fw-bold">Eco-Friendly Yoga Mat</h4>
-                    <a href="https://www.amazon.com/s?k=yoga+mat&tag=esthetics-hub-affiliate" target="_blank" class="btn btn-amazon w-100 py-3 mt-auto">Buy on Amazon</a>
+                <div class="glass-panel text-center">
+                    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600" class="img-fluid rounded-4 mb-4" alt="Nike Gear">
+                    <h3 class="fw-bold">Elite Performance</h3>
+                    <p>Upgrade your training with high-performance Nike activewear.</p>
+                    <a href="https://www.nike.com/" target="_blank" class="btn btn-nike w-100 py-3 mt-3">Shop Nike Official</a>
                 </div>
             </div>
             <div class="col-md-6" data-aos="fade-left">
-                <div class="glass-panel h-100 text-center">
-                    <img src="images/holistic-nutrition-guide.webp" class="img-fluid rounded-4 mb-4" alt="Nutrition Guide">
-                    <h4 class="fw-bold">Holistic Nutrition Guide</h4>
-                    <a href="https://www.amazon.com/s?k=nutrition+guide&tag=esthetics-hub-affiliate" target="_blank" class="btn btn-amazon w-100 py-3 mt-auto">Buy on Amazon</a>
+                <div class="glass-panel text-center">
+                    <img src="https://images.unsplash.com/photo-1540553016722-983e48a2cd10?auto=format&fit=crop&w=1200" class="img-fluid rounded-4 mb-4" alt="Booking Travel">
+                    <h3 class="fw-bold">Wellness Retreats</h3>
+                    <p>Book a transformative escape at the world's best spa destinations.</p>
+                    <a href="https://www.booking.com/flexsearch.html?aid=2311235" target="_blank" class="btn btn-info w-100 py-3 mt-3 text-white fw-bold">Find a Retreat</a>
                 </div>
             </div>
         </div>
     </section>
-    <footer class="py-5 mt-5" style="background: rgba(0,0,0,0.5); border-top: 1px solid var(--glass-border);">
+
+    <footer class="py-5 mt-5" style="background: rgba(0,0,0,0.8); border-top: 1px solid var(--glass-border);">
         <div class="container">
             <div class="row g-4">
                 <div class="col-md-4">
-                    <h4 class="fw-bold mb-4">Quick Links</h4>
-                    <ul class="list-unstyled">
-                        <li><a href="about.html" class="text-white opacity-75 text-decoration-none">About Us</a></li>
-                        <li><a href="privacy.html" class="text-white opacity-75 text-decoration-none">Privacy Policy</a></li>
-                        <li><a href="policy.html" class="text-white opacity-75 text-decoration-none">Privacy & Disclosure</a></li>
-                        <li><a href="terms.html" class="text-white opacity-75 text-decoration-none">Terms of Service</a></li>
-                        <li><a href="legal.html" class="text-white opacity-75 text-decoration-none">Privacy & Terms</a></li>
-                        <li><a href="disclaimer.html" class="text-white opacity-75 text-decoration-none">Affiliate Disclaimer</a></li>
-                        <li><a href="contact.html" class="text-white opacity-75 text-decoration-none">Contact</a></li>
-                    </ul>
-                </div>
-                
-                <div class="col-md-4 footer-contact">
-                    <h4 class="fw-bold mb-4">Contact</h4>
-                    <ul class="list-unstyled">
-                        <li><a href="https://www.google.com/maps?q=Nairobi+Kenya&output=embed" target="_blank" class="text-white opacity-75 text-decoration-none"><i class="bi bi-geo-alt"></i> Nairobi, Kenya</a></li>
-                        <li><a href="mailto:esthetics03@gmail.com" class="text-white opacity-75 text-decoration-none"><i class="bi bi-envelope-fill"></i> esthetics03@gmail.com</a></li>
-                        <li><a href="tel:+254113379488" class="text-white opacity-75 text-decoration-none"><i class="bi bi-telephone-fill"></i> +254 113 379488</a></li>
-                        <li><a href="https://chat.whatsapp.com/BmBFZe4Xu7g73QBstg256C" class="text-white opacity-75 text-decoration-none"><i class="bi bi-whatsapp"></i> Chat on WhatsApp</a></li>
-                    </ul>
-                </div>
-                
-                <div class="col-md-4 text-md-end">
-                    <img src="g1.png" alt="Esthetics Hub Logo" class="footer-logo">
-                    <h4 class="fw-bold mb-2">The Esthetics Hub</h4>
-                    <div class="footer-bottom opacity-50 small">
-                        <p>© <span id="year"></span> All rights reserved.</p>
-                        <p>
-                            <a href="/SECURITY.md" class="text-white">🔒 Security</a> |
-                            <a href="cookies.html" class="text-white">Cookie Policy</a>
-                        </p>
-                        <p>🌿 Holistic Wellness, Nairobi 🇰🇪</p>
+                    <img src="g1.png" alt="Esthetics Hub" class="footer-logo">
+                    <h4 class="fw-bold mb-3">THE ESTHETICS HUB</h4>
+                    <p class="small opacity-75 pe-md-4">Nairobi's premier destination for science-backed wellness, longevity research, and AI-driven lifestyle optimization. Live better, longer.</p>
+                    <div class="mt-4">
+                        <a href="https://facebook.com/esthetics_hub" class="text-white me-3 fs-5"><i class="bi bi-facebook"></i></a>
+                        <a href="https://instagram.com/esthetics_hub" class="text-white me-3 fs-5"><i class="bi bi-instagram"></i></a>
+                        <a href="https://chat.whatsapp.com/BmBFZe4Xu7g73QBstg256C" class="text-white fs-5"><i class="bi bi-whatsapp"></i></a>
                     </div>
+                </div>
+
+                <div class="col-md-2">
+                    <h5 class="fw-bold mb-4">Resources</h5>
+                    <ul class="list-unstyled small">
+                        <li class="mb-2"><a href="about.html" class="text-white-50 text-decoration-none">About Us</a></li>
+                        <li class="mb-2"><a href="contact.html" class="text-white-50 text-decoration-none">Contact</a></li>
+                        <li class="mb-2"><a href="sleep-tech.html" class="text-white-50 text-decoration-none">Sleep Lab</a></li>
+                        <li class="mb-2"><a href="nutrition-guide.html" class="text-white-50 text-decoration-none">Nutrition</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-md-3">
+                    <h5 class="fw-bold mb-4">Legal & Privacy</h5>
+                    <ul class="list-unstyled small">
+                        <li class="mb-2"><a href="privacy.html" class="text-white-50 text-decoration-none">Privacy Policy</a></li>
+                        <li class="mb-2"><a href="terms.html" class="text-white-50 text-decoration-none">Terms of Service</a></li>
+                        <li class="mb-2"><a href="disclaimer.html" class="text-white-50 text-decoration-none">Affiliate Disclosure</a></li>
+                        <li class="mb-2"><a href="cookies.html" class="text-white-50 text-decoration-none">Cookie Settings</a></li>
+                        <li class="mb-2"><a href="/SECURITY.md" class="text-white-50 text-decoration-none"><i class="bi bi-shield-lock me-1"></i> Security</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-md-3">
+                    <h5 class="fw-bold mb-4">Connect</h5>
+                    <p class="small text-white-50"><i class="bi bi-geo-alt text-info me-2"></i> Nairobi, Kenya</p>
+                    <p class="small text-white-50"><i class="bi bi-envelope text-info me-2"></i> esthetics03@gmail.com</p>
+                    <p class="small text-white-50"><i class="bi bi-telephone text-info me-2"></i> +254 113 379488</p>
+                    <button class="btn btn-sm btn-info rounded-pill px-4 mt-2 fw-bold" data-bs-toggle="modal" data-bs-target="#donateModal">Support Our Research</button>
                 </div>
             </div>
 
-            <div class="mt-5 text-center pt-4 border-top border-secondary">
-                <p class="small text-secondary mb-4"><em>This site contains affiliate links. We may earn a small commission at no extra cost to you.</em></p>
-                <ins class="adsbygoogle"
-                     style="display:block; text-align:center;"
-                     data-ad-client="ca-pub-1959507280210179"
-                     data-ad-slot="4567890123"
-                     data-ad-format="auto"
-                     data-full-width-responsive="true"></ins>
+            <hr class="my-5 border-secondary opacity-25">
+
+            <div class="text-center">
+                <p class="small text-secondary mb-0">© <span id="year"></span> The Esthetics Hub. All Rights Reserved.</p>
+                <p class="x-small text-secondary mt-2" style="font-size: 0.75rem;">This site uses affiliate links. We may earn a commission on qualifying purchases at no cost to you.</p>
             </div>
         </div>
     </footer>
 
-    <div class="modal fade" id="aiSearchModal" tabindex="-1">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content border-0" style="background: rgba(15, 23, 42, 0.98); border-radius: 30px;">
-                <div class="modal-body p-5">
-                    <h3 class="fw-bold text-info mb-4"><i class="bi bi-stars me-2"></i>MindSync AI Search</h3>
-                    <input type="text" id="aiInput" class="form-control form-control-lg bg-transparent border-0 border-bottom border-secondary text-white rounded-0 shadow-none px-0" placeholder="Ask about sleep, nutrition, or stress..." onkeyup="runSearch()">
-                    <div id="aiResults" class="mt-4 row g-3"></div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <a href="https://chat.whatsapp.com/BmBFZe4Xu7g73QBstg256C" class="whatsapp-float animate__animated animate__bounceIn" target="_blank">
+        <i class="bi bi-whatsapp"></i>
+    </a>
 
     <div class="modal fade" id="donateModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0" style="background: var(--deep-ocean); border-radius: 30px;">
                 <div class="modal-body p-5 text-center">
                     <h3 class="fw-bold mb-4">Support Our Network</h3>
-                    <div class="p-4 border border-success rounded-4 bg-dark mb-3">
-                        <span class="text-success small fw-bold text-uppercase">Buy Goods Till Number</span>
+                    <div class="p-4 border border-success rounded-4 bg-dark mb-4">
+                        <span class="text-success small fw-bold text-uppercase">Lipa Na M-PESA Till</span>
                         <h1 class="display-4 fw-bold text-white my-2">3421580</h1>
                     </div>
                     <a href="https://paypal.me/esthetics03" class="btn btn-primary rounded-pill w-100 py-3 shadow">Donate via PayPal</a>
@@ -302,34 +270,6 @@
     <script>
         AOS.init({ duration: 1000, once: true });
         document.getElementById('year').textContent = new Date().getFullYear();
-
-        // Functional AI Search
-        const searchBank = [
-            { title: "Sleep Optimization Guide", link: "sleep-tech.html" },
-            { title: "Nutrition Deep-Dive", link: "holistic-nutrition.html" },
-            { title: "Mental Clarity Protocol", link: "#articles" }
-        ];
-
-        function runSearch() {
-            const val = document.getElementById('aiInput').value.toLowerCase();
-            const res = document.getElementById('aiResults');
-            res.innerHTML = '';
-            if(val.length < 2) return;
-            searchBank.filter(i => i.title.toLowerCase().includes(val)).forEach(m => {
-                res.innerHTML += `<div class="col-12"><a href="${m.link}" class="text-decoration-none"><div class="glass-panel p-3 mb-2" style="border-radius:15px;"><h6 class="text-info mb-0">${m.title} →</h6></div></a></div>`;
-            });
-        }
-
-        // Diagnostic Tools
-        (function() {
-            console.log("🛠️ Esthetics Hub System Diagnostics Active");
-            window.addEventListener('scroll', function() {
-                if (window.scrollY > 300) { (adsbygoogle = window.adsbygoogle || []).push({}); }
-            }, { once: true });
-            document.querySelectorAll('a[href*="amazon"]').forEach(link => {
-                link.addEventListener('click', () => { gtag('event', 'affiliate_click', {'event_label': link.href}); });
-            });
-        })();
     </script>
 </body>
-  </html>
+        </html>
