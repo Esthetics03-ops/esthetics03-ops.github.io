@@ -306,12 +306,17 @@
         <i class="bi bi-whatsapp"></i>
     </a>
 
-    <div class="modal fade" id="searchModal" tabindex="-1">
+    <div class="modal fade" id="searchModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0" style="background: rgba(15, 23, 42, 0.98); border-radius: 25px; backdrop-filter: blur(15px);">
+            <div class="modal-content border-0 shadow-lg" style="background: rgba(15, 23, 42, 0.98); border-radius: 30px; backdrop-filter: blur(20px);">
                 <div class="modal-body p-4">
-                    <input type="text" id="aiInput" class="form-control bg-transparent border-info text-white" placeholder="Ask MindSync..." onkeyup="runMindSync()">
-                    <div id="aiOutput" class="mt-3"></div>
+                    <div class="d-flex align-items-center mb-4 bg-white bg-opacity-10 rounded-pill px-4 py-2 border border-info border-opacity-25">
+                        <i class="bi bi-stars text-info me-3 fs-4"></i>
+                        <input type="text" id="aiInput" class="form-control bg-transparent border-0 text-white shadow-none p-0" placeholder="Ask MindSync AI..." onkeyup="runMindSync()" autocomplete="off">
+                        <button type="button" class="btn-close btn-close-white ms-2" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div id="aiOutput" class="text-start" style="min-height: 150px;">
+                        </div>
                 </div>
             </div>
         </div>
@@ -331,13 +336,91 @@
         });
         function closePopup() { document.getElementById('exitPopup').style.display = 'none'; }
 
+        // Upgraded MindSync AI Master Index 2026
+        const hubDB = [
+            // Core Protocols & Reset
+            { t: "14-Day Bio-Sync Reset", l: "#reset", tag: "signup challenge rituals email daily program" },
+            { t: "Metabolic Nutrition Protocol", l: "nutrition-guide.html", tag: "fasting diet glucose metabolism science food" },
+            { t: "Vagus Nerve Reset", l: "stress-management.html", tag: "stress breathing mental mind breathwork anxiety" },
+            { t: "Deep Sleep Lab", l: "sleep-tech.html", tag: "sleep recovery circadian tech biohack insomnia" },
+            { t: "Bio-Sync Chrononutrition", l: "bio-sync-chrononutrition.html", tag: "timing biological clock rhythm energy" },
+            
+            // Research & Articles
+            { t: "Biohacking Longevity 2026", l: "biohacking-longevity-2025.html", tag: "aging future health lifespan science research" },
+            { t: "Mental Wellness Tech Hub", l: "https://esthetics03-ops.github.io/Mental-Wellness-Tech.html", tag: "ai apps digital health psychology gadgets" },
+            { t: "The Fate of Humanity", l: "posts.html", tag: "philosophy future society evolution humanity" },
+            { t: "Wellness Travel & Retreats", l: "Travel-wellness.html", tag: "vacation getaway spa relaxation travel" },
+            { t: "Natural Remedies Index", l: "natural-remedies.html", tag: "herbs healing traditional holistic cures" },
+            { t: "10 Nutritional Tips", l: "nutrition-tips.html", tag: "advice simple diet hacks weight loss" },
+            { t: "Oura Ring Gen3 Review", l: "sleep-tech-oura.html", tag: "hardware wearable tracker monitoring" },
+
+            // Partner & Commerce
+            { t: "Nike Elite Performance Shop", l: "https://www.nike.com/", tag: "shoes training gear gym sneakers athletic" },
+            { t: "Wellness Retreat Booking", l: "https://www.booking.com/flexsearch.html?aid=2311235", tag: "hotel travel spa staycation booking" },
+            { t: "MindSync AI Resource Center", l: "resources.html", tag: "downloads links tools help" },
+
+            // Legal & Support
+            { t: "Contact Support", l: "contact.html", tag: "help email phone reach out location nairobi" },
+            { t: "About The Esthetics Hub", l: "about.html", tag: "team mission story wellness nairobi" },
+            { t: "Privacy Policy", l: "privacy.html", tag: "data security safety" },
+            { t: "Terms of Service", l: "terms.html", tag: "rules agreement legal" },
+            { t: "Affiliate Disclosure", l: "disclaimer.html", tag: "transparency earnings ads" },
+            { t: "Legal & Regulatory", l: "legal.html", tag: "conditions disclosure" }
+        ];
+
+        const trendingTerms = ["Sleep", "Fasting", "Nike", "Longevity", "Stress"];
+
         function runMindSync() {
-            let input = document.getElementById('aiInput').value.toLowerCase();
-            let output = document.getElementById('aiOutput');
-            if (input.length > 2) {
-                output.innerHTML = `<div class="p-3 bg-white bg-opacity-10 rounded">Searching results for "${input}"...</div>`;
+            const input = document.getElementById('aiInput').value.toLowerCase().trim();
+            const output = document.getElementById('aiOutput');
+            
+            // Show Trending if input is empty
+            if (input.length === 0) {
+                renderTrending();
+                return;
+            }
+
+            if (input.length < 2) return;
+
+            const results = hubDB.filter(item => 
+                item.t.toLowerCase().includes(input) || 
+                item.tag.toLowerCase().includes(input)
+            );
+
+            if (results.length > 0) {
+                output.innerHTML = results.map(item => `
+                    <a href="${item.l}" class="d-block p-3 mb-2 bg-white bg-opacity-10 rounded-3 text-info text-decoration-none animate__animated animate__fadeInUp">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong class="d-block text-white">${item.t}</strong>
+                                <span class="small opacity-50" style="font-size:0.7rem;">${item.l.startsWith('http') ? 'PARTNER LINK' : 'INTERNAL PROTOCOL'}</span>
+                            </div>
+                            <i class="bi bi-chevron-right"></i>
+                        </div>
+                    </a>
+                `).join('');
+            } else {
+                output.innerHTML = `<div class="text-center py-4 opacity-50"><p>No protocols found for "${input}"</p></div>`;
             }
         }
+
+        function renderTrending() {
+            const output = document.getElementById('aiOutput');
+            let html = `<p class="small text-secondary mb-2">Trending Searches:</p><div class="d-flex flex-wrap gap-2">`;
+            trendingTerms.forEach(term => {
+                html += `<span class="badge rounded-pill bg-info bg-opacity-10 text-info p-2 px-3" style="cursor:pointer" onclick="fillSearch('${term}')">${term}</span>`;
+            });
+            html += `</div>`;
+            output.innerHTML = html;
+        }
+
+        function fillSearch(term) {
+            document.getElementById('aiInput').value = term;
+            runMindSync();
+        }
+
+        // Initialize Trending on Modal Load
+        document.getElementById('searchModal').addEventListener('shown.bs.modal', renderTrending);
     </script>
 </body>
     </html>
