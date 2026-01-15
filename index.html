@@ -421,6 +421,23 @@
 
         // Initialize Trending on Modal Load
         document.getElementById('searchModal').addEventListener('shown.bs.modal', renderTrending);
+        // AUTOMATED SITEMAP XML GENERATOR
+        function generateSitemap() {
+            let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
+            hubDB.forEach(item => {
+                if(!item.l.startsWith('http')) {
+                    xml += `  <url>\n    <loc>https://theestheticshub.com/${item.l}</loc>\n    <changefreq>weekly</changefreq>\n  </url>\n`;
+                }
+            });
+            xml += `</urlset>`;
+            console.log("🚀 GOOGLE SITEMAP XML GENERATED:\n", xml);
+        }
+        generateSitemap(); // View in Browser Console (F12)
+
+        // Exit Logic
+        document.addEventListener("mouseleave", (e) => { if(e.clientY < 0 && !localStorage.getItem('p')) { document.getElementById('exitPopup').style.display='flex'; localStorage.setItem('p','1'); }});
+        function closePopup() { document.getElementById('exitPopup').style.display='none'; }
+    
     </script>
 </body>
     </html>
