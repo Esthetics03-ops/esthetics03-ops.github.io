@@ -157,7 +157,73 @@
     padding: 4px 12px;
     border-radius: 50px;
 }
-        
+    /* Smart Mobile Action Bar - App Style */
+@media (max-width: 991px) {
+    .mobile-action-bar {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        max-width: 400px;
+        background: rgba(15, 23, 42, 0.9);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 50px;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        padding: 10px 15px;
+        z-index: 10000;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    }
+
+    .mobile-action-item {
+        color: white;
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: 0.65rem;
+        font-weight: 600;
+        transition: 0.3s;
+        opacity: 0.8;
+    }
+
+    .mobile-action-item i {
+        font-size: 1.4rem;
+        margin-bottom: 2px;
+    }
+
+    .mobile-action-item:hover, .mobile-action-item.active {
+        color: var(--accent-gold);
+        opacity: 1;
+        transform: translateY(-3px);
+    }
+
+    .mobile-action-center {
+        background: var(--accent-gold);
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: -35px;
+        border: 5px solid var(--deep-ocean);
+        box-shadow: 0 5px 15px rgba(197, 168, 128, 0.4);
+        color: var(--deep-ocean) !important;
+    }
+
+    .mobile-action-center i { font-size: 1.6rem; margin: 0; }
+    
+    /* Hide desktop floating WhatsApp when this bar is active */
+    .whatsapp-float { display: none !important; }
+}
+
+@media (min-width: 992px) {
+    .mobile-action-bar { display: none; }
+        }    
     </style>
 </head>
 
@@ -509,5 +575,28 @@
         function closePopup() { document.getElementById('exitPopup').style.display='none'; }
     
     </script>
+    <div class="mobile-action-bar animate__animated animate__fadeInUp">
+    <a href="index.html" class="mobile-action-item">
+        <i class="bi bi-house-door"></i>
+        <span>Home</span>
+    </a>
+    <a href="holistic-nutrition.html" class="mobile-action-item">
+        <i class="bi bi-apple"></i>
+        <span>Diet</span>
+    </a>
+    
+    <a href="#" class="mobile-action-item mobile-action-center" data-bs-toggle="modal" data-bs-target="#searchModal">
+        <i class="bi bi-stars"></i>
+    </a>
+
+    <a href="https://chat.whatsapp.com/BmBFZe4Xu7g73QBstg256C" class="mobile-action-item" target="_blank">
+        <i class="bi bi-whatsapp"></i>
+        <span>Chat</span>
+    </a>
+    <a href="posts.html" class="mobile-action-item">
+        <i class="bi bi-journal-text"></i>
+        <span>Protocol</span>
+    </a>
+    </div>
 </body>
     </html>
