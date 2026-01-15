@@ -276,6 +276,31 @@
 .social-link-icon.ig:hover { color: #E4405F !important; text-shadow: 0 0 10px rgba(228,64,95,0.5); }
 .social-link-icon.yt:hover { color: #FF0000 !important; text-shadow: 0 0 10px rgba(255,0,0,0.5); }
 .social-link-icon.wa:hover { color: #25D366 !important; text-shadow: 0 0 10px rgba(37,211,102,0.5); }
+/* Social Icon Visibility & Interaction Lock */
+.social-cluster {
+    display: flex;
+    gap: 15px;
+    justify-content: center; /* Centered on mobile */
+}
+
+@media (min-width: 992px) {
+    .social-cluster { justify-content: flex-end; } /* Right-aligned on desktop */
+}
+
+.social-link-icon {
+    color: rgba(255,255,255,0.9) !important;
+    font-size: 1.3rem;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+/* Individual Brand Glows */
+.social-link-icon:hover { transform: scale(1.2) translateY(-5px); }
+.social-link-icon.fb:hover { color: #1877f2 !important; }
+.social-link-icon.ig:hover { color: #e4405f !important; }
+.social-link-icon.wa:hover { color: #25d366 !important; }
+.social-link-icon.yt:hover { color: #ff0000 !important; }
+        
     </style>
 </head>
 
@@ -290,21 +315,20 @@
             <div class="social-top-bar d-none d-lg-block">
     <div class="container">
         <div class="brand-utility-wrapper">
-            <div class="eh-header-inner d-flex align-items-center">
-    <a href="index.html" class="eh-logo-link">
+            <div class="eh-header-inner d-flex flex-column flex-lg-row align-items-center text-center text-lg-start">
+    <a href="index.html" class="eh-logo-link mb-2 mb-lg-0">
         <img src="g1.png" 
              alt="The Esthetics Hub" 
              class="eh-logo" 
-             style="height: 45px; width: auto; display: block;" 
+             style="height: 50px; width: auto; transition: 0.3s;" 
              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-        <div class="fallback-logo" style="display:none; width:45px; height:45px; background:var(--accent-gold); color:var(--deep-ocean); border-radius:10px; align-items:center; justify-content:center; font-weight:800; font-size:1.2rem;">EH</div>
+        <div class="fallback-logo mx-auto" style="display:none; width:50px; height:50px; background:var(--accent-gold); color:var(--deep-ocean); border-radius:12px; align-items:center; justify-content:center; font-weight:800; font-size:1.4rem;">EH</div>
     </a>
-    <div class="eh-brand ms-3">
-        <span class="eh-title" style="display:block; font-weight:800; font-size:1.2rem; color:white; line-height:1;">The Esthetics Hub</span>
-        <span class="eh-subtitle" style="font-size:0.7rem; color:var(--accent-gold); text-transform:uppercase; letter-spacing:1px;">Holistic Living</span>
+    <div class="eh-brand ms-lg-3">
+        <h1 class="eh-title m-0" style="font-weight: 800; font-size: 1.3rem; color: white;">The Esthetics Hub</h1>
+        <span class="eh-subtitle" style="font-size: 0.7rem; color: var(--accent-gold); text-transform: uppercase; letter-spacing: 2px;">Holistic Living • 2026</span>
     </div>
 </div>
-
             <div class="d-flex align-items-center">
                 <span class="location-tag me-4">
                     <i class="bi bi-geo-alt-fill text-info me-2"></i> Nairobi HQ, Kenya
