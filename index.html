@@ -11,6 +11,27 @@
     <meta name="google-adsense-account" content="ca-pub-1959507280210179">
 
     <script>
+        // High-Performance Asset Preloading
+        (function() {
+            const videoSrc = "https://assets.mixkit.co/videos/preview/mixkit-serene-lake-landscape-with-mountains-and-mist-4438-large.mp4";
+            
+            // Preload Video Background
+            const videoPreload = document.createElement('link');
+            videoPreload.rel = 'preload';
+            videoPreload.as = 'video';
+            videoPreload.href = videoSrc;
+            document.head.appendChild(videoPreload);
+
+            // Instant Video Initialization
+            window.addEventListener('load', () => {
+                const bgVideo = document.getElementById('video-bg');
+                if (bgVideo) {
+                    bgVideo.classList.add('loaded');
+                    console.log("🚀 HD Background Loaded & Optimized");
+                }
+            });
+        })();
+        
     (function() {
       console.log("🔍 AdSense Diagnostic Started...");
       const adScript = document.querySelector('script[src*="pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"]');
@@ -110,6 +131,15 @@
         .dropdown-item { color: white; font-size: 0.9rem; padding: 8px 20px; }
         .dropdown-item:hover { background: var(--glass-bg); color: var(--accent-gold); }
         .dropdown-header { color: var(--accent-gold); font-weight: bold; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; }
+
+        
+    .eh-header-inner { display: flex; align-items: center; gap: 15px; }
+        .eh-logo { height: 45px; width: auto; }
+        .eh-brand { display: flex; flex-direction: column; }
+        .eh-title { font-weight: 800; font-size: 1.2rem; color: white; line-height: 1; }
+        .eh-subtitle { font-size: 0.7rem; color: var(--accent-gold); text-transform: uppercase; letter-spacing: 1px; }
+
+        
 
     /* Upgraded Premium Social Top Bar Styles */
 .social-top-bar {
