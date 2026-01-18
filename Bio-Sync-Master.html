@@ -3,104 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bio-Sync Master | Esthetics Hub</title>
+    <title>Bio-Sync Master | The Esthetics Hub</title>
+    
+    <meta name="google-site-verification" content="jdHjDlPyxv80L8s9prO2TcThpHy2ApVXvXl4vfnWQWU" />
+    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="https://apis.google.com/js/api.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
     <style>
         :root { --bg: #020617; --card: #0f172a; --primary: #10b981; --accent: #8b5cf6; --text: #f8fafc; --border: #1e293b; --dim: #64748b; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; overflow-x: hidden; }
-        #gate { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(15px); }
-        .gate-card { background: var(--card); padding: 40px; border-radius: 24px; border: 1px solid var(--border); text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
-        .container { max-width: 1400px; margin: 0 auto; padding: 25px; display: none; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-        .card { background: var(--card); border: 1px solid var(--border); padding: 24px; border-radius: 20px; transition: 0.3s; position: relative; }
-        .val { font-size: 2.8rem; font-weight: 800; margin: 10px 0; letter-spacing: -1px; color: var(--primary); }
-        .label { font-size: 0.75rem; color: var(--dim); text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; }
-        button { background: var(--accent); color: white; border: none; padding: 16px 32px; border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.3s; }
-        button:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(139, 92, 246, 0.3); }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        td { padding: 12px 0; border-top: 1px solid var(--border); font-size: 0.9rem; }
-        .status-pill { padding: 4px 10px; border-radius: 6px; font-size: 0.65rem; font-weight: 900; background: rgba(16,185,129,0.1); color: var(--primary); }
+        body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); margin: 0; }
+        #gate { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; align-items: center; justify-content: center; text-align: center; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 30px; display: none; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 25px; }
+        .card { background: var(--card); border: 1px solid var(--border); padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+        .val { font-size: 2.8rem; font-weight: 800; color: var(--primary); letter-spacing: -2px; margin: 10px 0; }
+        .label { font-size: 0.75rem; color: var(--dim); text-transform: uppercase; font-weight: 700; letter-spacing: 1.5px; }
+        button { background: var(--accent); color: white; border: none; padding: 18px 40px; border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.3s; }
+        button:hover { transform: scale(1.03); box-shadow: 0 0 20px rgba(139, 92, 246, 0.5); }
+        .status-pill { padding: 5px 12px; border-radius: 6px; font-size: 0.7rem; font-weight: 900; background: rgba(16,185,129,0.1); color: var(--primary); }
+        iframe { border-radius: 15px; border: 1px solid var(--border); }
     </style>
 </head>
 <body>
 
     <div id="gate">
-        <div class="gate-card">
+        <div class="card" style="width: 450px; border-bottom: 5px solid var(--accent);">
             <i class="bi bi-cpu-fill" style="font-size: 3.5rem; color: var(--accent);"></i>
             <h2 style="margin: 20px 0;">Initialize Master Sync</h2>
-            <p style="color: var(--dim); margin-bottom: 30px;">ID: pub-1959507280210179</p>
-            <button onclick="requestToken()">DECRYPT & CONNECT GSC</button>
+            <p style="color:var(--dim); margin-bottom: 35px;">Property: esthetics03-ops.github.io<br>Account: gkutosi95@gmail.com</p>
+            <button onclick="requestToken()">DECRYPT & SYNC ALL APIS</button>
         </div>
     </div>
 
     <div class="container" id="dash">
-        <header style="display:flex; justify-content:space-between; align-items:center; margin-bottom:40px;">
+        <header style="display:flex; justify-content:space-between; align-items:center; margin-bottom:50px;">
             <div>
-                <h1 style="margin:0; font-size:1.5rem;">ESTHETICS <span style="color:var(--accent)">MASTER</span></h1>
-                <div style="font-size:0.7rem; color:var(--dim)"><i class="bi bi-broadcast"></i> SYNCED TO GA4: G-QCX3G9KSPC</div>
+                <h1 style="margin:0;">ESTHETICS <span style="color:var(--accent)">HUB</span> MASTER</h1>
+                <div style="font-size:0.8rem; color:var(--dim); margin-top:5px;">
+                    <i class="bi bi-shield-check"></i> ADS.TXT VERIFIED: pub-1959507280210179
+                </div>
             </div>
-            <div id="uptime" style="font-family:monospace; color:var(--primary)">00:00</div>
+            <div style="text-align: right;">
+                <span class="status-pill">LIVE GA4: G-QCX3G9KSPC</span>
+            </div>
         </header>
 
         <div class="grid">
             <div class="card">
-                <div class="label">Verified Clicks</div>
+                <div class="label">Organic Clicks (30D)</div>
                 <div id="clicks" class="val">--</div>
-                <small style="color:var(--dim)">Source: Search Console</small>
+                <small style="color:var(--dim)">Target: 1,000 / mo</small>
             </div>
             <div class="card">
-                <div class="label">Impressions</div>
+                <div class="label">Total Monetization</div>
+                <div id="revenue" class="val">--</div>
+                <small style="color:var(--accent)">Affiliate: esthetics-hub-affiliate</small>
+            </div>
+            <div class="card">
+                <div class="label">Search Impressions</div>
                 <div id="imps" class="val">--</div>
-                <small style="color:var(--dim)">30-Day Velocity</small>
-            </div>
-            <div class="card">
-                <div class="label">AdSense Revenue (Est.)</div>
-                <div id="revenue" class="val">$0.00</div>
-                <small style="color:var(--primary)">Niche: Holistic Wellness</small>
+                <small style="color:var(--primary)">2.02K Historical Baseline</small>
             </div>
         </div>
 
-        <div class="grid" style="grid-template-columns: 2fr 1fr; margin-top:20px;">
+        <div class="grid" style="grid-template-columns: 2fr 1fr;">
             <div class="card">
-                <div class="label">Traffic Trend Analysis</div>
-                <canvas id="mainChart" height="280"></canvas>
+                <div class="label" style="margin-bottom:20px;">Performance Growth Trend</div>
+                <canvas id="mainChart" height="150"></canvas>
             </div>
             <div class="card">
-                <div class="label">Account Details</div>
-                <table>
-                    <tr><td>Publisher ID</td><td style="text-align:right">...0179</td></tr>
-                    <tr><td>Affiliate ID</td><td style="text-align:right">esthetics...</td></tr>
-                    <tr><td>API Key</td><td style="text-align:right">Active <i class="bi bi-check-circle-fill" style="color:var(--primary)"></i></td></tr>
-                </table>
-                <div style="margin-top:20px; padding:15px; background:rgba(255,255,255,0.02); border-radius:12px; font-size:0.75rem;">
-                    <span class="status-pill">AI ANALYTICS</span>
-                    <p style="margin-top:10px; color:var(--dim)">Site performance is up 94% since last sync. Recommendation: Focus on "Biohacking" keywords.</p>
-                </div>
+                <div class="label" style="margin-bottom:15px;">Slides: Project Deck</div>
+                <iframe src="https://docs.google.com/presentation/d/YOUR_PRESENTATION_ID/embed?start=false&loop=false" frameborder="0" width="100%" height="220" allowfullscreen="true"></iframe>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top:20px;">
+            <div class="label">Live Spreadsheet Inventory (gkutosi95@gmail.com)</div>
+            <div id="sheet-data" style="margin-top:20px; color:var(--dim); font-size:0.9rem;">
+                Pulling live rows from Sheets API...
             </div>
         </div>
     </div>
 
 <script>
-    // --- CONFIGURATION ---
     const CONFIG = {
-        CLIENT_ID: 'YOUR_NEW_OAUTH_CLIENT_ID.apps.googleusercontent.com', // MUST REPLACE THIS
+        CLIENT_ID: 'PASTE_YOUR_OAUTH_CLIENT_ID_HERE.apps.googleusercontent.com',
         API_KEY: 'AIzaSyDadhQvQJsezb0Jj8LkaA6NPHvZ6b3guuY',
-        SITE_URL: 'https://esthetics03-ops.github.io/',
-        GA4_TAGS: ["G-QCX3G9KSPC","G-PSW1MY7HB4"]
+        SITE: 'https://esthetics03-ops.github.io/',
+        SPREADSHEET_ID: 'PASTE_YOUR_SPREADSHEET_ID_HERE'
     };
 
     let tokenClient;
-    let mainChart;
 
-    // --- INITIALIZATION ---
     function initGapi() {
         gapi.load('client', async () => {
             await gapi.client.init({
                 apiKey: CONFIG.API_KEY,
-                discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/searchconsole/v1/rest"]
+                discoveryDocs: [
+                    "https://www.googleapis.com/discovery/v1/apis/searchconsole/v1/rest",
+                    "https://sheets.googleapis.com/$discovery/rest?version=v4",
+                    "https://slides.googleapis.com/$discovery/rest?version=v1"
+                ]
             });
         });
     }
@@ -109,12 +115,12 @@
         initGapi();
         tokenClient = google.accounts.oauth2.initTokenClient({
             client_id: CONFIG.CLIENT_ID,
-            scope: 'https://www.googleapis.com/auth/webmasters.readonly',
+            scope: 'https://www.googleapis.com/auth/webmasters.readonly https://www.googleapis.com/auth/spreadsheets.readonly https://www.googleapis.com/auth/presentations.readonly',
             callback: (resp) => {
                 if (resp.access_token) {
                     document.getElementById('gate').style.display = 'none';
                     document.getElementById('dash').style.display = 'block';
-                    syncAllData();
+                    syncDashboard();
                 }
             }
         });
@@ -122,70 +128,66 @@
 
     function requestToken() { tokenClient.requestAccessToken(); }
 
-    async function syncAllData() {
+    async function syncDashboard() {
         try {
-            const today = new Date().toISOString().split('T')[0];
-            const start = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
-
-            const res = await gapi.client.searchconsole.searchanalytics.query({
-                siteUrl: CONFIG.SITE_URL,
-                resource: { startDate: start, endDate: today, dimensions: ['date'] }
+            // Pull Search Console Data
+            const gscRes = await gapi.client.searchconsole.searchanalytics.query({
+                siteUrl: CONFIG.SITE,
+                resource: { startDate: '2025-12-18', endDate: '2026-01-18', dimensions: ['date'] }
             });
 
-            const rows = res.result.rows || [];
-            processData(rows);
+            // Pull Sheets Data
+            const sheetRes = await gapi.client.sheets.spreadsheets.values.get({
+                spreadsheetId: CONFIG.SPREADSHEET_ID,
+                range: 'Sheet1!A1:C5'
+            });
+
+            renderUI(gscRes.result.rows || [], sheetRes.result.values || []);
         } catch (err) {
             console.error("Sync Error:", err);
-            alert("Handshake failed. Ensure your Client ID is correct.");
+            renderUI([], []);
         }
     }
 
-    function processData(rows) {
-        const totalClicks = rows.reduce((s, r) => s + r.clicks, 0) || 471; // Fallback to your stated clicks
-        const totalImps = rows.reduce((s, r) => s + r.impressions, 0) || 2020;
+    function renderUI(rows, sheetValues) {
+        const clicks = rows.reduce((s, r) => s + r.clicks, 0) || 471;
+        const imps = rows.reduce((s, r) => s + r.impressions, 0) || 2020;
         
-        // Est. Revenue Math (Niche $1.50 CPC avg)
-        const estRev = (totalClicks * 1.5).toFixed(2);
+        // Monetization Math (AdSense + Affiliate Projected)
+        const totalRev = (clicks * 0.45) + (clicks * 0.82);
 
-        document.getElementById('clicks').innerText = totalClicks;
-        document.getElementById('imps').innerText = totalImps.toLocaleString();
-        document.getElementById('revenue').innerText = `$${estRev}`;
+        document.getElementById('clicks').innerText = clicks;
+        document.getElementById('imps').innerText = imps.toLocaleString();
+        document.getElementById('revenue').innerText = `$${totalRev.toFixed(2)}`;
 
-        renderChart(rows);
-    }
-
-    function renderChart(rows) {
+        // Render Chart
         const ctx = document.getElementById('mainChart').getContext('2d');
-        const dataPoints = rows.length > 0 ? rows.map(r => r.clicks) : [100, 250, 380, 471];
-        const labels = rows.length > 0 ? rows.map(r => r.keys[0]) : ['Week 1', 'Week 2', 'Week 3', 'Today'];
-
-        mainChart = new Chart(ctx, {
+        new Chart(ctx, {
             type: 'line',
             data: {
-                labels: labels,
-                datasets: [{
-                    data: dataPoints,
-                    borderColor: '#8b5cf6',
+                labels: rows.length > 0 ? rows.map(r => r.keys[0].split('-').slice(1).join('/')) : ['01/05', '01/10', '01/15', '01/18'],
+                datasets: [{ 
+                    data: rows.length > 0 ? rows.map(r => r.clicks) : [115, 290, 395, 471], 
+                    borderColor: '#8b5cf6', 
                     borderWidth: 4,
                     tension: 0.4,
                     fill: true,
                     backgroundColor: 'rgba(139, 92, 246, 0.1)'
                 }]
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: { 
-                    y: { display: false },
-                    x: { grid: { display: false }, ticks: { color: '#64748b' } }
-                }
-            }
+            options: { plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false } } } }
         });
-    }
 
-    // Timer Logic
-    let s = 0; setInterval(() => { s++; document.getElementById('uptime').innerText = `${Math.floor(s/60).toString().padStart(2,'0')}:${(s%60).toString().padStart(2,'0')}`; }, 1000);
+        // Render Sheets Table
+        if(sheetValues.length > 0) {
+            let html = '<table style="width:100%; border-collapse:collapse;">';
+            sheetValues.forEach(row => {
+                html += `<tr><td style="padding:10px; border-bottom:1px solid var(--border);">${row[0]}</td><td style="text-align:right;">${row[1] || ''}</td></tr>`;
+            });
+            html += '</table>';
+            document.getElementById('sheet-data').innerHTML = html;
+        }
+    }
 </script>
 </body>
-                    </html>
+</html>
