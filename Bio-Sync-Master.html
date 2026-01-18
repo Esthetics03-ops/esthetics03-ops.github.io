@@ -24,7 +24,6 @@
         button { background: var(--accent); color: white; border: none; padding: 18px 40px; border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.3s; }
         button:hover { transform: scale(1.03); box-shadow: 0 0 20px rgba(139, 92, 246, 0.5); }
         .status-pill { padding: 5px 12px; border-radius: 6px; font-size: 0.7rem; font-weight: 900; background: rgba(16,185,129,0.1); color: var(--primary); }
-        iframe { border-radius: 15px; border: 1px solid var(--border); }
     </style>
 </head>
 <body>
@@ -69,21 +68,10 @@
             </div>
         </div>
 
-        <div class="grid" style="grid-template-columns: 2fr 1fr;">
-            <div class="card">
-                <div class="label" style="margin-bottom:20px;">Performance Growth Trend</div>
-                <canvas id="mainChart" height="150"></canvas>
-            </div>
-            <div class="card">
-                <div class="label" style="margin-bottom:15px;">Slides: Project Deck</div>
-                <iframe src="https://docs.google.com/presentation/d/YOUR_PRESENTATION_ID/embed?start=false&loop=false" frameborder="0" width="100%" height="220" allowfullscreen="true"></iframe>
-            </div>
-        </div>
-
         <div class="card" style="margin-top:20px;">
-            <div class="label">Live Spreadsheet Inventory (gkutosi95@gmail.com)</div>
+            <div class="label">Live Spreadsheet Inventory</div>
             <div id="sheet-data" style="margin-top:20px; color:var(--dim); font-size:0.9rem;">
-                Pulling live rows from Sheets API...
+                Fetching rows from 1WdCzGeNXvb4Hni7AZasgFbxRHL63-lQs0HAGmHgtd_k...
             </div>
         </div>
     </div>
@@ -93,7 +81,7 @@
         CLIENT_ID: 'PASTE_YOUR_OAUTH_CLIENT_ID_HERE.apps.googleusercontent.com',
         API_KEY: 'AIzaSyDadhQvQJsezb0Jj8LkaA6NPHvZ6b3guuY',
         SITE: 'https://esthetics03-ops.github.io/',
-        SPREADSHEET_ID: 'PASTE_YOUR_SPREADSHEET_ID_HERE'
+        SPREADSHEET_ID: '1WdCzGeNXvb4Hni7AZasgFbxRHL63-lQs0HAGmHgtd_k'
     };
 
     let tokenClient;
@@ -104,8 +92,7 @@
                 apiKey: CONFIG.API_KEY,
                 discoveryDocs: [
                     "https://www.googleapis.com/discovery/v1/apis/searchconsole/v1/rest",
-                    "https://sheets.googleapis.com/$discovery/rest?version=v4",
-                    "https://slides.googleapis.com/$discovery/rest?version=v1"
+                    "https://sheets.googleapis.com/$discovery/rest?version=v4"
                 ]
             });
         });
@@ -115,7 +102,7 @@
         initGapi();
         tokenClient = google.accounts.oauth2.initTokenClient({
             client_id: CONFIG.CLIENT_ID,
-            scope: 'https://www.googleapis.com/auth/webmasters.readonly https://www.googleapis.com/auth/spreadsheets.readonly https://www.googleapis.com/auth/presentations.readonly',
+            scope: 'https://www.googleapis.com/auth/webmasters.readonly https://www.googleapis.com/auth/spreadsheets.readonly',
             callback: (resp) => {
                 if (resp.access_token) {
                     document.getElementById('gate').style.display = 'none';
@@ -130,59 +117,35 @@
 
     async function syncDashboard() {
         try {
-            // Pull Search Console Data
             const gscRes = await gapi.client.searchconsole.searchanalytics.query({
                 siteUrl: CONFIG.SITE,
                 resource: { startDate: '2025-12-18', endDate: '2026-01-18', dimensions: ['date'] }
             });
 
-            // Pull Sheets Data
             const sheetRes = await gapi.client.sheets.spreadsheets.values.get({
                 spreadsheetId: CONFIG.SPREADSHEET_ID,
-                range: 'Sheet1!A1:C5'
+                range: 'Sheet1!A1:C10'
             });
 
             renderUI(gscRes.result.rows || [], sheetRes.result.values || []);
         } catch (err) {
-            console.error("Sync Error:", err);
-            renderUI([], []);
+            console.error(err);
         }
     }
 
     function renderUI(rows, sheetValues) {
         const clicks = rows.reduce((s, r) => s + r.clicks, 0) || 471;
         const imps = rows.reduce((s, r) => s + r.impressions, 0) || 2020;
-        
-        // Monetization Math (AdSense + Affiliate Projected)
         const totalRev = (clicks * 0.45) + (clicks * 0.82);
 
         document.getElementById('clicks').innerText = clicks;
         document.getElementById('imps').innerText = imps.toLocaleString();
         document.getElementById('revenue').innerText = `$${totalRev.toFixed(2)}`;
 
-        // Render Chart
-        const ctx = document.getElementById('mainChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: rows.length > 0 ? rows.map(r => r.keys[0].split('-').slice(1).join('/')) : ['01/05', '01/10', '01/15', '01/18'],
-                datasets: [{ 
-                    data: rows.length > 0 ? rows.map(r => r.clicks) : [115, 290, 395, 471], 
-                    borderColor: '#8b5cf6', 
-                    borderWidth: 4,
-                    tension: 0.4,
-                    fill: true,
-                    backgroundColor: 'rgba(139, 92, 246, 0.1)'
-                }]
-            },
-            options: { plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false } } } }
-        });
-
-        // Render Sheets Table
         if(sheetValues.length > 0) {
-            let html = '<table style="width:100%; border-collapse:collapse;">';
+            let html = '<table style="width:100%;">';
             sheetValues.forEach(row => {
-                html += `<tr><td style="padding:10px; border-bottom:1px solid var(--border);">${row[0]}</td><td style="text-align:right;">${row[1] || ''}</td></tr>`;
+                html += `<tr><td style="padding:10px; border-bottom:1px solid var(--border);">${row.join(' | ')}</td></tr>`;
             });
             html += '</table>';
             document.getElementById('sheet-data').innerHTML = html;
