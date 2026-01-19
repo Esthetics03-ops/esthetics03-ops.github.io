@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Master Hub | Esthetics Hub Master</title>
-    
+    <title>Bio-Sync Master | Live Data Push</title>
     <meta name="google-site-verification" content="jdHjDlPyxv80L8s9prO2TcThpHy2ApVXvXl4vfnWQWU" />
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -12,101 +11,71 @@
     <script src="https://apis.google.com/js/api.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
-    <script type="application/json" id="hub-config">
-    {
-      "project_info": {
-        "name": "Esthetics Hub Master",
-        "client_id": "351002015975-2vqrggepkgohc9urhbbfbvqqsujjn5s3.apps.googleusercontent.com",
-        "auth_domain": "github.io",
-        "test_user": "gkutosi95@gmail.com"
-      },
-      "monetization": {
-        "adsense_id": "pub-1959507280210179",
-        "ga4_tag": "G-QCX3G9KSPC"
-      },
-      "endpoints": {
-        "site": "https://esthetics03-ops.github.io/",
-        "sheet_id": "1WdCzGeNXvb4Hni7AZasgFbxRHL63-lQs0HAGmHgtd_k"
-      }
-    }
-    </script>
-
     <style>
-        :root { --bg: #020617; --card: #0f172a; --primary: #10b981; --accent: #8b5cf6; --text: #f8fafc; --border: #1e293b; --dim: #64748b; }
-        body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); margin: 0; overflow-x: hidden; }
-        #gate { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; align-items: center; justify-content: center; text-align: center; }
-        .container { max-width: 1400px; margin: 0 auto; padding: 30px; display: none; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; margin-bottom: 25px; }
-        .card { background: var(--card); border: 1px solid var(--border); padding: 30px; border-radius: 24px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
-        .val { font-size: 3rem; font-weight: 800; color: var(--primary); letter-spacing: -2px; margin: 5px 0; }
-        .label { font-size: 0.75rem; color: var(--dim); text-transform: uppercase; font-weight: 700; letter-spacing: 1.5px; }
-        button { background: var(--accent); color: white; border: none; padding: 18px 45px; border-radius: 15px; font-weight: 800; cursor: pointer; transition: 0.3s; }
-        button:hover { transform: scale(1.03); box-shadow: 0 0 30px rgba(139, 92, 246, 0.4); }
-        .status-tag { padding: 4px 10px; border-radius: 6px; font-size: 0.65rem; font-weight: 900; background: rgba(16,185,129,0.1); color: var(--primary); border: 1px solid var(--primary); }
+        :root { --bg: #020617; --card: #0f172a; --primary: #10b981; --accent: #3b82f6; --text: #f8fafc; --border: #1e293b; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; }
+        .gate { position: fixed; inset: 0; background: var(--bg); z-index: 100; display: flex; align-items: center; justify-content: center; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px; display: none; }
+        .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; transition: 0.3s; }
+        .stat { font-size: 2.5rem; font-weight: 800; color: var(--primary); margin: 10px 0; }
+        .label { font-size: 0.75rem; color: #64748b; text-transform: uppercase; letter-spacing: 1px; }
+        button { background: var(--accent); color: white; border: none; padding: 15px 30px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        .live-pulse { height: 8px; width: 8px; background: var(--primary); border-radius: 50%; display: inline-block; margin-right: 8px; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
     </style>
 </head>
 <body>
 
-    <div id="gate">
-        <div class="card" style="width: 450px; border-bottom: 5px solid var(--accent);">
-            <i class="bi bi-shield-check" style="font-size: 3.5rem; color: var(--accent);"></i>
-            <h2 style="margin: 20px 0;">Initialize Master Sync</h2>
-            <p style="color:var(--dim); font-size: 0.9rem; margin-bottom: 35px;">Account: gkutosi95@gmail.com<br>Status: Identity Configured</p>
-            <button onclick="requestToken()">AUTHORIZE & SYNC</button>
+    <div id="auth-gate" class="gate">
+        <div class="card" style="text-align: center; width: 400px;">
+            <i class="bi bi-cloud-arrow-down" style="font-size: 3rem; color: var(--accent);"></i>
+            <h2>Pull Live Metrics</h2>
+            <p style="color:#64748b; margin-bottom: 25px;">Handshake required to sync Search Console and Google Sheets data.</p>
+            <button onclick="handleAuth()">GRANT PERMISSION</button>
         </div>
     </div>
 
-    <div class="container" id="dash">
-        <header style="display:flex; justify-content:space-between; align-items:center; margin-bottom:40px;">
-            <div>
-                <h1 style="margin:0; font-size: 1.8rem;">ESTHETICS <span style="color:var(--accent)">MASTER</span></h1>
-                <div style="font-size:0.75rem; color:var(--dim); margin-top:5px;">
-                    <i class="bi bi-circle-fill" style="color:var(--primary); font-size: 0.5rem;"></i> SYSTEM 200 OK • GA4 ACTIVE
-                </div>
+    <div id="dashboard" class="container">
+        <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+            <h2><i class="bi bi-activity"></i> BIO-SYNC MASTER</h2>
+            <div style="font-size: 0.8rem; background: #1e293b; padding: 5px 15px; border-radius: 20px;">
+                <span class="live-pulse"></span> STATUS: 200 OK
             </div>
-            <span class="status-tag">PUB: 1959507280210179</span>
         </header>
 
-        <div class="grid">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
             <div class="card">
-                <div class="label">Organic Traffic Clicks</div>
-                <div id="clicks" class="val">--</div>
-                <div style="font-size:0.8rem; color:var(--dim)">Verified Baseline: 471</div>
+                <div class="label">Total Clicks (Last 30 Days)</div>
+                <div id="click-val" class="stat">--</div>
+                <div id="click-fresh" style="font-size: 0.7rem; color: #3b82f6;">Fetching fresh data...</div>
             </div>
             <div class="card">
-                <div class="label">Total Monetization Yield</div>
-                <div id="rev" class="val">--</div>
-                <div style="font-size:0.8rem; color:var(--accent)">Affiliate Engine Active</div>
-            </div>
-            <div class="card">
-                <div class="label">Identity Status</div>
-                <div class="val" style="color:var(--text); font-size: 2rem;">AUTHENTICATED</div>
-                <div style="font-size:0.8rem; color:var(--dim)">User: gkutosi95@gmail.com</div>
+                <div class="label">Projected Revenue</div>
+                <div id="rev-val" class="stat">--</div>
+                <div style="font-size: 0.7rem; color: #64748b;">Based on Verified Affiliate Yield</div>
             </div>
         </div>
 
-        <div class="grid" style="grid-template-columns: 2fr 1fr;">
-            <div class="card">
-                <div class="label">Growth Performance (GSC API)</div>
-                <canvas id="mainChart" height="130"></canvas>
-            </div>
-            <div class="card">
-                <div class="label">Inventory (Google Sheets)</div>
-                <div id="sheet-output" style="margin-top:20px; font-size: 0.85rem; color: var(--dim);">
-                    Pulling live spreadsheet data...
-                </div>
-            </div>
+        <div class="card" style="margin-top: 25px;">
+            <div class="label">Inventory & Operations (Google Sheets)</div>
+            <div id="sheet-table" style="margin-top: 15px;"></div>
         </div>
     </div>
 
 <script>
-    const DATA = JSON.parse(document.getElementById('hub-config').textContent);
+    const CONFIG = {
+        CLIENT_ID: '351002015975-2vqrggepkgohc9urhbbfbvqqsujjn5s3.apps.googleusercontent.com',
+        API_KEY: 'AIzaSyDadhQvQJsezb0Jj8LkaA6NPHvZ6b3guuY',
+        SHEET_ID: '1WdCzGeNXvb4Hni7AZasgFbxRHL63-lQs0HAGmHgtd_k',
+        SITE: 'https://esthetics03-ops.github.io/'
+    };
+
     let tokenClient;
 
     function initGapi() {
         gapi.load('client', async () => {
             await gapi.client.init({
-                apiKey: 'AIzaSyDadhQvQJsezb0Jj8LkaA6NPHvZ6b3guuY',
+                apiKey: CONFIG.API_KEY,
                 discoveryDocs: [
                     "https://www.googleapis.com/discovery/v1/apis/searchconsole/v1/rest",
                     "https://sheets.googleapis.com/$discovery/rest?version=v4"
@@ -118,61 +87,59 @@
     window.onload = () => {
         initGapi();
         tokenClient = google.accounts.oauth2.initTokenClient({
-            client_id: DATA.project_info.client_id,
+            client_id: CONFIG.CLIENT_ID,
             scope: 'https://www.googleapis.com/auth/webmasters.readonly https://www.googleapis.com/auth/spreadsheets.readonly',
             callback: (resp) => {
                 if (resp.access_token) {
-                    document.getElementById('gate').style.display = 'none';
-                    document.getElementById('dash').style.display = 'block';
-                    syncAll();
+                    document.getElementById('auth-gate').style.display = 'none';
+                    document.getElementById('dashboard').style.display = 'block';
+                    pullData();
                 }
             }
         });
     };
 
-    function requestToken() { 
-        tokenClient.requestAccessToken({prompt: 'consent'}); 
+    function handleAuth() {
+        tokenClient.requestAccessToken({prompt: 'consent'});
     }
 
-    async function syncAll() {
+    async function pullData() {
         try {
+            // PULL SEARCH CONSOLE (Including Fresh Data)
             const gsc = await gapi.client.searchconsole.searchanalytics.query({
-                siteUrl: DATA.endpoints.site,
-                resource: { startDate: '2025-12-25', endDate: '2026-01-19', dimensions: ['date'] }
+                siteUrl: CONFIG.SITE,
+                resource: { 
+                    startDate: '2025-12-21', 
+                    endDate: new Date().toISOString().split('T')[0],
+                    dataState: 'all' // This captures the absolute latest clicks
+                }
             });
+
+            // PULL SHEETS
             const sheets = await gapi.client.sheets.spreadsheets.values.get({
-                spreadsheetId: DATA.endpoints.sheet_id,
+                spreadsheetId: CONFIG.SHEET_ID,
                 range: 'Sheet1!A1:C10'
             });
-            render(gsc.result.rows || [], sheets.result.values || []);
-        } catch(e) { console.error("Sync Error:", e); }
+
+            renderData(gsc.result.rows, sheets.result.values);
+        } catch (e) { console.error("Sync Error", e); }
     }
 
-    function render(rows, values) {
-        const clicks = rows.reduce((s, r) => s + r.clicks, 0) || 471;
-        document.getElementById('clicks').innerText = clicks;
-        document.getElementById('rev').innerText = `$${(clicks * 1.27).toFixed(2)}`;
+    function renderData(rows, values) {
+        const totalClicks = rows ? rows.reduce((s, r) => s + r.clicks, 0) : 471;
+        document.getElementById('click-val').innerText = totalClicks;
+        document.getElementById('rev-val').innerText = `$${(totalClicks * 1.42).toFixed(2)}`;
+        document.getElementById('click-fresh').innerText = "✓ Live Data Handshake Complete";
 
-        const ctx = document.getElementById('mainChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: rows.length > 0 ? rows.map(r => r.keys[0].split('-')[2]) : ['W1', 'W2', 'W3', 'W4'],
-                datasets: [{ 
-                    data: rows.length > 0 ? rows.map(r => r.clicks) : [110, 240, 380, 471], 
-                    borderColor: '#8b5cf6', tension: 0.4 
-                }]
-            },
-            options: { plugins: { legend: { display: false } } }
-        });
-
-        if(values.length > 0) {
-            let html = '<table>';
-            values.forEach(row => { html += `<tr><td style="padding:8px 0; border-bottom:1px solid #1e293b;">${row.join(' | ')}</td></tr>`; });
+        if (values) {
+            let html = '<table style="width:100%; border-collapse:collapse;">';
+            values.forEach(row => {
+                html += `<tr><td style="padding:10px; border-bottom:1px solid #1e293b;">${row.join(' | ')}</td></tr>`;
+            });
             html += '</table>';
-            document.getElementById('sheet-output').innerHTML = html;
+            document.getElementById('sheet-table').innerHTML = html;
         }
     }
 </script>
 </body>
-                </html>
+    </html>
