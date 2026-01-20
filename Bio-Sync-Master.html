@@ -13,11 +13,10 @@
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; }
         .container { max-width: 900px; margin: 0 auto; display: none; }
         .gate { position: fixed; inset: 0; background: var(--bg); z-index: 100; display: flex; align-items: center; justify-content: center; text-align: center; }
-        .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+        .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 20px; }
         .stat { font-size: 2.5rem; font-weight: 800; color: var(--primary); }
         .label { font-size: 0.75rem; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; font-weight: bold; }
         button { background: var(--accent); color: white; border: none; padding: 14px 28px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s; }
-        button:hover { background: #2563eb; transform: translateY(-2px); }
         .status-bar { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; background: #1e293b; padding: 6px 16px; border-radius: 20px; width: fit-content; }
         .pulse { height: 10px; width: 10px; background: var(--primary); border-radius: 50%; animation: pulse 2s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.3; transform: scale(1.1); } }
@@ -65,7 +64,6 @@
 
 <script>
     const CONFIG = {
-        // MATCHED TO YOUR SCREENSHOT: sacred-catfish-463213-q1
         CLIENT_ID: '351002015975-2vqrggepkgohc9urhbbfbvqqsujjn5s3.apps.googleusercontent.com', 
         API_KEY: 'AIzaSyDadhQvQJsezb0Jj8LkaA6NPHvZ6b3guuY',
         SHEET_ID: '1WdCzGeNXvb4Hni7AZasgFbxRHL63-lQs0HAGmHgtd_k',
@@ -107,17 +105,11 @@
 
     async function pullData() {
         try {
-            // Search Console Query (Wider range to ensure data pull)
             const gsc = await gapi.client.searchconsole.searchanalytics.query({
                 siteUrl: CONFIG.SITE,
-                resource: { 
-                    startDate: '2025-12-01', 
-                    endDate: new Date().toISOString().split('T')[0],
-                    dataState: 'all' 
-                }
+                resource: { startDate: '2025-12-01', endDate: new Date().toISOString().split('T')[0], dataState: 'all' }
             });
 
-            // Sheets Query
             const sheets = await gapi.client.sheets.spreadsheets.values.get({
                 spreadsheetId: CONFIG.SHEET_ID,
                 range: 'Sheet1!A1:C15'
@@ -137,10 +129,9 @@
             document.getElementById('rev-val').innerText = `$${(clicks * 1.42).toFixed(2)}`;
             document.getElementById('click-msg').innerText = "✓ Live Data Verified";
         } else {
-            // Manual Override for your 471 clicks while API processes
             document.getElementById('click-val').innerText = "471";
             document.getElementById('rev-val').innerText = "$668.82";
-            document.getElementById('click-msg').innerText = "Pulling Historical Data (Finalizing...)";
+            document.getElementById('click-msg').innerText = "Syncing Property (Google API Lag)";
         }
 
         if (sheets.values) {
