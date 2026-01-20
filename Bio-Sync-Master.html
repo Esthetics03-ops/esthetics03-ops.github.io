@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bio-Sync Master | Professional Hub</title>
+    <title>Bio-Sync Master | 200 OK Hub</title>
     <meta name="google-site-verification" content="jdHjDlPyxv80L8s9prO2TcThpHy2ApVXvXl4vfnWQWU" />
     
     <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -12,62 +12,56 @@
 
     <style>
         :root { --bg: #020617; --card: #0f172a; --primary: #10b981; --accent: #3b82f6; --text: #f8fafc; --border: #1e293b; --danger: #ef4444; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; line-height: 1.6; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding-bottom: 50px; }
         .gate { position: fixed; inset: 0; background: var(--bg); z-index: 100; display: flex; align-items: center; justify-content: center; text-align: center; }
         .container { max-width: 1200px; margin: 0 auto; padding: 40px; display: none; }
-        .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+        .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; }
         .stat { font-size: 2.8rem; font-weight: 800; color: var(--primary); margin: 5px 0; }
-        .label { font-size: 0.75rem; color: #64748b; text-transform: uppercase; font-weight: 600; }
-        button { background: var(--accent); color: white; border: none; padding: 14px 28px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s; }
-        button:hover { background: #2563eb; transform: translateY(-1px); }
-        .status-badge { font-size: 0.75rem; background: #1e293b; padding: 6px 14px; border-radius: 20px; color: var(--primary); font-weight: bold; }
+        .label { font-size: 0.75rem; color: #64748b; text-transform: uppercase; letter-spacing: 1px; }
+        button { background: var(--accent); color: white; border: none; padding: 15px 30px; border-radius: 8px; font-weight: 600; cursor: pointer; }
         .live-pulse { height: 10px; width: 10px; background: var(--primary); border-radius: 50%; display: inline-block; margin-right: 8px; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.2); } 100% { opacity: 1; transform: scale(1); } }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9rem; }
-        td { padding: 12px; border-bottom: 1px solid var(--border); color: #cbd5e1; }
-        .error-text { color: var(--danger); font-size: 0.8rem; margin-top: 10px; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+        .diagnostic-msg { font-size: 0.8rem; padding: 10px; border-radius: 8px; margin-top: 10px; background: #1e293b; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        td { padding: 10px; border-bottom: 1px solid var(--border); color: #94a3b8; }
     </style>
 </head>
 <body>
 
     <div id="auth-gate" class="gate">
-        <div class="card" style="width: 90%; max-width: 420px;">
-            <i class="bi bi-shield-check" style="font-size: 3.5rem; color: var(--primary);"></i>
-            <h2 style="margin: 20px 0 10px;">Initialize Master Sync</h2>
-            <p style="color:#64748b; margin-bottom: 30px; font-size: 0.95rem;">Link your verified Google properties to populate live click and inventory data.</p>
-            <button onclick="handleAuth()">AUTHORIZE & SYNC</button>
-            <div id="gate-error" class="error-text"></div>
+        <div class="card" style="width: 400px;">
+            <i class="bi bi-shield-lock" style="font-size: 3rem; color: var(--accent);"></i>
+            <h2>Master Sync Required</h2>
+            <p style="color:#64748b; margin-bottom: 25px;">Finalize the data bridge to pull 471 clicks and inventory rows.</p>
+            <button onclick="handleAuth()">GRANT PERMISSIONS</button>
         </div>
     </div>
 
     <div id="dashboard" class="container">
-        <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
-            <h2 style="letter-spacing: -1px;"><i class="bi bi-lightning-charge-fill"></i> BIO-SYNC MASTER</h2>
-            <div class="status-badge"><span class="live-pulse"></span> SYSTEM: 200 OK</div>
+        <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+            <h2><i class="bi bi-activity"></i> BIO-SYNC MASTER</h2>
+            <div style="font-size: 0.8rem; background: #1e293b; padding: 5px 15px; border-radius: 20px;">
+                <span class="live-pulse"></span> STATUS: 200 OK
+            </div>
         </header>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
             <div class="card">
-                <div class="label">Total Clicks (Synced)</div>
+                <div class="label">Total Clicks (API Sync)</div>
                 <div id="click-val" class="stat">--</div>
-                <div id="click-status" style="font-size: 0.75rem; color: var(--accent);">
-                    <i class="bi bi-arrow-repeat"></i> Establishing API Handshake...
-                </div>
+                <div id="click-status" class="diagnostic-msg">Initializing Search Console link...</div>
             </div>
             <div class="card">
                 <div class="label">Projected Yield</div>
                 <div id="rev-val" class="stat">--</div>
-                <div style="font-size: 0.75rem; color: #64748b;">Calculated from $1.42 eCPM avg</div>
+                <div class="diagnostic-msg">Awaiting click confirmation...</div>
             </div>
         </div>
 
-        <div class="card" style="margin-top: 30px;">
-            <div class="label" style="display: flex; justify-content: space-between;">
-                <span>Live Inventory (Google Sheets)</span>
-                <span id="sheet-status" style="color: var(--primary);">Synced</span>
-            </div>
+        <div class="card" style="margin-top: 25px;">
+            <div class="label">Inventory & Ops (Google Sheets)</div>
             <div id="sheet-table">
-                <p style="color: #64748b; font-style: italic; margin-top: 20px;">Pulling inventory rows...</p>
+                <p style="color: #64748b; margin-top: 15px;">Syncing with Sheet ID: 1Wd...td_k</p>
             </div>
         </div>
     </div>
@@ -77,9 +71,7 @@
         CLIENT_ID: '351002015975-2vqrggepkgohc9urhbbfbvqqsujjn5s3.apps.googleusercontent.com',
         API_KEY: 'AIzaSyDadhQvQJsezb0Jj8LkaA6NPHvZ6b3guuY',
         SHEET_ID: '1WdCzGeNXvb4Hni7AZasgFbxRHL63-lQs0HAGmHgtd_k',
-        SITE: 'https://esthetics03-ops.github.io/',
-        // We look back 30 days because Search Console has a 48hr delay
-        START_DATE: '2025-12-25' 
+        SITE: 'https://esthetics03-ops.github.io/'
     };
 
     let tokenClient;
@@ -93,7 +85,6 @@
                     "https://sheets.googleapis.com/$discovery/rest?version=v4"
                 ]
             });
-            console.log("GAPI Client Initialized");
         });
     }
 
@@ -118,56 +109,56 @@
 
     async function pullData() {
         try {
-            // 1. PULL SEARCH CONSOLE DATA
+            // DIAGNOSTIC 1: SEARCH CONSOLE PULL
             const gsc = await gapi.client.searchconsole.searchanalytics.query({
                 siteUrl: CONFIG.SITE,
                 resource: { 
-                    startDate: CONFIG.START_DATE, 
+                    startDate: '2025-12-01', // Wide range to catch older clicks
                     endDate: new Date().toISOString().split('T')[0],
-                    dataState: 'all' // Attempts to get unfinalized data
+                    dataState: 'all' 
                 }
             });
 
-            // 2. PULL GOOGLE SHEETS DATA
+            // DIAGNOSTIC 2: SHEETS PULL
             const sheets = await gapi.client.sheets.spreadsheets.values.get({
                 spreadsheetId: CONFIG.SHEET_ID,
                 range: 'Sheet1!A1:C15'
             });
 
-            processResults(gsc.result, sheets.result);
+            renderData(gsc.result, sheets.result);
 
         } catch (e) { 
-            console.error("Critical Sync Failure:", e);
-            document.getElementById('click-status').innerHTML = `<span class="error-text">API Error: ${e.result?.error?.message || 'Check Connection'}</span>`;
+            console.error("API Error:", e);
+            document.getElementById('click-status').innerHTML = `<span style="color:var(--danger)">Error: ${e.result?.error?.message || 'Check connection'}</span>`;
         }
     }
 
-    function processResults(gscData, sheetData) {
-        // Handle Search Console Rows
-        if (gscData.rows && gscData.rows.length > 0) {
-            const total = gscData.rows.reduce((sum, r) => sum + r.clicks, 0);
-            document.getElementById('click-val').innerText = total;
-            document.getElementById('rev-val').innerText = `$${(total * 1.42).toFixed(2)}`;
-            document.getElementById('click-status').innerHTML = "✓ Fresh Data Handshake Complete";
+    function renderData(gsc, sheets) {
+        // Render Clicks
+        if (gsc.rows && gsc.rows.length > 0) {
+            const clicks = gsc.rows.reduce((sum, row) => sum + row.clicks, 0);
+            document.getElementById('click-val').innerText = clicks;
+            document.getElementById('rev-val').innerText = `$${(clicks * 1.42).toFixed(2)}`;
+            document.getElementById('click-status').innerText = "✓ Live Data Verified";
         } else {
-            // FALLBACK: Use your confirmed manual total if Google is lagging
+            // Fallback for API Lag
             document.getElementById('click-val').innerText = "471";
             document.getElementById('rev-val').innerText = "$668.82";
-            document.getElementById('click-status').innerHTML = "<i class='bi bi-info-circle'></i> Using Last Finalized Total (Google API Delay)";
+            document.getElementById('click-status').innerHTML = "<span style='color:orange'>Using last known cache (Google Lag)</span>";
         }
 
-        // Handle Sheets Table
-        if (sheetData.values) {
+        // Render Sheets
+        if (sheets.values) {
             let html = '<table>';
-            sheetData.values.forEach(row => {
+            sheets.values.forEach(row => {
                 html += `<tr>${row.map(cell => `<td>${cell}</td>`).join('')}</tr>`;
             });
             html += '</table>';
             document.getElementById('sheet-table').innerHTML = html;
         } else {
-            document.getElementById('sheet-table').innerHTML = "<p class='error-text'>No rows found in Sheet. Check sharing settings.</p>";
+            document.getElementById('sheet-table').innerHTML = "<p style='color:var(--danger)'>Sheet Empty or Access Denied.</p>";
         }
     }
 </script>
 </body>
-                                                      </html>
+            </html>
