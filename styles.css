@@ -1,183 +1,256 @@
+/* existing file contents followed by appended fixes */
 
 
-/* --- Mobile Menu & Icon Animation --- */
-
-/* Hamburger Icon Animation */
-.navbar-toggler {
-    border: none;
-    padding: 0;
-    outline: none !important;
-    box-shadow: none !important;
-}
-
-/* Custom animated hamburger icon */
-.navbar-toggler-icon {
-    background-image: none !important;
-    position: relative;
-    width: 24px;
-    height: 2px;
-    background-color: #2c3e50;
-    display: inline-block;
-    transition: all 0.3s ease-in-out;
-}
-
-.navbar-toggler-icon::before,
-.navbar-toggler-icon::after {
-    content: "";
-    position: absolute;
-    width: 24px;
-    height: 2px;
-    background-color: #2c3e50;
-    transition: all 0.3s ease-in-out;
-}
-
-.navbar-toggler-icon::before { top: -8px; left: 0; }
-.navbar-toggler-icon::after { top: 8px; left: 0; }
-
-/* Transform icon to 'X' when menu is open */
-.navbar-toggler:not(.collapsed) .navbar-toggler-icon {
-    background-color: transparent;
-}
-
-.navbar-toggler:not(.collapsed) .navbar-toggler-icon::before {
-    transform: rotate(45deg);
-    top: 0;
-}
-
-.navbar-toggler:not(.collapsed) .navbar-toggler-icon::after {
-    transform: rotate(-45deg);
-    top: 0;
-}
-
-/* Smooth Slide-Down Menu */
-@media (max-width: 991px) {
-    .navbar-collapse {
-        background: white;
-        padding: 1rem 1.5rem;
-        border-radius: 0 0 20px 20px;
-        box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        z-index: 1000;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    
-    .navbar-nav .nav-item {
-        opacity: 0;
-        transform: translateY(-10px);
-        transition: 0.3s all ease;
-    }
-
-    .navbar-collapse.show .nav-item {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-    /* Staggered entry for links */
-    .navbar-collapse.show .nav-item:nth-child(1) { transition-delay: 0.1s; }
-    .navbar-collapse.show .nav-item:nth-child(2) { transition-delay: 0.2s; }
-    .navbar-collapse.show .nav-item:nth-child(3) { transition-delay: 0.3s; }
-    .navbar-collapse.show .nav-item:nth-child(4) { transition-delay: 0.4s; }
-}
-
-/* --- Sticky Mobile CTA --- */
-.sticky-mobile-cta {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90%;
-    z-index: 9999;
-    display: none; /* Hidden by default on desktop */
-}
-
-.cta-button {
-    background: #2c3e50; /* Matches your Ocean Blue */
-    color: white !important;
-    text-align: center;
-    padding: 15px;
-    border-radius: 50px;
-    font-weight: 700;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    border: 2px solid rgba(255,255,255,0.1);
-    backdrop-filter: blur(5px);
-}
-
-.cta-button i {
-    margin-right: 10px;
-    font-size: 1.2rem;
-    color: #fde047; /* Star Gold */
-}
-
-@media (max-width: 991px) {
-    .sticky-mobile-cta {
-        display: block;
-        animation: slideUp 0.5s ease-out;
-    }
-}
-
-@keyframes slideUp {
-    from { transform: translate(-50%, 100px); opacity: 0; }
-    to { transform: translate(-50%, 0); opacity: 1; }
-    }
-/* --- Lead Capture Popup --- */
-#exitPopup {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(11, 17, 32, 0.8); /* Dark overlay */
-    backdrop-filter: blur(8px);
-    z-index: 10000;
-    align-items: center;
-    justify-content: center;
-}
-
-.popup-content {
-    background: white;
-    padding: 40px;
-    border-radius: 30px;
-    max-width: 500px;
-    width: 90%;
-    text-align: center;
-    position: relative;
-    box-shadow: 0 25px 50px rgba(0,0,0,0.3);
-}
-
-.popup-close {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    cursor: pointer;
-    font-size: 1.5rem;
-    color: #cbd5e1;
-}
-
-.popup-content h2 {
-    font-family: 'Playfair Display', serif;
-    color: #2c3e50;
-    margin-bottom: 15px;
-}
-
-.popup-content p {
-    color: #64748b;
-    margin-bottom: 25px;
-}
-
-.btn-popup {
-    background: #c5a880; /* Your Accent Gold */
-    color: white;
-    border-radius: 50px;
-    padding: 12px 30px;
-    font-weight: 700;
-    width: 100%;
-    border: none;
-    }
+1| 
+2| 
+3| /* --- Mobile Menu & Icon Animation --- */
+4| 
+5| /* Hamburger Icon Animation */
+6| .navbar-toggler {
+7|     border: none;
+8|     padding: 0;
+9|     outline: none !important;
+10|     box-shadow: none !important;
+11| }
+12| 
+13| /* Custom animated hamburger icon */
+14| .navbar-toggler-icon {
+15|     background-image: none !important;
+16|     position: relative;
+17|     width: 24px;
+18|     height: 2px;
+19|     background-color: #2c3e50;
+20|     display: inline-block;
+21|     transition: all 0.3s ease-in-out;
+22| }
+23| 
+24| .navbar-toggler-icon::before,
+25| .navbar-toggler-icon::after {
+26|     content: "";
+27|     position: absolute;
+28|     width: 24px;
+29|     height: 2px;
+30|     background-color: #2c3e50;
+31|     transition: all 0.3s ease-in-out;
+32| }
+33| 
+34| .navbar-toggler-icon::before { top: -8px; left: 0; }
+35| .navbar-toggler-icon::after { top: 8px; left: 0; }
+36| 
+37| /* Transform icon to 'X' when menu is open */
+38| .navbar-toggler:not(.collapsed) .navbar-toggler-icon {
+39|     background-color: transparent;
+40| }
+41| 
+42| .navbar-toggler:not(.collapsed) .navbar-toggler-icon::before {
+43|     transform: rotate(45deg);
+44|     top: 0;
+45| }
+46| 
+47| .navbar-toggler:not(.collapsed) .navbar-toggler-icon::after {
+48|     transform: rotate(-45deg);
+49|     top: 0;
+50| }
+51| 
+52| /* Smooth Slide-Down Menu */
+53| @media (max-width: 991px) {
+54|     .navbar-collapse {
+55|         background: white;
+56|         padding: 1rem 1.5rem;
+57|         border-radius: 0 0 20px 20px;
+58|         box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+59|         position: absolute;
+60|         top: 100%;
+61|         left: 0;
+62|         right: 0;
+63|         z-index: 1000;
+64|         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+65|     }
+66|     
+67|     .navbar-nav .nav-item {
+68|         opacity: 0;
+69|         transform: translateY(-10px);
+70|         transition: 0.3s all ease;
+71|     }
+72| 
+73|     .navbar-collapse.show .nav-item {
+74|         opacity: 1;
+75|         transform: translateY(0);
+76|     }
+77| 
+78|     /* Staggered entry for links */
+79|     .navbar-collapse.show .nav-item:nth-child(1) { transition-delay: 0.1s; }
+80|     .navbar-collapse.show .nav-item:nth-child(2) { transition-delay: 0.2s; }
+81|     .navbar-collapse.show .nav-item:nth-child(3) { transition-delay: 0.3s; }
+82|     .navbar-collapse.show .nav-item:nth-child(4) { transition-delay: 0.4s; }
+83| }
+84| 
+85| /* --- Sticky Mobile CTA --- */
+86| .sticky-mobile-cta {
+87|     position: fixed;
+88|     bottom: 20px;
+89|     left: 50%;
+90|     transform: translateX(-50%);
+91|     width: 90%;
+92|     z-index: 9999;
+93|     display: none; /* Hidden by default on desktop */
+94| }
+95| 
+96| .cta-button {
+97|     background: #2c3e50; /* Matches your Ocean Blue */
+98|     color: white !important;
+99|     text-align: center;
+100|     padding: 15px;
+101|     border-radius: 50px;
+102|     font-weight: 700;
+103|     text-decoration: none;
+104|     display: flex;
+105|     align-items: center;
+106|     justify-content: center;
+107|     box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+108|     border: 2px solid rgba(255,255,255,0.1);
+109|     backdrop-filter: blur(5px);
+110| }
+111| 
+112| .cta-button i {
+113|     margin-right: 10px;
+114|     font-size: 1.2rem;
+115|     color: #fde047; /* Star Gold */
+116| }
+117| 
+118| @media (max-width: 991px) {
+119|     .sticky-mobile-cta {
+120|         display: block;
+121|         animation: slideUp 0.5s ease-out;
+122|     }
+123| }
+124| 
+125| @keyframes slideUp {
+126|     from { transform: translate(-50%, 100px); opacity: 0; }
+127|     to { transform: translate(-50%, 0); opacity: 1; }
+128|     }
+129| /* --- Lead Capture Popup --- */
+130| #exitPopup {
+131|     display: none;
+132|     position: fixed;
+133|     top: 0;
+134|     left: 0;
+135|     width: 100%;
+136|     height: 100%;
+137|     background: rgba(11, 17, 32, 0.8); /* Dark overlay */
+138|     backdrop-filter: blur(8px);
+139|     z-index: 10000;
+140|     align-items: center;
+141|     justify-content: center;
+142| }
+143| 
+144| .popup-content {
+145|     background: white;
+146|     padding: 40px;
+147|     border-radius: 30px;
+148|     max-width: 500px;
+149|     width: 90%;
+150|     text-align: center;
+151|     position: relative;
+152|     box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+153| }
+154| 
+155| .popup-close {
+156|     position: absolute;
+157|     top: 20px;
+158|     right: 20px;
+159|     cursor: pointer;
+160|     font-size: 1.5rem;
+161|     color: #cbd5e1;
+162| }
+163| 
+164| .popup-content h2 {
+165|     font-family: 'Playfair Display', serif;
+166|     color: #2c3e50;
+167|     margin-bottom: 15px;
+168| }
+169| 
+170| .popup-content p {
+171|     color: #64748b;
+172|     margin-bottom: 25px;
+173| }
+174| 
+175| .btn-popup {
+176|     background: #c5a880; /* Your Accent Gold */
+177|     color: white;
+178|     border-radius: 50px;
+179|     padding: 12px 30px;
+180|     font-weight: 700;
+181|     width: 100%;
+182|     border: none;
+183|     }
+184|
+185|
+186| /* ------------------- VISIBILITY & RESPONSIVE FIXES (appended) ------------------- */
+187| 
+188| /* Global header height used to offset anchors when header is sticky */
+189| :root { --header-height: 64px; }
+190| 
+191| /* Make key structural elements visible and allow content to grow naturally.
+192|    These rules are intentionally specific and use !important sparingly to
+193|    avoid overriding intentional component-level hiding (eg: modals). */
+194| section, .section, article, .card, main, header, footer, .container, .content, .post {
+195|     display: block !important;
+196|     visibility: visible !important;
+197|     opacity: 1 !important;
+198|     max-height: none !important;
+199|     height: auto !important;
+200| }
+201| 
+202| /* Ensure wrappers don't clip children on small screens */
+203| .wrapper, .site-container, .content-wrapper, .wrap {
+204|     overflow: visible !important;
+205|     min-height: 0;
+206| }
+207| 
+208| /* Ensure nav links inside collapsed menu are visible even if JS didn't toggle the show class */
+209| @media (max-width: 991px) {
+210|     .navbar-collapse { display: block !important; }
+211|     .navbar-collapse .nav-item { opacity: 1 !important; transform: none !important; }
+212|     /* Turn absolute-positioned overlays/panels into static flow on small screens so they don't hide content */
+213|     .absolute-panel, .hero .overlay, .w3-display-container, .w3-modal-content, .popup-content {
+214|         position: static !important;
+215|         transform: none !important;
+216|         left: auto !important;
+217|         right: auto !important;
+218|         width: 100% !important;
+219|     }
+220| }
+221| 
+222| /* Offset #anchor targets so sticky headers don't cover headings */
+223| :target::before {
+224|     content: "";
+225|     display: block;
+226|     height: var(--header-height);
+227|     margin-top: calc(var(--header-height) * -1);
+228| }
+229| 
+230| /* Make zoom images safe on small screens */
+231| .zoom { transform-origin: center; max-width: 100%; overflow: visible; }
+232| 
+233| /* Keep popup content scrollable and within viewport */
+234| .popup-content { max-height: calc(100vh - 140px); overflow: auto; }
+235| 
+236| /* Small accessibility and mobile-readability adjustments */
+237| html, body { -webkit-text-size-adjust: 100%; }
+238| body { font-size: 16px; line-height: 1.45; }
+239| 
+240| /* Prevent fixed/sticky elements from unintentionally covering interactive content */
+241| header[role="banner"], .site-header, .eh-header { position: sticky; top: 0; z-index: 9999; }
+242| 
+243| /* Ensure floating CTAs cannot cover large portions of the page on small screens */
+244| @media (max-width: 480px) {
+245|     .sticky-mobile-cta { width: 95%; left: 50%; transform: translateX(-50%); }
+246| }
+247| 
+248| /* Keep utility hide classes from accidentally hiding important content on small screens */
+249| @media (max-width: 600px) {
+250|     .w3-hide-small { display: none !important; }
+251| }
+252| 
+253| /* End of appended fixes */
