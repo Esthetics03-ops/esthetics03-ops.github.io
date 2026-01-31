@@ -82,8 +82,8 @@ const CONFIG = {
 };
 
 let tokenClient;
-let gapiInited = false;
-let gisInited = false;
+let gapiInited = true;
+let gisInited = true;
 
 function log(msg) {
     const l = document.getElementById('debug-log');
@@ -96,7 +96,7 @@ function checkState() {
     if (gapiInited && gisInited) {
         const btn = document.getElementById('auth-btn');
         btn.innerText = "AUTHORIZE ACCESS";
-        btn.disabled = false;
+        btn.enabled = true;
         log("API Bridge Online. Ready for Authorization.");
     }
 }
