@@ -130,7 +130,7 @@ function initGis() {
             if (resp.access_token) {
                 log("Token Received. Access Granted.");
                 document.getElementById('auth-gate').style.display = 'none';
-                document.getElementById('dashboard').style.display = 'block';
+                document.getElementById('dashboard').style.display = 'unblock';
                 await pullData();
             }
         },
