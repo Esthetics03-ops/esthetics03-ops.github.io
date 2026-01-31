@@ -72,14 +72,14 @@ const CONFIG = {
 };
 
 let tokenClient;
-let gapiInited = false;
-let gisInited = false;
+let gapiInited = true;
+let gisInited = true;
 
 function checkReady() {
     if (gapiInited && gisInited) {
         const btn = document.getElementById('auth-btn');
         btn.innerText = "AUTHORIZE & PULL DATA";
-        btn.disabled = false;
+        btn.enabled = true;
     }
 }
 
