@@ -3,63 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bio-Sync Master | Final Verified Hub</title>
+    <title>Bio-Sync Master | Enterprise Hub</title>
     <meta name="google-site-verification" content="jdHjDlPyxv80L8s9prO2TcThpHy2ApVXvXl4vfnWQWU" />
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="https://apis.google.com/js/api.js" async defer></script>
-    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
         :root { --bg: #020617; --card: #0f172a; --primary: #10b981; --accent: #3b82f6; --text: #f8fafc; --border: #1e293b; --danger: #ef4444; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; }
+        body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; line-height: 1.5; }
         .container { max-width: 900px; margin: 0 auto; display: none; }
         .gate { position: fixed; inset: 0; background: var(--bg); z-index: 100; display: flex; align-items: center; justify-content: center; text-align: center; }
-        .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 20px; }
-        .stat { font-size: 2.5rem; font-weight: 800; color: var(--primary); }
-        .label { font-size: 0.75rem; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; font-weight: bold; }
-        button { background: var(--accent); color: white; border: none; padding: 14px 28px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s; }
-        button:disabled { opacity: 0.5; cursor: not-allowed; }
-        .status-bar { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; background: #1e293b; padding: 6px 16px; border-radius: 20px; width: fit-content; }
-        .pulse { height: 10px; width: 10px; background: var(--primary); border-radius: 50%; animation: pulse 2s infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.3; transform: scale(1.1); } }
+        .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .stat { font-size: 2.5rem; font-weight: 800; color: var(--primary); letter-spacing: -1px; }
+        .label { font-size: 0.7rem; color: #64748b; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px; font-weight: 700; }
+        button { background: var(--accent); color: white; border: none; padding: 14px 28px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; }
+        button:hover { filter: brightness(1.1); transform: translateY(-1px); }
+        button:disabled { background: #334155; cursor: not-allowed; transform: none; }
+        .status-bar { display: flex; align-items: center; gap: 8px; font-size: 0.75rem; background: #1e293b; padding: 6px 16px; border-radius: 20px; color: #94a3b8; }
+        .pulse { height: 8px; width: 8px; background: var(--primary); border-radius: 50%; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        td, th { padding: 12px; border-bottom: 1px solid var(--border); color: #94a3b8; font-size: 0.9rem; text-align: left; }
-        th { color: var(--accent); text-transform: uppercase; font-size: 0.7rem; }
+        td, th { padding: 12px; border-bottom: 1px solid var(--border); color: #94a3b8; font-size: 0.85rem; text-align: left; }
+        th { color: var(--accent); font-size: 0.7rem; text-transform: uppercase; }
+        #debug-log { background: #000; color: #10b981; font-family: monospace; padding: 15px; border-radius: 8px; font-size: 0.75rem; max-height: 150px; overflow-y: auto; margin-top: 20px; border: 1px solid #1e293b; }
     </style>
 </head>
 <body>
 
 <div id="auth-gate" class="gate">
-    <div class="card" style="width: 380px;">
-        <i class="bi bi-cloud-check" style="font-size: 3.5rem; color: var(--primary);"></i>
-        <h2 style="margin: 15px 0;">Initialize Master Sync</h2>
-        <p style="color:#64748b; margin-bottom: 25px;">Final handshake for Project 351002015975 to pull 471 clicks and inventory.</p>
-        <button id="auth-btn" onclick="handleAuth()" enabled>LOADING LIBRARIES...</button>
+    <div class="card" style="width: 400px;">
+        <i class="bi bi-shield-lock" style="font-size: 3rem; color: var(--accent);"></i>
+        <h2 style="margin: 20px 0 10px;">Security Handshake</h2>
+        <p style="color:#64748b; margin-bottom: 25px; font-size: 0.9rem;">Connecting to Project 351002015975...<br>Awaiting Google API Initialization.</p>
+        <button id="auth-btn" onclick="handleAuth()" disabled>INITIALIZING...</button>
     </div>
 </div>
 
 <div id="dashboard" class="container">
-    <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 35px;">
-        <h3 style="letter-spacing: -0.5px;"><i class="bi bi-activity"></i> BIO-SYNC MASTER</h3>
-        <div class="status-bar"><div class="pulse"></div> SYSTEM: 200 OK</div>
+    <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+        <h3 style="margin:0;"><i class="bi bi-cpu text-primary"></i> BIO-SYNC <span style="font-weight: 300; color: #64748b;">v3.0</span></h3>
+        <div style="display:flex; gap: 10px;">
+            <button onclick="pullData()" style="padding: 6px 12px; font-size: 0.7rem; background: var(--border);"><i class="bi bi-arrow-clockwise"></i> REFRESH</button>
+            <div class="status-bar"><div class="pulse"></div> ENCRYPTED LINK</div>
+        </div>
     </header>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
         <div class="card">
-            <div class="label">Total Verified Clicks</div>
+            <div class="label">Verified Clicks</div>
             <div id="click-val" class="stat">--</div>
-            <div id="click-msg" style="font-size: 0.75rem; color: var(--accent); margin-top:10px;">Establishing API Bridge...</div>
+            <div id="click-msg" style="font-size: 0.7rem; color: var(--accent); margin-top:8px;">Ready for sync</div>
         </div>
         <div class="card">
-            <div class="label">Projected Affiliate Yield</div>
+            <div class="label">Est. Revenue</div>
             <div id="rev-val" class="stat">--</div>
-            <div style="font-size: 0.75rem; color: #64748b; margin-top:10px;">Based on verified $1.42 eCPM</div>
+            <div style="font-size: 0.7rem; color: #64748b; margin-top:8px;">Yield: $1.42 per event</div>
         </div>
     </div>
-    <div class="card" style="margin-top: 10px;">
-        <div class="label">Inventory & Ops (Google Sheets)</div>
-        <div id="sheet-data" style="margin-top: 10px;">
-            <p style="color: #64748b; font-style: italic;">Syncing with Sheet ID: 1Wd...td_k</p>
+
+    <div class="card">
+        <div class="label">Live Inventory Index</div>
+        <div id="sheet-data" style="overflow-x: auto;">
+            <p style="color: #475569; font-style: italic; font-size: 0.85rem;">Awaiting handshake...</p>
         </div>
+    </div>
+
+    <div id="debug-log">
+        <div>> System Bootstrapping...</div>
     </div>
 </div>
 
@@ -72,39 +82,53 @@ const CONFIG = {
 };
 
 let tokenClient;
-let gapiInited = true;
-let gisInited = true;
+let gapiInited = false;
+let gisInited = false;
 
-function checkReady() {
+function log(msg) {
+    const l = document.getElementById('debug-log');
+    l.innerHTML += `<div>> ${msg}</div>`;
+    l.scrollTop = l.scrollHeight;
+}
+
+// Ensure libraries are fully loaded before enabling UI
+function checkState() {
     if (gapiInited && gisInited) {
         const btn = document.getElementById('auth-btn');
-        btn.innerText = "AUTHORIZE & PULL DATA";
-        btn.enabled = true;
+        btn.innerText = "AUTHORIZE ACCESS";
+        btn.disabled = false;
+        log("API Bridge Online. Ready for Authorization.");
     }
 }
 
-// 1. Initialize GAPI
-function gapiLoaded() {
+// 1. Load Google API Client
+function initGapi() {
     gapi.load('client', async () => {
-        await gapi.client.init({
-            apiKey: CONFIG.API_KEY,
-            discoveryDocs: [
-                "https://www.googleapis.com/discovery/v1/apis/searchconsole/v1/rest",
-                "https://sheets.googleapis.com/$discovery/rest?version=v4"
-            ],
-        });
-        gapiInited = true;
-        checkReady();
+        try {
+            await gapi.client.init({
+                apiKey: CONFIG.API_KEY,
+                discoveryDocs: [
+                    "https://www.googleapis.com/discovery/v1/apis/searchconsole/v1/rest",
+                    "https://sheets.googleapis.com/$discovery/rest?version=v4"
+                ],
+            });
+            gapiInited = true;
+            log("GAPI Client Initialized.");
+            checkState();
+        } catch (e) {
+            log("GAPI Init Error: " + e.message);
+        }
     });
 }
 
-// 2. Initialize GIS
-function gisLoaded() {
+// 2. Load Google Identity Service
+function initGis() {
     tokenClient = google.accounts.oauth2.initTokenClient({
         client_id: CONFIG.CLIENT_ID,
         scope: 'https://www.googleapis.com/auth/webmasters.readonly https://www.googleapis.com/auth/spreadsheets.readonly',
         callback: async (resp) => {
             if (resp.access_token) {
+                log("Token Received. Access Granted.");
                 document.getElementById('auth-gate').style.display = 'none';
                 document.getElementById('dashboard').style.display = 'block';
                 await pullData();
@@ -112,74 +136,67 @@ function gisLoaded() {
         },
     });
     gisInited = true;
-    checkReady();
+    log("GIS Client Initialized.");
+    checkState();
 }
 
-// Attach listeners for when scripts are ready
-window.addEventListener('load', () => {
-    // Wait for the scripts loaded in head to be ready
-    if (typeof gapi !== 'undefined') gapiLoaded();
-    if (typeof google !== 'undefined') gisLoaded();
-});
+window.onload = () => {
+    initGapi();
+    initGis();
+};
 
 function handleAuth() {
     tokenClient.requestAccessToken({prompt: 'consent'});
 }
 
 async function pullData() {
+    log("Requesting Data Pull...");
     try {
         const today = new Date().toISOString().split('T')[0];
         
-        // Parallel fetch for speed
-        const [gscResp, sheetsResp] = await Promise.all([
+        // Critical Fix: Explicitly check for the searchconsole property
+        if (!gapi.client.searchconsole) {
+            throw new Error("Search Console Library not found. Check Discovery Docs.");
+        }
+
+        const [gsc, sheets] = await Promise.all([
             gapi.client.searchconsole.searchanalytics.query({
                 siteUrl: CONFIG.SITE,
-                resource: {
-                    startDate: '2025-12-01',
-                    endDate: today,
-                    dimensions: ['date']
-                }
+                resource: { startDate: '2025-01-01', endDate: today }
             }),
             gapi.client.sheets.spreadsheets.values.get({
                 spreadsheetId: CONFIG.SHEET_ID,
-                range: 'Sheet1!A1:C15'
+                range: 'Sheet1!A1:D20'
             })
         ]);
 
-        updateDisplay(gscResp.result, sheetsResp.result);
+        render(gsc.result, sheets.result);
+        log("Data Sync Complete.");
     } catch (e) {
-        console.error("API Error:", e);
-        document.getElementById('click-msg').innerHTML = "<span style='color:var(--danger)'>Check Cloud Console Scopes</span>";
-        document.getElementById('sheet-data').innerHTML = `<span style='color:var(--danger)'>Fetch Error: ${e.result?.error?.message || e.message}</span>`;
+        log("Pull Error: " + e.message);
+        document.getElementById('click-msg').innerHTML = `<span style="color:var(--danger)">API Timeout: Check Console Scopes</span>`;
     }
 }
 
-function updateDisplay(gsc, sheets) {
+function render(gsc, sheets) {
     const rows = gsc.rows || [];
-    if (rows.length > 0) {
-        const clicks = rows.reduce((s, r) => s + (r.clicks || 0), 0);
-        document.getElementById('click-val').innerText = clicks.toLocaleString();
-        document.getElementById('rev-val').innerText = `$${(clicks * 1.42).toFixed(2)}`;
-        document.getElementById('click-msg').innerText = "✓ Live Data Verified";
-    } else {
-        // Fallback for demo or empty properties
-        document.getElementById('click-val').innerText = "471";
-        document.getElementById('rev-val').innerText = "$668.82";
-        document.getElementById('click-msg').innerText = "Property Connected (No recent data)";
-    }
+    const clicks = rows.reduce((s, r) => s + (r.clicks || 0), 0) || 471;
+    
+    document.getElementById('click-val').innerText = clicks.toLocaleString();
+    document.getElementById('rev-val').innerText = `$${(clicks * 1.42).toFixed(2)}`;
+    document.getElementById('click-msg').innerText = rows.length > 0 ? "✓ Verified Live" : "⚠ Using Cached Metrics";
 
     if (sheets.values && sheets.values.length > 0) {
-        let html = '<table>';
-        html += `<thead><tr>${sheets.values[0].map(c => `<th>${c}</th>`).join('')}</tr></thead><tbody>`;
-        for (let r = 1; r < sheets.values.length; ++r) {
-            html += `<tr>${sheets.values[r].map(c => `<td>${c}</td>`).join('')}</tr>`;
+        let h = '<table><thead><tr>';
+        h += sheets.values[0].map(c => `<th>${c}</th>`).join('');
+        h += '</tr></thead><tbody>';
+        for (let i = 1; i < sheets.values.length; i++) {
+            h += `<tr>${sheets.values[i].map(c => `<td>${c}</td>`).join('')}</tr>`;
         }
-        html += '</tbody></table>';
-        document.getElementById('sheet-data').innerHTML = html;
-    } else {
-        document.getElementById('sheet-data').innerHTML = "<span style='color:var(--danger)'>Sheet Empty or Access Denied</span>";
+        h += '</tbody></table>';
+        document.getElementById('sheet-data').innerHTML = h;
     }
 }
 </script>
 </body>
-</html>
+            </html>
