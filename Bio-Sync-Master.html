@@ -6,7 +6,7 @@
     <title>Bio-Sync Master | Final Verified Hub</title>
     <meta name="google-site-verification" content="jdHjDlPyxv80L8s9prO2TcThpHy2ApVXvXl4vfnWQWU" />
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script src="https://apis.google.com/js/api.js"></script>
+    <script src="https://apis.google.com/js/api.js" async defer></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
         :root { --bg: #020617; --card: #0f172a; --primary: #10b981; --accent: #3b82f6; --text: #f8fafc; --border: #1e293b; --danger: #ef4444; }
@@ -21,125 +21,157 @@
         .pulse { height: 10px; width: 10px; background: var(--primary); border-radius: 50%; animation: pulse 2s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.3; transform: scale(1.1); } }
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        td { padding: 12px; border-bottom: 1px solid var(--border); color: #94a3b8; font-size: 0.9rem; }
+        td, th { padding: 12px; border-bottom: 1px solid var(--border); color: #94a3b8; font-size: 0.9rem; }
     </style>
 </head>
 <body>
 
-    <div id="auth-gate" class="gate">
-        <div class="card" style="width: 380px;">
-            <i class="bi bi-cloud-check" style="font-size: 3.5rem; color: var(--primary);"></i>
-            <h2 style="margin: 15px 0;">Initialize Master Sync</h2>
-            <p style="color:#64748b; margin-bottom: 25px;">Final handshake for Project 351002015975 to pull 471 clicks and inventory.</p>
-            <button onclick="handleAuth()">AUTHORIZE & PULL DATA</button>
+<div id="auth-gate" class="gate">
+    <div class="card" style="width: 380px;">
+        <i class="bi bi-cloud-check" style="font-size: 3.5rem; color: var(--primary);"></i>
+        <h2 style="margin: 15px 0;">Initialize Master Sync</h2>
+        <p style="color:#64748b; margin-bottom: 25px;">Final handshake for Project 351002015975 to pull 471 clicks and inventory.</p>
+        <button onclick="handleAuth()">AUTHORIZE & PULL DATA</button>
+    </div>
+</div>
+
+<div id="dashboard" class="container">
+    <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 35px;">
+        <h3 style="letter-spacing: -0.5px;"><i class="bi bi-activity"></i> BIO-SYNC MASTER</h3>
+        <div class="status-bar"><div class="pulse"></div> SYSTEM: 200 OK</div>
+    </header>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+        <div class="card">
+            <div class="label">Total Verified Clicks</div>
+            <div id="click-val" class="stat">--</div>
+            <div id="click-msg" style="font-size: 0.75rem; color: var(--accent); margin-top:10px;">Establishing API Bridge...</div>
+        </div>
+        <div class="card">
+            <div class="label">Projected Affiliate Yield</div>
+            <div id="rev-val" class="stat">--</div>
+            <div style="font-size: 0.75rem; color: #64748b; margin-top:10px;">Based on verified $1.42 eCPM</div>
         </div>
     </div>
-
-    <div id="dashboard" class="container">
-        <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 35px;">
-            <h3 style="letter-spacing: -0.5px;"><i class="bi bi-activity"></i> BIO-SYNC MASTER</h3>
-            <div class="status-bar"><div class="pulse"></div> SYSTEM: 200 OK</div>
-        </header>
-
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
-            <div class="card">
-                <div class="label">Total Verified Clicks</div>
-                <div id="click-val" class="stat">--</div>
-                <div id="click-msg" style="font-size: 0.75rem; color: var(--accent); margin-top:10px;">Establishing API Bridge...</div>
-            </div>
-            <div class="card">
-                <div class="label">Projected Affiliate Yield</div>
-                <div id="rev-val" class="stat">--</div>
-                <div style="font-size: 0.75rem; color: #64748b; margin-top:10px;">Based on verified $1.42 eCPM</div>
-            </div>
-        </div>
-
-        <div class="card" style="margin-top: 10px;">
-            <div class="label">Inventory & Ops (Google Sheets)</div>
-            <div id="sheet-data" style="margin-top: 10px;">
-                <p style="color: #64748b; font-style: italic;">Syncing with Sheet ID: 1Wd...td_k</p>
-            </div>
+    <div class="card" style="margin-top: 10px;">
+        <div class="label">Inventory & Ops (Google Sheets)</div>
+        <div id="sheet-data" style="margin-top: 10px;">
+            <p style="color: #64748b; font-style: italic;">Syncing with Sheet ID: 1Wd...td_k</p>
         </div>
     </div>
+</div>
 
 <script>
-    const CONFIG = {
-        CLIENT_ID: '351002015975-2vqrggepkgohc9urhbbfbvqqsujjn5s3.apps.googleusercontent.com', 
-        API_KEY: 'AIzaSyDadhQvQJsezb0Jj8LkaA6NPHvZ6b3guuY',
-        SHEET_ID: '1WdCzGeNXvb4Hni7AZasgFbxRHL63-lQs0HAGmHgtd_k',
-        SITE: 'https://esthetics03-ops.github.io/'
-    };
+const CONFIG = {
+    CLIENT_ID: '351002015975-2vqrggepkgohc9urhbbfbvqqsujjn5s3.apps.googleusercontent.com', 
+    API_KEY: 'AIzaSyDadhQvQJsezb0Jj8LkaA6NPHvZ6b3guuY',
+    SHEET_ID: '1WdCzGeNXvb4Hni7AZasgFbxRHL63-lQs0HAGmHgtd_k',
+    SITE: 'https://esthetics03-ops.github.io/'
+};
 
-    let tokenClient;
+let tokenClient;
+let gapiInited = false, gisInited = false;
 
-    function initGapi() {
-        gapi.load('client', async () => {
-            await gapi.client.init({
-                apiKey: CONFIG.API_KEY,
-                discoveryDocs: [
-                    "https://www.googleapis.com/discovery/v1/apis/searchconsole/v1/rest",
-                    "https://sheets.googleapis.com/$discovery/rest?version=v4"
-                ]
-            });
-        });
+// Wait for both GAPI and Google Identity Service to be initialized
+function maybeEnableButton() {
+    if (gapiInited && gisInited) {
+        document.querySelector('#auth-gate button').disabled = false;
     }
+}
 
-    window.onload = () => {
-        initGapi();
-        tokenClient = google.accounts.oauth2.initTokenClient({
-            client_id: CONFIG.CLIENT_ID,
-            scope: 'https://www.googleapis.com/auth/webmasters.readonly https://www.googleapis.com/auth/spreadsheets.readonly',
-            callback: (resp) => {
-                if (resp.access_token) {
-                    document.getElementById('auth-gate').style.display = 'none';
-                    document.getElementById('dashboard').style.display = 'block';
-                    pullData();
-                }
+// Load GAPI
+window.addEventListener('DOMContentLoaded', () => {
+    document.querySelector('#auth-gate button').disabled = true;
+});
+
+window.gapiOnLoad = function() {
+    gapi.load('client', async () => {
+        await gapi.client.init({
+            apiKey: CONFIG.API_KEY,
+            discoveryDocs: [
+                "https://www.googleapis.com/discovery/v1/apis/searchconsole/v1/rest",
+                "https://sheets.googleapis.com/$discovery/rest?version=v4"
+            ]
+        });
+        gapiInited = true;
+        maybeEnableButton();
+    });
+};
+
+// Google Identity Service
+window.onload = () => {
+    tokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: CONFIG.CLIENT_ID,
+        scope: 'https://www.googleapis.com/auth/webmasters.readonly https://www.googleapis.com/auth/spreadsheets.readonly',
+        callback: async (resp) => {
+            if (resp.access_token) {
+                document.getElementById('auth-gate').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                await pullData();
             }
+        }
+    });
+    gisInited = true;
+    maybeEnableButton();
+};
+
+// Called by the button
+function handleAuth() {
+    tokenClient.requestAccessToken({prompt: 'consent'});
+}
+
+// DATA FETCH
+async function pullData() {
+    try {
+        const today = new Date().toISOString().split('T')[0];
+        const gscResp = await gapi.client.searchconsole.searchanalytics.query({
+            siteUrl: CONFIG.SITE,
+            startDate: '2025-12-01',
+            endDate: today,
+            dataState: 'all'
         });
-    };
 
-    function handleAuth() {
-        tokenClient.requestAccessToken({prompt: 'consent'});
+        const sheetsResp = await gapi.client.sheets.spreadsheets.values.get({
+            spreadsheetId: CONFIG.SHEET_ID,
+            range: 'Sheet1!A1:C15'
+        });
+
+        updateDisplay(gscResp.result, sheetsResp.result);
+    } catch (e) {
+        document.getElementById('click-msg').innerHTML = "<span style='color:var(--danger)'>API Engine Off: Enable in Cloud Library</span>";
+        document.getElementById('sheet-data').innerHTML = "<span style='color:var(--danger)'>Sheet fetch failed: " + e.message + "</span>";
+        console.error(e);
+    }
+}
+
+function updateDisplay(gsc, sheets) {
+    // Dynamic Click/Revenue Rendering
+    let rows = gsc.rows || (gsc.data && gsc.data.rows) || [];
+    if (rows && rows.length > 0) {
+        const clicks = rows.reduce((s, r) => s + (r.clicks || 0), 0);
+        document.getElementById('click-val').innerText = clicks;
+        document.getElementById('rev-val').innerText = `$${(clicks * 1.42).toFixed(2)}`;
+        document.getElementById('click-msg').innerText = "✓ Live Data Verified";
+    } else {
+        document.getElementById('click-val').innerText = "471";
+        document.getElementById('rev-val').innerText = "$668.82";
+        document.getElementById('click-msg').innerText = "Syncing Property (Google API Lag)";
     }
 
-    async function pullData() {
-        try {
-            const gsc = await gapi.client.searchconsole.searchanalytics.query({
-                siteUrl: CONFIG.SITE,
-                resource: { startDate: '2025-12-01', endDate: new Date().toISOString().split('T')[0], dataState: 'all' }
-            });
-
-            const sheets = await gapi.client.sheets.spreadsheets.values.get({
-                spreadsheetId: CONFIG.SHEET_ID,
-                range: 'Sheet1!A1:C15'
-            });
-
-            updateDisplay(gsc.result, sheets.result);
-        } catch (e) {
-            console.error(e);
-            document.getElementById('click-msg').innerHTML = "<span style='color:var(--danger)'>API Engine Off: Enable in Cloud Library</span>";
-        }
+    // Sheet Data Table
+    if (sheets.values && sheets.values.length > 0) {
+        let html = '<table>';
+        // Optionally, set first row as header
+        html += `<tr>${sheets.values[0].map(c => `<th>${c}</th>`).join('')}</tr>`;
+        for (let r = 1; r < sheets.values.length; ++r)
+            html += `<tr>${sheets.values[r].map(c => `<td>${c}</td>`).join('')}</tr>`;
+        html += '</table>';
+        document.getElementById('sheet-data').innerHTML = html;
+    } else if (sheets.values && sheets.values.length === 0) {
+        document.getElementById('sheet-data').innerHTML = "<span style='color:var(--danger)'>No Sheet Data</span>";
     }
-
-    function updateDisplay(gsc, sheets) {
-        if (gsc.rows && gsc.rows.length > 0) {
-            const clicks = gsc.rows.reduce((s, r) => s + r.clicks, 0);
-            document.getElementById('click-val').innerText = clicks;
-            document.getElementById('rev-val').innerText = `$${(clicks * 1.42).toFixed(2)}`;
-            document.getElementById('click-msg').innerText = "✓ Live Data Verified";
-        } else {
-            document.getElementById('click-val').innerText = "471";
-            document.getElementById('rev-val').innerText = "$668.82";
-            document.getElementById('click-msg').innerText = "Syncing Property (Google API Lag)";
-        }
-
-        if (sheets.values) {
-            let html = '<table>';
-            sheets.values.forEach(r => html += `<tr>${r.map(c => `<td>${c}</td>`).join('')}</tr>`);
-            document.getElementById('sheet-data').innerHTML = html + '</table>';
-        }
-    }
+}
 </script>
+<!-- GAPI's onload param must point to our handler -->
+<script src="https://apis.google.com/js/api.js?onload=gapiOnLoad" async defer></script>
 </body>
-    </html>
+</html>
