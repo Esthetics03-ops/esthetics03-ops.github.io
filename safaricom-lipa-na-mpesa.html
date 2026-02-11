@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safaricom Lipa Na M-PESA</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 380px; text-align: center; }
+        .mpesa-logo { width: 150px; margin-bottom: 20px; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
+        .btn { background: #4FB037; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; transition: 0.3s; }
+        .btn:hover { background: #3e8e2c; }
+        .btn:disabled { background: #ccc; }
+        #status { margin-top: 20px; font-weight: 500; color: #555; min-height: 24px; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/M-PESA_LOGO-01.svg/512px-M-PESA_LOGO-01.svg.png" class="mpesa-logo" alt="M-PESA">
+    <h3>Checkout</h3>
+    <input type="text" id="phone" placeholder="2547XXXXXXXX" value="2547">
+    <input type="number" id="amount" placeholder="Amount (e.g. 1)">
+    <button id="payBtn" class="btn">Pay Now</button>
+    <div id="status"></div>
+</div>
+
+<script>
+document.getElementById('payBtn').addEventListener('click', async function() {
+    const btn = this;
+    const status = document.getElementById('status');
+    const phone = document.getElementById('phone').value;
+    const amount = document.getElementById('amount').value;
+
+    if (phone.length < 12) return alert("Enter valid phone (2547...)");
+
+    btn.disabled = true;
+    status.innerHTML = "Requesting STK Push...";
+
+    try {
+        const response = await fetch('process.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'stk_push', phone, amount })
+        });
+        const data = await response.json();
+
+        if (data.CheckoutRequestID) {
+            status.innerHTML = "Enter M-PESA PIN on your phone...";
+            startPolling(data.CheckoutRequestID);
+        } else {
+            throw new Error(data.errorMessage || "Request failed");
+        }
+    } catch (e) {
+        status.innerHTML = "Error: " + e.message;
+        btn.disabled = false;
+    }
+});
+
+function startPolling(checkoutID) {
+    let attempts = 0;
+    const interval = setInterval(async () => {
+        attempts++;
+        const res = await fetch(`process.php?action=check_status&checkoutID=${checkoutID}`);
+        const data = await res.json();
+
+        if (data.status === 'Completed') {
+            clearInterval(interval);
+            document.getElementById('status').innerHTML = "✅ Payment Successful!";
+            document.getElementById('status').style.color = "green";
+        } else if (data.status === 'Failed' || attempts > 12) {
+            clearInterval(interval);
+            document.getElementById('status').innerHTML = "❌ Payment Failed or Timed Out.";
+            document.getElementById('payBtn').disabled = false;
+        }
+    }, 5000);
+}
+</script>
+</body>
+</html>
