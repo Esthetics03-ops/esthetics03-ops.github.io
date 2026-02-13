@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bio-Sync Master | Automated Hub</title>
+    <title>Bio-Sync Master | v9.0 Autonomous</title>
     
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="https://apis.google.com/js/api.js" async defer></script>
@@ -12,60 +12,68 @@
     
     <style>
         :root { --bg: #020617; --card: #0f172a; --primary: #10b981; --accent: #3b82f6; --text: #f8fafc; --border: #1e293b; }
-        body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; }
+        body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); padding: 15px; margin: 0; }
         .container { max-width: 1100px; margin: 0 auto; display: none; }
         .gate { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; align-items: center; justify-content: center; text-align: center; }
-        .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4); }
-        .stat { font-size: 3rem; font-weight: 800; color: var(--primary); letter-spacing: -1.5px; line-height: 1; }
-        .label { font-size: 0.75rem; color: #64748b; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-bottom: 15px; }
-        button { background: var(--accent); color: white; border: none; padding: 14px 28px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s; }
-        .status-pill { display: flex; align-items: center; gap: 8px; font-size: 0.7rem; background: #064e3b; color: #34d399; padding: 6px 14px; border-radius: 50px; border: 1px solid #065f46; font-weight: 600; }
-        #debug-log { background: #000; color: var(--primary); font-family: monospace; padding: 15px; border-radius: 8px; font-size: 0.75rem; max-height: 160px; overflow-y: auto; border: 1px solid #1e293b; margin-top: 20px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        td, th { padding: 14px; border-bottom: 1px solid var(--border); color: #94a3b8; font-size: 0.85rem; text-align: left; }
-        th { color: var(--accent); font-size: 0.7rem; text-transform: uppercase; }
+        .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 15px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.4); }
+        .stat { font-size: 2.2rem; font-weight: 800; color: var(--primary); letter-spacing: -1px; }
+        .label { font-size: 0.65rem; color: #64748b; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; margin-bottom: 8px; }
+        button { background: var(--accent); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 700; cursor: pointer; }
+        .toggle-group { display: flex; background: #1e293b; padding: 4px; border-radius: 8px; gap: 4px; }
+        .toggle-btn { background: transparent; border: none; color: #94a3b8; padding: 6px 16px; border-radius: 6px; font-size: 0.7rem; cursor: pointer; transition: 0.2s; }
+        .toggle-btn.active { background: var(--accent); color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        #debug-log { background: #000; color: var(--primary); font-family: 'Fira Code', monospace; padding: 12px; border-radius: 8px; font-size: 0.7rem; max-height: 120px; overflow-y: auto; border: 1px solid #1e293b; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.75rem; }
+        th { color: var(--accent); text-align: left; padding: 8px; border-bottom: 2px solid var(--border); text-transform: uppercase; font-size: 0.6rem; }
+        td { padding: 8px; border-bottom: 1px solid var(--border); color: #94a3b8; }
+        #revenue-chart { width: 100%; height: 250px; }
+        .status-badge { font-size: 0.6rem; padding: 4px 10px; border-radius: 20px; background: #064e3b; color: #34d399; border: 1px solid #065f46; }
     </style>
 </head>
 <body>
 
 <div id="auth-gate" class="gate">
-    <div class="card" style="width: 420px;">
-        <i class="bi bi-cpu-fill" style="font-size: 4rem; color: var(--primary);"></i>
-        <h2 style="margin: 20px 0 10px;">Automated Handshake</h2>
-        <p style="color:#64748b; margin-bottom: 30px; font-size: 0.9rem;">Target: 1qMFHW7...V2V<br>Heartbeat Sync: <b>ENABLED (10m)</b></p>
-        <button onclick="handleAuth()">AUTHORIZE SYSTEM</button>
+    <div class="card" style="width: 380px;">
+        <i class="bi bi-cloud-check-fill" style="font-size: 3.5rem; color: var(--primary);"></i>
+        <h2 style="margin: 15px 0 5px;">Autonomous Sync</h2>
+        <p style="color:#64748b; font-size: 0.8rem; margin-bottom: 25px;">
+            Initializing Cloud Triggers & <br>Dual-Currency Financial Stream.
+        </p>
+        <button onclick="handleAuth()">ACTIVATE MASTER NODE</button>
     </div>
 </div>
 
 <div id="dashboard" class="container">
-    <header style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px;">
+    <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
         <div>
-            <h2 style="margin:0;"><i class="bi bi-activity text-primary"></i> BIO-SYNC MASTER</h2>
-            <div style="font-size: 0.65rem; color: #475569; font-family: monospace; margin-top: 5px;">LAST HEARTBEAT: <span id="sync-time">WAITING...</span></div>
+            <h3 style="margin:0;"><i class="bi bi-cpu text-primary"></i> BIO-SYNC <span style="font-weight:200">v9.0</span></h3>
+            <span class="status-badge">CLOUD TRIGGER: ACTIVE</span>
         </div>
-        <div class="status-pill"><i class="bi bi-heart-pulse-fill"></i> HEARTBEAT ACTIVE</div>
+        <div class="toggle-group">
+            <button id="btn-us" class="toggle-btn active" onclick="switchCurrency('US')">USD</button>
+            <button id="btn-kes" class="toggle-btn" onclick="switchCurrency('KES')">KES</button>
+        </div>
     </header>
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 20px;">
-        <div class="card">
-            <div class="label">Verified Traffic Clicks</div>
-            <div id="click-val" class="stat">--</div>
-        </div>
-        <div class="card">
-            <div class="label">Projected Yield ($1.42)</div>
-            <div id="rev-val" class="stat">--</div>
-        </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px;">
+        <div class="card"><div class="label">Daily Clicks</div><div id="click-val" class="stat">--</div></div>
+        <div class="card"><div class="label">Yield Projection</div><div id="rev-val" class="stat">--</div></div>
+        <div class="card"><div class="label">Net Commission</div><div id="comm-val" class="stat" style="color: var(--accent);">--</div></div>
     </div>
 
     <div class="card">
-        <div class="label">System Pipeline Log</div>
-        <div id="debug-log">> System initialized. Awaiting handshake.</div>
+        <div class="label">Revenue Distribution (AdSense vs Affiliate)</div>
+        <div id="revenue-chart"></div>
     </div>
 
-    <div class="card">
-        <div class="label">Sheet1 Database Stream</div>
-        <div id="sheet-data" style="overflow-x: auto;">
-            <p style="color: #475569; font-style: italic; font-size: 0.85rem;">Connecting to Sheet1...</p>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+        <div class="card">
+            <div class="label">System Pipeline Log</div>
+            <div id="debug-log">> Awaiting Cloud Handshake...</div>
+        </div>
+        <div class="card">
+            <div class="label">Database Mirror: Sheet1</div>
+            <div id="sheet-data" style="max-height: 120px; overflow-y: auto;">Syncing...</div>
         </div>
     </div>
 </div>
@@ -78,11 +86,15 @@ const CONFIG = {
     SITE_URL: 'https://esthetics03-ops.github.io/'
 };
 
+google.charts.load('current', {'packages':['corechart']});
 let tokenClient;
-function log(m) { 
-    const l = document.getElementById('debug-log'); 
-    l.innerHTML += `<div>[${new Date().toLocaleTimeString()}] > ${m}</div>`; 
-    l.scrollTop = l.scrollHeight; 
+let currentCurrency = 'US';
+let cachedDashData = null;
+
+function log(m) {
+    const l = document.getElementById('debug-log');
+    l.innerHTML += `<div>[${new Date().toLocaleTimeString()}] > ${m}</div>`;
+    l.scrollTop = l.scrollHeight;
 }
 
 async function initGapi() {
@@ -90,82 +102,109 @@ async function initGapi() {
         await new Promise(r => gapi.load('client', r));
         await gapi.client.init({ apiKey: CONFIG.API_KEY });
         await Promise.all([
-            gapi.client.load('https://sheets.googleapis.com/$discovery/rest?version=v4'),
-            gapi.client.load('https://www.googleapis.com/discovery/v1/apis/searchconsole/v1/rest')
+            gapi.client.load('searchconsole', 'v1'),
+            gapi.client.load('sheets', 'v4')
         ]);
-        log("GAPI: Discovery Services Fully Linked.");
-    } catch (e) { log("Init Error: " + e.message); }
+        log("GAPI: Cloud Services Discovery Finished.");
+    } catch (e) { log("ERR: Initialization stall."); }
 }
 
 function initGis() {
     tokenClient = google.accounts.oauth2.initTokenClient({
         client_id: CONFIG.CLIENT_ID,
         scope: 'https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/webmasters.readonly',
-        callback: async (resp) => { 
+        callback: async (resp) => {
             if (resp.access_token) {
                 document.getElementById('auth-gate').style.display = 'none';
                 document.getElementById('dashboard').style.display = 'block';
                 await masterSync();
-                // Set the Heartbeat: Sync every 10 minutes (600,000ms)
-                setInterval(masterSync, 600000);
-                log("Heartbeat Activated: Next sync in 10m.");
-            } 
+                setInterval(masterSync, 600000); // 10-min heartbeat
+            }
         }
     });
 }
 
-window.onload = () => { initGapi(); initGis(); };
-function handleAuth() { tokenClient.requestAccessToken({prompt: 'consent'}); }
+function switchCurrency(code) {
+    currentCurrency = code;
+    document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(`btn-${code.toLowerCase()}`).classList.add('active');
+    if (cachedDashData) updateDashboardUI(cachedDashData);
+}
 
 async function masterSync() {
-    log("HEARTBEAT SYNC INITIATED...");
+    log("HEARTBEAT: Syncing Cloud Node...");
     try {
         const today = new Date().toISOString().split('T')[0];
         
-        // PULL: GSC Analytics
-        const gscRes = await gapi.client.searchconsole.searchanalytics.query({
+        // 1. PULL LIVE TRAFFIC
+        const gsc = await gapi.client.searchconsole.searchanalytics.query({
             siteUrl: CONFIG.SITE_URL,
             resource: { startDate: '2025-01-01', endDate: today }
         });
-
-        const clicks = (gscRes.result.rows || []).reduce((s, r) => s + (r.clicks || 0), 0) || 471;
-        const revenue = (clicks * 1.42).toFixed(2);
-
+        const clicks = (gsc.result.rows || []).reduce((s, r) => s + (r.clicks || 0), 0) || 471;
         document.getElementById('click-val').innerText = clicks.toLocaleString();
-        document.getElementById('rev-val').innerText = `$${revenue}`;
 
-        // PUSH: Record to Sheet1
+        // 2. PUSH TO SHEET1
         await gapi.client.sheets.spreadsheets.values.append({
-            spreadsheetId: CONFIG.SHEET_ID,
-            range: 'Sheet1!A:C',
+            spreadsheetId: CONFIG.SHEET_ID, range: 'Sheet1!A:C',
             valueInputOption: 'RAW',
-            resource: { values: [[new Date().toLocaleString(), clicks, `$${revenue}`]] }
+            resource: { values: [[new Date().toLocaleString(), clicks, (clicks * 1.42).toFixed(2)]] }
         });
-        log("PUSH: Data appended to Sheet1.");
 
-        // PULL: Refresh Inventory Table
-        const sheetRes = await gapi.client.sheets.spreadsheets.values.get({
-            spreadsheetId: CONFIG.SHEET_ID,
-            range: 'Sheet1!A1:E100'
+        // 3. PULL DASHBOARD METRICS
+        const dashRes = await gapi.client.sheets.spreadsheets.values.get({
+            spreadsheetId: CONFIG.SHEET_ID, range: 'Dashboard!A1:C10'
         });
+        cachedDashData = dashRes.result.values;
+        updateDashboardUI(cachedDashData);
         
-        renderTable(sheetRes.result);
-        document.getElementById('sync-time').innerText = new Date().toLocaleTimeString();
-        log("HEARTBEAT SUCCESSFUL.");
+        // 4. PULL LOG TABLE
+        const logRes = await gapi.client.sheets.spreadsheets.values.get({
+            spreadsheetId: CONFIG.SHEET_ID, range: 'Sheet1!A1:C10'
+        });
+        renderTable(logRes.result.values);
 
-    } catch (e) { 
-        log("SYNC ERROR: " + (e.result?.error?.message || e.message)); 
-    }
+        log("SUCCESS: Cloud Pipeline Synchronized.");
+    } catch (e) { log("SYNC ERROR: Verify Permissions."); }
 }
 
-function renderTable(data) {
-    if (!data || !data.values) return;
-    let h = '<table><thead><tr>' + data.values[0].map(c => `<th>${c}</th>`).join('') + '</tr></thead><tbody>';
-    for (let i = 1; i < data.values.length; i++) {
-        h += '<tr>' + data.values[i].map(c => `<td>${c}</td>`).join('') + '</tr>';
+function updateDashboardUI(rows) {
+    const colIdx = currentCurrency === 'US' ? 1 : 2;
+    const prefix = currentCurrency === 'US' ? '$' : 'KSh ';
+    
+    // AdSense total from Row 4, Commission from Row 6
+    document.getElementById('rev-val').innerText = `${prefix}${rows[3][colIdx]}`;
+    document.getElementById('comm-val').innerText = `${prefix}${rows[5][colIdx]}`;
+    
+    drawChart(rows, colIdx);
+}
+
+function drawChart(rows, colIdx) {
+    const data = google.visualization.arrayToDataTable([
+        ['Source', 'Revenue'],
+        ['AdSense', parseFloat(rows[3][colIdx].replace(/[^0-9.-]+/g,""))],
+        ['Affiliate', parseFloat(rows[4][colIdx].replace(/[^0-9.-]+/g,""))]
+    ]);
+
+    new google.visualization.PieChart(document.getElementById('revenue-chart')).draw(data, {
+        backgroundColor: 'transparent', colors: ['#10b981', '#3b82f6'],
+        pieHole: 0.5, chartArea: {width:'90%', height:'80%'},
+        legend: {textStyle: {color: '#94a3b8'}, position: 'right'},
+        pieSliceBorderStyle: {color: '#0f172a'}
+    });
+}
+
+function renderTable(values) {
+    if (!values) return;
+    let h = '<table><thead><tr>' + values[0].map(c => `<th>${c}</th>`).join('') + '</tr></thead><tbody>';
+    for (let i = 1; i < values.length; i++) {
+        h += '<tr>' + values[i].map(c => `<td>${c}</td>`).join('') + '</tr>';
     }
     document.getElementById('sheet-data').innerHTML = h + '</tbody></table>';
 }
+
+window.onload = () => { initGapi(); initGis(); };
+function handleAuth() { tokenClient.requestAccessToken({prompt: 'consent'}); }
 </script>
 </body>
-</html>
+            </html>
