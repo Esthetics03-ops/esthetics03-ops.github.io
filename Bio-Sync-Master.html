@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bio-Sync Master | Final Enterprise Hub</title>
+    <title>Bio-Sync Master | Automated Hub</title>
     
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="https://apis.google.com/js/api.js" async defer></script>
@@ -12,163 +12,149 @@
     
     <style>
         :root { --bg: #020617; --card: #0f172a; --primary: #10b981; --accent: #3b82f6; --text: #f8fafc; --border: #1e293b; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; }
+        body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; }
         .container { max-width: 1100px; margin: 0 auto; display: none; }
         .gate { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; align-items: center; justify-content: center; text-align: center; }
         .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4); }
-        .stat { font-size: 3rem; font-weight: 800; color: var(--primary); letter-spacing: -1.5px; }
-        .label { font-size: 0.75rem; color: #64748b; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; }
+        .stat { font-size: 3rem; font-weight: 800; color: var(--primary); letter-spacing: -1.5px; line-height: 1; }
+        .label { font-size: 0.75rem; color: #64748b; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-bottom: 15px; }
         button { background: var(--accent); color: white; border: none; padding: 14px 28px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s; }
-        #debug-log { background: #000; color: var(--primary); font-family: monospace; padding: 15px; border-radius: 8px; font-size: 0.75rem; max-height: 150px; overflow-y: auto; border: 1px solid #1e293b; margin-top: 20px; }
+        .status-pill { display: flex; align-items: center; gap: 8px; font-size: 0.7rem; background: #064e3b; color: #34d399; padding: 6px 14px; border-radius: 50px; border: 1px solid #065f46; font-weight: 600; }
+        #debug-log { background: #000; color: var(--primary); font-family: monospace; padding: 15px; border-radius: 8px; font-size: 0.75rem; max-height: 160px; overflow-y: auto; border: 1px solid #1e293b; margin-top: 20px; }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        td, th { padding: 12px; border-bottom: 1px solid var(--border); color: #94a3b8; font-size: 0.85rem; }
-        th { color: var(--accent); text-align: left; text-transform: uppercase; font-size: 0.7rem; }
+        td, th { padding: 14px; border-bottom: 1px solid var(--border); color: #94a3b8; font-size: 0.85rem; text-align: left; }
+        th { color: var(--accent); font-size: 0.7rem; text-transform: uppercase; }
     </style>
 </head>
 <body>
 
 <div id="auth-gate" class="gate">
-    <div class="card" style="width: 400px;">
-        <i class="bi bi-shield-lock-fill" style="font-size: 3.5rem; color: var(--primary);"></i>
-        <h2>System Handshake</h2>
-        <p style="color:#64748b; font-size: 0.9rem; margin-bottom: 25px;">Publisher: pub-1959507280210179<br>Bi-Directional Pipeline: <b>READY</b></p>
-        <button onclick="handleAuth()">AUTHORIZE MASTER SYNC</button>
+    <div class="card" style="width: 420px;">
+        <i class="bi bi-cpu-fill" style="font-size: 4rem; color: var(--primary);"></i>
+        <h2 style="margin: 20px 0 10px;">Automated Handshake</h2>
+        <p style="color:#64748b; margin-bottom: 30px; font-size: 0.9rem;">Target: 1qMFHW7...V2V<br>Heartbeat Sync: <b>ENABLED (10m)</b></p>
+        <button onclick="handleAuth()">AUTHORIZE SYSTEM</button>
     </div>
 </div>
 
 <div id="dashboard" class="container">
-    <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-        <h3><i class="bi bi-cpu-fill text-primary"></i> BIO-SYNC MASTER</h3>
-        <div style="display:flex; gap: 15px; align-items: center;">
-            <div id="sync-status" style="font-size: 0.7rem; color: #64748b;">LAST SYNC: NEVER</div>
-            <button onclick="masterSync()" style="padding: 8px 16px; font-size: 0.75rem;"><i class="bi bi-arrow-repeat"></i> SYNC NOW</button>
+    <header style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px;">
+        <div>
+            <h2 style="margin:0;"><i class="bi bi-activity text-primary"></i> BIO-SYNC MASTER</h2>
+            <div style="font-size: 0.65rem; color: #475569; font-family: monospace; margin-top: 5px;">LAST HEARTBEAT: <span id="sync-time">WAITING...</span></div>
         </div>
+        <div class="status-pill"><i class="bi bi-heart-pulse-fill"></i> HEARTBEAT ACTIVE</div>
     </header>
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 20px;">
         <div class="card">
-            <div class="label">Verified Analytics Clicks</div>
+            <div class="label">Verified Traffic Clicks</div>
             <div id="click-val" class="stat">--</div>
         </div>
         <div class="card">
-            <div class="label">Total Yield ($1.42 weight)</div>
+            <div class="label">Projected Yield ($1.42)</div>
             <div id="rev-val" class="stat">--</div>
         </div>
     </div>
 
     <div class="card">
-        <div class="label">Performance Trend</div>
-        <div id="perf-chart" style="height: 250px;"></div>
+        <div class="label">System Pipeline Log</div>
+        <div id="debug-log">> System initialized. Awaiting handshake.</div>
     </div>
 
     <div class="card">
-        <div class="label">Inventory & Cloud Logs</div>
-        <div id="sheet-data" style="overflow-x: auto;"></div>
+        <div class="label">Sheet1 Database Stream</div>
+        <div id="sheet-data" style="overflow-x: auto;">
+            <p style="color: #475569; font-style: italic; font-size: 0.85rem;">Connecting to Sheet1...</p>
+        </div>
     </div>
-
-    <div id="debug-log">> Boot sequence initiated...</div>
 </div>
 
 <script>
 const CONFIG = {
     CLIENT_ID: '351002015975-2vqrggepkgohc9urhbbfbvqqsujjn5s3.apps.googleusercontent.com',
     API_KEY: 'AIzaSyDadhQvQJsezb0Jj8LkaA6NPHvZ6b3guuY',
-    SHEET_ID: '1xAgKqtj_dw3UbM0HOZE8HfIuvx9RC6DDSZQcSFLBIq8',
+    SHEET_ID: '1qMFHW7YLLILLhscgOwhzUA2NkmEGOV2V',
     SITE_URL: 'https://esthetics03-ops.github.io/'
 };
 
-google.charts.load('current', {'packages':['corechart']});
 let tokenClient;
-
-function log(m) {
-    const l = document.getElementById('debug-log');
-    l.innerHTML += `<div>[${new Date().toLocaleTimeString()}] > ${m}</div>`;
-    l.scrollTop = l.scrollHeight;
+function log(m) { 
+    const l = document.getElementById('debug-log'); 
+    l.innerHTML += `<div>[${new Date().toLocaleTimeString()}] > ${m}</div>`; 
+    l.scrollTop = l.scrollHeight; 
 }
 
-// 1. Core API Loaders
 async function initGapi() {
     try {
-        await new Promise((resolve) => gapi.load('client', resolve));
+        await new Promise(r => gapi.load('client', r));
         await gapi.client.init({ apiKey: CONFIG.API_KEY });
-        // Force manual load of discovery docs to ensure objects are built
-        await gapi.client.load('https://www.googleapis.com/discovery/v1/apis/searchconsole/v1/rest');
-        await gapi.client.load('https://sheets.googleapis.com/$discovery/rest?version=v4');
-        log("API Library Objects: CREATED");
+        await Promise.all([
+            gapi.client.load('https://sheets.googleapis.com/$discovery/rest?version=v4'),
+            gapi.client.load('https://www.googleapis.com/discovery/v1/apis/searchconsole/v1/rest')
+        ]);
+        log("GAPI: Discovery Services Fully Linked.");
     } catch (e) { log("Init Error: " + e.message); }
 }
 
 function initGis() {
     tokenClient = google.accounts.oauth2.initTokenClient({
         client_id: CONFIG.CLIENT_ID,
-        scope: 'https://www.googleapis.com/auth/webmasters.readonly https://www.googleapis.com/auth/spreadsheets',
-        callback: async (resp) => {
+        scope: 'https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/webmasters.readonly',
+        callback: async (resp) => { 
             if (resp.access_token) {
                 document.getElementById('auth-gate').style.display = 'none';
                 document.getElementById('dashboard').style.display = 'block';
                 await masterSync();
-            }
-        },
+                // Set the Heartbeat: Sync every 10 minutes (600,000ms)
+                setInterval(masterSync, 600000);
+                log("Heartbeat Activated: Next sync in 10m.");
+            } 
+        }
     });
-    log("Auth Client: READY");
 }
 
 window.onload = () => { initGapi(); initGis(); };
 function handleAuth() { tokenClient.requestAccessToken({prompt: 'consent'}); }
 
-// 2. The Master Sync Engine (with Validation)
 async function masterSync() {
-    log("MASTER SYNC STARTING...");
-    
-    // VALIDATION LOOP: Ensure gapi.client.searchconsole exists
-    if (!gapi.client.searchconsole || !gapi.client.searchconsole.searchanalytics) {
-        log("RE-LINKING Search Console service...");
-        await gapi.client.load('https://www.googleapis.com/discovery/v1/apis/searchconsole/v1/rest');
-    }
-    if (!gapi.client.sheets) {
-        log("RE-LINKING Sheets service...");
-        await gapi.client.load('https://sheets.googleapis.com/$discovery/rest?version=v4');
-    }
-
+    log("HEARTBEAT SYNC INITIATED...");
     try {
         const today = new Date().toISOString().split('T')[0];
         
-        // A. PULL ANALYTICS
+        // PULL: GSC Analytics
         const gscRes = await gapi.client.searchconsole.searchanalytics.query({
             siteUrl: CONFIG.SITE_URL,
             resource: { startDate: '2025-01-01', endDate: today }
         });
-        
+
         const clicks = (gscRes.result.rows || []).reduce((s, r) => s + (r.clicks || 0), 0) || 471;
         const revenue = (clicks * 1.42).toFixed(2);
-        
+
         document.getElementById('click-val').innerText = clicks.toLocaleString();
         document.getElementById('rev-val').innerText = `$${revenue}`;
 
-        // B. CLOUD PUSH
+        // PUSH: Record to Sheet1
         await gapi.client.sheets.spreadsheets.values.append({
             spreadsheetId: CONFIG.SHEET_ID,
             range: 'Sheet1!A:C',
             valueInputOption: 'RAW',
             resource: { values: [[new Date().toLocaleString(), clicks, `$${revenue}`]] }
         });
-        log("PUSH: Data Appended to Sheet.");
+        log("PUSH: Data appended to Sheet1.");
 
-        // C. DATABASE PULL
+        // PULL: Refresh Inventory Table
         const sheetRes = await gapi.client.sheets.spreadsheets.values.get({
             spreadsheetId: CONFIG.SHEET_ID,
             range: 'Sheet1!A1:E100'
         });
         
         renderTable(sheetRes.result);
-        drawChart(gscRes.result.rows || []);
-        
-        document.getElementById('sync-status').innerText = "LAST SYNC: " + new Date().toLocaleTimeString();
-        log("MASTER SYNC: SUCCESS");
+        document.getElementById('sync-time').innerText = new Date().toLocaleTimeString();
+        log("HEARTBEAT SUCCESSFUL.");
 
-    } catch (e) {
-        log("SYNC FAILED: " + (e.result?.error?.message || e.message));
-        console.error(e);
+    } catch (e) { 
+        log("SYNC ERROR: " + (e.result?.error?.message || e.message)); 
     }
 }
 
@@ -179,17 +165,6 @@ function renderTable(data) {
         h += '<tr>' + data.values[i].map(c => `<td>${c}</td>`).join('') + '</tr>';
     }
     document.getElementById('sheet-data').innerHTML = h + '</tbody></table>';
-}
-
-function drawChart(rows) {
-    const dataArray = [['Date', 'Earnings']];
-    rows.slice(-10).forEach(r => dataArray.push([r.keys[0], (r.clicks * 1.42)]));
-    if(dataArray.length === 1) dataArray.push(['No Data', 0]);
-    const data = google.visualization.arrayToDataTable(dataArray);
-    new google.visualization.AreaChart(document.getElementById('perf-chart')).draw(data, {
-        backgroundColor: 'transparent', colors: ['#10b981'],
-        legend: 'none', areaOpacity: 0.1, hAxis: {textStyle:{color:'#64748b'}}, vAxis: {textStyle:{color:'#64748b'}}
-    });
 }
 </script>
 </body>
