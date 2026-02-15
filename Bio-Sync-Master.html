@@ -2,9 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bio-Sync Master | v9.0 Autonomous</title>
-    
+    <title>Bio-Sync Master | Autonomous Enterprise</title>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="https://apis.google.com/js/api.js" async defer></script>
     <script src="https://www.gstatic.com/charts/loader.js"></script>
@@ -12,68 +10,62 @@
     
     <style>
         :root { --bg: #020617; --card: #0f172a; --primary: #10b981; --accent: #3b82f6; --text: #f8fafc; --border: #1e293b; }
-        body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); padding: 15px; margin: 0; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 15px; }
         .container { max-width: 1100px; margin: 0 auto; display: none; }
-        .gate { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; align-items: center; justify-content: center; text-align: center; }
-        .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 15px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.4); }
-        .stat { font-size: 2.2rem; font-weight: 800; color: var(--primary); letter-spacing: -1px; }
-        .label { font-size: 0.65rem; color: #64748b; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; margin-bottom: 8px; }
-        button { background: var(--accent); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 700; cursor: pointer; }
-        .toggle-group { display: flex; background: #1e293b; padding: 4px; border-radius: 8px; gap: 4px; }
-        .toggle-btn { background: transparent; border: none; color: #94a3b8; padding: 6px 16px; border-radius: 6px; font-size: 0.7rem; cursor: pointer; transition: 0.2s; }
-        .toggle-btn.active { background: var(--accent); color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
-        #debug-log { background: #000; color: var(--primary); font-family: 'Fira Code', monospace; padding: 12px; border-radius: 8px; font-size: 0.7rem; max-height: 120px; overflow-y: auto; border: 1px solid #1e293b; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.75rem; }
-        th { color: var(--accent); text-align: left; padding: 8px; border-bottom: 2px solid var(--border); text-transform: uppercase; font-size: 0.6rem; }
+        .gate { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; align-items: center; justify-content: center; }
+        .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px; margin-bottom: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3); }
+        .stat { font-size: 2rem; font-weight: 800; color: var(--primary); }
+        .label { font-size: 0.65rem; color: #64748b; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 5px; font-weight: 700; }
+        button { background: var(--accent); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.3s; }
+        button:hover { opacity: 0.9; transform: translateY(-1px); }
+        .toggle-group { display: flex; background: #1e293b; padding: 4px; border-radius: 8px; }
+        .toggle-btn { background: transparent; border: none; color: #94a3b8; padding: 6px 16px; border-radius: 6px; font-size: 0.7rem; cursor: pointer; }
+        .toggle-btn.active { background: var(--accent); color: white; }
+        #debug-log { background: #000; color: var(--primary); font-family: 'Fira Code', monospace; padding: 10px; border-radius: 8px; font-size: 0.7rem; height: 100px; overflow-y: auto; border: 1px solid #1e293b; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.75rem; margin-top: 10px; }
+        th { color: var(--accent); text-align: left; border-bottom: 2px solid var(--border); padding: 8px; text-transform: uppercase; font-size: 0.65rem; }
         td { padding: 8px; border-bottom: 1px solid var(--border); color: #94a3b8; }
-        #revenue-chart { width: 100%; height: 250px; }
-        .status-badge { font-size: 0.6rem; padding: 4px 10px; border-radius: 20px; background: #064e3b; color: #34d399; border: 1px solid #065f46; }
     </style>
 </head>
 <body>
 
 <div id="auth-gate" class="gate">
-    <div class="card" style="width: 380px;">
+    <div class="card" style="text-align: center; width: 380px;">
         <i class="bi bi-cloud-check-fill" style="font-size: 3.5rem; color: var(--primary);"></i>
-        <h2 style="margin: 15px 0 5px;">Autonomous Sync</h2>
-        <p style="color:#64748b; font-size: 0.8rem; margin-bottom: 25px;">
-            Initializing Cloud Triggers & <br>Dual-Currency Financial Stream.
-        </p>
-        <button onclick="handleAuth()">ACTIVATE MASTER NODE</button>
+        <h2 style="margin: 15px 0 10px;">Master Handshake</h2>
+        <p style="color:#64748b; font-size: 0.85rem; margin-bottom: 25px;">Connecting to RawData & Dashboard tabs...</p>
+        <button onclick="handleAuth()">ACTIVATE ENTERPRISE NODE</button>
     </div>
 </div>
 
 <div id="dashboard" class="container">
-    <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-        <div>
-            <h3 style="margin:0;"><i class="bi bi-cpu text-primary"></i> BIO-SYNC <span style="font-weight:200">v9.0</span></h3>
-            <span class="status-badge">CLOUD TRIGGER: ACTIVE</span>
-        </div>
+    <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h3 style="margin:0"><i class="bi bi-cpu-fill text-primary"></i> BIO-SYNC v10.0</h3>
         <div class="toggle-group">
             <button id="btn-us" class="toggle-btn active" onclick="switchCurrency('US')">USD</button>
             <button id="btn-kes" class="toggle-btn" onclick="switchCurrency('KES')">KES</button>
         </div>
     </header>
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px;">
-        <div class="card"><div class="label">Daily Clicks</div><div id="click-val" class="stat">--</div></div>
-        <div class="card"><div class="label">Yield Projection</div><div id="rev-val" class="stat">--</div></div>
-        <div class="card"><div class="label">Net Commission</div><div id="comm-val" class="stat" style="color: var(--accent);">--</div></div>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 15px;">
+        <div class="card"><div class="label">Total Clicks</div><div id="click-val" class="stat">--</div></div>
+        <div class="card"><div class="label">AdSense Yield</div><div id="rev-val" class="stat">--</div></div>
+        <div class="card"><div class="label">Commission</div><div id="comm-val" class="stat" style="color:var(--accent)">--</div></div>
     </div>
 
     <div class="card">
-        <div class="label">Revenue Distribution (AdSense vs Affiliate)</div>
-        <div id="revenue-chart"></div>
+        <div class="label">Revenue Performance Summary</div>
+        <div id="revenue-chart" style="height: 250px;"></div>
     </div>
 
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
         <div class="card">
             <div class="label">System Pipeline Log</div>
-            <div id="debug-log">> Awaiting Cloud Handshake...</div>
+            <div id="debug-log">> Booting Core Systems...</div>
         </div>
         <div class="card">
-            <div class="label">Database Mirror: Sheet1</div>
-            <div id="sheet-data" style="max-height: 120px; overflow-y: auto;">Syncing...</div>
+            <div class="label">Stream: RawData</div>
+            <div id="sheet-data" style="max-height: 100px; overflow-y: auto;">Synchronizing...</div>
         </div>
     </div>
 </div>
@@ -87,124 +79,120 @@ const CONFIG = {
 };
 
 google.charts.load('current', {'packages':['corechart']});
-let tokenClient;
-let currentCurrency = 'US';
-let cachedDashData = null;
+let tokenClient, cachedDash = null, currency = 'US';
 
-function log(m) {
-    const l = document.getElementById('debug-log');
-    l.innerHTML += `<div>[${new Date().toLocaleTimeString()}] > ${m}</div>`;
-    l.scrollTop = l.scrollHeight;
+function log(m) { 
+    const l = document.getElementById('debug-log'); 
+    l.innerHTML += `<div>[${new Date().toLocaleTimeString()}] > ${m}</div>`; 
+    l.scrollTop = l.scrollHeight; 
 }
 
 async function initGapi() {
     try {
         await new Promise(r => gapi.load('client', r));
         await gapi.client.init({ apiKey: CONFIG.API_KEY });
-        await Promise.all([
-            gapi.client.load('searchconsole', 'v1'),
-            gapi.client.load('sheets', 'v4')
-        ]);
-        log("GAPI: Cloud Services Discovery Finished.");
-    } catch (e) { log("ERR: Initialization stall."); }
+        // FIXED: Load specific versions to prevent "undefined" query errors
+        await gapi.client.load('searchconsole', 'v1');
+        await gapi.client.load('sheets', 'v4');
+        log("GAPI: Core Services Verified.");
+    } catch (e) { log("INIT ERR: Critical library stall."); }
 }
 
 function initGis() {
     tokenClient = google.accounts.oauth2.initTokenClient({
         client_id: CONFIG.CLIENT_ID,
         scope: 'https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/webmasters.readonly',
-        callback: async (resp) => {
-            if (resp.access_token) {
-                document.getElementById('auth-gate').style.display = 'none';
-                document.getElementById('dashboard').style.display = 'block';
-                await masterSync();
-                setInterval(masterSync, 600000); // 10-min heartbeat
-            }
+        callback: async (r) => { 
+            if(r.access_token) { 
+                document.getElementById('auth-gate').style.display='none'; 
+                document.getElementById('dashboard').style.display='block'; 
+                await sync(); 
+                setInterval(sync, 600000); // 10-minute heartbeat
+            } 
         }
     });
 }
 
-function switchCurrency(code) {
-    currentCurrency = code;
-    document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(`btn-${code.toLowerCase()}`).classList.add('active');
-    if (cachedDashData) updateDashboardUI(cachedDashData);
-}
-
-async function masterSync() {
-    log("HEARTBEAT: Syncing Cloud Node...");
+async function sync() {
+    log("HEARTBEAT: Initiating Pull/Push...");
     try {
         const today = new Date().toISOString().split('T')[0];
-        
-        // 1. PULL LIVE TRAFFIC
-        const gsc = await gapi.client.searchconsole.searchanalytics.query({
-            siteUrl: CONFIG.SITE_URL,
-            resource: { startDate: '2025-01-01', endDate: today }
+        const gsc = await gapi.client.searchconsole.searchanalytics.query({ 
+            siteUrl: CONFIG.SITE_URL, 
+            resource: { startDate: '2025-01-01', endDate: today } 
         });
+        
         const clicks = (gsc.result.rows || []).reduce((s, r) => s + (r.clicks || 0), 0) || 471;
-        document.getElementById('click-val').innerText = clicks.toLocaleString();
-
-        // 2. PUSH TO SHEET1
-        await gapi.client.sheets.spreadsheets.values.append({
-            spreadsheetId: CONFIG.SHEET_ID, range: 'Sheet1!A:C',
-            valueInputOption: 'RAW',
-            resource: { values: [[new Date().toLocaleString(), clicks, (clicks * 1.42).toFixed(2)]] }
-        });
-
-        // 3. PULL DASHBOARD METRICS
-        const dashRes = await gapi.client.sheets.spreadsheets.values.get({
-            spreadsheetId: CONFIG.SHEET_ID, range: 'Dashboard!A1:C10'
-        });
-        cachedDashData = dashRes.result.values;
-        updateDashboardUI(cachedDashData);
         
-        // 4. PULL LOG TABLE
-        const logRes = await gapi.client.sheets.spreadsheets.values.get({
-            spreadsheetId: CONFIG.SHEET_ID, range: 'Sheet1!A1:C10'
+        // PUSH to "RawData" tab based on your Date/Page/Views headers
+        await gapi.client.sheets.spreadsheets.values.append({ 
+            spreadsheetId: CONFIG.SHEET_ID, 
+            range: 'RawData!A:E', 
+            valueInputOption: 'RAW', 
+            resource: { values: [[new Date().toLocaleDateString(), "Bio-Node", clicks, (clicks * 1.42).toFixed(2), "Automated Sync"]] } 
         });
-        renderTable(logRes.result.values);
 
-        log("SUCCESS: Cloud Pipeline Synchronized.");
-    } catch (e) { log("SYNC ERROR: Verify Permissions."); }
+        // PULL Dashboard Metrics (Mapping from your A4:C7 structure)
+        const dash = await gapi.client.sheets.spreadsheets.values.get({ 
+            spreadsheetId: CONFIG.SHEET_ID, 
+            range: 'Dashboard!A4:C7' 
+        });
+        cachedDash = dash.result.values;
+        
+        // PULL RawData Table for preview
+        const raw = await gapi.client.sheets.spreadsheets.values.get({ 
+            spreadsheetId: CONFIG.SHEET_ID, 
+            range: 'RawData!A1:E10' 
+        });
+        
+        updateUI(clicks);
+        renderTable(raw.result.values);
+        log("SUCCESS: Database and Analytics Synced.");
+    } catch (e) { 
+        log("SYNC ERR: " + (e.result?.error?.message || e.message)); 
+    }
 }
 
-function updateDashboardUI(rows) {
-    const colIdx = currentCurrency === 'US' ? 1 : 2;
-    const prefix = currentCurrency === 'US' ? '$' : 'KSh ';
+function updateUI(clicks) {
+    if(!cachedDash) return;
+    const col = currency === 'US' ? 1 : 2;
+    const pre = currency === 'US' ? '$' : 'KSh ';
     
-    // AdSense total from Row 4, Commission from Row 6
-    document.getElementById('rev-val').innerText = `${prefix}${rows[3][colIdx]}`;
-    document.getElementById('comm-val').innerText = `${prefix}${rows[5][colIdx]}`;
+    document.getElementById('click-val').innerText = clicks.toLocaleString();
+    document.getElementById('rev-val').innerText = pre + cachedDash[0][col]; 
+    document.getElementById('comm-val').innerText = pre + cachedDash[2][col]; 
     
-    drawChart(rows, colIdx);
-}
-
-function drawChart(rows, colIdx) {
     const data = google.visualization.arrayToDataTable([
         ['Source', 'Revenue'],
-        ['AdSense', parseFloat(rows[3][colIdx].replace(/[^0-9.-]+/g,""))],
-        ['Affiliate', parseFloat(rows[4][colIdx].replace(/[^0-9.-]+/g,""))]
+        ['AdSense', parseFloat(cachedDash[0][col].toString().replace(/[^0-9.-]+/g,""))],
+        ['Affiliate', parseFloat(cachedDash[1][col].toString().replace(/[^0-9.-]+/g,""))]
     ]);
-
+    
     new google.visualization.PieChart(document.getElementById('revenue-chart')).draw(data, {
-        backgroundColor: 'transparent', colors: ['#10b981', '#3b82f6'],
-        pieHole: 0.5, chartArea: {width:'90%', height:'80%'},
-        legend: {textStyle: {color: '#94a3b8'}, position: 'right'},
-        pieSliceBorderStyle: {color: '#0f172a'}
+        backgroundColor: 'transparent', 
+        colors: ['#10b981', '#3b82f6'], 
+        legend: {textStyle: {color: '#94a3b8'}},
+        chartArea: {width:'90%', height:'80%'}
     });
 }
 
-function renderTable(values) {
-    if (!values) return;
-    let h = '<table><thead><tr>' + values[0].map(c => `<th>${c}</th>`).join('') + '</tr></thead><tbody>';
-    for (let i = 1; i < values.length; i++) {
-        h += '<tr>' + values[i].map(c => `<td>${c}</td>`).join('') + '</tr>';
+function renderTable(rows) {
+    if(!rows) return;
+    let h = '<table><thead><tr><th>Date</th><th>Clicks</th><th>Yield</th></tr></thead><tbody>';
+    for(let i=1; i < Math.min(rows.length, 6); i++) {
+        h += `<tr><td>${rows[i][0]}</td><td>${rows[i][2]}</td><td>${rows[i][3]}</td></tr>`;
     }
     document.getElementById('sheet-data').innerHTML = h + '</tbody></table>';
+}
+
+function switchCurrency(c) { 
+    currency = c; 
+    document.querySelectorAll('.toggle-btn').forEach(b => b.classList.toggle('active', b.id === `btn-${c.toLowerCase()}`)); 
+    if(cachedDash) updateUI(document.getElementById('click-val').innerText); 
 }
 
 window.onload = () => { initGapi(); initGis(); };
 function handleAuth() { tokenClient.requestAccessToken({prompt: 'consent'}); }
 </script>
 </body>
-            </html>
+</html>
