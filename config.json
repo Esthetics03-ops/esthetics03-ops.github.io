@@ -1,4 +1,46 @@
 {
+  "PROJECT_METADATA": {
+    "node_id": "amiable-crane-465217-j9",
+    "version": "23.0.0",
+    "localization": "Africa/Nairobi",
+    "deployment_status": "ENTERPRISE_READY",
+    "error_rate": 0.00
+  },
+  "CLOUD_CREDENTIALS": {
+    "api_key": "AIzaSyDadhQvQJsezb0Jj8LkaA6NPHvZ6b3guuY",
+    "client_id": "351002015975-2vqrggepkgohc9urhbbfbvqqsujjn5s3.apps.googleusercontent.com",
+    "auth_scopes": [
+      "https://www.googleapis.com/auth/spreadsheets",
+      "https://www.googleapis.com/auth/webmasters.readonly",
+      "https://www.googleapis.com/auth/analytics.readonly"
+    ]
+  },
+  "DATA_ARCHITECT": {
+    "spreadsheet_id": "1qMFHW7YLLILLhscgOwhzUA2NkmEGOV2V",
+    "mappings": {
+      "adsense_net": "Dashboard!B4",
+      "affiliate_net": "Dashboard!B5",
+      "total_combined": "Dashboard!B7",
+      "raw_data_stream": "RawData!A:E"
+    }
+  },
+  "ANALYTICS_NODES": {
+    "adsense_pub_id": "pub-1959507280210179",
+    "ga4_properties": [
+      "G-QCX3G9KSPC",
+      "G-PSW1MY7HB4"
+    ],
+    "search_console_site": "https://esthetics03-ops.github.io/",
+    "affiliate_id": "esthetics-hub-affiliate"
+  },
+  "AUTOMATION_RULES": {
+    "payout_milestone_usd": 1000.00,
+    "archive_frequency": "WEEKLY_SUNDAY",
+    "reporting_cycle": "MONTHLY_1ST",
+    "health_pulse": "HOURLY"
+  }
+}
+{
   "project_info": {
     "name": "The Esthetics Hub",
     "version": "2.4.1",
