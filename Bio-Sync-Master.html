@@ -3,100 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bio-Sync Ultimate Hub v21.0</title>
+    <title>Bio-Sync Master v22.0</title>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="https://apis.google.com/js/api.js" async defer></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
         :root { --bg: #020617; --card: #0f172a; --primary: #10b981; --accent: #3b82f6; --text: #f8fafc; --border: #1e293b; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 15px; }
+        body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); padding: 15px; margin: 0; }
         .container { max-width: 1200px; margin: 0 auto; display: none; }
         .gate { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; align-items: center; justify-content: center; text-align: center; }
-        .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-bottom: 15px; box-shadow: 0 4px 25px rgba(0,0,0,0.4); }
-        .stat { font-size: 2.8rem; font-weight: 800; color: var(--primary); letter-spacing: -1.5px; line-height: 1; margin: 12px 0; }
-        .label { font-size: 0.65rem; color: #64748b; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; }
+        .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-bottom: 15px; box-shadow: 0 4px 30px rgba(0,0,0,0.5); }
+        .stat { font-size: 2.8rem; font-weight: 800; color: var(--primary); letter-spacing: -1.5px; margin: 10px 0; }
+        .label { font-size: 0.7rem; color: #64748b; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; }
         .progress-container { background: #1e293b; height: 16px; border-radius: 8px; margin: 20px 0; overflow: hidden; border: 1px solid var(--border); }
-        .progress-bar { background: linear-gradient(90deg, var(--accent), var(--primary)); height: 100%; width: 0%; transition: 2.5s cubic-bezier(0.1, 0, 0, 1); }
-        button { background: var(--accent); color: white; border: none; padding: 18px 36px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 1rem; transition: 0.3s; }
-        button:hover { background: #2563eb; transform: translateY(-2px); }
-        #terminal { background: #000; color: var(--primary); font-family: 'Fira Code', monospace; padding: 15px; border-radius: 12px; font-size: 0.7rem; height: 140px; overflow-y: auto; border: 1px solid var(--border); }
+        .progress-bar { background: linear-gradient(90deg, var(--accent), var(--primary)); height: 100%; width: 0%; transition: 2.5s ease-in-out; }
+        button { background: var(--accent); color: white; border: none; padding: 18px 36px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 1rem; }
+        #terminal { background: #000; color: var(--primary); font-family: 'Fira Code', monospace; padding: 15px; border-radius: 12px; font-size: 0.75rem; height: 160px; overflow-y: auto; border: 1px solid var(--border); }
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; }
-        .qr-card { text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .qr-img { background: white; padding: 10px; border-radius: 8px; margin-top: 10px; width: 120px; height: 120px; }
-        table { width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-top: 10px; }
-        th { text-align: left; color: var(--accent); padding: 8px; border-bottom: 1px solid var(--border); }
-        td { padding: 8px; border-bottom: 1px solid var(--border); color: #94a3b8; }
+        .badge { background: #064e3b; color: #34d399; padding: 4px 12px; border-radius: 20px; font-size: 0.65rem; font-weight: 800; }
     </style>
 </head>
 <body>
 
 <div id="auth-gate" class="gate">
     <div class="card" style="width: 440px;">
-        <i class="bi bi-cpu-fill" style="font-size: 4rem; color: var(--primary);"></i>
-        <h1 style="margin: 15px 0 5px;">BIO-SYNC MASTER</h1>
+        <i class="bi bi-shield-lock-fill" style="font-size: 4rem; color: var(--primary);"></i>
+        <h1 style="margin: 15px 0 5px;">Enterprise Hub</h1>
         <p style="color:#64748b; margin-bottom: 30px;">Node: amiable-crane-465217-j9</p>
-        <button onclick="handleAuth()">INITIALIZE HANDSHAKE</button>
+        <button onclick="handleAuth()">INITIALIZE MASTER SECURE LOGIN</button>
     </div>
 </div>
 
 <div id="dashboard" class="container">
     <header style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px;">
         <div>
-            <h2 style="margin:0"><i class="bi bi-shield-check text-primary"></i> ENTERPRISE NODE v21.0</h2>
-            <p style="color:#64748b; margin: 5px 0 0; font-size: 0.85rem;">PUB-ID: pub-1959507280210179 | <span style="color:var(--primary)">Nairobi/Active</span></p>
+            <h2 style="margin:0"><i class="bi bi-cpu-fill text-primary"></i> BIO-SYNC MASTER HUB <span class="badge">v22.0</span></h2>
+            <p style="color:#64748b; margin: 5px 0 0; font-size: 0.85rem;">Local Time: <span id="local-time" style="color:var(--primary)">Synced</span> (Africa/Nairobi)</p>
         </div>
         <div style="text-align: right;">
             <div id="payout-percent" style="font-size: 1.5rem; font-weight: 800; color: var(--accent);">--%</div>
-            <div class="label">Payout Goal ($1,000)</div>
+            <div class="label">Progress to $1,000 Goal</div>
         </div>
     </header>
 
-    <div class="grid" style="grid-template-columns: 2fr 1fr;">
-        <div class="card">
-            <div class="label">Revenue Velocity Milestone</div>
-            <div class="progress-container"><div id="bar" class="progress-bar"></div></div>
-            <div class="grid">
-                <div><div class="label">AdSense (B4)</div><div id="val-ads" class="stat">--</div></div>
-                <div><div class="label">Affiliate (B5)</div><div id="val-aff" class="stat" style="color:var(--accent)">--</div></div>
-                <div><div class="label">Combined (B7)</div><div id="val-total" class="stat">--</div></div>
-            </div>
-        </div>
-        <div class="card qr-card">
-            <div class="label">Report Folder QR</div>
-            <img id="qr-display" class="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Initializing" alt="QR Code">
-            <p style="font-size: 0.6rem; color: #64748b; margin-top: 10px;">SCAN FOR DRIVE PDF FOLDER</p>
-        </div>
+    <div class="card">
+        <div class="label">Revenue Velocity Milestone</div>
+        <div class="progress-container"><div id="bar" class="progress-bar"></div></div>
+    </div>
+
+    <div class="grid">
+        <div class="card"><div class="label">AdSense Net (B4)</div><div id="val-ads" class="stat">--</div></div>
+        <div class="card"><div class="label">Affiliate (B5)</div><div id="val-aff" class="stat" style="color:var(--accent)">--</div></div>
+        <div class="card"><div class="label">Total Combined (B7)</div><div id="val-total" class="stat">--</div></div>
     </div>
 
     <div class="grid" style="grid-template-columns: 1fr 1.5fr;">
         <div class="card">
-            <div class="label">System Logs</div>
-            <div id="terminal">> Initializing protocol...</div>
+            <div class="label">System Terminal</div>
+            <div id="terminal">> Initializing master protocol...</div>
         </div>
         <div class="card">
-            <div class="label">GSC Analytics (Top 5 Pages)</div>
-            <div id="stream-feed">Awaiting Google Cloud data...</div>
+            <div class="label">Analytics Feed (GSC & GA4)</div>
+            <div id="analytics-stream" style="font-size: 0.8rem; color: #94a3b8; margin-top: 15px;">Waiting for data handshake...</div>
         </div>
     </div>
 </div>
 
 <script>
 /**
- * ENTERPRISE BI-SYNC CONFIG
+ * ENTERPRISE BI-SYNC CONFIGURATION
  */
 const CONFIG = {
     CLIENT_ID: '351002015975-2vqrggepkgohc9urhbbfbvqqsujjn5s3.apps.googleusercontent.com',
     API_KEY: 'AIzaSyDadhQvQJsezb0Jj8LkaA6NPHvZ6b3guuY',
     SHEET_ID: '1qMFHW7YLLILLhscgOwhzUA2NkmEGOV2V',
     SITE_URL: 'https://esthetics03-ops.github.io/',
-    DRIVE_FOLDER: 'https://drive.google.com/drive/u/0/my-drive' // Replace with your specific Report Folder URL
+    TIMEZONE: 'Africa/Nairobi'
 };
 
 let tokenClient;
 
 function log(msg) {
     const t = document.getElementById('terminal');
-    t.innerHTML += `<div>[${new Date().toLocaleTimeString('en-GB', {timeZone: 'Africa/Nairobi'})}] ${msg}</div>`;
+    const time = new Date().toLocaleTimeString('en-GB', {timeZone: CONFIG.TIMEZONE});
+    t.innerHTML += `<div>[${time}] ${msg}</div>`;
     t.scrollTop = t.scrollHeight;
 }
 
@@ -118,14 +108,14 @@ function initGis() {
             if (resp.access_token) {
                 document.getElementById('auth-gate').style.display = 'none';
                 document.getElementById('dashboard').style.display = 'block';
-                await masterSync();
+                await executeSync();
             }
         }
     });
 }
 
-async function masterSync() {
-    log("NODE: Fetching Core Metrics...");
+async function executeSync() {
+    log("NODE: Analyzing account architecture...");
     try {
         const today = new Date().toISOString().split('T')[0];
         const [sheetRes, gscRes] = await Promise.all([
@@ -136,40 +126,36 @@ async function masterSync() {
             })
         ]);
 
-        const vals = sheetRes.result.values;
-        const totalNum = parseFloat(vals[3][0].replace(/[^0-9.-]+/g,""));
-        const percent = Math.min((totalNum / 1000) * 100, 100).toFixed(2);
+        const d = sheetRes.result.values;
+        const total = parseFloat(d[3][0].replace(/[^0-9.-]+/g,""));
+        const percent = Math.min((total / 1000) * 100, 100).toFixed(2);
 
-        // Update UI
-        document.getElementById('val-ads').innerText = "$" + vals[0][0];
-        document.getElementById('val-aff').innerText = "$" + vals[1][0];
-        document.getElementById('val-total').innerText = "$" + totalNum.toLocaleString();
+        document.getElementById('val-ads').innerText = "$" + d[0][0];
+        document.getElementById('val-aff').innerText = "$" + d[1][0];
+        document.getElementById('val-total').innerText = "$" + total.toLocaleString();
         document.getElementById('payout-percent').innerText = percent + "%";
         document.getElementById('bar').style.width = percent + "%";
-        
-        // Update QR Code
-        document.getElementById('qr-display').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(CONFIG.DRIVE_FOLDER)}`;
 
-        renderGSC(gscRes.result.rows);
-        log(`SYNC: Success. Payout progress: ${percent}%.`);
+        renderAnalytics(gscRes.result.rows);
+        log(`SYNC: Finalized. Threshold status: ${percent}%.`);
     } catch (e) {
-        log("ERR: Handshake failed. Check Sheet permissions.");
+        log("ERR: Handshake failed. Ensure Sheet is Shared with Editor access.");
         console.error(e);
     }
 }
 
-function renderGSC(rows) {
+function renderAnalytics(rows) {
     if (!rows) return;
-    let html = '<table><tr><th>URL Path</th><th>Clicks</th></tr>';
+    let html = '<table style="width:100%; border-collapse: collapse;"><tr><th style="text-align:left;">URL Path</th><th>Clicks</th></tr>';
     rows.forEach(r => {
         const path = r.keys[0].replace(CONFIG.SITE_URL, '/');
-        html += `<tr><td>${path}</td><td>${r.clicks}</td></tr>`;
+        html += `<tr style="border-bottom:1px solid var(--border);"><td style="padding:8px 0;">${path}</td><td style="text-align:right;">${r.clicks}</td></tr>`;
     });
-    document.getElementById('stream-feed').innerHTML = html + '</table>';
+    document.getElementById('analytics-stream').innerHTML = html + '</table>';
 }
 
 window.onload = () => { initGapi(); initGis(); };
 function handleAuth() { tokenClient.requestAccessToken({prompt: 'consent'}); }
 </script>
 </body>
-                </html>
+    </html>
