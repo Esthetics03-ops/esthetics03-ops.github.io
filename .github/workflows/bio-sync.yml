@@ -22,24 +22,20 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          pip install google-analytics-data requests
+          pip install google-analytics-data requests pandas openpyxl
 
-      - name: Execute Master Engine
+      - name: Execute Live Pull & Bank Audit
         env:
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
           GA4_PROPERTY_ID: "319520471"
-        run: python main.py
+        run: |
+          python main.py
+          python monitor.py
 
       - name: Commit and Push Actuals
         run: |
           git config --global user.name "Gemini-Bio-Sync"
           git config --global user.email "bot@bio-sync.live"
-          git add config.json
+          git add config.json *.csv # Added *.csv to ensure your sheet data is saved
           git commit -m "⚡ Live Audit: $(date +'%Y-%m-%d %H:%M:%S') [Actuals Sync]" || echo "No changes to commit"
           git push
-- name: Execute Live Pull & Bank Audit
-        env:
-          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
-        run: |
-          python main.py
-          python monitor.py
