@@ -160,3 +160,13 @@ function setupAllTriggers() {
   
   console.log("SUCCESS: All 4 automation layers activated for Africa/Nairobi node.");
 }
+// Add this to your main.js
+window.addEventListener('load', () => {
+    // Only show pop-up after 10 seconds or 50% scroll
+    setTimeout(() => {
+        if(!localStorage.getItem('popupShown')) {
+            document.getElementById('travel-popup').style.display = 'block';
+            localStorage.setItem('popupShown', 'true');
+        }
+    }, 10000); 
+});
