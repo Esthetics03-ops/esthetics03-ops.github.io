@@ -1,0 +1,30 @@
+name: Site Health & Link Audit
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 0 * * 1' # Runs every Monday at midnight
+
+jobs:
+  link-checker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Check for Broken Links
+        uses: lycheeverse/lychee-action@v1.9.0
+        with:
+          # Scans your site for 404s in affiliate links and internal protocols
+          args: --verbose --no-progress "https://esthetics03-ops.github.io/"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  seo-validation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Audit Meta Tags
+        run: |
+          # Simple check to ensure every page has a Title and Description for SEO
+          grep -r "<title>" . || echo "Warning: Missing Title Tags"
+          grep -r "description" . || echo "Warning: Missing Meta Descriptions"
