@@ -407,6 +407,15 @@ function checkAds() {
     margin-bottom: 20px;
     font-style: italic;
     }
+
+    .affiliate-disclosure {
+    font-size: 0.85rem;
+    line-height: 1.4;
+    transition: opacity 0.3s ease;
+}
+.affiliate-disclosure:hover {
+    opacity: 0.9;
+    }
     
     /* WhatsApp Pulse Fix */
     .whatsapp-float {
@@ -660,9 +669,20 @@ html, body {
                    
             </div>
 
+            <div class="affiliate-disclosure py-2 px-3 mb-4 rounded border-start border-3 border-dark bg-light">
+    <p class="small text-muted mb-0">
+        <i class="bi bi-info-circle-fill me-1"></i> 
+        <strong>Transparency Note:</strong> Our research is independent. To support our work, we may earn a small commission from products purchased through our links—at no additional cost to you. 
+        <a href="/privacy-disclosure" class="text-decoration-underline text-secondary">Learn how we vet our protocols.</a>
+    </p>
+            </div>
+
              <div class="mt-5 text-center pt-4 border-top border-secondary">
-                <p class="small text-secondary mb-4"><em>This site contains affiliate links. We may earn a small commission at no extra cost to you.</em></p>
-                <ins class="adsbygoogle"
+                <p class="small text-secondary mb-4 border-top pt-2" style="letter-spacing: 0.02em; opacity: 0.8;">
+    <span class="text-uppercase fw-bold" style="font-size: 0.7rem;">Protocol Support:</span> 
+    As part of the <strong>Esthetics Hub</strong> commitment to transparency, please note that we may receive compensation for referrals to our research-backed partners.
+                </p>
+                 <ins class="adsbygoogle"
                      style="display:block; text-align:center;"
                      data-ad-client="ca-pub-1959507280210179"
                      data-ad-slot="4567890123"
