@@ -1,0 +1,11 @@
+- name: Install Dependencies
+        run: |
+          pip install google-analytics-data requests gspread oauth2client pandas
+
+      - name: Execute Live Pull & Bank Audit
+        env:
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          GA4_PROPERTY_ID: "319520471"
+          SPREADSHEET_ID: "14lde3IpR7th4DyYATejALuOHswor-QD0xdREE7FNpIo"
+        run: |
+          python main.py
