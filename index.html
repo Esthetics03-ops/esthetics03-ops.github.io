@@ -347,24 +347,53 @@ function checkAds() {
     }
     .glass-panel:hover { border-color: var(--accent-gold); transform: translateY(-7px); }
 
-    /* Logo Ticker - Fixed Infinite Animation */
-    .logo-ticker { 
-        background: rgba(0,0,0,0.4); padding: 25px 0; 
-        border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border);
-        overflow: hidden; white-space: nowrap; width: 100%;
-    }
-    .logo-track { 
-        display: flex; width: max-content; 
-        animation: scroll-left 35s linear infinite; 
-    }
-    @keyframes scroll-left { 
-        0% { transform: translateX(0); } 
-        100% { transform: translateX(-50%); } 
-    }
-    .logo-item { 
-        flex: 0 0 250px; text-align: center; font-weight: 800; font-size: 1.1rem; 
-        display: flex; align-items: center; justify-content: center;
-    }
+    /* Ticker Container */
+.logo-ticker {
+    overflow: hidden;
+    padding: 20px 0;
+    background: #ffffff; /* Clean white background for official colors to pop */
+    white-space: nowrap;
+    position: relative;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+}
+
+/* The Animation Track */
+.logo-track {
+    display: flex;
+    width: calc(250px * 14); /* Adjust based on number of logos */
+    animation: scroll 30s linear infinite;
+}
+
+.logo-item {
+    width: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 40px;
+}
+
+.brand-logo {
+    height: 35px; /* Consistent height for all logos */
+    width: auto;
+    filter: grayscale(100%); /* Optional: Starts subtle, turns colored on hover */
+    transition: filter 0.3s ease;
+}
+
+.logo-item:hover .brand-logo {
+    filter: grayscale(0%);
+}
+
+/* Animation */
+@keyframes scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(calc(-200px * 7)); }
+}
+
+/* Specific Tweak for Nike (if background is white) */
+.nike-dark {
+    height: 25px; /* Nike logo looks bigger than others at same height */
+}
 
     /* Mobile Action Bar - Improved Accessibility */
     @media (max-width: 991px) {
@@ -533,14 +562,20 @@ html, body {
     </header>
 
     <div class="logo-ticker">
-        <div class="logo-track">
-            <div class="logo-item" style="color:#FF9900;"><i class="bi bi-amazon me-2"></i> AMAZON</div>
-            <div class="logo-item" style="color:#635bff;"><i class="bi bi-stripe me-2"></i> STRIPE</div>
-            <div class="logo-item" style="color:#4285F4;"><i class="bi bi-google me-2"></i> GOOGLE</div>
-            <div class="logo-item text-white"><i class="bi bi-nike me-2"></i> NIKE</div>
-            <div class="logo-item" style="color:#003580; background:white; padding:2px 8px; border-radius:4px;">BOOKING.COM</div>
-        </div>
+    <div class="logo-track">
+        <div class="logo-item"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon" class="brand-logo"></div>
+        <div class="logo-item"><img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Stripe_Logo%2C_revised_2016.svg" alt="Stripe" class="brand-logo"></div>
+        <div class="logo-item"><img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google" class="brand-logo"></div>
+        <div class="logo-item"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg" alt="Nike" class="brand-logo nike-dark"></div>
+        <div class="logo-item"><img src="https://upload.wikimedia.org/wikipedia/commons/b/be/Booking.com_logo.svg" alt="Booking.com" class="brand-logo"></div>
+        
+        <div class="logo-item"><img src="https://upload.wikimedia.org/wikipedia/commons/3/30/Safaricom_logo.svg" alt="Safaricom" class="brand-logo"></div>
+        <div class="logo-item"><img src="https://ncbagroup.com/wp-content/uploads/2019/10/NCBA-Logo-White-BG.png" alt="NCBA Bank" class="brand-logo"></div>
+        
+        <div class="logo-item"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon" class="brand-logo"></div>
+        <div class="logo-item"><img src="https://upload.wikimedia.org/wikipedia/commons/3/30/Safaricom_logo.svg" alt="Safaricom" class="brand-logo"></div>
     </div>
+</div>
 
     <div class="container my-4 text-center">
     <ins class="adsbygoogle"
