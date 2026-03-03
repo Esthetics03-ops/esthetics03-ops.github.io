@@ -510,6 +510,30 @@ html, body {
 
 <body>
 
+    <div id="payment-success" style="display:none; background:#e8f5e9; border:1px solid #4caf50; padding:20px; border-radius:8px; margin:20px 0; text-align:center;">
+    <h3 style="color:#2e7d32;">✨ Protocol Unlocked!</h3>
+    <p>Thank you for your payment. Your 2026 Wellness Guide is now available below.</p>
+</div>
+
+<script>
+// Check if user just paid
+if(window.location.hash === "#success") {
+    document.getElementById('payment-success').style.display = 'block';
+    
+    // Trigger GA4 Conversion Event
+    gtag('event', 'purchase', {
+        'transaction_id': 'T_' + Math.floor(Math.random() * 1000000),
+        'affiliation': 'The Esthetics Hub',
+        'value': 5.00, // Set your protocol price
+        'currency': 'USD',
+        'items': [{
+            'item_id': 'wellness_001',
+            'item_name': 'Bio-Sync Reset Protocol'
+        }]
+    });
+}
+</script>
+
     <video autoplay muted loop playsinline id="video-bg">
         <source src="00248=17573=17571=16911.mp4" type="video/mp4">
     </video>
