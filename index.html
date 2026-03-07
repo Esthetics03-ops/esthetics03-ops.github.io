@@ -334,7 +334,69 @@ function checkAds() {
     }
     body { background-color: var(--bg-dark); color: white; font-family: 'Inter', sans-serif; }
         header { background: radial-gradient(circle at 50% 0%, #1e293b 0%, #0f172a 100%); }
-    
+    /* --- Navbar Refinements --- */
+.navbar-nav .nav-link {
+    color: #e2e8f0 !important;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    padding: 0.5rem 1rem !important;
+    position: relative;
+}
+
+.navbar-nav .nav-link:hover, 
+.navbar-nav .nav-link.active {
+    color: var(--accent-gold) !important;
+}
+
+/* Underline effect for active links */
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 1rem;
+    width: 0;
+    height: 2px;
+    background: var(--accent-gold);
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover::after, 
+.nav-link.active::after {
+    width: calc(100% - 2rem);
+}
+
+/* --- Dropdown Aesthetics --- */
+.dropdown-menu {
+    background: rgba(15, 23, 42, 0.98) !important;
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--border) !important;
+    border-radius: 12px !important;
+    margin-top: 10px !important;
+}
+
+.dropdown-item {
+    color: #cbd5e1 !important;
+    padding: 0.75rem 1.25rem !important;
+    transition: background 0.2s ease;
+}
+
+.dropdown-item:hover {
+    background: rgba(212, 175, 55, 0.1) !important;
+    color: var(--accent-gold) !important;
+}
+
+/* --- Get Started Button --- */
+.btn-info {
+    background: var(--accent-gold) !important;
+    border: none !important;
+    color: #0f172a !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-info:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3) !important;
+    }
 
     /* --- Slideshow & Glassmorphism --- */
         .slideshow-container {
