@@ -347,12 +347,14 @@ function checkAds() {
 }
 
     .hamburger {
-    width: 30px;
+/* Container for the 3 lines */
+.hamburger {
+    width: 28px;
     height: 20px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    cursor: pointer;
+    transition: transform 0.3s ease;
 }
 
 .hamburger span {
@@ -360,8 +362,21 @@ function checkAds() {
     height: 2px;
     width: 100%;
     background: var(--accent-gold);
-    transition: all 0.4s ease;
-    transform-origin: left center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 2px;
+}
+
+/* When the navbar is OPEN (not collapsed) */
+.navbar-toggler:not(.collapsed) .hamburger span:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+}
+
+.navbar-toggler:not(.collapsed) .hamburger span:nth-child(2) {
+    opacity: 0;
+}
+
+.navbar-toggler:not(.collapsed) .hamburger span:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
 }
 
 /* Logic to rotate lines when menu is collapsed (using Bootstrap's 'collapsed' class state) */
@@ -702,7 +717,7 @@ if(window.location.hash === "#success") {
                 <i class="bi bi-stars text-info"></i> <span class="d-none d-md-inline ms-1 small">MindSync AI</span>
             </div>
             
-        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
+        <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navContent" aria-expanded="false" aria-label="Toggle navigation">
     <div class="hamburger">
         <span></span>
         <span></span>
