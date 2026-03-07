@@ -379,7 +379,7 @@ function checkAds() {
     border-radius: 2px;
 }
 
-/* When the navbar is OPEN (not collapsed) */
+/* Transform to "X" when not collapsed */
 .navbar-toggler:not(.collapsed) .hamburger span:nth-child(1) {
     transform: translateY(9px) rotate(45deg);
 }
@@ -731,13 +731,13 @@ if(window.location.hash === "#success") {
             </div>             
         </div>
 
-        <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
     <div class="hamburger">
         <span></span>
         <span></span>
         <span></span>
     </div>
-        </button>
+</button>
 
             <div class="container">    
         <div class="collapse navbar-collapse" id="navContent">
@@ -1133,6 +1133,20 @@ if(window.location.hash === "#success") {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
+        document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+        const navContent = document.getElementById('navContent');
+        const toggler = document.querySelector('.navbar-toggler');
+        
+        // Collapse the menu
+        const bsCollapse = new bootstrap.Collapse(navContent, { toggle: false });
+        bsCollapse.hide();
+        
+        // Reset the toggler state
+        toggler.classList.add('collapsed');
+        toggler.setAttribute('aria-expanded', 'false');
+    });
+});
 document.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('click', () => {
         const navContent = document.getElementById('navContent');
