@@ -410,7 +410,7 @@ function checkAds() {
     content: '';
     display: block;
     background: var(--accent-gold);
-   max-width: 100px; 
+   width: 100px; 
     height: 3px;
     border-radius: 10px;
     margin-top: 4px;
@@ -1133,6 +1133,18 @@ if(window.location.hash === "#success") {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
+document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+        const navContent = document.getElementById('navContent');
+        const bsCollapse = new bootstrap.Collapse(navContent, { toggle: false });
+        
+        // Only close if the menu is actually open (on mobile)
+        if (navContent.classList.contains('show')) {
+            bsCollapse.hide();
+        }
+    });
+});
+        
         AOS.init({ duration: 1000, once: true });
         document.getElementById('year').textContent = new Date().getFullYear();
 
