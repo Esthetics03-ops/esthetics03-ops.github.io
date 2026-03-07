@@ -319,7 +319,7 @@ function checkAds() {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <style>
     :root { 
@@ -340,8 +340,22 @@ function checkAds() {
     padding: 0.5rem 1rem !important;
 }
 
+/* Active state for navigation links */
 .navbar-nav .nav-link.active {
     color: var(--accent-gold) !important;
+    position: relative;
+}
+
+/* The gold indicator bar for active items */
+.navbar-nav .nav-link.active::after {
+    content: '';
+    display: block;
+    background: var(--accent-gold);
+    width: 24px; 
+    height: 3px;
+    border-radius: 10px;
+    margin-top: 4px;
+    transition: all 0.3s ease;
 }
 
 /* Glassmorphism for Dropdowns */
@@ -662,8 +676,7 @@ if(window.location.hash === "#success") {
         </button>
         </div>
 
-            <div class="container">
-        
+            <div class="container">    
 
         <div class="collapse navbar-collapse" id="navContent">
             <ul class="navbar-nav ms-auto align-items-center" data-aos="fade-down" data-aos-delay="200">
