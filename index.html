@@ -362,8 +362,7 @@ function checkAds() {
     }
 /* Container for the 3 lines */
 .hamburger {
-    color: var(--accent-gold) !important;
-    width: 28px;
+     width: 28px;
     height: 20px;
     display: flex;
     flex-direction: column;
@@ -372,6 +371,7 @@ function checkAds() {
 }
 
 .hamburger span {
+    color: var(--accent-gold) !important;
     display: block;
     height: 2px;
     width: 30px;
@@ -409,7 +409,8 @@ function checkAds() {
 .navbar-nav .nav-link.active::after {
     content: '';
     display: block;
-    
+    background: var(--accent-gold);
+   
    width: 30px; 
     height: 3px;
     border-radius: 10px;
