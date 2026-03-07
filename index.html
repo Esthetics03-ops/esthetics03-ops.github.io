@@ -332,71 +332,50 @@ function checkAds() {
         --whatsapp: #25D366; --amazon: #FF9900; --stripe: #635bff;
         --google: #4285F4; --nike: #FFFFFF;
     }
-    body { background-color: var(--bg-dark); color: white; font-family: 'Inter', sans-serif; }
-        header { background: radial-gradient(circle at 50% 0%, #1e293b 0%, #0f172a 100%); }
-    /* --- Navbar Refinements --- */
+    /* --- Navbar Premium Scoping --- */
 .navbar-nav .nav-link {
     color: #e2e8f0 !important;
     font-weight: 500;
     transition: all 0.3s ease;
     padding: 0.5rem 1rem !important;
-    position: relative;
 }
 
-.navbar-nav .nav-link:hover, 
 .navbar-nav .nav-link.active {
     color: var(--accent-gold) !important;
 }
 
-/* Underline effect for active links */
-.nav-link::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 1rem;
-    width: 0;
-    height: 2px;
-    background: var(--accent-gold);
-    transition: width 0.3s ease;
-}
-
-.nav-link:hover::after, 
-.nav-link.active::after {
-    width: calc(100% - 2rem);
-}
-
-/* --- Dropdown Aesthetics --- */
+/* Glassmorphism for Dropdowns */
 .dropdown-menu {
-    background: rgba(15, 23, 42, 0.98) !important;
-    backdrop-filter: blur(15px);
-    border: 1px solid var(--border) !important;
-    border-radius: 12px !important;
-    margin-top: 10px !important;
+    background: rgba(15, 23, 42, 0.95) !important;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 16px !important;
+    padding: 10px !important;
 }
 
 .dropdown-item {
     color: #cbd5e1 !important;
-    padding: 0.75rem 1.25rem !important;
-    transition: background 0.2s ease;
+    border-radius: 8px !important;
+    transition: all 0.2s ease;
 }
 
 .dropdown-item:hover {
-    background: rgba(212, 175, 55, 0.1) !important;
+    background: rgba(212, 175, 55, 0.15) !important;
     color: var(--accent-gold) !important;
 }
 
-/* --- Get Started Button --- */
-.btn-info {
+/* "Get Started" Button Pulse */
+.btn-started {
     background: var(--accent-gold) !important;
-    border: none !important;
-    color: #0f172a !important;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    color: var(--bg-dark) !important;
+    border: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.btn-info:hover {
+.btn-started:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3) !important;
-    }
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+        }
 
     /* --- Slideshow & Glassmorphism --- */
         .slideshow-container {
@@ -682,26 +661,34 @@ if(window.location.hash === "#success") {
             </button>
         </div>
 
+            <div class="container">
+        <a class="navbar-brand fw-bold" href="#">BIO-SYNC</a>
+        
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
         <div class="collapse navbar-collapse" id="navContent">
-            <ul class="navbar-nav ms-auto align-items-center">
+            <ul class="navbar-nav ms-auto align-items-center" data-aos="fade-down" data-aos-delay="200">
                 <li class="nav-item"><a class="nav-link" href="index.html">Travel</a></li>
-                <li class="nav-item"><a class="nav-link active" href="holistic-nutrition.html">Nutrition</a></li>
-                <li class="nav-item"><a class="nav-link" href="sleep-tech.html">Sleep Tech</a></li>
+                <li class="nav-item"><a class="nav-link active" href="nutrition.html">Nutrition</a></li>
+                <li class="nav-item"><a class="nav-link" href="sleep-tech.html">Sleep</a></li>
+                
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Insights</a>
-                    <ul class="dropdown-menu dropdown-menu-dark shadow-lg border-secondary">
+                    <ul class="dropdown-menu dropdown-menu-dark">
                         <li><h6 class="dropdown-header text-info">Featured</h6></li>
-                        <li><a class="dropdown-item" href="biohacking-longevity-2025.html">Biohacking 2026</a></li>
-                        <li><a class="dropdown-item" href="Travel-wellness.html">Wellness Travel</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="posts.html">All Research</a></li>
+                        <li><a class="dropdown-item" href="#">Biohacking 2026</a></li>
+                        <li><a class="dropdown-item" href="#">Wellness Travel</a></li>
                     </ul>
                 </li>
-                <li class="nav-item ms-lg-3 mt-3 mt-lg-0">
-                    <a class="btn btn-info rounded-pill px-4 fw-bold btn-sm shadow-sm" href="posts.html">Get Started</a>
+                
+                <li class="nav-item ms-lg-3">
+                    <a class="btn btn-started rounded-pill px-4 fw-bold btn-sm shadow-sm" href="posts.html">Get Started</a>
                 </li>
             </ul>
         </div>
+    </div>
     </div>
       </nav>
 
