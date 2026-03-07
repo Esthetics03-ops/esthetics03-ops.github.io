@@ -346,12 +346,43 @@ function checkAds() {
     position: relative;
 }
 
+    .hamburger {
+    width: 30px;
+    height: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.hamburger span {
+    display: block;
+    height: 2px;
+    width: 100%;
+    background: var(--accent-gold);
+    transition: all 0.4s ease;
+    transform-origin: left center;
+}
+
+/* Logic to rotate lines when menu is collapsed (using Bootstrap's 'collapsed' class state) */
+.navbar-toggler:not(.collapsed) .hamburger span:nth-child(1) {
+    transform: rotate(45deg);
+}
+
+.navbar-toggler:not(.collapsed) .hamburger span:nth-child(2) {
+    opacity: 0;
+}
+
+.navbar-toggler:not(.collapsed) .hamburger span:nth-child(3) {
+    transform: rotate(-45deg);
+    }
+
 /* The gold indicator bar for active items */
 .navbar-nav .nav-link.active::after {
     content: '';
     display: block;
     background: var(--accent-gold);
-    width: 24px; 
+   max-width: 100px; 
     height: 3px;
     border-radius: 10px;
     margin-top: 4px;
@@ -671,9 +702,13 @@ if(window.location.hash === "#success") {
                 <i class="bi bi-stars text-info"></i> <span class="d-none d-md-inline ms-1 small">MindSync AI</span>
             </div>
             
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
+    <div class="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+</button>
         </div>
 
             <div class="container">    
