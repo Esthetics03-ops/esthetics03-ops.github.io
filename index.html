@@ -460,6 +460,16 @@ function checkAds() {
     filter: brightness(1.1);
     }
 
+    /* Mobile Alignment Fix */
+@media (max-width: 991.98px) {
+    .navbar-nav {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+    .nav-link::after {
+        align-self: center; /* Keeps indicator centered on mobile menu */
+    }
+    }
     /* --- Slideshow & Glassmorphism --- */
         .slideshow-container {
             max-width: 1000px; position: relative; margin: auto;
@@ -750,27 +760,7 @@ if(window.location.hash === "#success") {
 </button>
 
             <div class="container">    
-        <div class="collapse navbar-collapse" id="#navContent">
-                   
-            <ul class="navbar-nav ms-auto align-items-center" data-aos="fade-down" data-aos-delay="200">
-                <li class="nav-item"><a class="nav-link" href="index.html">Travel</a></li>
-                <li class="nav-item"><a class="nav-link active" href="nutrition.html">Nutrition</a></li>
-                <li class="nav-item"><a class="nav-link" href="sleep-tech.html">Sleep</a></li>
-                
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Insights</a>
-                    <ul class="dropdown-menu dropdown-menu-dark">
-                        <li><h6 class="dropdown-header text-info">Featured</h6></li>
-                        <li><a class="dropdown-item" href="#">Biohacking 2026</a></li>
-                        <li><a class="dropdown-item" href="#">Wellness Travel</a></li>
-                    </ul>
-                </li>
-                
-                <li class="nav-item ms-lg-3">
-                    <a class="btn btn-started rounded-pill px-4 fw-bold btn-sm shadow-sm" href="posts.html">Get Started</a>
-                </li>
-            </ul>
-        </div>
+        
     </div>
     </div>
       </nav>
