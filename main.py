@@ -1,7 +1,6 @@
 import os
 import json
 import gspread
-import pandas as pd
 from datetime import datetime
 from oauth2client.service_account import ServiceAccountCredentials
 from google.analytics.data_v1beta import BetaAnalyticsDataClient
@@ -9,71 +8,53 @@ from google.analytics.data_v1beta.types import RunRealtimeReportRequest, Metric
 
 # --- CONFIGURATION ---
 PROPERTY_ID = "319520471"
-JSON_PATH = "config.json"
 SPREADSHEET_ID = "14lde3IpR7th4DyYATejALuOHswor-QD0xdREE7FNpIo"
+JSON_PATH = "config.json"
 
-def get_google_client():
-    """Authenticates using the GitHub Secret Service Account"""
-    scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+def update_bio_sync():
+    # 1. Initialize Clients
     creds_dict = json.loads(os.getenv("GOOGLE_API_KEY"))
+    scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
     creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
-    return gspread.authorize(creds)
+    gc = gspread.authorize(creds)
+    analytics = BetaAnalyticsDataClient.from_service_account_info(creds_dict)
 
-def get_live_analytics():
-    """Pulls REAL active user counts from GA4"""
-    try:
-        # Use the same credentials for GA4
-        creds_info = json.loads(os.getenv("GOOGLE_API_KEY"))
-        client = BetaAnalyticsDataClient.from_service_account_info(creds_info)
-        request = RunRealtimeReportRequest(
-            property=f"properties/{PROPERTY_ID}",
-            metrics=[Metric(name="activeUsers")]
-        )
-        response = client.run_realtime_report(request)
-        return int(response.rows[0].metric_values[0].value) if response.rows else 0
-    except Exception as e:
-        print(f"⚠️ GA4 Error: {e}")
-        return 0
+    # 2. Get Live Analytics
+    request = RunRealtimeReportRequest(property=f"properties/{PROPERTY_ID}", metrics=[Metric(name="activeUsers")])
+    response = analytics.run_realtime_report(request)
+    active_now = int(response.rows[0].metric_values[0].value) if response.rows else 0
 
-def update_spreadsheet_and_vault():
-    active_users = get_live_analytics()
-    gc = get_google_client()
+    # 3. Pull Spreadsheet Context
     doc = gc.open_by_key(SPREADSHEET_ID)
+    settings = doc.worksheet("Settings")
+    kes_rate = float(settings.acell('B3').value)
     
-    # 1. Pull Current Settings (Live KES Rate)
-    settings_sheet = doc.worksheet("Settings")
-    kes_rate = float(settings_sheet.acell('B3').value) # Currently 129
-    
-    # 2. Append Live Audit to RawData Tab
+    dashboard = doc.worksheet("Dashboard")
+    total_gross = dashboard.acell('B6').value  # Should pull 884.53
+
+    # 4. Update RawData (Fixing #REF! Errors)
+    # We append a clean row; Google Sheets handles the KES calculation automatically
     raw_sheet = doc.worksheet("RawData")
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    
-    # Placeholder for daily logic: Adjust earnings based on live traffic
-    adsense_usd = round((active_users * 0.05), 2) 
-    
-    # New Row: [Date, Page, Pageviews, AdSense_USD, AdSense_KES, Clicks, Affiliate_USD, Affiliate_KES]
-    new_row = [timestamp, "Live_Audit", active_users, adsense_usd, "", 0, 0, ""]
+    # New Row Format: [Date, Page, Pageviews, AdSense_USD, AdSense_KES (Calculated), Clicks, Affiliate_USD, Affiliate_KES (Calculated)]
+    new_row = [timestamp, "Live_Audit", active_now, 0, "", 0, 0, ""]
     raw_sheet.append_row(new_row, value_input_option='USER_ENTERED')
-    
-    # 3. Pull Totals for Website config.json
-    dashboard = doc.worksheet("Dashboard")
-    total_gross_usd = float(dashboard.acell('B6').value.replace('$', '').replace(',', '')) # Pulls 884.53
-    
-    # 4. Update config.json for Bio-Sync.live
+
+    # 5. Update config.json for Bio-Sync Site
     if os.path.exists(JSON_PATH):
         with open(JSON_PATH, "r") as f:
             data = json.load(f)
-            
+        
+        # Syncing trackers with actuals from Dashboard
         for t in data["trackers"]:
-            if t["id"] == "stat-active": t["value"] = active_users
-            if t["id"] == "stat-total-gross": t["value"] = total_gross_usd
+            if t["id"] == "stat-active": t["value"] = active_now
+            if t["id"] == "stat-total-gross": t["value"] = float(total_gross.replace('$', '').replace(',', ''))
             
         data["project_info"]["last_audit"] = timestamp
-        
         with open(JSON_PATH, "w") as f:
             json.dump(data, f, indent=2)
 
-    print(f"✅ Sync Complete: {timestamp} | {active_users} Users | ${total_gross_usd} Total Gross")
+    print(f"✅ Sync Successful: {active_now} Users | Total Gross: {total_gross}")
 
 if __name__ == "__main__":
-    update_spreadsheet_and_vault()
+    update_bio_sync()
