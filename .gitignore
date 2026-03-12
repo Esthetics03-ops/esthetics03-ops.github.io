@@ -1,17 +1,53 @@
-# Google Cloud Credentials (EXTREMELY SENSITIVE)
+# --- Security & Credentials (CRITICAL) ---
+# Never commit these; they grant access to your Google/Cloud accounts.
 credentials.json
+token.json
+client_secret.json
+.env
+.env.local
+.env.*.local
 
-# Local Python Environment
+# --- Databases (SQLite & Local Storage) ---
+# Prevent your local DB or backups from bloating the repo.
+*.db
+*.sqlite
+*.sqlite3
+/data/
+
+# --- Python Environment & Cache ---
 __pycache__/
 *.py[cod]
 *$py.class
-.env
+*.so
+.Python
+env/
 venv/
 .venv/
+pip-log.txt
+pip-delete-this-directory.txt
 
-# Local OS Files
+# --- Build & Distribution ---
+# If you eventually package your scripts
+dist/
+build/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# --- Logs & Performance Tracking ---
+*.log
+# Specific log files for syncing
+google_sync_error.log
+analytics_fetch.log
+
+# --- Local OS & IDE Specifics ---
 .DS_Store
 Thumbs.db
+.vscode/
+.idea/
+*.swp
 
-# Logs
-*.log
+# --- Temporary & Scratch Files ---
+temp/
+tmp/
+*.bak
