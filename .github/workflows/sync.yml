@@ -1,37 +1,74 @@
-name: Lighthouse CI
+name: "Bio-Sync Core: Performance & Data Orchestration"
 
 on:
   push:
-    branches: ["main"]
+    branches: [ "main" ]
   pull_request:
+    branches: [ "main" ]
   schedule:
-    - cron: '0 0 * * *' # Keeps your "Bio-Sync" active daily
+    - cron: '0 0 * * *' # Daily Performance Audit
+    - cron: '0 0 * * 0' # Sunday Deep Data Archival
+  workflow_dispatch: # Manual override
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
-  lhci:
-    name: Lighthouse Audit
+  # --- STAGE 1: Technical Excellence (Lighthouse) ---
+  audit:
+    name: "Lighthouse Performance Engineering"
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repo
+      - name: "Clone Repository"
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: "Initialize Node.js LTS (v22)"
         uses: actions/setup-node@v4
         with:
-          node-version: 20 # Updated to LTS for better compatibility
+          node-version: 22
+          cache: 'npm' # Atomic caching for faster runs
 
-      - name: Install Dependencies
+      - name: "Deployment Audit"
         run: |
-          # Use npm install if ci fails to prevent the 22s crash
-          npm install || npm install --legacy-peer-deps
-          npm install -g @lhci/cli@0.13.x
-
-      - name: Run Lighthouse CI
-        run: |
+          npm install -g @lhci/cli@latest
           lhci autorun \
-          --collect.url=https://esthetics03-ops.github.io \
-          --upload.target=temporary-public-storage \
-          --assertion-level=warn 
+            --collect.url=${{ vars.TARGET_URL || 'https://esthetics03-ops.github.io' }} \
+            --collect.settings.preset=desktop \
+            --upload.target=temporary-public-storage \
+            --assert.assertions.performance=0.9 \
+            --assert.assertion-level=error
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # --- STAGE 2: Data Integrity (Google Cloud Sync) ---
+  sync-and-archive:
+    name: "Sunday Bio-Sync Archival"
+    needs: audit # Only sync if the site performance passes
+    if: github.event_name == 'schedule' && github.event.schedule == '0 0 * * 0' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: "Clone Repository"
+        uses: actions/checkout@v4
+
+      - name: "Initialize Python 3.12 (Optimized)"
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: 'pip'
+
+      - name: "Install Hardened Dependencies"
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: "Secure Sunday Archival Execution"
+        env:
+          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+          SHEET_ID: ${{ secrets.SHEET_ID }}
+          GOOGLE_APPLICATION_CREDENTIALS_JSON: ${{ secrets.GOOGLE_CREDENTIALS_JSON }}
+          DB_DATABASE: "database/hub_storage.sqlite"
+          ADMIN_EMAIL: ${{ vars.ADMIN_EMAIL }}
+        run: python scripts/sunday_archive.py
