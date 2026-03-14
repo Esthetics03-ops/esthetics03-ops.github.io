@@ -1,0 +1,7 @@
+- name: "Sync Google Business Profile"
+        env:
+          GOOGLE_CREDENTIALS_JSON: ${{ secrets.GOOGLE_CREDENTIALS_JSON }}
+          LOCATION_ID: ${{ secrets.GBP_LOCATION_ID }}
+        run: |
+          # Automatically updates your profile status every Sunday
+          python scripts/gbp_update.py
