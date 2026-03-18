@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bio-Sync Master v23.1 | Premium Enterprise</title>
@@ -55,6 +56,44 @@
         }
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
         .badge { background: #064e3b; color: #34d399; padding: 3px 10px; border-radius: 20px; font-size: 0.6rem; vertical-align: middle; }
+        /* Mobile Optimization for George K. Ondimu */
+@media (max-width: 768px) {
+    body { padding: 10px; }
+    
+    header { 
+        flex-direction: column; 
+        align-items: flex-start !important; 
+        gap: 15px;
+    }
+    
+    header div:last-child { text-align: left !important; }
+
+    .grid { 
+        grid-template-columns: 1fr !important; /* Forces single column */
+        gap: 10px;
+    }
+
+    .stat { font-size: 2.2rem; } /* Slightly smaller for mobile fit */
+
+    .card { padding: 18px; }
+
+    /* Touch-friendly adjustments */
+    button { 
+        width: 100%; 
+        padding: 20px; 
+        font-size: 1.1rem; 
+    }
+
+    #terminal { height: 120px; } /* Conserve vertical space */
+            }
+        @media (max-width: 768px) {
+    /* Larger touch targets for mobile */
+    .bi-clipboard { font-size: 1rem; }
+    #terminal div { 
+        padding: 4px 0; 
+        border-bottom: 1px solid rgba(255,255,255,0.05); 
+    }
+                }
     </style>
 </head>
 <body>
@@ -138,6 +177,31 @@
     .pulse-red { width: 10px; height: 10px; background: #ef4444; border-radius: 50%; box-shadow: 0 0 8px #ef4444; animation: blink 1.5s infinite; }
     @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
 </style>
+
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; background: var(--glass); padding: 8px 15px; border-radius: 30px; border: 1px solid var(--border); width: fit-content;">
+    <div class="label" style="margin: 0; font-size: 0.6rem;">Live Sync</div>
+    <label class="switch">
+        <input type="checkbox" id="sync-toggle" checked>
+        <span class="slider round"></span>
+    </label>
+    <span id="sync-timer" style="font-size: 0.65rem; color: var(--accent); font-weight: 800;">60s</span>
+</div>
+
+<style>
+/* Modern Toggle Switch */
+.switch { position: relative; display: inline-block; width: 34px; height: 18px; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; cursor: pointer; inset: 0; background-color: #334155; transition: .4s; border-radius: 34px; }
+.slider:before { position: absolute; content: ""; height: 12px; width: 12px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+input:checked + .slider { background-color: var(--primary); }
+input:checked + .slider:before { transform: translateX(16px); }
+               </style>
+
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+    <div class="label">System Terminal</div>
+    <button onclick="copyLogs()" style="padding: 4px 10px; font-size: 0.6rem; width: auto; border-radius: 6px;">
+        <i class="bi bi-clipboard"></i> COPY LOGS
+    </div>
     <div class="card" style="border-left: 4px solid var(--accent);">
     <div class="label"><i class="bi bi-link-45deg"></i> Campaign Asset Readiness</div>
     <div id="asset-status" style="margin-top:10px;">
@@ -347,6 +411,73 @@ function renderAnalytics(rows) {
 }
 // Run on load
 trackAppeal();
+
+    function copyLogs() {
+    const terminal = document.getElementById('terminal');
+    const logs = terminal.innerText;
+    
+    // Copy to clipboard
+    navigator.clipboard.writeText(logs).then(() => {
+        const btn = event.target.closest('button');
+        const originalText = btn.innerHTML;
+        
+        // Success Feedback
+        btn.innerHTML = '<i class="bi bi-check-lg"></i> COPIED';
+        btn.style.background = '#10b981';
+        
+        log("ACTION: System logs exported to clipboard.");
+        
+        setTimeout(() => {
+            btn.innerHTML = originalText;
+            btn.style.background = '';
+        }, 2000);
+    });
+    }
+    let countdown = 60;
+let refreshInterval;
+
+function startAutoSync() {
+    refreshInterval = setInterval(() => {
+        const isEnabled = document.getElementById('sync-toggle').checked;
+        
+        if (isEnabled) {
+            countdown--;
+            document.getElementById('sync-timer').innerText = countdown + "s";
+            
+            if (countdown <= 0) {
+                countdown = 60;
+                executeSync(); // Triggers your main data fetch
+                log("AUTO-SYNC: Refreshing NCBA/M-PESA Ledger...");
+            }
+        } else {
+            document.getElementById('sync-timer').innerText = "PAUSED";
+        }
+    }, 1000);
+}
+
+// Start the engine on load
+startAutoSync();
+    function copyLogs() {
+    const terminal = document.getElementById('terminal');
+    const logs = terminal.innerText;
+    
+    // Copy to clipboard
+    navigator.clipboard.writeText(logs).then(() => {
+        const btn = event.target.closest('button');
+        const originalText = btn.innerHTML;
+        
+        // Success Feedback
+        btn.innerHTML = '<i class="bi bi-check-lg"></i> COPIED';
+        btn.style.background = '#10b981';
+        
+        log("ACTION: System logs exported to clipboard.");
+        
+        setTimeout(() => {
+            btn.innerHTML = originalText;
+            btn.style.background = '';
+        }, 2000);
+    });
+    }
 
 window.onload = () => { initGapi(); initGis(); };
 function handleAuth() { tokenClient.requestAccessToken({prompt: 'consent'}); }
