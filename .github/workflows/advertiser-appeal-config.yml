@@ -1,0 +1,38 @@
+# GOOGLE ADS ADVERTISER TRANSPARENCY MANIFEST
+# Generated for: George Kutosi Ondimu
+# Status: Manual Appeal / Verification Phase 2026
+
+identity_verification:
+  legal_name: "George Kutosi Ondimu"
+  document_type: "Kenyan National ID"
+  profile_match: true
+  status: "SUBMITTED_FOR_REVIEW"
+
+financial_architecture:
+  primary_bank:
+    institution: "NCBA Bank"
+    branch: "Ruaka Branch, Nairobi"
+    account_number: "1003791648"
+  payment_method:
+    provider: "Safaricom M-PESA"
+    phone_linked: "+254113379488"
+    registration_match: "EXACT_LEGAL_NAME"
+
+business_profile:
+  entity_name: "The Esthetics Hub"
+  domain: "https://esthetics03-ops.github.io/"
+  category: "Digital Content Creation / Technical Wellness"
+  model: "Biohacking & Metabolic Health Data"
+
+promo_compliance:
+  target_credit_goal: 300.00
+  currency: "USD"
+  automation_script: "PREMIUM_V23.1_ACTIVE"
+  spend_cap_enforced: true
+
+appeal_statement: >
+  I am submitting this appeal to confirm the legitimacy of my advertiser profile 
+  and payment methods. I utilize NCBA Bank and M-PESA for all billing, both 
+  registered in my legal name. My ads promote 'The Esthetics Hub,' a platform 
+  for technical wellness and biohacking data. I am currently working toward the 
+  $300 spend-match promotional credit with automated spend-caps in place.
