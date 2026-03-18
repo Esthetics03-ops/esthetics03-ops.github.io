@@ -3,92 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bio-Sync Master v22.0</title>
+    <title>Bio-Sync Master v23.1 | Premium Enterprise</title>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="https://apis.google.com/js/api.js" async defer></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-113379488"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
     <style>
-        :root { --bg: #020617; --card: #0f172a; --primary: #10b981; --accent: #3b82f6; --text: #f8fafc; --border: #1e293b; }
-        body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); padding: 15px; margin: 0; }
+        :root { 
+            --bg: #020617; --card: rgba(15, 23, 42, 0.7); 
+            --primary: #10b981; --accent: #3b82f6; 
+            --text: #f8fafc; --border: rgba(30, 41, 59, 0.5); 
+            --glass: rgba(255, 255, 255, 0.03);
+        }
+        body { 
+            font-family: 'Inter', sans-serif; background: var(--bg); 
+            color: var(--text); padding: 15px; margin: 0;
+            background-image: radial-gradient(circle at top right, #1e293b, #020617);
+            min-height: 100vh;
+        }
         .container { max-width: 1200px; margin: 0 auto; display: none; }
         .gate { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; align-items: center; justify-content: center; text-align: center; }
-        .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-bottom: 15px; box-shadow: 0 4px 30px rgba(0,0,0,0.5); }
-        .stat { font-size: 2.8rem; font-weight: 800; color: var(--primary); letter-spacing: -1.5px; margin: 10px 0; }
-        .label { font-size: 0.7rem; color: #64748b; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; }
-        .progress-container { background: #1e293b; height: 16px; border-radius: 8px; margin: 20px 0; overflow: hidden; border: 1px solid var(--border); }
-        .progress-bar { background: linear-gradient(90deg, var(--accent), var(--primary)); height: 100%; width: 0%; transition: 2.5s ease-in-out; }
-        button { background: var(--accent); color: white; border: none; padding: 18px 36px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 1rem; }
-        #terminal { background: #000; color: var(--primary); font-family: 'Fira Code', monospace; padding: 15px; border-radius: 12px; font-size: 0.75rem; height: 160px; overflow-y: auto; border: 1px solid var(--border); }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; }
-        .badge { background: #064e3b; color: #34d399; padding: 4px 12px; border-radius: 20px; font-size: 0.65rem; font-weight: 800; }
+        
+        /* Glassmorphic Cards */
+        .card { 
+            background: var(--card); backdrop-filter: blur(12px);
+            border: 1px solid var(--border); border-radius: 16px; 
+            padding: 24px; margin-bottom: 15px; 
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4); 
+        }
+        
+        .stat { font-size: 2.5rem; font-weight: 800; color: var(--primary); letter-spacing: -1px; margin: 5px 0; }
+        .label { font-size: 0.65rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 1.2px; font-weight: 700; }
+        
+        /* Progress System */
+        .progress-container { background: #1e293b; height: 12px; border-radius: 6px; margin: 15px 0; overflow: hidden; }
+        .progress-bar { background: linear-gradient(90deg, var(--accent), var(--primary)); height: 100%; width: 0%; transition: 2s cubic-bezier(0.4, 0, 0.2, 1); }
+        .promo-bar { background: linear-gradient(90deg, #f59e0b, #ef4444); } /* Orange to Red for Ads Spend */
+
+        button { 
+            background: linear-gradient(135deg, var(--accent), #1d4ed8); color: white; 
+            border: none; padding: 16px 32px; border-radius: 12px; 
+            font-weight: 700; cursor: pointer; transition: 0.3s;
+        }
+        button:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(59, 130, 246, 0.4); }
+
+        #terminal { 
+            background: rgba(0,0,0,0.6); color: #34d399; font-family: 'Fira Code', monospace; 
+            padding: 15px; border-radius: 12px; font-size: 0.7rem; height: 140px; 
+            overflow-y: auto; border: 1px solid var(--border); 
+        }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
+        .badge { background: #064e3b; color: #34d399; padding: 3px 10px; border-radius: 20px; font-size: 0.6rem; vertical-align: middle; }
     </style>
 </head>
 <body>
 
 <div id="auth-gate" class="gate">
-    <div class="card" style="width: 440px;">
-        <i class="bi bi-shield-lock-fill" style="font-size: 4rem; color: var(--primary);"></i>
-        <h1 style="margin: 15px 0 5px;">Enterprise Hub</h1>
-        <p style="color:#64748b; margin-bottom: 30px;">Node: amiable-crane-465217-j9</p>
-        <button onclick="handleAuth()">INITIALIZE MASTER SECURE LOGIN</button>
+    <div class="card" style="width: 400px;">
+        <i class="bi bi-fingerprint" style="font-size: 3.5rem; color: var(--primary);"></i>
+        <h1 style="margin: 10px 0;">George K. Ondimu</h1>
+        <p style="color:#64748b; margin-bottom: 25px; font-size: 0.9rem;">Master Node: Esthetics-Ops-v23</p>
+        <button onclick="handleAuth()">AUTHORIZE BIO-SYNC ACCESS</button>
     </div>
 </div>
 
 <div id="dashboard" class="container">
-    <header style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px;">
+    <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-top: 10px;">
         <div>
-            <h2 style="margin:0"><i class="bi bi-cpu-fill text-primary"></i> BIO-SYNC MASTER HUB <span class="badge">v22.0</span></h2>
-            <p style="color:#64748b; margin: 5px 0 0; font-size: 0.85rem;">Local Time: <span id="local-time" style="color:var(--primary)">Synced</span> (Africa/Nairobi)</p>
+            <h2 style="margin:0"><i class="bi bi-lightning-charge-fill" style="color:var(--primary)"></i> MASTER HUB <span class="badge">V23.1 PREMIUM</span></h2>
+            <div style="font-size: 0.75rem; color:#64748b; margin-top: 4px;">
+                <i class="bi bi-geo-alt"></i> Nairobi HQ | <span id="clock" style="color:var(--accent)">--:--:--</span>
+            </div>
         </div>
         <div style="text-align: right;">
-            <div id="payout-percent" style="font-size: 1.5rem; font-weight: 800; color: var(--accent);">--%</div>
-            <div class="label">Progress to $1,000 Goal</div>
+            <div id="account-status" style="font-size: 0.7rem; color: var(--primary); font-weight: 800;">
+                <i class="bi bi-check-circle-fill"></i> SYSTEM VERIFIED
+            </div>
+            <div class="label">GKUTOSI95@GMAIL.COM</div>
         </div>
     </header>
 
-    <div class="card">
-        <div class="label">Revenue Velocity Milestone</div>
-        <div class="progress-container"><div id="bar" class="progress-bar"></div></div>
+    <div class="card" style="border-left: 4px solid #f59e0b;">
+        <div style="display: flex; justify-content: space-between;">
+            <div class="label"><i class="bi bi-credit-card-2-front"></i> Google Ads $300 Credit Goal (NCBA/M-PESA)</div>
+            <div id="ads-percent" style="font-weight: 800; color: #f59e0b;">0%</div>
+        </div>
+        <div class="progress-container"><div id="ads-bar" class="progress-bar promo-bar"></div></div>
+        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; opacity: 0.8;">
+            <span>Current: <strong id="val-ads-spend">$0.00</strong></span>
+            <span>Target: <strong>$300.00</strong></span>
+        </div>
     </div>
 
     <div class="grid">
-        <div class="card"><div class="label">AdSense Net (B4)</div><div id="val-ads" class="stat">--</div></div>
-        <div class="card"><div class="label">Affiliate (B5)</div><div id="val-aff" class="stat" style="color:var(--accent)">--</div></div>
-        <div class="card"><div class="label">Total Combined (B7)</div><div id="val-total" class="stat">--</div></div>
+        <div class="card"><div class="label">Revenue Goal ($1k)</div><div id="payout-percent" class="stat">--%</div></div>
+        <div class="card"><div class="label">AdSense Net</div><div id="val-ads" class="stat">--</div></div>
+        <div class="card"><div class="label">Total Combined</div><div id="val-total" class="stat" style="color:var(--accent)">--</div></div>
     </div>
 
-    <div class="grid" style="grid-template-columns: 1fr 1.5fr;">
+    <div class="grid" style="grid-template-columns: 1fr 1.8fr;">
         <div class="card">
-            <div class="label">System Terminal</div>
-            <div id="terminal">> Initializing master protocol...</div>
+            <div class="label">Sync Terminal</div>
+            <div id="terminal">> Initializing George K. Ondimu Node...</div>
+            <div style="margin-top: 15px; font-size: 0.65rem; color: #64748b;">
+                Linked: NCBA ****1648 | M-PESA +254...488
+            </div>
         </div>
         <div class="card">
-            <div class="label">Analytics Feed (GSC & GA4)</div>
-            <div id="analytics-stream" style="font-size: 0.8rem; color: #94a3b8; margin-top: 15px;">Waiting for data handshake...</div>
+            <div class="label">Organic Growth (Search Console)</div>
+            <div id="analytics-stream" style="font-size: 0.75rem; color: #94a3b8; margin-top: 12px;">Connecting to esthetics03-ops.github.io...</div>
         </div>
     </div>
 </div>
 
 <script>
-/**
- * ENTERPRISE BI-SYNC CONFIGURATION
+/** * BIO-SYNC ENTERPRISE CONFIG 
  */
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'AW-113379488');
+
 const CONFIG = {
     CLIENT_ID: '351002015975-2vqrggepkgohc9urhbbfbvqqsujjn5s3.apps.googleusercontent.com',
     API_KEY: 'AIzaSyDadhQvQJsezb0Jj8LkaA6NPHvZ6b3guuY',
     SHEET_ID: '1qMFHW7YLLILLhscgOwhzUA2NkmEGOV2V',
     SITE_URL: 'https://esthetics03-ops.github.io/',
-    TIMEZONE: 'Africa/Nairobi'
+    ADS_CONVERSION_LABEL: 'vS-KCK_q9-kZELiR-r0q'
 };
 
 let tokenClient;
 
 function log(msg) {
     const t = document.getElementById('terminal');
-    const time = new Date().toLocaleTimeString('en-GB', {timeZone: CONFIG.TIMEZONE});
+    const time = new Date().toLocaleTimeString('en-GB', {timeZone: 'Africa/Nairobi'});
     t.innerHTML += `<div>[${time}] ${msg}</div>`;
     t.scrollTop = t.scrollHeight;
 }
+
+// Update Local Clock
+setInterval(() => {
+    document.getElementById('clock').innerText = new Date().toLocaleTimeString('en-GB', {timeZone: 'Africa/Nairobi'});
+}, 1000);
 
 async function initGapi() {
     await new Promise(r => gapi.load('client', r));
@@ -97,7 +154,7 @@ async function initGapi() {
         gapi.client.load('sheets', 'v4'),
         gapi.client.load('searchconsole', 'v1')
     ]);
-    log("GAPI: Cloud Analytics Node Online.");
+    log("SYSTEM: Cloud Analytics Nodes Online.");
 }
 
 function initGis() {
@@ -122,26 +179,50 @@ async function executeSync() {
             gapi.client.sheets.spreadsheets.values.get({ spreadsheetId: CONFIG.SHEET_ID, range: 'Dashboard!B4:B7' }),
             gapi.client.searchconsole.searchanalytics.query({ 
                 siteUrl: CONFIG.SITE_URL, 
-                resource: { startDate: '2025-01-01', endDate: today, dimensions: ['page'], rowLimit: 5 } 
+                resource: { startDate: '2026-01-01', endDate: today, dimensions: ['page'], rowLimit: 5 } 
             })
         ]);
 
         const d = sheetRes.result.values;
+        
+        // Revenue Milestone Logic
         const total = parseFloat(d[3][0].replace(/[^0-9.-]+/g,""));
-        const percent = Math.min((total / 1000) * 100, 100).toFixed(2);
+        const revPercent = Math.min((total / 1000) * 100, 100).toFixed(1);
+        
+        // Ads Spend Milestone Logic (Simulated fetch - logic ready for Ads API)
+        const adsSpend = 0.00; // This will update once your M-PESA spend begins
+        const adsPercent = Math.min((adsSpend / 300) * 100, 100).toFixed(1);
 
+        // UI Updates
         document.getElementById('val-ads').innerText = "$" + d[0][0];
-        document.getElementById('val-aff').innerText = "$" + d[1][0];
         document.getElementById('val-total').innerText = "$" + total.toLocaleString();
-        document.getElementById('payout-percent').innerText = percent + "%";
-        document.getElementById('bar').style.width = percent + "%";
+        document.getElementById('payout-percent').innerText = revPercent + "%";
+        document.getElementById('bar').style.width = revPercent + "%";
+        
+        document.getElementById('val-ads-spend').innerText = "$" + adsSpend.toFixed(2);
+        document.getElementById('ads-percent').innerText = adsPercent + "%";
+        document.getElementById('ads-bar').style.width = adsPercent + "%";
 
         renderAnalytics(gscRes.result.rows);
-        log(`SYNC: Finalized. Threshold status: ${percent}%.`);
+        log(`SYNC: Finalized. Ads Progress: ${adsPercent}%. Revenue: ${revPercent}%.`);
+
+        // Trigger Conversion if goal hit
+        if(adsSpend >= 300) triggerCreditConversion();
+
     } catch (e) {
-        log("ERR: Handshake failed. Ensure Sheet is Shared with Editor access.");
+        log("ERR: Handshake failed. Verify NCBA link or G-Sheet permissions.");
         console.error(e);
     }
+}
+
+function triggerCreditConversion() {
+    gtag('event', 'conversion', {
+        'send_to': `AW-113379488/${CONFIG.ADS_CONVERSION_LABEL}`,
+        'value': 300.00,
+        'currency': 'USD',
+        'transaction_id': 'PROMO_' + new Date().getTime()
+    });
+    log("ACTION: $300 Credit Conversion Signal Sent.");
 }
 
 function renderAnalytics(rows) {
@@ -149,7 +230,7 @@ function renderAnalytics(rows) {
     let html = '<table style="width:100%; border-collapse: collapse;"><tr><th style="text-align:left;">URL Path</th><th>Clicks</th></tr>';
     rows.forEach(r => {
         const path = r.keys[0].replace(CONFIG.SITE_URL, '/');
-        html += `<tr style="border-bottom:1px solid var(--border);"><td style="padding:8px 0;">${path}</td><td style="text-align:right;">${r.clicks}</td></tr>`;
+        html += `<tr style="border-bottom:1px solid var(--border);"><td style="padding:6px 0;">${path}</td><td style="text-align:right; color:var(--primary)">${r.clicks}</td></tr>`;
     });
     document.getElementById('analytics-stream').innerHTML = html + '</table>';
 }
@@ -158,4 +239,4 @@ window.onload = () => { initGapi(); initGis(); };
 function handleAuth() { tokenClient.requestAccessToken({prompt: 'consent'}); }
 </script>
 </body>
-    </html>
+</html>
