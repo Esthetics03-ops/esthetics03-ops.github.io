@@ -117,6 +117,26 @@
     </div>
 </div>
 
+    <div class="card" style="border-left: 4px solid var(--accent);">
+    <div class="label"><i class="bi bi-link-45deg"></i> Campaign Asset Readiness</div>
+    <div id="asset-status" style="margin-top:10px;">
+        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 5px;">
+            <span>Sitelinks (1-4)</span>
+            <span id="sitelink-count" style="color:var(--accent)">0/4 Active</span>
+        </div>
+        <div class="progress-container" style="height: 8px;">
+            <div id="sitelink-bar" class="progress-bar" style="width: 0%; background: var(--accent);"></div>
+        </div>
+        
+        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-top: 15px; margin-bottom: 5px;">
+            <span>Asset Group Strength</span>
+            <span id="strength-label" style="color:#ef4444">Incomplete</span>
+        </div>
+        <div class="progress-container" style="height: 8px;">
+            <div id="strength-bar" class="progress-bar" style="width: 15%; background: #ef4444;"></div>
+        </div>
+    </div>
+    </div>
 <script>
 /** * BIO-SYNC ENTERPRISE CONFIG 
  */
@@ -252,6 +272,37 @@ function renderAnalytics(rows) {
         }
     } catch (e) {
         log("PENDING: Awaiting M-PESA Handshake...");
+    }
+    }
+
+    async function executeSync() {
+    log("NODE: Scanning Campaign Assets...");
+    try {
+        // ... (Keep your existing Google Sheets/M-PESA fetch logic here)
+
+        // New Asset Logic based on your screenshots
+        const hasFinalUrl = false; // Set to true once you paste your link in the "https://" box
+        const activeSitelinks = 0; // Update this as you fill Sitelink 1, 2, 3, 4
+        
+        // Update Sitelink UI
+        const sitelinkPercent = (activeSitelinks / 4) * 100;
+        document.getElementById('sitelink-count').innerText = `${activeSitelinks}/4 Active`;
+        document.getElementById('sitelink-bar').style.width = sitelinkPercent + "%";
+
+        // Update Asset Strength UI
+        if (!hasFinalUrl) {
+            document.getElementById('strength-label').innerText = "Incomplete - Missing Final URL";
+            document.getElementById('strength-bar').style.width = "15%";
+            document.getElementById('strength-bar').style.background = "#ef4444";
+            log("WARN: Asset Group 1 requires a Final URL to proceed.");
+        } else {
+            document.getElementById('strength-label').innerText = "Optimizing...";
+            document.getElementById('strength-bar').style.width = "65%";
+            document.getElementById('strength-bar').style.background = "var(--primary)";
+        }
+
+    } catch (e) {
+        log("ERR: Asset scan failed. Check browser console.");
     }
     }
 
