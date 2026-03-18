@@ -117,6 +117,27 @@
     </div>
 </div>
 
+    <div class="card" id="appeal-card">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="label"><i class="bi bi-shield-check"></i> Verification Status</div>
+        <div id="appeal-pulse" class="pulse-red"></div>
+    </div>
+    <div id="appeal-status" style="margin-top: 10px;">
+        <div class="stat" style="font-size: 1.2rem; color: #f59e0b;">PENDING REVIEW</div>
+        <p style="font-size: 0.7rem; color: #94a3b8; margin: 5px 0;">
+            Submitted: <span id="submit-date" style="color:var(--text)">18/03/2026</span><br>
+            Est. Resolution: <span id="est-date" style="color:var(--text)">23/03/2026</span>
+        </p>
+        <div class="progress-container" style="height: 6px; margin-top: 10px;">
+            <div id="timer-bar" class="progress-bar" style="width: 5%; background: #f59e0b;"></div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .pulse-red { width: 10px; height: 10px; background: #ef4444; border-radius: 50%; box-shadow: 0 0 8px #ef4444; animation: blink 1.5s infinite; }
+    @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+</style>
     <div class="card" style="border-left: 4px solid var(--accent);">
     <div class="label"><i class="bi bi-link-45deg"></i> Campaign Asset Readiness</div>
     <div id="asset-status" style="margin-top:10px;">
@@ -305,6 +326,27 @@ function renderAnalytics(rows) {
         log("ERR: Asset scan failed. Check browser console.");
     }
     }
+
+    function trackAppeal() {
+    const submitDate = new Date('2026-03-18');
+    const today = new Date();
+    
+    // Google's 5-day window (Business Days)
+    const diffTime = Math.abs(today - submitDate);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    // Progress calculation (0 to 5 days)
+    const progress = Math.min((diffDays / 5) * 100, 100);
+    document.getElementById('timer-bar').style.width = progress + "%";
+
+    if (progress >= 100) {
+        document.getElementById('appeal-pulse').style.background = "#10b981";
+        document.getElementById('appeal-pulse').style.boxShadow = "0 0 8px #10b981";
+        log("ACTION: 5-day window reached. Check Ads Inbox for verification status.");
+    }
+}
+// Run on load
+trackAppeal();
 
 window.onload = () => { initGapi(); initGis(); };
 function handleAuth() { tokenClient.requestAccessToken({prompt: 'consent'}); }
