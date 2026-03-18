@@ -1,0 +1,9 @@
+deployment:
+  name: bio-sync-ads-fetcher
+  runtime: python310
+  entry_point: get_ads_spend
+  trigger_http: true
+  env_vars:
+    CUSTOMER_ID: "gkutosi95"
+    TARGET_GOAL: "300.00"
+    NCBA_SYNC: "ENABLED"
