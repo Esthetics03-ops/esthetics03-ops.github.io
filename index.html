@@ -127,12 +127,13 @@
     
 <script>
   gtag('event', 'conversion', {
-      'send_to': 'AW-113379488/MPESA_CONFIRM_LABEL', 
-      'value': 30.00, // You can make this dynamic based on the transaction
+      'send_to': 'AW-113379488/vS-KCK_q9-kZELiR-r0q', // Standardized Conversion Label
+      'value': 300.00, // Updated to match your $300 Credit threshold
       'currency': 'USD',
-      'transaction_id': 'MPESA_' + Math.floor(Math.random() * 1000000) // Unique ID for M-PESA tracking
+      'transaction_id': 'NCBA_MPESA_' + new Date().getTime(), // Uses timestamp for a unique Kenyan transaction ID
+      'user_id': 'gkutosi95' 
   });
-      </script>
+</script>
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=AW-113379488"></script>
 <script>
