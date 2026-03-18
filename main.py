@@ -112,3 +112,53 @@ def update_bio_sync():
 
 if __name__ == "__main__":
     update_bio_sync()
+
+import functions_framework
+from google.ads.googleads.client import GoogleAdsClient
+import json
+
+# Your Developer Config
+DEVELOPER_TOKEN = 'YOUR_TOKEN'
+CLIENT_ID = 'YOUR_CLIENT_ID'
+CLIENT_SECRET = 'YOUR_CLIENT_SECRET'
+REFRESH_TOKEN = 'YOUR_REFRESH_TOKEN'
+CUSTOMER_ID = 'YOUR_CUSTOMER_ID' # Without dashes
+
+@functions_framework.http
+def get_ads_spend(request):
+    # Initialize Google Ads Client
+    credentials = {
+        "developer_token": DEVELOPER_TOKEN,
+        "client_id": CLIENT_ID,
+        "client_secret": CLIENT_SECRET,
+        "refresh_token": REFRESH_TOKEN,
+        "use_proto_plus": True
+    }
+    
+    client = GoogleAdsClient.load_from_dict(credentials)
+    ga_service = client.get_service("GoogleAdsService")
+
+    # Query to get spend for the current month
+    query = """
+        SELECT metrics.cost_micros 
+        FROM customer 
+        WHERE segments.date DURING THIS_MONTH
+    """
+
+    response = ga_service.search_stream(customer_id=CUSTOMER_ID, query=query)
+    
+    total_spend_micros = 0
+    for batch in response:
+        for row in batch.results:
+            total_spend_micros += row.metrics.cost_micros
+
+    # Convert Micros to Standard Currency (e.g., USD or KES)
+    total_spend = total_spend_micros / 1000000
+    goal_remaining = max(0, 300.00 - total_spend)
+
+    return json.dumps({
+        "user": "George Kutosi Ondimu",
+        "current_spend": total_spend,
+        "goal_remaining": goal_remaining,
+        "credit_eligible": total_spend >= 300.00
+    }), 200, {'Content-Type': 'application/json'}
