@@ -100,7 +100,39 @@
     "logo": "https://esthetics03-ops.github.io/logo.png"
   }
 }
+
+{
+  "account_info": {
+    "name": "George Kutosi Ondimu",
+    "account_id": "gkutosi95",
+    "bank_link": "NCBA-1003791648",
+    "payment_method": "M-PESA-254113379488"
+  },
+  "credit_verification": {
+    "status": "AWAITING_ID_VERIFICATION",
+    "target_spend": 300.00,
+    "current_spend": 0.00,
+    "progress_percentage": 0.0,
+    "remaining_balance": 300.00
+  },
+  "automation_rules": [
+    {
+      "rule_id": "STOP_AT_300",
+      "action": "PAUSE_ALL",
+      "trigger": "COST_GT_300.01"
+    }
+  ]
+}
     </script>
+    
+<script>
+  gtag('event', 'conversion', {
+      'send_to': 'AW-113379488/MPESA_CONFIRM_LABEL', 
+      'value': 30.00, // You can make this dynamic based on the transaction
+      'currency': 'USD',
+      'transaction_id': 'MPESA_' + Math.floor(Math.random() * 1000000) // Unique ID for M-PESA tracking
+  });
+      </script>
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=AW-113379488"></script>
 <script>
