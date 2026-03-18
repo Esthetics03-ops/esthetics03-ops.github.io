@@ -234,6 +234,26 @@ function renderAnalytics(rows) {
     });
     document.getElementById('analytics-stream').innerHTML = html + '</table>';
 }
+    async function executeSync() {
+    log("NODE: Checking M-PESA Ledger...");
+    try {
+        // Fetch live spend from your Python Backend
+        const adsRes = await fetch('https://your-python-app.herokuapp.com/get-ads-progress');
+        const adsData = await adsRes.json();
+
+        // Update UI with Live M-PESA Data
+        document.getElementById('val-ads-spend').innerText = "$" + adsData.current_spend.toFixed(2);
+        document.getElementById('ads-percent').innerText = adsData.percent + "%";
+        document.getElementById('ads-bar').style.width = adsData.percent + "%";
+
+        if (adsData.current_spend >= 300) {
+            triggerCreditConversion(); // Automatically fires the Google Ads Tag
+            log("SUCCESS: $300 Milestone reached via M-PESA/NCBA.");
+        }
+    } catch (e) {
+        log("PENDING: Awaiting M-PESA Handshake...");
+    }
+    }
 
 window.onload = () => { initGapi(); initGis(); };
 function handleAuth() { tokenClient.requestAccessToken({prompt: 'consent'}); }
