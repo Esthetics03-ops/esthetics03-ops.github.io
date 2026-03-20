@@ -16,6 +16,8 @@ metaId.name = "google-business-id";
 metaId.content = "2440185579889306379";
 document.getElementsByTagName('head')[0].appendChild(metaId);
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
     <style>
         :root { 
             --bg: #020617; --card: rgba(15, 23, 42, 0.7); 
@@ -32,6 +34,18 @@ document.getElementsByTagName('head')[0].appendChild(metaId);
         .container { max-width: 1200px; margin: 0 auto; display: none; }
         .gate { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; align-items: center; justify-content: center; text-align: center; }
 
+.glass-modal {
+    backdrop-filter: blur(15px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 20px !important;
+}
+
+/* Add a subtle green glow when the milestone is hit */
+.milestone-reached-glow {
+    box-shadow: 0 0 20px rgba(79, 179, 42, 0.5);
+    transition: box-shadow 0.5s ease;
+        }
+        
 /* Status Dot Indicators */
         .stats-grid {
     display: grid;
@@ -406,7 +420,40 @@ async function executeSync() {
         // Ads Spend Milestone Logic (Simulated fetch - logic ready for Ads API)
         const adsSpend = 0.00; // This will update once your M-PESA spend begins
         const adsPercent = Math.min((adsSpend / 300) * 100, 100).toFixed(1);
+const jsConfetti = new JSConfetti();
+let milestoneReached = false; // Prevents duplicate alerts
 
+function triggerMilestoneCelebration(currentClicks) {
+    const target = 500;
+
+    if (currentClicks >= target && !milestoneReached) {
+        milestoneReached = true;
+        
+        // 1. Fire Confetti
+        jsConfetti.addConfetti({
+            confettiColors: ['#4FB32A', '#3498db', '#ffffff', '#ffd700'],
+            confettiNumber: 500,
+        });
+
+        // 2. Show Premium Modal
+        Swal.fire({
+            title: 'Milestone Achieved!',
+            text: `The Esthetics Hub has reached ${currentClicks} organic clicks!`,
+            icon: 'success',
+            background: 'rgba(20, 20, 20, 0.95)',
+            color: '#fff',
+            confirmButtonColor: '#4FB32A',
+            confirmButtonText: 'Keep Scaling',
+            backdrop: `rgba(0,0,123,0.4)`,
+            timer: 5000, // Auto-close after 5 seconds
+            customClass: {
+                popup: 'glass-modal'
+            }
+        });
+
+        console.log("%c 🚀 MILESTONE: 500 CLICKS REACHED ", "color: #4FB32A; font-weight: bold;");
+    }
+    }
         // UI Updates
         document.getElementById('val-ads').innerText = "$" + d[0][0];
         document.getElementById('val-total').innerText = "$" + total.toLocaleString();
