@@ -491,6 +491,41 @@ metaId.name = "google-business-id";
 metaId.content = "2440185579889306379";
 document.getElementsByTagName('head')[0].appendChild(metaId);
 
+    /**
+ * PREMIUM SYNC ENGINE v18.5
+ * Automatically updates Assets and Status on reload
+ */
+async function reloadDashboardAssets() {
+    const cloudFunctionUrl = 'YOUR_CLOUD_FUNCTION_ENDPOINT_URL';
+    const statusElement = document.getElementById('ads-status-badge');
+
+    try {
+        const response = await fetch(cloudFunctionUrl);
+        const data = await response.json();
+
+        // Update the UI with real-time status
+        if (data.campaigns && data.campaigns.length > 0) {
+            const mainCampaign = data.campaigns[0];
+            
+            // Dynamic UI Injection
+            statusElement.innerHTML = `
+                <span class="status-indicator" style="color: ${mainCampaign.status === 'ENABLED' ? '#4FB32A' : '#ff4444'}">
+                    ● ${mainCampaign.status}
+                </span>
+                <p>Primary Status: ${mainCampaign.primary_status.replace(/_/g, ' ')}</p>
+            `;
+            
+            console.log("Premium Sync: Success for Profile " + data.business_id);
+        }
+    } catch (err) {
+        console.error("Premium Sync Failed:", err);
+        statusElement.innerText = "Sync Offline - Check API Token";
+    }
+}
+
+// Trigger on every reload
+window.onload = reloadDashboardAssets;
+
 window.onload = () => { initGapi(); initGis(); };
 function handleAuth() { tokenClient.requestAccessToken({prompt: 'consent'}); }
 </script>
