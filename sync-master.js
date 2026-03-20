@@ -1,4 +1,30 @@
 /**
+ * HEALTH REPORT UPDATER
+ * Calculates progress toward the 500-click milestone.
+ */
+function updateHealthReport(currentClicks) {
+    const target = 500;
+    const percentage = (currentClicks / target) * 100;
+    
+    const fill = document.getElementById('progress-fill');
+    const valueDisplay = document.querySelector('.stat-value');
+
+    if (fill && valueDisplay) {
+        valueDisplay.innerText = currentClicks;
+        fill.style.width = `${Math.min(percentage, 100)}%`;
+        
+        // Visual cue: Change color to green if target is hit
+        if (percentage >= 100) {
+            fill.style.background = '#4FB32A';
+            console.log("Milestone Reached: Esthetics Hub is Scaling!");
+        }
+    }
+}
+
+// Example Trigger:
+updateHealthReport(472);
+
+/**
  * BIO-SYNC AUTO-RELOADER v18.5
  * Runs a background sync every 60 minutes.
  */
