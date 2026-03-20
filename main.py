@@ -229,3 +229,36 @@ def mpesa_stk_push(request):
 
     except Exception as e:
         return (json.dumps({"error": str(e)}), 500, headers)
+
+@functions_framework.http
+def mpesa_callback(request):
+    if request.method != 'POST':
+        return ('Method Not Allowed', 405)
+
+    callback_data = request.get_json()
+    
+    # Extracting the ResultCode (0 means success)
+    result_code = callback_data['Body']['stkCallback']['ResultCode']
+    merchant_request_id = callback_data['Body']['stkCallback']['MerchantRequestID']
+
+    if result_code == 0:
+        # SUCCESS: User entered PIN
+        callback_metadata = callback_data['Body']['stkCallback']['CallbackMetadata']['Item']
+        
+        # Extract specific transaction details
+        amount = next(item for item in callback_metadata if item["Name"] == "Amount")["Value"]
+        receipt = next(item for item in callback_metadata if item["Name"] == "MpesaReceiptNumber")["Value"]
+        phone = next(item for item in callback_metadata if item["Name"] == "PhoneNumber")["Value"]
+
+        print(f"PAYMENT SUCCESS: {receipt} | {amount} KES from {phone}")
+        
+        # --- TRIGGER AUTOMATION ---
+        # 1. Update your Google Sheet via Google Auth (from your requirements.txt)
+        # 2. Send a Telegram notification via python-telegram-bot
+        # 3. Update the Bio-Sync Revenue Scale
+        
+        return ('Callback Received Successfully', 200)
+    else:
+        # FAILURE: User cancelled or insufficient funds
+        print(f"PAYMENT FAILED/CANCELLED: ID {merchant_request_id}")
+        return ('Callback Processed (Failed Transaction)', 200)
