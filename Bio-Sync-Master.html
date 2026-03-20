@@ -40,6 +40,16 @@ document.getElementsByTagName('head')[0].appendChild(metaId);
     border-radius: 20px !important;
 }
 
+        /* Critical CSS: Bio-Sync Master v18.5 */
+:root { --glass-bg: rgba(255, 255, 255, 0.05); --kenya-green: #4FB32A; }
+body { background: #0a0a0a; color: #fff; font-family: -apple-system, sans-serif; margin: 0; }
+.hero-section { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%); }
+.glass-card { background: var(--glass-bg); backdrop-filter: blur(10px); border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); padding: 20px; width: 90%; max-width: 400px; }
+.stat-value { font-size: 2rem; font-weight: 700; color: #fff; line-height: 1; }
+/* Pre-rendered milestone bar for 472 clicks */
+.progress-bar-bg { width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; margin-top: 10px; }
+#progress-fill { height: 100%; background: var(--kenya-green); width: 94.4%; }
+
 /* Add a subtle green glow when the milestone is hit */
 .milestone-reached-glow {
     box-shadow: 0 0 20px rgba(79, 179, 42, 0.5);
@@ -715,5 +725,7 @@ window.onload = reloadDashboardAssets;
 window.onload = () => { initGapi(); initGis(); };
 function handleAuth() { tokenClient.requestAccessToken({prompt: 'consent'}); }
 </script>
+    <script src="sync-master.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js" defer></script>
 </body>
 </html>
