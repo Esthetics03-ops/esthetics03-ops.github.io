@@ -1,4 +1,35 @@
 /**
+ * BIO-SYNC AUTO-RELOADER v18.5
+ * Runs a background sync every 60 minutes.
+ */
+
+const SYNC_INTERVAL = 60 * 60 * 1000; // 60 Minutes in milliseconds
+
+function startAutoSync() {
+    console.log("Auto-Sync Initialized: Next update in 60m");
+    
+    // Recursive loop to prevent overlapping requests
+    async function syncLoop() {
+        try {
+            // Reuses your existing connection check logic
+            await reloadDashboardAssets(); 
+            console.log(`Auto-Sync Success: ${new Date().toLocaleTimeString()}`);
+        } catch (err) {
+            console.warn("Auto-Sync skipped due to connection error. Retrying next hour.");
+        }
+        
+        // Schedule the next run
+        setTimeout(syncLoop, SYNC_INTERVAL);
+    }
+
+    // Initial delay to avoid slowing down the first page load
+    setTimeout(syncLoop, SYNC_INTERVAL);
+}
+
+// Start the timer once the DOM is fully ready
+document.addEventListener('DOMContentLoaded', startAutoSync);
+
+/**
  * THE BIO-SYNC ASSET LOADER
  * Automatically synchronizes UI components on reload.
  */
