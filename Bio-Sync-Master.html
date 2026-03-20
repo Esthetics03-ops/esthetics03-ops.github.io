@@ -33,6 +33,40 @@ document.getElementsByTagName('head')[0].appendChild(metaId);
         .gate { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; align-items: center; justify-content: center; text-align: center; }
 
 /* Status Dot Indicators */
+        .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.stat-label { font-size: 0.8rem; color: rgba(255,255,255,0.6); display: block; }
+.stat-value { font-size: 1.8rem; font-weight: 700; color: #fff; }
+.stat-trend.positive { color: #4FB32A; font-weight: bold; }
+
+.progress-bar-bg {
+    width: 100%;
+    height: 8px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 8px 0;
+}
+
+#progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #3498db, #4FB32A);
+    transition: width 1.5s ease-in-out;
+}
+
+.badge-premium {
+    background: rgba(79, 179, 42, 0.2);
+    color: #4FB32A;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    border: 1px solid #4FB32A;
+}
 #status-display { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
 
 .dot-idle { width: 12px; height: 12px; border-radius: 50%; background: #888; }
@@ -163,6 +197,35 @@ document.getElementsByTagName('head')[0].appendChild(metaId);
         <span id="status-text">Ready to Sync</span>
     </div>
     <button id="check-connection-btn" class="cta-button">Check Connection</button>
+    </div>
+
+    <div id="health-report-card" class="glass-card">
+    <div class="report-header">
+        <h3>System Health Status</h3>
+        <span class="badge-premium">v18.5 Active</span>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-item">
+            <span class="stat-label">Organic Clicks</span>
+            <span class="stat-value">472</span>
+            <small class="stat-trend positive">↑ 12% vs Last Month</small>
+        </div>
+        
+        <div class="stat-item">
+            <span class="stat-label">Indexing Status</span>
+            <span class="stat-value">Healthy</span>
+            <small class="stat-trend">Verified: Nairobi HQ</small>
+        </div>
+    </div>
+
+    <div class="milestone-container">
+        <p>Goal: 500 Clicks Milestone</p>
+        <div class="progress-bar-bg">
+            <div id="progress-fill" style="width: 94.4%;"></div>
+        </div>
+        <small>94.4% of Target Reached</small>
+    </div>
     </div>
 
     <div class="sync-meta">
