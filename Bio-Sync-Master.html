@@ -165,6 +165,10 @@ document.getElementsByTagName('head')[0].appendChild(metaId);
     <button id="check-connection-btn" class="cta-button">Check Connection</button>
     </div>
 
+    <div class="sync-meta">
+    <small>Last Sync: <span id="last-sync-time">Just now</span></small>
+    </div>
+
     <div class="card" style="border-left: 4px solid #f59e0b;">
         <div style="display: flex; justify-content: space-between;">
             <div class="label"><i class="bi bi-credit-card-2-front"></i> Google Ads $300 Credit Goal (NCBA/M-PESA)</div>
@@ -534,6 +538,8 @@ document.getElementsByTagName('head')[0].appendChild(metaId);
 async function reloadDashboardAssets() {
     const cloudFunctionUrl = 'YOUR_CLOUD_FUNCTION_ENDPOINT_URL';
     const statusElement = document.getElementById('ads-status-badge');
+    const now = new Date();
+document.getElementById('last-sync-time').innerText = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
     try {
         const response = await fetch(cloudFunctionUrl);
