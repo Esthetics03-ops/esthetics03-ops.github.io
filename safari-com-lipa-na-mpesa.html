@@ -140,9 +140,12 @@
     }
 
     async function initiateSTK() {
-        const phone = document.getElementById('phone').value;
-        const amount = document.getElementById('amount').value;
-
+        // Replace localhost with your new Google Cloud URL
+const response = await fetch('https://YOUR_REGION-YOUR_PROJECT.cloudfunctions.net/mpesa-stk-push', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ phone: phone, amount: amount })
+});
         if (phone.length < 12) {
             Swal.fire({ icon: 'error', title: 'Invalid Number', text: 'Please use 254 format.', background: '#020617', color: '#fff' });
             return;
