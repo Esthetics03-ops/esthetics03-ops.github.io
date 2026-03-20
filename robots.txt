@@ -1,29 +1,29 @@
-User-agent: *
-Allow: /
-Disallow: /assets/private/
-
-# SITEMAP 2026
-Sitemap: https://esthetics03-ops.github.io/sitemap.xml
 # ========================================================
-# Robots.txt for The Esthetics Hub
-# Optimized for AdSense Revenue & GitHub Pages SEO
+# Robots.txt for The Esthetics Hub v18.5
+# Optimized for Nairobi HQ, AdSense Revenue & GitHub SEO
 # ========================================================
 
-# 1. ALLOW ADSENSE CRAWLERS (Priority)
-# This ensures the AdSense bot can "read" your page to show high-paying ads.
+# 1. PRIORITY: ADSENSE CRAWLERS
+# Ensures the AdSense bot can scan your page for high-paying ads.
 User-agent: Mediapartners-Google
 Allow: /
 
 # 2. GENERAL SEARCH ENGINES (Google, Bing, etc.)
 User-agent: *
 Allow: /
-# Disallow private GitHub/Development files
+Allow: /index.html
+Allow: /Bio-Sync-Master.html
+
+# Security & Technical Disallows
 Disallow: /README.md
 Disallow: /LICENSE
 Disallow: /SECURITY.md
 Disallow: /.github/
 Disallow: /private/
+Disallow: /assets/private/
+Disallow: /scripts/temp/
+Disallow: /404.html
 
-# 3. SITEMAP LOCATION
-# Directly points search engines to your updated sitemap for faster indexing.
+# 3. SITEMAP & HOSTING
+Host: esthetics03-ops.github.io
 Sitemap: https://esthetics03-ops.github.io/sitemap.xml
