@@ -3,91 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404: Bio-Sync Interrupted | The Esthetics Hub</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>404: Signal Lost | Bio-Sync Master</title>
     <style>
-        :root {
-            --glass: rgba(255, 255, 255, 0.05);
-            --border: rgba(255, 255, 255, 0.1);
-            --accent: #00ff88;
-            --bg: #0a0a0c;
-        }
-
         body {
-            margin: 0;
+            background: #0a0a0a;
+            color: #fff;
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg);
-            color: #ffffff;
             display: flex;
-            justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
             text-align: center;
         }
-
-        .container {
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-            border-radius: 32px;
-            padding: 60px 40px;
-            width: 90%;
-            max-width: 450px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        .glass-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            padding: 40px;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 400px;
         }
-
-        .error-code {
-            font-size: 5rem;
-            font-weight: 600;
-            margin: 0;
-            background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            opacity: 0.8;
-        }
-
-        h1 { font-size: 1.5rem; margin: 20px 0 10px; }
-        p { opacity: 0.6; font-size: 1rem; line-height: 1.6; margin-bottom: 30px; }
-
-        .btn {
-            display: inline-block;
-            background: var(--accent);
-            color: #000;
-            padding: 14px 28px;
-            border-radius: 12px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: 0.3s;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0, 255, 136, 0.3);
-        }
-
-        .secondary-link {
-            display: block;
-            margin-top: 20px;
-            font-size: 0.85rem;
-            color: #fff;
-            opacity: 0.5;
-            text-decoration: none;
-        }
-
-        .secondary-link:hover { opacity: 1; }
+        h1 { font-size: 4rem; margin: 0; color: #ff4444; }
+        p { opacity: 0.8; margin: 20px 0; }
+        .timer { font-weight: bold; color: #4FB32A; }
+        .manual-link { color: #3498db; text-decoration: none; font-size: 0.9rem; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="error-code">404</div>
-    <h1>Bio-Sync Interrupted</h1>
-    <p>The neural pathway you're looking for doesn't exist or has been recalibrated.</p>
-    
-    <a href="/" class="btn">Return to Hub</a>
-    
-    <a href="/status.html" class="secondary-link">Check System Status</a>
+<div class="glass-container">
+    <h1>404</h1>
+    <p>Signal lost. We couldn't find that protocol.</p>
+    <p>Redirecting to <strong>Nairobi HQ Hub</strong> in <span id="countdown" class="timer">5</span> seconds...</p>
+    <a href="index.html" class="manual-link">Click here to sync manually</a>
 </div>
 
+<script>
+    let seconds = 5;
+    const display = document.getElementById('countdown');
+    
+    const timer = setInterval(() => {
+        seconds--;
+        display.innerText = seconds;
+        if (seconds <= 0) {
+            clearInterval(timer);
+            window.location.href = "index.html";
+        }
+    }, 1000);
+</script>
+
 </body>
-  </html>
+</html>
