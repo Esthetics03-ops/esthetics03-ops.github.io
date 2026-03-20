@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bio-Sync Master Hub v18.5 | Nairobi HQ</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
+
+    <style>
+        /* CRITICAL CSS & GLASSMORPHIC THEME */
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --kenya-green: #4FB32A;
+            --accent-blue: #3498db;
+            --text-main: #ffffff;
+        }
+
+        body {
+            background: radial-gradient(circle at top, #1a1a1a 0%, #000 100%);
+            color: var(--text-main);
+            font-family: 'Inter', -apple-system, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .dashboard-container {
+            width: 90%;
+            max-width: 1200px;
+            padding: 40px 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 24px;
+            transition: transform 0.3s ease;
+        }
+
+        .glass-card:hover { transform: translateY(-5px); }
+
+        /* PERFORMANCE WIDGET */
+        .speed-container { position: relative; display: flex; justify-content: center; align-items: center; margin: 20px 0; }
+        .progress-ring__circle { transition: stroke-dashoffset 1s ease-in-out; transform: rotate(-90deg); transform-origin: 50% 50%; }
+        .speed-value { position: absolute; text-align: center; }
+        #perf-score { font-size: 2rem; font-weight: 800; }
+
+        /* MILESTONE BAR */
+        .progress-bar-bg { width: 100%; height: 10px; background: rgba(255,255,255,0.1); border-radius: 5px; margin: 15px 0; overflow: hidden; }
+        #progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent-blue), var(--kenya-green)); width: 94.4%; transition: width 2s ease; }
+
+        /* BUTTONS */
+        .cta-button {
+            width: 100%;
+            background: var(--glass-bg);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        .cta-button:hover { background: rgba(255,255,255,0.15); border-color: var(--kenya-green); }
+
+        .status-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+        .online { background: var(--kenya-green); box-shadow: 0 0 8px var(--kenya-green); }
+    </style>
+</head>
+<body>
+
+<div class="dashboard-container">
+    <div class="glass-card">
+        <h3>System Health</h3>
+        <p>Organic Clicks: <strong id="click-count">472</strong></p>
+        <div class="progress-bar-bg">
+            <div id="progress-fill"></div>
+        </div>
+        <small>94.4% to 500 Click Milestone</small>
+        <button class="cta-button" onclick="manualSync()">Manual Sync</button>
+    </div>
+
+    <div class="glass-card">
+        <h3>Page Performance</h3>
+        <div class="speed-container">
+            <svg width="120" height="120">
+                <circle stroke="rgba(255,255,255,0.1)" stroke-width="8" fill="transparent" r="52" cx="60" cy="60"/>
+                <circle id="speed-ring" stroke="#4FB32A" stroke-width="8" stroke-dasharray="326.7" stroke-dashoffset="32.6" fill="transparent" r="52" cx="60" cy="60"/>
+            </svg>
+            <div class="speed-value"><span id="perf-score">96</span><br><small>SCORE</small></div>
+        </div>
+        <p style="text-align:center"><small>LCP: 0.8s | FID: 12ms</small></p>
+    </div>
+
+    <div class="glass-card">
+        <h3>Ad Connection</h3>
+        <p><span class="status-dot online"></span> API Status: Verified</p>
+        <p><small>Profile ID: 2440185579889306379</small></p>
+        <hr style="opacity:0.1">
+        <h3>Quick Assets</h3>
+        <button class="cta-button" style="border-left: 4px solid var(--kenya-green)">Lipa na M-PESA Integration</button>
+        <button class="cta-button">Vagus Reset Protocol</button>
+    </div>
+</div>
+
+<script>
+    const jsConfetti = new JSConfetti();
+    let milestoneReached = false;
+
+    // AUTO-SYNC LOGIC (60 MINUTE TIMER)
+    async function syncData() {
+        console.log("Syncing Bio-Sync Master Hub...");
+        // Placeholder for your Cloud Function fetch
+        updateUI(472); 
+    }
+
+    function updateUI(clicks) {
+        const target = 500;
+        const fill = document.getElementById('progress-fill');
+        const percentage = (clicks / target) * 100;
+        
+        fill.style.width = percentage + "%";
+
+        if (clicks >= target && !milestoneReached) {
+            milestoneReached = true;
+            jsConfetti.addConfetti();
+            Swal.fire({
+                title: '500 Clicks Reached!',
+                text: 'The Esthetics Hub is scaling!',
+                icon: 'success',
+                background: '#1a1a1a',
+                color: '#fff'
+            });
+        }
+    }
+
+    function manualSync() {
+        Swal.fire({ title: 'Syncing...', timer: 1000, showConfirmButton: false });
+        syncData();
+    }
+
+    // Initialize
+    window.onload = () => {
+        syncData();
+        setInterval(syncData, 3600000); // 1 Hour Auto-Sync
+    };
+</script>
+
+</body>
+  </html>
