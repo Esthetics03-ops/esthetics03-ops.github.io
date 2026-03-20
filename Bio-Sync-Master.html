@@ -9,7 +9,13 @@
     <script src="https://apis.google.com/js/api.js" async defer></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=AW-113379488"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    
+    <script>
+// Add this inside your sync function to help with verification
+const metaId = document.createElement('meta');
+metaId.name = "google-business-id";
+metaId.content = "2440185579889306379";
+document.getElementsByTagName('head')[0].appendChild(metaId);
+    </script>
     <style>
         :root { 
             --bg: #020617; --card: rgba(15, 23, 42, 0.7); 
@@ -478,6 +484,12 @@ startAutoSync();
         }, 2000);
     });
     }
+
+    // Add this inside your sync function to help with verification
+const metaId = document.createElement('meta');
+metaId.name = "google-business-id";
+metaId.content = "2440185579889306379";
+document.getElementsByTagName('head')[0].appendChild(metaId);
 
 window.onload = () => { initGapi(); initGis(); };
 function handleAuth() { tokenClient.requestAccessToken({prompt: 'consent'}); }
