@@ -51,3 +51,22 @@ Thumbs.db
 temp/
 tmp/
 *.bak
+
+# Google Ads API Credentials - Bio-Sync Master v18.5
+# --------------------------------------------------
+
+# Developer token from your Google Ads Manager API Center (Status: Requested)
+developer_token: "DEVELOPER_TOKEN_FROM_ADS_CENTER"
+
+# OAuth 2.0 Credentials (from Google Cloud Console)
+client_id: "782440185579889306379-apps.googleusercontent.com"
+client_secret: "GOCSPX-CLIENT_SECRET_FROM_CONSOLE"
+
+# Your long-lived Refresh Token (Generated via OAuth Playground)
+refresh_token: "1//0_REFRESH_TOKEN_GENERATED_BY_OAUTH"
+
+# Your 10-digit Customer ID for 'The Esthetics Hub' (No dashes)
+login_customer_id: "CUSTOMER_ID_FROM_ADS_DASHBOARD"
+
+# Use Proto Plus for better performance in Python
+use_proto_plus: True
