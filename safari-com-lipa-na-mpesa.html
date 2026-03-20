@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>M-PESA Checkout | Esthetics Hub Nairobi</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root { 
+            --bg: #020617; 
+            --mpesa-green: #4FB32A;
+            --mpesa-red: #EE2A24;
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(30, 41, 59, 0.5);
+            --text: #f8fafc;
+        }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: var(--bg); 
+            color: var(--text); 
+            margin: 0; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh;
+            background-image: radial-gradient(circle at center, #1e293b, #020617);
+        }
+
+        .checkout-card {
+            width: 100%;
+            max-width: 400px;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        .header { text-align: center; margin-bottom: 25px; }
+        .mpesa-logo { font-weight: 800; font-size: 1.5rem; color: var(--mpesa-green); letter-spacing: -1px; }
+        .mpesa-logo span { color: var(--mpesa-red); }
+
+        .input-group { margin-bottom: 20px; }
+        label { display: block; font-size: 0.7rem; text-transform: uppercase; color: #94a3b8; margin-bottom: 8px; font-weight: 700; }
+        
+        input {
+            width: 100%;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px;
+            color: white;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: 0.3s;
+        }
+        input:focus { border-color: var(--mpesa-green); outline: none; background: rgba(0,0,0,0.5); }
+
+        .pay-btn {
+            background: var(--mpesa-green);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .pay-btn:hover { filter: brightness(1.1); transform: translateY(-2px); }
+
+        .terminal {
+            background: rgba(0,0,0,0.4);
+            border-radius: 12px;
+            padding: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.7rem;
+            margin-top: 20px;
+            color: #34d399;
+            height: 80px;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #64748b;
+            text-decoration: none;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="checkout-card">
+    <div class="header">
+        <div class="mpesa-logo">M-PESA<span> Online</span></div>
+        <p style="font-size: 0.8rem; color: #94a3b8;">Secure Payment Gateway | Nairobi Node</p>
+    </div>
+
+    <div class="input-group">
+        <label>Phone Number</label>
+        <input type="tel" id="phone" placeholder="2547XXXXXXXX" value="254">
+    </div>
+
+    <div class="input-group">
+        <label>Amount (KES)</label>
+        <input type="number" id="amount" placeholder="Enter Amount" value="1000">
+    </div>
+
+    <button class="pay-btn" onclick="initiateSTK()">
+        <i class="bi bi-shield-lock-fill"></i> PAY NOW
+    </button>
+
+    <div class="terminal" id="mpesa-terminal">
+        > Ready for transaction...
+    </div>
+
+    <a href="index.html" class="back-link"><i class="bi bi-arrow-left"></i> Return to Bio-Sync Hub</a>
+</div>
+
+<script>
+    function log(msg) {
+        const t = document.getElementById('mpesa-terminal');
+        t.innerHTML += `<div>> ${msg}</div>`;
+        t.scrollTop = t.scrollHeight;
+    }
+
+    async function initiateSTK() {
+        const phone = document.getElementById('phone').value;
+        const amount = document.getElementById('amount').value;
+
+        if (phone.length < 12) {
+            Swal.fire({ icon: 'error', title: 'Invalid Number', text: 'Please use 254 format.', background: '#020617', color: '#fff' });
+            return;
+        }
+
+        log("Requesting STK Push for " + phone);
+        
+        Swal.fire({
+            title: 'Processing...',
+            text: 'Check your phone for the M-PESA PIN prompt.',
+            allowOutsideClick: false,
+            background: '#020617',
+            color: '#fff',
+            didOpen: () => { Swal.showLoading(); }
+        });
+
+        // This is where you would call your Safaricom Daraja API Backend
+        setTimeout(() => {
+            Swal.close();
+            log("STK Push Sent successfully.");
+            log("Waiting for customer response...");
+
+            setTimeout(() => {
+                log("Payment Verified. Receipt: RQK" + Math.floor(Math.random() * 1000000));
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Payment Received',
+                    text: 'Your Bio-Sync balance has been updated.',
+                    background: '#020617',
+                    color: '#fff',
+                    confirmButtonColor: '#4FB32A'
+                });
+            }, 3000);
+        }, 2000);
+    }
+</script>
+
+</body>
+        </html>
