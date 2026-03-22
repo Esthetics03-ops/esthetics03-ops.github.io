@@ -438,6 +438,83 @@ document.querySelector('.cta-gold').addEventListener('click', function() {
     prepareWhatsApp("Nairobi Sync Kit", "KES 3,500");
 });
     </script>
+    <script>
+        async function triggerSTKPush() {
+    const phone = document.getElementById('phone-input').value; // e.g., 254712345678
+    const amount = 1499; // Price for Vagus Reset Premium
+    const btn = document.querySelector('.glass-cta');
+
+    // 1. UI Feedback: Immediate "Processing" state
+    btn.innerHTML = `<span>Connecting to M-Pesa...</span>`;
+    btn.disabled = true;
+
+    try {
+        const response = await fetch('https://YOUR_CLOUD_FUNCTION_URL/stkpush', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone, amount })
+        });
+
+        const data = await response.json();
+
+        if (data.ResponseCode === "0") {
+            // 2. Success: Tell the user to check their phone
+            btn.innerHTML = `<span>Check your Phone! 📱</span>`;
+            alert("Please enter your M-Pesa PIN on your phone to complete the protocol unlock.");
+        } else {
+            throw new Error('STK failed to fire');
+        }
+    } catch (error) {
+        btn.innerHTML = `<span>Retry Payment</span>`;
+        btn.disabled = false;
+        alert("Connection failed. Please ensure your number is correct and try again.");
+    }
+   }
+        const axios = require('axios');
+
+exports.stkPush = async (req, res) => {
+    // Enable CORS for your GitHub Pages domain
+    res.set('Access-Control-Allow-Origin', 'https://esthetics03-ops.github.io');
+    
+    const { phone, amount } = req.body;
+    const shortCode = "3421580"; // Your Till Number
+    const passKey = process.env.MPESA_PASSKEY;
+    const timestamp = new Date().toISOString().replace(/[-:T.Z]/g, "").slice(0, 14);
+    
+    // Generate Password: Base64(ShortCode + PassKey + Timestamp)
+    const password = Buffer.from(shortCode + passKey + timestamp).toString('base64');
+
+    try {
+        // 1. Get OAuth Token
+        const auth = Buffer.from(`${process.env.CONSUMER_KEY}:${process.env.CONSUMER_SECRET}`).toString('base64');
+        const tokenResponse = await axios.get('https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials', {
+            headers: { Authorization: `Basic ${auth}` }
+        });
+        const token = tokenResponse.data.access_token;
+
+        // 2. Initiate STK Push
+        const stkResponse = await axios.post('https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest', {
+            "BusinessShortCode": shortCode,
+            "Password": password,
+            "Timestamp": timestamp,
+            "TransactionType": "CustomerBuyGoodsOnline", // Correct for Tills
+            "Amount": amount,
+            "PartyA": phone,
+            "PartyB": shortCode,
+            "PhoneNumber": phone,
+            "CallBackURL": "https://YOUR_DOMAIN.com/callback",
+            "AccountReference": "VagusReset",
+            "TransactionDesc": "Premium Protocol Unlock"
+        }, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+
+        res.status(200).send(stkResponse.data);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+    </script>
     <a id="whatsapp-float" href="#" class="shadow-lg" target="_blank">
     <i class="bi bi-whatsapp"></i> <span>Order via WhatsApp</span>
 </a>
