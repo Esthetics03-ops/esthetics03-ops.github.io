@@ -46,6 +46,71 @@
         /* BIO-SYNC INTERACTIVE CARDS */
         .protocol-card { background: #fff; border: 1px solid #eee; border-radius: 20px; padding: 25px; transition: 0.4s; position: relative; overflow: hidden; height: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
         .protocol-card:hover { border-color: var(--accent); transform: translateY(-5px); }
+
+/* 2026 Glassmorphic CTA Strategy */
+.glass-cta {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 32px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 50px; /* Pill shape for 2026 aesthetics */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px); /* The Frosted Glass effect */
+    -webkit-backdrop-filter: blur(15px);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    overflow: hidden;
+    cursor: pointer;
+}
+
+/* The "Liquid Glow" Hover Effect */
+.glass-cta::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+    transition: all 0.6s;
+    opacity: 0;
+}
+
+.glass-cta:hover {
+    transform: translateY(-3px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.5);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.glass-cta:hover::before {
+    opacity: 1;
+    transform: scale(0.8);
+}
+
+/* Attention-Grabbing "Sync" Pulse */
+.glass-cta-pulse {
+    animation: cta-pulse 2s infinite;
+}
+
+@keyframes cta-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4); }
+    70% { box-shadow: 0 0 0 15px rgba(255, 255, 255, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+}
+
+.mpesa-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
+    filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.2));
+    }
         
         /* 4-7-8 TIMER */
         .breath-circle { width: 70px; height: 70px; border: 3px solid var(--accent); border-radius: 50%; margin: 20px auto; transition: all 4s linear; }
@@ -163,6 +228,14 @@
                 <a href="https://amazon.com/vagus-nerve-stimulator" class="cta-gold">Shop VNS Devices</a>
             </div>
         </article>
+        
+        <button class="glass-cta glass-cta-pulse" onclick="triggerSTKPush()">
+    <svg class="mpesa-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" fill="#4CAF50"/>
+        <path d="M11 7h2v10h-2z" fill="#4CAF50"/>
+    </svg>
+    Unlock Peak Calm (KES 1,499) →
+        </button>
 
         <div class="p-5 rounded-4 text-center border-2 border" style="border: 2px solid var(--accent);">
             <h4>Download the 2026 Vagus Cheat Sheet</h4>
