@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline | The Esthetics Hub</title>
+    <link rel="icon" type="image/png" href="/g1.png">
+    <style>
+        body { font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #f4f4f4; text-align: center; }
+        .container { padding: 20px; }
+        img { width: 80px; margin-bottom: 20px; }
+        h1 { color: #333; }
+        p { color: #666; }
+        button { padding: 10px 20px; background: #000; color: #fff; border: none; border-radius: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="g1.png" alt="Logo">
+        <h1>You're currently offline</h1>
+        <p>It looks like your connection dropped. Check your network and try again.</p>
+        <button onclick="window.location.reload()">Retry Connection</button>
+    </div>
+</body>
+</html>
