@@ -168,6 +168,46 @@
         </div>
     </section>
 
+    <!-- Bio-Sync Dynamic Timing Alert -->
+<div id="bio-sync-alert" style="background: #f0f7ff; border-left: 5px solid #007bff; padding: 15px; margin: 20px 0; border-radius: 4px; font-family: sans-serif;">
+    <p style="margin: 0; font-weight: bold; color: #0056b3;">
+        🕒 Bio-Sync Timing Update
+    </p>
+    <p id="vagus-window" style="margin: 5px 0 0; color: #333;">
+        Calculating your optimal window...
+    </p>
+</div>
+
+<script>
+function updateVagusWindow() {
+    const now = new Date();
+    const hour = now.getHours();
+    let message = "";
+
+    // 2026 Protocol Logic: Circadian alignment for Nervous System Regulation
+    if (hour >= 5 && hour < 9) {
+        message = "Optimizing for Morning Cortisol Reset. **Best time for Cold Exposure.**";
+    } else if (hour >= 9 && hour < 12) {
+        message = "Deep Work Phase. Use **Box Breathing** to maintain Vagal Tone.";
+    } else if (hour >= 12 && hour < 15) {
+        message = "Post-Digestive Window. Ideal for **Light Movement** to aid the Gut-Brain axis.";
+    } else if (hour >= 15 && hour < 19) {
+        message = "Current Window: **Prime Vagus Stimulation.** Recommended: Humming or Gargling.";
+    } else if (hour >= 19 && hour < 22) {
+        message = "Evening Wind-down. Focus on **Slowing Exhalations** for Sleep Prep.";
+    } else {
+        message = "Deep Recovery Mode. Ensure **Blue Light Blocking** is active.";
+    }
+
+    const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    document.getElementById('vagus-window').innerHTML = `Current Local Time: <strong>${timeString}</strong> — ${message}`;
+}
+
+// Initialize and refresh every minute
+updateVagusWindow();
+setInterval(updateVagusWindow, 60000);
+</script>
+
     <div class="container mt-5">
         <div class="ad-slot">
             <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1959507280210179" data-ad-slot="YOUR_AD_SLOT_ID" data-ad-format="auto"></ins>
