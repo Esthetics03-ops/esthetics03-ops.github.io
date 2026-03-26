@@ -92,6 +92,46 @@ articles_db = [
         "content": "<h2>Cellular Quality Control</h2><p>Autophagy identifies and recycles dysfunctional mitochondria. It is governed by the AMPK/mTOR switch.</p><h2>The 20:4 Protocol</h2><p>Engaging in a 20-hour fast once per week allows the body to clear out senescent 'zombie' cells that drive systemic inflammation.</p>"
     },
     {
+        "title": "GLUT4 Activation: The Post-Meal Reset",
+        "category": "Metabolic",
+        "content": "<h2>The Insulin Bypass</h2><p>Post-meal lethargy is a sign of insulin dominance. We use GLUT4 activation to redirect glucose into skeletal muscle rather than adipose tissue.</p><h2>The 10-Minute Walk</h2><p>Walking immediately after your largest meal of the day facilitates glucose transport, maintaining a flat glycemic curve and protecting your cognitive endurance for the afternoon.</p>"
+    },
+    {
+        "title": "NSDR: Non-Sleep Deep Rest for Creators",
+        "category": "Recovery",
+        "content": "<h2>The Theta Wave Bridge</h2><p>NSDR (Non-Sleep Deep Rest) allows the nervous system to enter a deep restorative state without the grogginess of a nap.</p><h2>Neural Cache Clearing</h2><p>By engaging in 20 minutes of NSDR, you shift the brain into a state of high Parasympathetic tone, clearing metabolic waste from the prefrontal cortex and restoring focus.</p>"
+    },
+    {
+        "title": "DNA Methylation: Measuring the Bio-Clock",
+        "category": "Longevity",
+        "content": "<h2>Epigenetic Signaling</h2><p>Our DNA is a fixed script, but methylation is the 'software' that decides which genes are read. High stress and poor sleep increase 'epigenetic noise.'</p><h2>The Horvath Clock</h2><p>We utilize DNA methylation testing to track Biological Age. This allows for a data-driven validation of all biohacking protocols hosted on The Esthetics Hub.</p>"
+    }
+    {
+        "title": "Sirtuin Activation: The Survival Circuit",
+        "category": "Longevity",
+        "content": "<h2>The Longevity Genes</h2><p>Sirtuins are a family of proteins responsible for cellular health and DNA repair. They are activated by energy stress (fasting) and specific molecules like NAD+.</p><h2>Resveratrol and NMN</h2><p>By utilizing Sirtuin-activating compounds, we can signal the body to enter a 'survival mode' that prioritizes long-term cellular maintenance over short-term growth.</p>"
+    },
+    {
+        "title": "The 14-Day Bio-Sync Grocery Stack",
+        "category": "Metabolic",
+        "content": "<h2>Strategic Nutrition</h2><p>To support a flat glucose curve, your shopping list must prioritize high-leucine proteins and soluble fibers. In Nairobi, this means focusing on local nutrient-dense greens and clean protein sources.</p><h2>The Stack</h2><p>Key items: Apple Cider Vinegar (for glucose blunting), dark leafy greens, and cold-pressed oils to maintain hormonal health.</p>"
+    },
+    {
+        "title": "CO2 Tolerance: The Metric of Resilience",
+        "category": "Recovery",
+        "content": "<h2>The Respiratory Sink</h2><p>Your ability to tolerate Carbon Dioxide is a direct proxy for your nervous system's stress threshold. We use the CO2 exhale test to baseline our Vagus Reset progress.</p><h2>Expanding the Window</h2><p>By increasing CO2 tolerance through breathwork, you increase your 'Deep Work' window, allowing for longer coding sessions without triggering the sympathetic nervous system.</p>"
+    },
+    {
+        "title": "Circadian Lighting: Blue Light vs. The Master Clock",
+        "category": "Sleep Science",
+        "content": "<h2>Photobiology</h2><p>The Suprachiasmatic Nucleus (SCN) is sensitive to the 480nm wavelength of blue light. Exposure after sunset inhibits melatonin synthesis for up to 4 hours.</p><h2>The Lighting Stack</h2><p>We recommend shifting to amber-spectrum lighting (under 3000K) at 8:00 PM to protect the circadian rhythm and ensure deep, restorative sleep cycles.</p>"
+    },
+    {
+        "title": "MindSync AI: The Future of Wellness Tech",
+        "category": "Insights",
+        "content": "<h2>Algorithmic Personalization</h2><p>The future of biohacking is not a general protocol, but a personalized algorithm. MindSync AI leverages real-time HRV and metabolic data to adjust your daily 'Bio-Sync' window.</p><h2>Integration</h2><p>By merging web development with biological data, we can create a feedback loop that optimizes human performance with the same precision as a CI/CD pipeline.</p>"
+}
+    {
         "title": "Mitochondrial Health: ATP Optimization",
         "category": "Recovery",
         "content": "<h2>The Bio-Energetic Engine</h2><p>Mitochondria convert oxygen into ATP. Red light therapy (810-850nm) stimulates Cytochrome C Oxidase to increase this energy production.</p><h2>Mitochondrial Biogenesis</h2><p>Nutrients like PQQ and CoQ10 signal the body to create new mitochondria, raising your total energetic baseline for high-intensity work.</p>"
