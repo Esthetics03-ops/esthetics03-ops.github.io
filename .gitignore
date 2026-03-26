@@ -1,72 +1,49 @@
-# --- Security & Credentials (CRITICAL) ---
-# Never commit these; they grant access to your Google/Cloud accounts.
+# --- THE ESTHETICS HUB: MASTER SHIELD ---
+
+# 1. API & CREDENTIALS (CRITICAL - DO NOT CAPTURE)
 credentials.json
 token.json
 client_secret.json
+google_ads_config.yaml
 .env
 .env.local
 .env.*.local
 
-# --- Databases (SQLite & Local Storage) ---
-# Prevent your local DB or backups from bloating the repo.
+# 2. DATABASES & DATA (BIO-SYNC CACHE)
 *.db
 *.sqlite
 *.sqlite3
 /data/
+outputs/
+*.csv
+*.json_metadata
 
-# --- Python Environment & Cache ---
+# 3. PYTHON & ENVIRONMENT
 __pycache__/
 *.py[cod]
 *$py.class
-*.so
 .Python
 env/
 venv/
 .venv/
 pip-log.txt
-pip-delete-this-directory.txt
 
-# --- Build & Distribution ---
-# If you eventually package your scripts
-dist/
-build/
-*.egg-info/
-.installed.cfg
-*.egg
-
-# --- Logs & Performance Tracking ---
+# 4. LOGS & DIAGNOSTICS
 *.log
-# Specific log files for syncing
 google_sync_error.log
 analytics_fetch.log
+performance_audit.txt
 
-# --- Local OS & IDE Specifics ---
+# 5. OS & IDE SPECIFICS
 .DS_Store
 Thumbs.db
 .vscode/
 .idea/
 *.swp
 
-# --- Temporary & Scratch Files ---
+# 6. BUILD & TEMP
+dist/
+build/
 temp/
 tmp/
 *.bak
-
-# Google Ads API Credentials - Bio-Sync Master v18.5
-# --------------------------------------------------
-
-# Developer token from your Google Ads Manager API Center (Status: Requested)
-developer_token: "DEVELOPER_TOKEN_FROM_ADS_CENTER"
-
-# OAuth 2.0 Credentials (from Google Cloud Console)
-client_id: "782440185579889306379-apps.googleusercontent.com"
-client_secret: "GOCSPX-CLIENT_SECRET_FROM_CONSOLE"
-
-# Your long-lived Refresh Token (Generated via OAuth Playground)
-refresh_token: "1//0_REFRESH_TOKEN_GENERATED_BY_OAUTH"
-
-# Your 10-digit Customer ID for 'The Esthetics Hub' (No dashes)
-login_customer_id: "CUSTOMER_ID_FROM_ADS_DASHBOARD"
-
-# Use Proto Plus for better performance in Python
-use_proto_plus: True
