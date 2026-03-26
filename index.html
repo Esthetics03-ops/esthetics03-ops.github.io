@@ -43,6 +43,36 @@
   <meta name="twitter:description" content="Science-backed nutrition and mental health advice." />
   <meta name="twitter:image" content="https://esthetics03-ops.github.io/g1.png" />
     <!-- ✅ Structured Data for The Esthetics Hub Homepage -->
+    <script>
+       // --- CORE WEB VITALS MONITOR ---
+const monitorPerformance = () => {
+    if ('performance' in window && 'getEntriesByType' in performance) {
+        
+        window.addEventListener('load', () => {
+            // 1. LCP: Largest Contentful Paint (Goal: < 2.5s)
+            const lcpEntry = performance.getEntriesByType('paint').find(e => e.name === 'largest-contentful-paint');
+            const lcp = lcpEntry ? (lcpEntry.startTime / 1000).toFixed(2) : "Calculating...";
+
+            // 2. Load Time (Goal: < 1.5s for PWA)
+            const loadTime = (performance.now() / 1000).toFixed(2);
+
+            // 3. Log to Developer Console
+            console.log(`%c ⚡ THE ESTHETICS HUB: SYSTEM HEALTH `, 'background: #0dcaf0; color: #000; font-weight: bold;');
+            console.log(`LCP (Visual Readiness): ${lcp}s`);
+            console.log(`Total Load Time: ${loadTime}s`);
+
+            // 4. Update Dashboard UI (Optional: If you have an element with id="perf-status")
+            const statusEl = document.getElementById('perf-status');
+            if (statusEl) {
+                statusEl.innerHTML = `System Latency: ${loadTime}s | LCP: ${lcp}s`;
+                statusEl.style.color = loadTime < 2 ? "#0df086" : "#f0b40d";
+            }
+        });
+    }
+};
+
+monitorPerformance(); 
+    </script>
     <script type="application/ld+json">
 {
   "@context": "https://schema.org",
