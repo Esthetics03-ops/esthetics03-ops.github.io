@@ -3,12 +3,12 @@ import datetime
 from git import Repo
 
 # --- CONFIGURATION ---
-REPO_PATH = "./"  # Local path to your GitHub repo
-WIKI_DIR = "wiki" # Target directory for articles
+REPO_PATH = "./"  
+WIKI_DIR = "wiki" 
 REMOTE_NAME = "origin"
 BRANCH_NAME = "main"
 
-# --- THE HTML ENGINE (AdSense Compliant + Glassmorphism) ---
+# --- THE HTML ENGINE ---
 HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html lang="en">
@@ -64,20 +64,43 @@ HTML_TEMPLATE = """
 </html>
 """
 
-# --- ARTICLE REPOSITORY (Add your 15 articles here) ---
+# --- ARTICLE DATABASE (7/15 Articles) ---
 articles_db = [
+    {
+        "title": "The Digital Vagus Reset Protocol",
+        "category": "Vagus Nerve",
+        "content": "<h2>The Biological Cost of Focus</h2><p>In high-velocity digital environments, the nervous system defaults to Sympathetic Dominance. The Vagus Nerve (Cranial Nerve X) is the primary mediator for shifting back to a Parasympathetic state.</p><h2>Somatic Triggers</h2><p>Using the Oculocardiac Reflex and thermal cycling (cold exposure), we can force a physiological reset that immediately lowers heart rate and stabilizes HRV metrics.</p>"
+    },
+    {
+        "title": "Bio-Sync: The Insulin Sensitivity Protocol",
+        "category": "Metabolic",
+        "content": "<h2>Circadian Biology</h2><p>Nutrition is a timing problem. Bio-Syncing aligns nutrient intake with hormonal peaks (Insulin and Cortisol) to maximize metabolic flexibility.</p><h2>The Protocol</h2><p>By utilizing a 16:8 feeding window and sequencing fiber before carbohydrates, we create a flat glucose curve, preventing cognitive crashes during deep work.</p>"
+    },
+    {
+        "title": "The Sleep Lab: Circadian Optimization",
+        "category": "Sleep Science",
+        "content": "<h2>The Glymphatic System</h2><p>Sleep is a neurological cleanup process. During deep sleep, the brain's glymphatic system clears neurotoxic waste.</p><h2>The 18-Degree Rule</h2><p>To initiate sleep, core temperature must drop. Maintaining an environment of 18°C (64°F) signals the brain to begin the sleep cycle and maximize REM quality.</p>"
+    },
+    {
+        "title": "Digital Hypoxia: Solving Screen Apnea",
+        "category": "Developer Health",
+        "content": "<h2>The Focused Breath Glitch</h2><p>Developers often hold their breath during complex coding, leading to CO2 buildup and stress. This 'Screen Apnea' triggers mid-day burnout.</p><h2>The 20-20-20-20 Reset</h2><p>Every 20 minutes, take 20 'Cyclic Sigh' breaths—double inhales followed by long exhales—to reset the Vagus nerve mid-sprint.</p>"
+    },
+    {
+        "title": "Autophagy: The Cellular Cleanup Protocol",
+        "category": "Longevity",
+        "content": "<h2>Cellular Quality Control</h2><p>Autophagy identifies and recycles dysfunctional mitochondria. It is governed by the AMPK/mTOR switch.</p><h2>The 20:4 Protocol</h2><p>Engaging in a 20-hour fast once per week allows the body to clear out senescent 'zombie' cells that drive systemic inflammation.</p>"
+    },
+    {
+        "title": "Mitochondrial Health: ATP Optimization",
+        "category": "Recovery",
+        "content": "<h2>The Bio-Energetic Engine</h2><p>Mitochondria convert oxygen into ATP. Red light therapy (810-850nm) stimulates Cytochrome C Oxidase to increase this energy production.</p><h2>Mitochondrial Biogenesis</h2><p>Nutrients like PQQ and CoQ10 signal the body to create new mitochondria, raising your total energetic baseline for high-intensity work.</p>"
+    },
     {
         "title": "Longevity 2026: The Biological Tech Stack",
         "category": "Longevity",
-        "content": """
-            <p>Longevity is no longer a passive process; it is a technical optimization of cellular health. By 2026, the 'Longevity Stack' has evolved beyond basic supplementation into <b>epigenetic maintenance</b>.</p>
-            <h2>The Protocol: NAD+ and Sirtuin Activation</h2>
-            <p>The primary driver of cellular aging is mitochondrial decay. We utilize NAD+ precursors combined with Sirtuin-activating compounds (STACs) to maintain genomic stability.</p>
-            <h2>Biological Monitoring</h2>
-            <p>To confirm efficacy, we track 'Biological Age' via DNA methylation clocks rather than chronological years.</p>
-        """
-    },
-    # Add the remaining 14 objects here...
+        "content": "<h2>Epigenetic Maintenance</h2><p>In 2026, longevity is about genomic stability. We utilize NAD+ precursors and Sirtuin-activating compounds to slow the biological clock.</p><h2>DNA Methylation</h2><p>We monitor progress using methylation clocks rather than chronological age to verify the efficacy of our biohacking stack.</p>"
+    }
 ]
 
 def generate_wiki():
@@ -86,13 +109,10 @@ def generate_wiki():
         print(f"📁 Created folder: {WIKI_DIR}")
 
     file_list = []
-    
     for art in articles_db:
-        # Create a URL-friendly slug
         slug = art['title'].lower().replace(":", "").replace(" ", "-") + ".html"
         file_path = os.path.join(WIKI_DIR, slug)
         
-        # Fill the template
         final_html = HTML_TEMPLATE.format(
             title=art['title'],
             category=art['category'],
@@ -106,7 +126,6 @@ def generate_wiki():
         file_list.append(file_path)
         print(f"📄 Generated: {slug}")
 
-    # --- GIT AUTO-PUSH ---
     try:
         repo = Repo(REPO_PATH)
         repo.index.add(file_list)
