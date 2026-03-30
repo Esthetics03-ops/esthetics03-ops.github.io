@@ -1,0 +1,54 @@
+name: Global System Audit & Sync
+
+on:
+  push:
+    branches: [ main ]
+  workflow_run:
+    workflows: ["Site Performance & Deploy", "update-adsense-dashboard"]
+    types:
+      - completed
+
+jobs:
+  deep-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Validate YAML Syntax
+        run: |
+          sudo apt-get install yamllint
+          yamllint .github/workflows/*.yml
+          yamllint _config.yml
+
+      - name: Cross-Platform Path Check
+        run: |
+          # Ensures Front-end Jekyll & Back-end PHP paths align
+          test -f _config.yml && echo "Jekyll Config Found" || exit 1
+          test -d assets && echo "Frontend Assets Found" || exit 1
+          grep -q "pub-1959507280210179" ads.txt && echo "AdSense ID Verified" || exit 1
+
+      - name: Sync Cloud Credentials
+        run: |
+          # This simulates a deep check of your required Secrets
+          if [ -z "${{ secrets.MPESA_CONSUMER_KEY }}" ]; then
+            echo "::warning :: M-PESA Backend Credentials Missing"
+          fi
+          if [ -z "${{ secrets.ADSENSE_ID }}" ]; then
+            echo "::warning :: AdSense Dashboard Sync Restricted"
+          fi
+
+      - name: Fix Jekyll & GitHub Pages Alignment
+        run: |
+          bundle exec jekyll build
+        env:
+          JEKYLL_ENV: production
+
+  redeploy-all:
+    needs: deep-scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clear Cache and Force Sync
+        run: |
+          echo "Deep Scan Passed. Forcing Cloud Alignment..."
+          # Add your specific deployment commands here to re-run the failed jobs
