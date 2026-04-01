@@ -1,0 +1,53 @@
+name: Zoho CRM Sync Update
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - '**.py'              # Only run if Python files change
+      - 'data/**'            # Or if your data folder updates
+  schedule:
+    - cron: '0 0 * * *'      # Daily at midnight
+  workflow_dispatch:          # Manual trigger enabled
+
+# Prevents multiple syncs from running at the same time
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  sync-crm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5       # Safety timeout to save GitHub Action minutes
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'        # Automatically caches your dependencies
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Run Zoho Sync Script
+        env:
+          ZOHO_CLIENT_ID: ${{ secrets.ZOHO_CLIENT_ID }}
+          ZOHO_CLIENT_SECRET: ${{ secrets.ZOHO_CLIENT_SECRET }}
+          ZOHO_REFRESH_TOKEN: ${{ secrets.ZOHO_REFRESH_TOKEN }}
+        run: |
+          if [ -f sync_script.py ]; then
+            python sync_script.py
+          else
+            echo "Error: sync_script.py not found in root directory."
+            exit 1
+          fi
+
+      - name: Sync Status Notification
+        if: failure()
+        run: echo "The Zoho CRM Sync failed. Check the logs for API errors."
