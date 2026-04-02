@@ -1474,5 +1474,60 @@ window.onload = () => {
         <span>Protocol</span>
     </a>
     </div>
+    <script>
+  /**
+   * Lazy Load Third-Party Scripts
+   * This delays heavy scripts until the browser is idle (requestIdleCallback)
+   * or until the user scrolls, saving "Total Blocking Time" (TBT).
+   */
+  const lazyScripts = {
+    paypal: "https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID",
+    // Add other heavy scripts here
+  };
+
+  function loadExternalScript(src) {
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = src;
+      script.async = true;
+      script.onload = resolve;
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
+  }
+
+  // Trigger loading when the browser has a "free" moment
+  const initiateLazyLoad = () => {
+    if ('requestIdleCallback' in window) {
+      window.requestIdleCallback(() => {
+        loadExternalScript(lazyScripts.paypal).then(() => {
+          console.log("✅ PayPal SDK loaded during idle period.");
+          // Initialize your buttons here if needed
+          // paypal.Buttons().render('#paypal-button-container');
+        });
+      });
+    } else {
+      // Fallback for older browsers: Load after 3 seconds
+      setTimeout(() => loadExternalScript(lazyScripts.paypal), 3000);
+    }
+  };
+
+  // Optional: Only load when the user actually scrolls near the payment section
+  const observer = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      initiateLazyLoad();
+      observer.disconnect(); // Only load once
+    }
+  });
+
+  // Observe the M-PESA/Payment section
+  const paymentSection = document.querySelector('#paypal-button-container');
+  if (paymentSection) {
+    observer.observe(paymentSection);
+  } else {
+    initiateLazyLoad(); // Fallback if section isn't found
+  }
+    </script>
+    <script src="js/mpesa.js" defer></script>
 </body>
     </html>
