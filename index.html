@@ -861,7 +861,13 @@ if(window.location.hash === "#success") {
     <div class="container">
         <div class="d-flex align-items-center">
             <a href="index.html" class="d-flex align-items-center text-decoration-none">
-                <img src="g1.png" alt="Logo" style="height: 45px; width: auto;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+ <picture>
+  <source srcset="g1.avif" type="image/avif">
+  
+  <source srcset="g1.webp" type="image/webp">
+  
+  <img src="g1.png" alt="The Esthetics Hub Logo" width="150" height="150" loading="eager">
+</picture>  
                 <div class="fallback-logo" style="display:none; width:45px; height:45px; background:var(--accent-gold); color:var(--deep-ocean); border-radius:10px; align-items:center; justify-content:center; font-weight:800;">EH</div>
                 <div class="ms-3 d-none d-sm-block">
                     <h1 class="m-0" style="font-weight: 800; font-size: 1.1rem; color: white; line-height: 1;">The Esthetics Hub</h1>
