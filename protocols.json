@@ -1,0 +1,27 @@
+{
+  "system_status": "synced",
+  "last_update": "2026-05-11",
+  "version": "24.0.0",
+  "protocols": [
+    {
+      "id": "vagus-metabolic-001",
+      "title": "Vagus-Metabolic Integration",
+      "category": "Nervous System",
+      "status": "Priority",
+      "impact": "98%",
+      "link": "protocols/vagus-metabolic.html",
+      "tags": ["Metabolism", "HRV", "Glucose"],
+      "description": "Optimizing gut-brain axis for peak metabolic flexibility."
+    },
+    {
+      "id": "bio-sync-core-002",
+      "title": "Circadian Rhythm Alignment",
+      "category": "System Sync",
+      "status": "Stable",
+      "impact": "85%",
+      "link": "protocols/circadian-sync.html",
+      "tags": ["Sleep", "Light", "Biohacking"],
+      "description": "Aligning internal clocks with external environments."
+    }
+  ]
+}
