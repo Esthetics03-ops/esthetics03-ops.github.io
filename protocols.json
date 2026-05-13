@@ -1,37 +1,40 @@
 {
   "system_status": "synced",
-  "last_update": "2026-05-11",
+  "last_update": "2026-05-13",
   "version": "24.0.0",
   "protocols": [
     {
       "id": "vagus-metabolic-001",
-      "title": "Vagus-Metabolic Integration",
+      "title": "Vagus-Metabolic Patch 1.0",
       "category": "Nervous System",
       "status": "Priority",
       "impact": "98%",
       "link": "protocols/vagus-metabolic.html",
       "tags": ["Metabolism", "HRV", "Glucose"],
-      "description": "Optimizing gut-brain axis for peak metabolic flexibility."
+      "description": "Optimizing gut-brain axis for peak metabolic flexibility.",
+      "last_sync": "2026-05-11"
+    },
+    {
+      "id": "cold-sync-002",
+      "title": "Cold Sync 2.0: Thermal Loading",
+      "category": "Metabolic",
+      "status": "Stable",
+      "impact": "85%",
+      "link": "protocols/cold-sync.html",
+      "tags": ["Cold Exposure", "Fat Loss", "Recovery"],
+      "description": "Optimizing mitochondrial density through cryo-loading.",
+      "last_sync": "2026-05-13"
     },
     {
       "id": "bio-sync-core-002",
-      "title": "Circadian Rhythm Alignment",
-      "category": "System Sync",
+      "title": "Master Hub Synchronization",
+      "category": "System",
       "status": "Stable",
-      "impact": "85%",
-      "link": "protocols/circadian-sync.html",
-      "tags": ["Sleep", "Light", "Biohacking"],
-      "description": "Aligning internal clocks with external environments."
-    },
-    {
-  "id": "cold-sync-002",
-  "title": "Cold Sync 2.0: Thermal Loading",
-  "category": "Metabolic",
-  "status": "Stable",
-  "impact": "85%",
-  "link": "protocols/cold-sync.html",
-  "tags": ["Cold Exposure", "Fat Loss", "Recovery"],
-  "last_sync": "2026-05-13"
+      "impact": "100%",
+      "link": "#",
+      "tags": ["Core", "Automation"],
+      "description": "Master synchronization and system-wide automation protocols.",
+      "last_sync": "2026-05-11"
     }
   ]
 }
