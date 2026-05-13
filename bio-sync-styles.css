@@ -68,3 +68,37 @@
     display: inline-block;
     margin-top: 10px;
   }
+.system-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 25px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 30px;
+    font-family: monospace;
+    font-size: 0.8rem;
+}
+
+.label { color: #666; margin-right: 5px; }
+
+.glass-card {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.6s forwards ease-out;
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card-tag {
+    font-size: 0.6rem;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
