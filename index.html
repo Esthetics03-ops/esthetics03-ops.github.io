@@ -980,7 +980,6 @@ if(window.location.hash === "#success") {
             <i class="bi bi-phone-vibrate me-2"></i>Unlock Full Protocol
         </button>
     </div>
-<div id="protocol-grid"></div>
         
     <div class="slideshow-container">
         <div class="mySlides1 fade-anim">
@@ -1104,6 +1103,42 @@ if(window.location.hash === "#success") {
         x[slideIndex[no]-1].style.display = "block"; dots[slideIndex[no]-1].className += " active";
     }
 </script>
+
+    <div class="main-container" id="hub-root">
+    
+    <header class="system-header">
+        <div class="status-box">
+            <span class="label">SYSTEM_STATE:</span> 
+            <span id="sync-status" class="status-active">OFFLINE</span>
+        </div>
+        <div class="status-box">
+            <span class="label">NODES:</span> 
+            <span id="protocol-count">0</span>
+        </div>
+        <div class="status-box hide-mobile">
+            <span class="label">UPTIME:</span> 
+            <span id="uptime-clock">00:00:00</span>
+        </div>
+    </header>
+
+    <section class="hub-hero">
+        <div class="hero-content">
+            <h1>Bio-Sync Master Hub <span id="system-version" class="badge">v24.0.0</span></h1>
+            <p class="subtitle">Real-time metabolic protocols & neural optimization.</p>
+        </div>
+        <div class="sync-ledger">
+            <span class="label">LAST_RECONCILIATION:</span>
+            <span id="last-update">--/--/--</span>
+        </div>
+    </section>
+
+    <main id="protocol-grid" class="protocol-grid">
+        <div class="system-loader">Scanning Data Core...</div>
+    </main>
+
+    </div>
+
+    
 </div>
     <div class="logo-ticker">
     <div class="logo-track">
