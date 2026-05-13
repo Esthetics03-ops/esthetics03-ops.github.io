@@ -22,6 +22,16 @@
       "link": "protocols/circadian-sync.html",
       "tags": ["Sleep", "Light", "Biohacking"],
       "description": "Aligning internal clocks with external environments."
+    },
+    {
+  "id": "cold-sync-002",
+  "title": "Cold Sync 2.0: Thermal Loading",
+  "category": "Metabolic",
+  "status": "Stable",
+  "impact": "85%",
+  "link": "protocols/cold-sync.html",
+  "tags": ["Cold Exposure", "Fat Loss", "Recovery"],
+  "last_sync": "2026-05-13"
     }
   ]
 }
