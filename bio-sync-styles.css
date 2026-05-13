@@ -1,20 +1,51 @@
-/* Glassmorphic Variable Set */
+/* UPDATED BIO-SYNC MASTER STYLESHEET v24.0.5 */
+
 :root {
+    /* Glassmorphic Variable Set */
     --glass-bg: rgba(255, 255, 255, 0.03);
     --glass-border: rgba(255, 255, 255, 0.08);
+    --accent: #1a73e8; /* Linked to logic expansion */
     --accent-blue: #1a73e8;
     --accent-green: #00e676;
+    --success: #00e676;
     --text-primary: #ffffff;
     --text-dim: #9aa0a6;
+    --border: rgba(255, 255, 255, 0.1);
 }
 
+/* Container Scaffolding */
+.main-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* System Header - Unified Terminal Style */
+.system-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 25px;
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 40px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.8rem;
+    color: var(--text-primary);
+}
+
+.label { color: #666; margin-right: 5px; }
+.status-active { color: var(--accent-green); font-weight: bold; text-shadow: 0 0 8px rgba(0, 230, 118, 0.4); }
+
+/* Protocol Grid */
 #protocol-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 25px;
-    padding: 20px;
 }
 
+/* Glass Card - Unified Animation & Hover */
 .glass-card {
     background: var(--glass-bg);
     backdrop-filter: blur(15px);
@@ -22,15 +53,29 @@
     border: 1px solid var(--glass-border);
     border-radius: 20px;
     padding: 30px;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     position: relative;
     overflow: hidden;
+    opacity: 0; /* Initial state for logic-driven fade-in */
+    transform: translateY(20px);
+    animation: fadeInUp 0.6s forwards ease-out;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .glass-card:hover {
     transform: translateY(-8px);
     border-color: var(--accent-blue);
+    background: rgba(255, 255, 255, 0.05);
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+/* Card Typography & Status */
+.card-tag {
+    font-size: 0.6rem;
+    color: var(--accent-blue);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    font-weight: 700;
 }
 
 .status-tag {
@@ -42,22 +87,35 @@
     margin-bottom: 12px;
 }
 
-.tag {
-    font-size: 0.75rem;
-    color: var(--text-dim);
-    margin-right: 8px;
+h3 {
+    margin: 10px 0;
+    font-size: 1.4rem;
+    color: var(--text-primary);
 }
 
+.tag-list { margin-top: 15px; }
+.tag {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    margin-right: 10px;
+    background: rgba(255,255,255,0.05);
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+/* Interactive Elements */
 .progress-container {
     height: 3px;
     background: rgba(255,255,255,0.05);
     margin: 20px 0;
     border-radius: 2px;
+    overflow: hidden;
 }
 
 .progress-bar {
     height: 100%;
     background: linear-gradient(90deg, var(--accent-blue), var(--accent-green));
+    box-shadow: 0 0 10px var(--accent-blue);
 }
 
 .launch-link {
@@ -65,29 +123,16 @@
     text-decoration: none;
     font-size: 0.9rem;
     font-weight: 600;
-    display: inline-block;
-    margin-top: 10px;
-  }
-.system-header {
     display: flex;
-    justify-content: space-between;
-    padding: 15px 25px;
-    background: rgba(255,255,255,0.02);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    margin-bottom: 30px;
-    font-family: monospace;
-    font-size: 0.8rem;
+    align-items: center;
+    gap: 5px;
+    margin-top: 15px;
 }
 
-.label { color: #666; margin-right: 5px; }
+.launch-link::after { content: ' →'; transition: transform 0.2s; }
+.launch-link:hover::after { transform: translateX(5px); }
 
-.glass-card {
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeInUp 0.6s forwards ease-out;
-}
-
+/* Keyframes */
 @keyframes fadeInUp {
     to {
         opacity: 1;
@@ -95,10 +140,8 @@
     }
 }
 
-.card-tag {
-    font-size: 0.6rem;
-    color: var(--accent);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-}
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+    .system-header { flex-direction: column; gap: 10px; }
+    .main-container { padding: 1rem; }
+    }
