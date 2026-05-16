@@ -31,10 +31,10 @@
       "category": "System",
       "status": "Stable",
       "impact": "100%",
-      "link": "#",
+      "link": "protocols/bio-sync.html",
       "tags": ["Core", "Automation"],
       "description": "Master synchronization and system-wide automation protocols.",
-      "last_sync": "2026-05-11"
+      "last_sync": "2026-05-16"
     }
   ]
 }
