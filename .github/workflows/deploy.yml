@@ -50,7 +50,9 @@ jobs:
           TIMESTAMP=$(date +%s)
           # Specifically targets local assets to avoid breaking external CDN links
           for FILE in *.html; do
-            sed -i -E "s/(href|src)=\"([^\"]+\.(css|js))\"/\1=\"\2?v=$TIMESTAMP\"/g" "$FILE"
+            if [ -f "$FILE" ]; then
+              sed -i -E "s/(href|src)=\"([^\"]+\.(css|js))\"/\1=\"\2?v=$TIMESTAMP\"/g" "$FILE"
+            fi
           done
           echo "Cache busting complete. Version: $TIMESTAMP"
 
