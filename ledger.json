@@ -1,0 +1,19 @@
+{
+  "transactions": [
+    {
+      "id": "TXN-1779445123456-128",
+      "timestamp": "2026-05-22T16:10:00.000Z",
+      "type": "AdSense_Simulated",
+      "amount": 884.53,
+      "status": "processed",
+      "metadata": {
+        "source": "Google_Ireland",
+        "currency": "USD"
+      }
+    }
+  ],
+  "metrics": {
+    "total_ingested": 1,
+    "last_update": "2026-05-22T16:10:00.000Z"
+  }
+}
