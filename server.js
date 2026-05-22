@@ -1,81 +1,95 @@
 const express = require('express');
+const cors = require('cors');
+const fs = require('fs');
+const fsPromises = require('fs').promises;
+const path = require('path');
+
 const app = express();
+const PORT = process.env.PORT || 3000;
+const LEDGER_FILE = path.join(__dirname, 'ledger.json');
 
-// UNBLOCKER MIDDLEWARE
-app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "https://esthetics03-ops.github.io");
-    res.header("Access-Control-Allow-Methods", "GET, OPTIONS");
-    res.header("Access-Control-Allow-Headers", "Content-Type");
-    if (req.method === 'OPTIONS') return res.sendStatus(200);
-    next();
-});
+// 1. GLOBAL MIDDLEWARE
+app.use(cors({
+    origin: 'https://esthetics03-ops.github.io',
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
-// HEALTH CHECK (Visit this in your browser to test)
-app.get('/health', (req, res) => res.send("API is Live and Unblocked"));
+app.use(express.json()); // Native Express body parser replacing 'body-parser' package
 
-// THE DATA ENDPOINT
-app.get('/monetisation', (req, res) => {
-    res.json({
-        adsense: 1.25, // Replace with your logic
-        affiliate: 5.50,
-        donations: 0.00,
-        total: 6.75
-    });
-});
+// Initialize file synchronously ONCE during startup boot sequence (safe to block here)
+if (!fs.existsSync(LEDGER_FILE)) {
+    fs.writeFileSync(LEDGER_FILE, JSON.stringify({ transactions: [], metrics: {} }, null, 2));
+}
 
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => console.log(`Server running on ${PORT}`));
+// 2. PRODUCTION API ENDPOINTS
 
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => console.log(`Server optimized on port ${PORT}`));
+/**
+ * POST Endpoint: Ingests traffic metrics or monetization payloads asynchronously
+ */
+app.post('/api/v1/push-data', async (req, res) => {
+    try {
+        const { timestamp, type, amount, status, metadata } = req.body;
 
-// This MUST be placed BEFORE your app.get routes
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'https://esthetics03-ops.github.io');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-    next();
-});
+        // Strict validation checks
+        if (!type || amount === undefined || isNaN(parseFloat(amount))) {
+            return res.status(400).json({ 
+                success: false, 
+                message: "Validation Error: 'type' string and numeric 'amount' are mandatory." 
+            });
+        }
 
-// Add this middleware to your server.js
-app.use((req, res, next) => {
-    // 1. Allow your specific GitHub domain
-    res.header("Access-Control-Allow-Origin", "https://esthetics03-ops.github.io");
-    
-    // 2. Allow the standard methods
-    res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-    
-    // 3. Allow standard headers
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        // ASYNCHRONOUS I/O: Non-blocking read operation
+        const rawData = await fsPromises.readFile(LEDGER_FILE, 'utf8');
+        const fileData = JSON.parse(rawData);
 
-    // 4. Handle "Preflight" requests (Browsers send an OPTIONS request first)
-    if (req.method === 'OPTIONS') {
-        return res.sendStatus(200);
+        // Normalize tracking parameters
+        const currentRecord = {
+            id: `TXN-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+            timestamp: timestamp || new Date().toISOString(),
+            type: type, // e.g., "AdSense_Simulated", "BioSync_Conversion"
+            amount: parseFloat(amount),
+            status: status || "processed",
+            metadata: metadata || {}
+        };
+
+        // Inject new payload into transaction history arrays
+        fileData.transactions.push(currentRecord);
+
+        // ASYNCHRONOUS I/O: Non-blocking write operation
+        await fsPromises.writeFile(LEDGER_FILE, JSON.stringify(fileData, null, 2));
+
+        console.log(`[DATA INGESTED] ${currentRecord.id} | Amount: $${currentRecord.amount}`);
+
+        return res.status(200).json({
+            success: true,
+            message: "Data pipeline ingestion complete.",
+            recordId: currentRecord.id
+        });
+
+    } catch (error) {
+        console.error("🚨 Pipeline Ingestion Core Error:", error);
+        return res.status(500).json({ success: false, message: "Internal server error during data write." });
     }
-    
-    next();
-});
-const express = require('express');
-const app = express();
-const port = process.env.PORT || 8080;
-
-app.use((req, res, next) => {
-    // FIX: Explicitly allowing your GitHub Pages domain
-    res.header("Access-Control-Allow-Origin", "https://esthetics03-ops.github.io");
-    res.header("Access-Control-Allow-Methods", "GET, OPTIONS");
-    res.header("Access-Control-Allow-Headers", "Content-Type");
-    
-    if (req.method === 'OPTIONS') return res.sendStatus(200);
-    next();
 });
 
-app.get('/monetisation', (req, res) => {
-    res.json({
-        adsense: 0.00,
-        affiliate: 0.00,
-        donations: 0.00,
-        total: 0.00
-    });
+/**
+ * GET Endpoint: Reads and returns the aggregated system ledger data
+ */
+app.get('/api/v1/ledger', async (req, res) => {
+    try {
+        // Non-blocking file fetch
+        const rawData = await fsPromises.readFile(LEDGER_FILE, 'utf8');
+        const fileData = JSON.parse(rawData);
+        res.status(200).json(fileData);
+    } catch (error) {
+        console.error("🚨 Ledger Retrieval Error:", error);
+        res.status(500).json({ success: false, message: "Error parsing the tracking ledger." });
+    }
 });
 
-app.listen(port, () => console.log(`API running on port ${port}`));
+// 3. EXECUTE SYSTEM ENGINE
+app.listen(PORT, () => {
+    console.log(`🚀 Automated Data Engine live on port ${PORT}`);
+    console.log(`📊 Local system ledger database linked at: ${LEDGER_FILE}`);
+});
