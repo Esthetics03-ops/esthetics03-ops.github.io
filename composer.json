@@ -12,7 +12,8 @@
         "monolog/monolog": "^3.5",
         "google/apiclient": "^2.15",
         "resend/resend-php": "^0.10.0",
-        "starkbank/ecdsa": "^2.0"
+        "starkbank/ecdsa": "^2.0",
+        "google/cloud-functions-framework": "^1.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^10.5",
@@ -38,6 +39,6 @@
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
-        "start": "php -S localhost:8000 -t public"
+        "start": "php -S 0.0.0.0:${PORT:-8080} vendor/google/cloud-functions-framework/router.php"
     }
 }
