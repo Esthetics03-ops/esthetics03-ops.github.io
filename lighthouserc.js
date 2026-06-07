@@ -8,6 +8,13 @@ module.exports = {
         throttlingMethod: 'provided' 
       }
     },
+    assert: {
+      preset: 'lighthouse:recommended',
+      assertions: {
+        'categories:performance': ['error', { minScore: 0.85 }],
+        'categories:pwa': 'off' 
+      }
+    },
     upload: { 
       target: 'temporary-public-storage' 
     }
