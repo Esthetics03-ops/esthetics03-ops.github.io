@@ -3,8 +3,13 @@ module.exports = {
     collect: {
       url: ['https://esthetics03-ops.github.io'],
       numberOfRuns: 1,
-      settings: { emulatedFormFactor: 'mobile', throttlingMethod: 'provided' }
+      settings: { 
+        emulatedFormFactor: 'mobile', 
+        throttlingMethod: 'provided' 
+      }
     },
-    upload: { target: 'temporary-public-storage' }
+    upload: { 
+      target: 'temporary-public-storage' 
+    }
   }
 };
