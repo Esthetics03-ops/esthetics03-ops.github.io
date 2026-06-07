@@ -4,6 +4,12 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch: # Allows manual trigger for debugging
+
+# Prevents multiple concurrent deployments from corrupting your live site
+concurrency:
+  group: "pages-deploy"
+  cancel-in-progress: true
 
 permissions:
   contents: write
@@ -15,40 +21,33 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      # 1️⃣ Checkout repository (v4 Upgrade for performance)
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      # 2️⃣ Setup Node.js (v4 for LTS compatibility)
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20 # Upgraded to Node 20 for faster sharp processing
+          node-version: 20
 
-      # 3️⃣ Enterprise Node Verification
       - name: Verify Bio-Sync Node
         run: |
           echo "Verifying Cloud Project: amiable-crane-465217-j9"
           echo "Status: 0% Error Rate Handshake Initialized"
           echo "Region: Africa/Nairobi"
 
-      # 4️⃣ Install dependencies (Clean Install)
       - name: Install dependencies
         run: npm install sharp @lhci/cli --prefer-offline --no-audit
 
-      # 5️⃣ Optimization Engine (Images & Sitemap)
       - name: Run Optimization Scripts
         run: |
           node scripts/convert-images.js || echo "Notice: scripts/convert-images.js not found, skipping..."
           node scripts/generate-sitemap.js || echo "Notice: scripts/generate-sitemap.js not found, skipping..."
 
-      # 6️⃣ Cache-busting for CSS/JS
       - name: Asset Cache Busting
         run: |
           TIMESTAMP=$(date +%s)
-          # Specifically targets local assets to avoid breaking external CDN links
           for FILE in *.html; do
             if [ -f "$FILE" ]; then
               sed -i -E "s/(href|src)=\"([^\"]+\.(css|js))\"/\1=\"\2?v=$TIMESTAMP\"/g" "$FILE"
@@ -56,12 +55,10 @@ jobs:
           done
           echo "Cache busting complete. Version: $TIMESTAMP"
 
-      # 7️⃣ Lighthouse Performance Test (Scoped to Enterprise Hub)
       - name: Lighthouse Performance Audit
         run: |
           lhci autorun --upload.target=temporary-public-storage --config=lighthouserc.js || echo "Audit complete with warnings."
 
-      # 8️⃣ Deploy to GitHub Pages (Upgraded to v4 Actions)
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
