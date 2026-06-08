@@ -1,0 +1,97 @@
+name: Deploy to Cloud Run
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - 'deploy.sh'
+      - '.github/workflows/deploy-cloud-run.yml'
+      - 'src/**'
+      - 'public/**'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - staging
+
+env:
+  PROJECT_ID: amiable-crane-465217-j9
+  SERVICE_NAME: mpesa-callback
+  REGION: europe-west2
+  RUNTIME: php83
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: ${{ env.PROJECT_ID }}
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+          service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
+
+      - name: Configure gcloud
+        run: |
+          gcloud config set project ${{ env.PROJECT_ID }}
+          gcloud config set run/region ${{ env.REGION }}
+
+      - name: Make deploy script executable
+        run: chmod +x deploy.sh
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy ${{ env.SERVICE_NAME }} \
+            --project=${{ env.PROJECT_ID }} \
+            --source . \
+            --region ${{ env.REGION }} \
+            --allow-unauthenticated \
+            --runtime ${{ env.RUNTIME }} \
+            --set-secrets CALLBACK_SECRET=mpesa-callback-secret:latest \
+            --service-account=amiable-crane-465217-j9-compute@developer.gserviceaccount.com \
+            --quiet
+
+      - name: Get Service URL
+        run: |
+          SERVICE_URL=$(gcloud run services describe ${{ env.SERVICE_NAME }} \
+            --region=${{ env.REGION }} \
+            --format='value(status.url)')
+          echo "Service URL: $SERVICE_URL"
+          echo "SERVICE_URL=$SERVICE_URL" >> $GITHUB_ENV
+
+      - name: Deployment Summary
+        run: |
+          echo "✅ Deployment Complete!"
+          echo "Service: ${{ env.SERVICE_NAME }}"
+          echo "Project: ${{ env.PROJECT_ID }}"
+          echo "Region: ${{ env.REGION }}"
+          echo "URL: ${{ env.SERVICE_URL }}"
+
+      - name: Notify Deployment
+        if: success()
+        run: |
+          echo "🚀 M-Pesa Callback Service deployed successfully to Cloud Run"
+
+      - name: Notify Deployment Failure
+        if: failure()
+        run: |
+          echo "❌ Deployment failed. Check the logs for details."
