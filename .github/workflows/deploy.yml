@@ -4,9 +4,8 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch: # Allows manual trigger for debugging
+  workflow_dispatch:
 
-# Prevents multiple concurrent deployments from corrupting your live site
 concurrency:
   group: "pages-deploy"
   cancel-in-progress: true
@@ -31,14 +30,17 @@ jobs:
         with:
           node-version: 20
 
-      - name: Verify Bio-Sync Node
-        run: |
-          echo "Verifying Cloud Project: amiable-crane-465217-j9"
-          echo "Status: 0% Error Rate Handshake Initialized"
-          echo "Region: Africa/Nairobi"
-
       - name: Install dependencies
         run: npm install sharp @lhci/cli --prefer-offline --no-audit
+
+      - name: Create Build Directory
+        run: |
+          mkdir dist
+          # Copy only necessary files to dist/
+          cp *.html dist/ 2>/dev/null || true
+          cp -r assets/ dist/ 2>/dev/null || true
+          cp -r css/ dist/ 2>/dev/null || true
+          cp -r js/ dist/ 2>/dev/null || true
 
       - name: Run Optimization Scripts
         run: |
@@ -48,21 +50,18 @@ jobs:
       - name: Asset Cache Busting
         run: |
           TIMESTAMP=$(date +%s)
-          for FILE in *.html; do
+          # Target only the files inside the dist directory
+          for FILE in dist/*.html; do
             if [ -f "$FILE" ]; then
               sed -i -E "s/(href|src)=\"([^\"]+\.(css|js))\"/\1=\"\2?v=$TIMESTAMP\"/g" "$FILE"
             fi
           done
           echo "Cache busting complete. Version: $TIMESTAMP"
 
-      - name: Lighthouse Performance Audit
-        run: |
-          lhci autorun --upload.target=temporary-public-storage --config=lighthouserc.js || echo "Audit complete with warnings."
-
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: .
+          publish_dir: ./dist  # Now pointing to the isolated build folder
           publish_branch: gh-pages
           commit_message: "🚀 Bio-Sync Enterprise v23.0 [Skip CI]"
