@@ -1,4 +1,4 @@
-readme_content = """# 🌿 The Esthetics Hub | Bio-Sync Enterprise v23.0
+## 🌿 The Esthetics Hub | Bio-Sync Enterprise v23.0
 
 [![Lighthouse Audit](https://github.com/esthetics03-ops/esthetics03-ops.github.io/actions/workflows/bio-sync-orchestrator.yml/badge.svg)](https://github.com/esthetics03-ops/esthetics03-ops.github.io/actions)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/esthetics03-ops/esthetics03-ops.github.io/graphs/commit-activity)
