@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # --- Deployment Script for The Esthetics Hub ---
-# Purpose: Deploy Esthetics Tracker v2
 # Based on project: amiable-crane-465217-j9
 # Reference: Screenshot_20260608-173308.png (GitHub Dashboard Context)
 
@@ -11,7 +10,6 @@ REGION="europe-west2"
 SECRET_NAME="mpesa-callback-secret"
 SERVICE_ACCOUNT="amiable-crane-465217-j9-compute@developer.gserviceaccount.com"
 
-echo "Deploying Esthetics Tracker v2..."
 echo "Starting deployment for $PROJECT_ID..."
 
 # 1. Set the project
