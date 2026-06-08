@@ -1,0 +1,32 @@
+name: Deploy Esthetics Hub
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch: # Allows you to trigger manually for debugging
+
+jobs:
+  # 1. Core Deployment - High Priority
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Build and Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: . # Replace with your build folder if using Jekyll/Hugo
+          clean: true
+
+  # 2. External Sync - Decoupled (Runs separately to prevent timeouts)
+  sync-external-services:
+    needs: build-and-deploy
+    if: success()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update AdSense & GCP Dashboard
+        run: |
+          echo "Triggering external sync..."
+          # Insert your specific sync command here
