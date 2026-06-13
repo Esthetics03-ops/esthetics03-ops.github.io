@@ -1646,5 +1646,32 @@ window.onload = () => {
   }
     </script>
     <script src="js/mpesa.js" defer></script>
+    <!-- Place this near the bottom of your HTML file -->
+<script>
+  async function fetchPaymentStatus() {
+      try {
+          const response = await fetch('./data/payment_status.json?cache-bust=' + Date.now());
+          const data = await response.json();
+          
+          document.getElementById('payment-ref').innerText = data.reference;
+          document.getElementById('payment-amount').innerText = `$${data.amount}`;
+          
+          const statusBadge = document.getElementById('payment-status');
+          statusBadge.innerText = data.status;
+          
+          if (data.status === 'HOLD') {
+              statusBadge.style.backgroundColor = '#ff4d4d';
+              document.getElementById('action-required-panel').style.display = 'block';
+          } else {
+              statusBadge.style.backgroundColor = '#2ecc71';
+              document.getElementById('action-required-panel').style.display = 'none';
+          }
+      } catch (error) {
+          console.error("Failed to stream payment logging metrics:", error);
+      }
+  }
+
+  window.addEventListener('DOMContentLoaded', fetchPaymentStatus);
+</script>
 </body>
 </html>
