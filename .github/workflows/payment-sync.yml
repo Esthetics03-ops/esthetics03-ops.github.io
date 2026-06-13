@@ -1,0 +1,38 @@
+name: Automated Revenue & Payment Tracker
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs every day at midnight UTC
+  workflow_dispatch: # Allows you to trigger it manually anytime
+
+jobs:
+  sync-metrics:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Install Dependencies
+      run: |
+        pip install requests
+
+    - name: Run Tracker Script
+      env:
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        # GOOGLE_PAYMENTS_API_KEY: ${{ secrets.GOOGLE_PAYMENTS_API_KEY }}
+      run: python track_payments.py
+
+    - name: Commit and Push Updates to GitHub Pages
+      run: |
+        git config --global user.name "Bio-Sync Automations"
+        git config --global user.email "gkutosi95@gmail.com"
+        git add data/payment_status.json
+        git diff-index --quiet HEAD || git commit -m "sys-cron: auto-update payment metrics [skip ci]"
+        git push
