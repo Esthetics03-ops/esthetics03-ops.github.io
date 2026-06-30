@@ -1673,5 +1673,69 @@ window.onload = () => {
 
   window.addEventListener('DOMContentLoaded', fetchPaymentStatus);
 </script>
+
+<!-- ==========================================
+     GOOGLE TAG & ADSENSE INTEGRATION FRAMEWORK
+     ========================================== -->
+<!-- 1. Google AdSense Automated Monetization Script -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1959507280210179"
+     crossorigin="anonymous"></script>
+
+<!-- 2. Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PSW1MY7HB4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  // Establish operational baselines for your tracking identities
+  gtag('config', 'G-PSW1MY7HB4', { 'adsense_linker': true });
+  gtag('config', 'G-QCX3G9KSPC'); 
+</script>
+
+<!-- 3. Dynamic DOM Conversion Event Listeners -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    
+    // Target the primary M-PESA payment container for premium optimization
+    const mpesaSubmitForm = document.querySelector('form[action*="mpesa"]') || document.querySelector('form');
+    const paymentButton = document.querySelector('button[type="submit"]') || document.querySelector('#mpesa-trigger');
+
+    if (paymentButton || mpesaSubmitForm) {
+        const primaryTrigger = paymentButton || mpesaSubmitForm;
+        
+        primaryTrigger.addEventListener('click', function() {
+            if (typeof gtag !== 'undefined') {
+                // Primary Conversion Action for Performance Max
+                gtag('event', 'conversion', {
+                    'send_to': 'G-PSW1MY7HB4', 
+                    'value': 1.0,
+                    'currency': 'KES'
+                });
+                console.log('⚡ M-PESA conversion event successfully dispatched.');
+            }
+        });
+    }
+
+    // Lead Capture Target: The "14-Day Bio-Sync Reset" sign-up grid
+    const signupInput = document.querySelector('input[type="email"]');
+    if (signupInput) {
+        const leadForm = signupInput.closest('form');
+        if (leadForm) {
+            leadForm.addEventListener('submit', function() {
+                if (typeof gtag !== 'undefined') {
+                    // Secondary optimization metric for cold ad traffic tracking
+                    gtag('event', 'generate_lead', {
+                        'send_to': 'G-PSW1MY7HB4',
+                        'value': 1.0,
+                        'currency': 'KES'
+                    });
+                    console.log('📬 Lead generation tracking object recorded.');
+                }
+            });
+        }
+    }
+});
+</script>
 </body>
 </html>
