@@ -1737,5 +1737,68 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+
+<!-- =======================================================
+     THE ESTHETICS HUB - PRODUCTION TAG SUITE (2026 DEPLOY)
+     ======================================================= -->
+
+<!-- 1. Google AdSense Global Monetization -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1959507280210179"
+     crossorigin="anonymous"></script>
+
+<!-- 2. Global Site Tag (gtag.js) Infrastructure -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PSW1MY7HB4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  // Link across both measurement frames to clean up Performance Max attribution gaps
+  gtag('config', 'G-PSW1MY7HB4', { 'adsense_linker': true });
+  gtag('config', 'G-QCX3G9KSPC'); 
+</script>
+
+<!-- 3. Live UI Event Listeners -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    
+    // Target 1: M-PESA Form / Button Actions (Premium Checkout Conversion)
+    const paymentForm = document.querySelector('form[action*="mpesa"]') || document.querySelector('form');
+    const checkoutButton = document.querySelector('button[type="submit"]') || document.querySelector('#mpesa-trigger');
+
+    if (checkoutButton || paymentForm) {
+        const targetElement = checkoutButton || paymentForm;
+        
+        targetElement.addEventListener('click', function() {
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'conversion', {
+                    'send_to': 'G-PSW1MY7HB4', 
+                    'value': 1.0,
+                    'currency': 'KES'
+                });
+                console.log('✔ Google Ads: M-PESA conversion triggered.');
+            }
+        });
+    }
+
+    // Target 2: 14-Day Bio-Sync Reset Sign-Up Form (Lead Capture Event)
+    const emailField = document.querySelector('input[type="email"]');
+    if (emailField) {
+        const structuralForm = emailField.closest('form');
+        if (structuralForm) {
+            structuralForm.addEventListener('submit', function() {
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'generate_lead', {
+                        'send_to': 'G-PSW1MY7HB4',
+                        'value': 1.0,
+                        'currency': 'KES'
+                    });
+                    console.log('✔ Google Ads: Lead event captured.');
+                }
+            });
+        }
+    }
+});
+</script>
 </body>
 </html>
