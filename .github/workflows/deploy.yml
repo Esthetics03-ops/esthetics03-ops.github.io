@@ -11,13 +11,16 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: write
-  pages: write
+  contents: read     # Safe practice when deploying natively
+  pages: write       # Essential for injecting artifacts directly into Pages
   id-token: write
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     
     steps:
       - name: Checkout repository
@@ -35,12 +38,12 @@ jobs:
 
       - name: Create Build Directory
         run: |
-          mkdir dist
-          # Copy only necessary files to dist/
+          mkdir -p dist
+          # If your files live in subfolders, make sure to adjust these copy commands
           cp *.html dist/ 2>/dev/null || true
-          cp -r assets/ dist/ 2>/dev/null || true
-          cp -r css/ dist/ 2>/dev/null || true
-          cp -r js/ dist/ 2>/dev/null || true
+          cp -r assets dist/ 2>/dev/null || true
+          cp -r css dist/ 2>/dev/null || true
+          cp -r js dist/ 2>/dev/null || true
 
       - name: Run Optimization Scripts
         run: |
@@ -50,7 +53,7 @@ jobs:
       - name: Asset Cache Busting
         run: |
           TIMESTAMP=$(date +%s)
-          # Target only the files inside the dist directory
+          shopt -s nullglob # Prevents errors if no files match
           for FILE in dist/*.html; do
             if [ -f "$FILE" ]; then
               sed -i -E "s/(href|src)=\"([^\"]+\.(css|js))\"/\1=\"\2?v=$TIMESTAMP\"/g" "$FILE"
@@ -58,10 +61,11 @@ jobs:
           done
           echo "Cache busting complete. Version: $TIMESTAMP"
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Upload Artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist  # Now pointing to the isolated build folder
-          publish_branch: gh-pages
-          commit_message: "🚀 Bio-Sync Enterprise v23.0 [Skip CI]"
+          path: './dist'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
