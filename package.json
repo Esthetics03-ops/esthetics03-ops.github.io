@@ -2,34 +2,12 @@
   "name": "esthetics-api",
   "version": "1.0.0",
   "main": "server.js",
-  "scripts": { "start": "node server.js" },
-  "dependencies": { "express": "^4.18.2" }
-}
-
-{
-  "name": "revenue-dashboard",
-  "version": "1.0.0",
-  "type": "module",
-  "scripts": {
-    "start": "node server.js"
+  "scripts": { 
+    "start": "node server.js",
+    "fix-ads": "node fix-campaign.js"
   },
-  "dependencies": {
-    "express": "^4.18.2",
-    "node-fetch": "^3.3.1"
+  "dependencies": { 
+    "@google-ads/google-ads-api": "^17.0.0",
+    "express": "^4.18.2" 
   }
 }
-{
-  "scripts": {
-    "build": "jekyll build",
-    "deploy": "gh-pages -d _site"
-  }
-}
-{
-  "scripts": {
-    "lighthouse": "lhci autorun --config=lighthouse.config.js"
-  },
-  "devDependencies": {
-    "@lhci/cli": "^0.9.0"
-  }
-}
-
