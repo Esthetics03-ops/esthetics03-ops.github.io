@@ -34,11 +34,11 @@ The Hub operates on a high-performance, serverless-first infrastructure:
 ## 📂 Project Structure
 
 ```text
-├── .github/workflows/       # CI/CD Orchestration (Lighthouse + Sync)
-├── src/                     # Core Business Logic & Payment Handlers
-│   ├── Payments/            # M-Pesa Callback & Daraja logic
-│   └── Database/            # Data orchestration models
-├── database/                # SQLite storage for transaction telemetry
-├── public/                  # Frontend assets & deployment entry
-├── index.php                # Cloud Run entry point
-└── index.html               # Main Wellness Hub entry point
+my-project/
+├── data/
+│   └── database.db
+├── scripts/
+│   └── drive_sync.py
+├── .gitignore
+├── requirements.txt
+└── README.md
