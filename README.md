@@ -33,12 +33,4 @@ The Hub operates on a high-performance, serverless-first infrastructure:
 
 ## 📂 Project Structure
 
-```text
-my-project/
-├── data/
-│   └── database.db
-├── scripts/
-│   └── drive_sync.py
-├── .gitignore
-├── requirements.txt
-└── README.md
+The repository contains frontend assets, automation workflows, and deployment configuration for the Hub's ecosystem.
