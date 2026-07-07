@@ -1060,19 +1060,25 @@ if(window.location.hash === "#success") {
                 <h4 class="fw-bold">Bio-Sync Premium</h4>
                 <p class="text-white-50 small">Enter your number to receive an STK Push prompt</p>
             </div>
+            
             <form id="mpesa-form">
-                <div class="mb-3">
-                    <label class="form-label small text-muted">Phone Number (254...)</label>
-                    <input type="text" id="phone" class="form-control bg-dark border-secondary text-white" placeholder="254712345678" required>
-                </div>
-                <div class="mb-4">
-                    <label class="form-label small text-muted">Amount (KES)</label>
-                    <input type="text" class="form-control bg-dark border-secondary text-white" value="1,500" readonly>
-                </div>
-                <button type="submit" class="btn mpesa-btn w-100" id="pay-btn">
-                    <span id="btn-text">Send Payment Prompt</span>
-                </button>
-            </form>
+    <!-- Phone Number Input Group -->
+    <div class="mb-3">
+        <label for="phone" class="form-label small text-muted">Phone Number (254...)</label>
+        <input type="tel" id="phone" name="phone" class="form-control bg-dark border-secondary text-white" placeholder="254712345678" required aria-required="true">
+    </div>
+    
+    <!-- Amount Input Group (Fixed Explicitly for Accessibility) -->
+    <div class="mb-4">
+        <label for="amount" class="form-label small text-muted">Amount (KES)</label>
+        <input type="text" id="amount" name="amount" class="form-control bg-dark border-secondary text-white" value="1,500" readonly aria-readonly="true">
+    </div>
+    
+    <!-- Submit Button -->
+    <button type="submit" class="btn mpesa-btn w-100" id="pay-btn">
+        <span id="btn-text">Send Payment Prompt</span>
+    </button>
+</form>
         </div>
     </div>
 
@@ -1093,23 +1099,39 @@ if(window.location.hash === "#success") {
     });
 
     // M-PESA Handler
-    document.getElementById('mpesa-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const btn = document.getElementById('pay-btn');
-        const phone = document.getElementById('phone').value;
-        
-        btn.disabled = true;
-        btn.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Processing...`;
+document.getElementById('mpesa-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const btn = document.getElementById('pay-btn');
+    const rawPhone = document.getElementById('phone').value.trim();
+    
+    // 1. Sanitize the phone number input
+    let sanitizedPhone = rawPhone.replace(/[\s\-+]/g, ''); // Remove spaces, hyphens, and plus signs
+    
+    if (sanitizedPhone.startsWith('0')) {
+        sanitizedPhone = '254' + sanitizedPhone.slice(1); // Convert 07... or 01... to 2547...
+    }
+    
+    // 2. Quick Validation Check
+    // Safaricom phone numbers in 254XXXXXXXXX format are exactly 12 characters long
+    if (sanitizedPhone.length !== 12 || !/^254/.test(sanitizedPhone)) {
+        alert("Please enter a valid Safaricom phone number (e.g., 0712345678 or 254712345678)");
+        return;
+    }
+    
+    // 3. UI Loading State
+    btn.disabled = true;
+    btn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...`;
 
-        // This is where you would call your actual backend (e.g., safaricom-lipa-na-mpesa.php)
-        console.log("Initiating STK Push for: " + phone);
-        
-        setTimeout(() => {
-            alert("STK Push sent! Please check your phone to enter your M-PESA PIN.");
-            btn.disabled = false;
-            btn.innerHTML = "Send Payment Prompt";
-        }, 2000);
-    });
+    // 4. API / Simulation Trigger
+    console.log("Initiating STK Push for: " + sanitizedPhone);
+    
+    setTimeout(() => {
+        alert("STK Push sent! Please check your phone to enter your M-PESA PIN.");
+        btn.disabled = false;
+        btn.innerHTML = "Send Payment Prompt";
+    }, 2000);
+});
 
     // Weather Logic & Slide Logic (Omitted for brevity, use existing)
     async function fetchLiveWeather() {
