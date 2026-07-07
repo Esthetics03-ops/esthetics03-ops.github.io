@@ -396,15 +396,25 @@ document.addEventListener('DOMContentLoaded', function () {
     <!-- Preload Critical Resources for Faster Loading -->
   <link rel="preload" href="style-fixes.css" as="style" />
   <link rel="preload" href="performance-optimiser.js" as="script" />
-    <!-- Google Analytics (GA4) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QCX3G9KSPC"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-QCX3G9KSPC');
-    gtag('config', 'G-PSW1MY7HB4');
-  </script>
+
+<!-- Combined Google Tag Manager (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-QCX3G9KSPC"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  // Configure first Measurement ID
+  gtag('config', 'G-QCX3G9KSPC');
+  
+  // Configure second Measurement ID without reloading the script
+  gtag('config', 'G-PSW1MY7HB4');
+</script>
+
+<!-- Google AdSense (Asynchronous) -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1959507280210179"
+     crossorigin="anonymous"></script>
+   
     <!-- Preconnect for Fonts & Performance -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
