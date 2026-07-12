@@ -1039,18 +1039,18 @@ if(window.location.hash === "#success") {
 
         <div class="mySlides1 fade-anim">
             <div style="background: #0f172a; height: 400px; display: flex; align-items: center; justify-content: center; gap: 1.5rem;">
-                <div class="widget-box p-4 rounded-4 bg-white bg-opacity-5 border border-white border-opacity-10">
+                <div class="widget-box p-4 rounded-4 bg-white border border-white border-opacity-10 text-center">
     <i id="weather-icon" class="bi bi-cloud-sun fs-1 text-info"></i>
-    <div id="temp-val" class="fs-3 fw-bold mt-2">
-        <span class="shimmer">Loading...</span>
+    <div id="temp-val" class="fs-3 fw-bold mt-2 text-dark">
+        <span class="placeholder-glow"><span class="placeholder col-6 bg-secondary opacity-25"></span></span>
     </div>
-    <div id="loc-label" class="small opacity-50">Nairobi Bio-Climate</div>
-   </div>
+    <div id="loc-label" class="small text-muted fw-semibold">Nairobi Bio-Climate</div>
+</div>
 
-<div class="widget-box p-4 rounded-4 bg-white bg-opacity-5 border border-white border-opacity-10">
+<div class="widget-box p-4 rounded-4 bg-white border border-white border-opacity-10 text-center">
     <i class="bi bi-clock fs-1" style="color: var(--accent-gold);"></i>
-    <div id="time-val" class="fs-4 fw-bold mt-2">00:00:00</div>
-    <div class="small opacity-50">Local Time (EAT)</div>
+    <div id="time-val" class="fs-4 fw-bold mt-2 text-dark">--:--:--</div>
+    <div class="small text-muted fw-semibold">Local Time (EAT)</div>
 </div>
             </div>
         </div>
