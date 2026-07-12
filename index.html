@@ -1040,15 +1040,18 @@ if(window.location.hash === "#success") {
         <div class="mySlides1 fade-anim">
             <div style="background: #0f172a; height: 400px; display: flex; align-items: center; justify-content: center; gap: 1.5rem;">
                 <div class="widget-box p-4 rounded-4 bg-white bg-opacity-5 border border-white border-opacity-10">
-                    <i class="bi bi-cloud-sun fs-1 text-info"></i>
-                    <div id="temp-val" class="fs-3 fw-bold mt-2"><span class="shimmer"></span></div>
-                    <div id="loc-label" class="small opacity-50">Local Bio-Climate</div>
-                </div>
-                <div class="widget-box p-4 rounded-4 bg-white bg-opacity-5 border border-white border-opacity-10">
-                    <i class="bi bi-calendar-check fs-1" style="color: var(--accent-gold);"></i>
-                    <div class="fs-4 fw-bold mt-2">14:00</div>
-                    <div class="small opacity-50">Next Sync</div>
-                </div>
+    <i id="weather-icon" class="bi bi-cloud-sun fs-1 text-info"></i>
+    <div id="temp-val" class="fs-3 fw-bold mt-2">
+        <span class="shimmer">Loading...</span>
+    </div>
+    <div id="loc-label" class="small opacity-50">Nairobi Bio-Climate</div>
+   </div>
+
+<div class="widget-box p-4 rounded-4 bg-white bg-opacity-5 border border-white border-opacity-10">
+    <i class="bi bi-clock fs-1" style="color: var(--accent-gold);"></i>
+    <div id="time-val" class="fs-4 fw-bold mt-2">00:00:00</div>
+    <div class="small opacity-50">Local Time (EAT)</div>
+</div>
             </div>
         </div>
     </div>
@@ -1096,16 +1099,76 @@ if(window.location.hash === "#success") {
 <script>
     // Configuration & Weather (Same as previous)
     const API_KEY = '07331b0af5d56a31ed98a6a3298f8cbc'; 
-    let slideIndex = [1];
-    let slideId = ["mySlides1"];
+const LAT = '-1.2921'; // Nairobi Latitude
+const LON = '36.8219'; // Nairobi Longitude
 
-    document.addEventListener('DOMContentLoaded', () => {
-        AOS.init({ duration: 1000, once: true });
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize your existing carousel & animations
+    if (typeof AOS !== 'undefined') AOS.init({ duration: 1000, once: true });
+    if (typeof showSlides === 'function') {
         showSlides(1, 0);
-        fetchLiveWeather();
         setInterval(() => plusSlides(1, 0), 6000);
-    });
+    }
+    
+    // Start Live Stream Components
+    fetchLiveWeather();
+    startLiveClock();
+    
+    // Refresh weather data every 10 minutes to protect API limits
+    setInterval(fetchLiveWeather, 600000);
+});
 
+// Weather API Streaming Engine
+async function fetchLiveWeather() {
+    const tempContainer = document.getElementById('temp-val');
+    const weatherIcon = document.getElementById('weather-icon');
+    
+    try {
+        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${LAT}&lon=${LON}&units=metric&appid=${API_KEY}`);
+        if (!response.ok) throw new Error('Network response failure');
+        
+        const data = await response.json();
+        const currentTemp = Math.round(data.main.temp);
+        const conditionCode = data.weather[0].id;
+        
+        // Stream directly into the element, stripping the placeholder shimmer class
+        tempContainer.innerHTML = `${currentTemp}°C`;
+        
+        // Dynamically update standard Bootstrap Icons based on live conditions
+        if (weatherIcon) {
+            if (conditionCode >= 200 && conditionCode < 600) {
+                weatherIcon.className = "bi bi-cloud-rain-heavy fs-1 text-primary";
+            } else if (conditionCode >= 801 && conditionCode <= 804) {
+                weatherIcon.className = "bi bi-cloud-sun fs-1 text-info";
+            } else {
+                weatherIcon.className = "bi bi-sun fs-1 text-warning";
+            }
+        }
+    } catch (error) {
+        console.error('Weather Sync Error:', error);
+        tempContainer.innerHTML = `<span class="small text-danger">Offline</span>`;
+    }
+}
+
+// 1-Second Precision Clock Stream
+function startLiveClock() {
+    const timeContainer = document.getElementById('time-val');
+    
+    function updateClock() {
+        const now = new Date();
+        // Format to exact 24h clock string (HH:MM:SS)
+        const timeString = now.toLocaleTimeString('en-US', { 
+            hour12: false, 
+            hour: '2-digit', 
+            minute: '2-digit', 
+            second: '2-digit' 
+        });
+        if (timeContainer) timeContainer.textContent = timeString;
+    }
+    
+    updateClock();
+    setInterval(updateClock, 1000);
+}
     // M-PESA Handler
 document.getElementById('mpesa-form').addEventListener('submit', function(e) {
     e.preventDefault();
