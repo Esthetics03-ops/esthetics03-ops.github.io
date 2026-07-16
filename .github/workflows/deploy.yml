@@ -54,9 +54,16 @@ jobs:
         run: |
           TIMESTAMP=$(date +%s)
           shopt -s nullglob # Prevents errors if no files match
+          
           for FILE in dist/*.html; do
             if [ -f "$FILE" ]; then
-              sed -i -E "s/(href|src)=\"([^\"]+\.(css|js))\"/\1=\"\2?v=$TIMESTAMP\"/g" "$FILE"
+              echo "Processing cache busting for: $FILE"
+              
+              # Step 1: Strip out any pre-existing query parameters on local .css and .js paths to prevent nesting
+              sed -i -E "s/((href|src)=\"([^\"]+)\.(css|js))\?[^\"]*\"/\1\"/g" "$FILE"
+              
+              # Step 2: Inject the new timestamp query parameter ONLY to local files (ignores http:// or https:// paths)
+              sed -i -E "s/((href|src)=\")([^h][^\"]+\.(css|js))\"/\1\3?v=$TIMESTAMP\"/g" "$FILE"
             fi
           done
           echo "Cache busting complete. Version: $TIMESTAMP"
