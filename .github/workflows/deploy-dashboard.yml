@@ -4,6 +4,10 @@ on:
     branches:
       - main  # Triggered whenever you push to the main branch
 
+# Grant explicit write permissions for the deployment action
+permissions:
+  contents: write
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -23,5 +27,6 @@ jobs:
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-            folder: . # The folder the action should deploy.
-            branch: gh-pages # The branch the action should deploy to.
+          folder: . 
+          branch: main   # Changed to main branch
+          clean: false   # Prevents deleting the working branch tree during root deployment
