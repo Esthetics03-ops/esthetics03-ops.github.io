@@ -1,9 +1,13 @@
 ## 🌿 The Esthetics Hub | Bio-Sync Enterprise v23.0
 
+[![Live Site Status](https://img.shields.io/website?url=https%3A%2F%2Festhetics03-ops.github.io&label=production%20site&logo=github)](https://esthetics03-ops.github.io)
 [![Lighthouse Audit](https://github.com/esthetics03-ops/esthetics03-ops.github.io/actions/workflows/bio-sync-orchestrator.yml/badge.svg)](https://github.com/esthetics03-ops/esthetics03-ops.github.io/actions)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/esthetics03-ops/esthetics03-ops.github.io/graphs/commit-activity)
 
-**The Esthetics Hub** is a Nairobi-based biohacking platform specializing in metabolic health, nervous system regulation, and longevity research. This repository houses the frontend architecture and the **Bio-Sync Enterprise** automation engine.
+**The Esthetics Hub** is a Nairobi-based biohacking platform specializing in metabolic health, nervous system regulation, and longevity research. 
+
+* **Production URL:** [https://esthetics03-ops.github.io](https://esthetics03-ops.github.io)
+* **Repository Role:** Houses the core frontend responsive web architecture and the **Bio-Sync Enterprise** automation engine.
 
 ---
 
