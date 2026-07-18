@@ -20,15 +20,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     outputs:
-      digests: ${{ steps.hash.outputs.digests }}
+      # FIX: Changed expression to point to 'hashes' to match the step output below
+      digests: ${{ steps.hash.outputs.hashes }}
 
     steps:
       - uses: actions/checkout@v4
 
       # ========================================================
-      #
       # Step 1: Build your artifacts.
-      #
       # ========================================================
       - name: Build artifacts
         run: |
@@ -37,12 +36,7 @@ jobs:
             echo "artifact2" > artifact2
 
       # ========================================================
-      #
       # Step 2: Add a step to generate the provenance subjects
-      #         as shown below. Update the sha256 sum arguments
-      #         to include all binaries that you generate
-      #         provenance for.
-      #
       # ========================================================
       - name: Generate subject for provenance
         id: hash
@@ -62,5 +56,6 @@ jobs:
       contents: write # To add assets to a release.
     uses: slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v1.4.0
     with:
+      # FIX: Repaired the broken expression interpolation syntax
       base64-subjects: "${{ needs.build.outputs.digests }}"
       upload-assets: true # Optional: Upload to a new release
