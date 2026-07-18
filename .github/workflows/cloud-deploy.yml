@@ -6,4 +6,4 @@ deployment:
   env_vars:
     CUSTOMER_ID: "gkutosi95"
     TARGET_GOAL: "300.00"
-    NCBA_SYNC: "ENABLED"
+    NCBA_SYNC: "ENABLED" # FIX: Repaired line break and quotes
