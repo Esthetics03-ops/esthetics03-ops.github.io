@@ -75,7 +75,11 @@ jobs:
         with:
           path: './dist'
 
-      # FIX: Repaired the broken line break to turn the execution line green
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      # Instant trigger to sync production build directly to Render
+      - name: Trigger Render Web Service Deployment
+        run: |
+          curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
