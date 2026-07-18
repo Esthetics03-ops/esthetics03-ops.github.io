@@ -3,6 +3,11 @@ on:
   push:
     branches:
       - main  # Triggers when you push to the main branch
+  workflow_dispatch: # Added to allow manual debugging from the Actions tab
+
+permissions:
+  contents: read
+  id-token: write # Highly recommended for secure GCP authentication handshakes
 
 jobs:
   deploy:
@@ -29,5 +34,5 @@ jobs:
           entry_point: 'updateMonetisationData'
           # FIX 2: Point it to the directory containing your package.json (usually project root '.')
           source_dir: '.'
-          # FIX 3: (Highly Recommended) Specify your deployment staging bucket 
-          # bucket: 'your-gcs-bucket-name'
+          # FIX 3: Cleaned and securely nested parameter configuration layout
+          # bucket: 'your-gcs-bucket-name' # Un-comment and change if using a custom staging bucket
