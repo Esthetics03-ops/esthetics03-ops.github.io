@@ -33,4 +33,11 @@ The Hub operates on a high-performance, serverless-first infrastructure:
 
 ## 📂 Project Structure
 
-The repository contains frontend assets, automation workflows, and deployment configuration for the Hub's ecosystem.
+The repository contains frontend assets, automation workflows, and deployment configuration for the Hub's ecosystem:
+
+```text
+├── .github/workflows/       # Automated CI/CD pipelines (Bio-Sync, Audit, Search Sync)
+├── assets/                  # CSS, icons, and WebP compressed media assets
+├── scripts/                 # Python/Node analytics & external data-sync scripts
+├── index.html               # Main glassmorphism frontend user portal
+└── README.md                # Enterprise repository documentation
