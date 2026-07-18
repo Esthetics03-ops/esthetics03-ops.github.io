@@ -1,5 +1,6 @@
 - name: Install Dependencies
         run: |
+          python -m pip install --upgrade pip
           pip install google-analytics-data requests gspread oauth2client pandas
 
       - name: Execute Live Pull & Bank Audit
@@ -7,5 +8,9 @@
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
           GA4_PROPERTY_ID: "319520471"
           SPREADSHEET_ID: "14lde3IpR7th4DyYATejALuOHswor-QD0xdREE7FNpIo"
+          # Added AdSense and GA4 tag tracking variables for the engine sync
+          ADSENSE_PUB_ID: "pub-1959507280210179"
+          GA4_MEASUREMENT_ID_PROD: "G-PSW1MY7HB4"
+          GA4_MEASUREMENT_ID_STAGE: "G-QCX3G9KSPC"
         run: |
           python main.py
