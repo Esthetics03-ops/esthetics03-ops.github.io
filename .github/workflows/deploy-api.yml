@@ -16,6 +16,10 @@ jobs:
         with:
           credentials_json: '${{ secrets.GCP_SA_KEY }}'
 
+      # FIX 1: Explicitly set up the gcloud environment
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v2'
+
       - name: Deploy Cloud Function
         uses: 'google-github-actions/deploy-cloud-functions@v2'
         with:
@@ -23,3 +27,7 @@ jobs:
           runtime: 'nodejs20'
           region: 'us-central1'
           entry_point: 'updateMonetisationData'
+          # FIX 2: Point it to the directory containing your package.json (usually project root '.')
+          source_dir: '.'
+          # FIX 3: (Highly Recommended) Specify your deployment staging bucket 
+          # bucket: 'your-gcs-bucket-name'
