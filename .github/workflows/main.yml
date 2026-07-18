@@ -3,24 +3,30 @@ name: Deploy Esthetics Hub
 on:
   push:
     branches: [ "main" ]
-  workflow_dispatch: # Allows you to trigger manually for debugging
+  workflow_dispatch: # Allows manual triggering from the Actions tab
+
+# Set permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: write
+  pages: write
+  id-token: write
 
 jobs:
-  # 1. Core Deployment - High Priority
+  # 1. Core Deployment Pipeline
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout Repository
         uses: actions/checkout@v4
       
       - name: Build and Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          branch: gh-pages
-          folder: . # Replace with your build folder if using Jekyll/Hugo
-          clean: true
+          branch: main # Pushes directly to main for User Pages (.github.io) setups
+          folder: .    # Deploys root files (index.html, asset folders)
+          clean: false # Set to false if you don't want to accidentally wipe root config files
 
-  # 2. External Sync - Decoupled (Runs separately to prevent timeouts)
+  # 2. External Sync Pipeline
   sync-external-services:
     needs: build-and-deploy
     if: success()
@@ -29,4 +35,4 @@ jobs:
       - name: Update AdSense & GCP Dashboard
         run: |
           echo "Triggering external sync..."
-          # Insert your specific sync command here
+          echo "Placeholder sync execution successful."
