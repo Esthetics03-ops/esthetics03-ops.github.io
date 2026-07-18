@@ -9,7 +9,12 @@ jobs:
   lighthouse:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          # FIX: Prevent shallow clone so LHCI can parse ancestor commits safely
+          fetch-depth: 0 
+
       - name: Audit URLs
         uses: treosh/lighthouse-ci-action@v12
         with:
