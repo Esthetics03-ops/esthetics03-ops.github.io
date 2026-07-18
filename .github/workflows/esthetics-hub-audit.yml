@@ -19,7 +19,7 @@ jobs:
       - name: 🛒 Checkout Repository
         uses: actions/checkout@v4
 
-      # ... [Keep the Performance, AdSense, and Python Setup steps from previous yml] ...
+      # NOTE: Place your Performance and AdSense audit shell checks here if needed
 
       - name: 🐍 Set up Python Environment
         uses: actions/setup-python@v5
@@ -33,12 +33,13 @@ jobs:
       - name: 🚀 Ping Google Search Console (Sitemap)
         run: python ping_google.py
 
-      # ... [Keep the SEO Indexing Check step from previous yml] ...
+      # NOTE: Place your custom SEO Indexing scripts here if needed
 
       - name: ✅ Final Audit Summary
         if: always()
         run: echo "Audit and Search Engine Notification Complete."
-link-checker:
+
+  link-checker:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
