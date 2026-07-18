@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: esthetics-hub-frontend  # <- The individual service name inside the blueprint
+    runtime: static
+    buildCommand: echo "Static build complete"
+    publishDir: .
+    autoDeploy: true
