@@ -75,7 +75,7 @@ jobs:
         with:
           path: './dist'
 
-      # FIX: Restored the single line name parameter string
+      # FIX: Repaired the broken line break to turn the execution line green
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
