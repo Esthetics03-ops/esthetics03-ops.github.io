@@ -1,4 +1,4 @@
-# GOOGLE ADS ADVERTISER TRANSPARENCY MANIFEST
+# GOOGLE ADS ADVERTIVER TRANSPARENCY MANIFEST
 # Generated for: George Kutosi Ondimu
 # Status: Manual Appeal / Verification Phase 2026
 
@@ -12,7 +12,7 @@ financial_architecture:
   primary_bank:
     institution: "NCBA Bank"
     branch: "Ruaka Branch, Nairobi"
-    account_number: "1003791648"
+    account_number: "1003******" # Highly recommended to mask this in public repos
   payment_method:
     provider: "Safaricom M-PESA"
     phone_linked: "+254113379488"
