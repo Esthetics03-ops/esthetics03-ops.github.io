@@ -934,27 +934,47 @@ html, body {
 <body>
 
     <div id="payment-success" style="display:none; background:#e8f5e9; border:1px solid #4caf50; padding:20px; border-radius:8px; margin:20px 0; text-align:center;">
-    <h3 style="color:#2e7d32;">✨ Protocol Unlocked!</h3>
-    <p>Thank you for your payment. Your 2026 Wellness Guide is now available below.</p>
+    <h3 style="color:#2e7d32; margin-top:0;">✨ Protocol Unlocked!</h3>
+    <p style="margin-bottom:0;">Thank you for your payment. Your 2026 Wellness Guide is now available below.</p>
 </div>
 
 <script>
-// Check if user just paid
-if(window.location.hash === "#success") {
-    document.getElementById('payment-success').style.display = 'block';
-    
-    // Trigger GA4 Conversion Event
-    gtag('event', 'purchase', {
-        'transaction_id': 'T_' + Math.floor(Math.random() * 1000000),
-        'affiliation': 'The Esthetics Hub',
-        'value': 5.00, // Set your protocol price
-        'currency': 'USD',
-        'items': [{
-            'item_id': 'wellness_001',
-            'item_name': 'Bio-Sync Reset Protocol'
-        }]
-    });
-}
+window.addEventListener('DOMContentLoaded', () => {
+    // Check if URL hash indicates a successful payment callback
+    if (window.location.hash === "#success") {
+        const successBanner = document.getElementById('payment-success');
+        if (successBanner) {
+            successBanner.style.display = 'block';
+            successBanner.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        const transactionId = 'MPESA_' + Date.now();
+        const purchaseValue = 500; // Value in KES (adjust as needed)
+
+        if (typeof gtag === 'function') {
+            // 1. Trigger GA4 Purchase Event
+            gtag('event', 'purchase', {
+                'transaction_id': transactionId,
+                'affiliation': 'The Esthetics Hub Nairobi',
+                'value': purchaseValue,
+                'currency': 'KES',
+                'items': [{
+                    'item_id': 'bio_sync_2026',
+                    'item_name': 'Bio-Sync Reset Protocol 2026',
+                    'item_category': 'Wellness Guides'
+                }]
+            });
+
+            // 2. Trigger Google Ads Conversion Event
+            gtag('event', 'conversion', {
+                'send_to': 'AW-18006354803',
+                'value': purchaseValue,
+                'currency': 'KES',
+                'transaction_id': transactionId
+            });
+        }
+    }
+});
 </script>
 
     <video autoplay muted loop playsinline id="video-bg">
