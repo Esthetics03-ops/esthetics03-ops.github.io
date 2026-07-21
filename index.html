@@ -1217,19 +1217,60 @@ document.getElementById('mpesa-form').addEventListener('submit', function(e) {
         return;
     }
     
-    // 3. UI Loading State
-    btn.disabled = true;
-    btn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...`;
+// 3. UI Loading State
+btn.disabled = true;
+btn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...`;
 
-    // 4. API / Simulation Trigger
-    console.log("Initiating STK Push for: " + sanitizedPhone);
+// 4. API / Simulation Trigger
+console.log("Initiating STK Push for: " + sanitizedPhone);
+
+// Send Checkout Started event to GA4 & Ads
+if (typeof gtag === 'function') {
+    gtag('event', 'begin_checkout', {
+        'currency': 'KES',
+        'value': amountInput ? amountInput.value : 0,
+        'payment_type': 'M-PESA STK Push'
+    });
+}
+
+setTimeout(() => {
+    // Alert user to check phone
+    alert("STK Push sent! Please check your phone (" + sanitizedPhone + ") and enter your M-PESA PIN to complete the protocol unlock.");
     
-    setTimeout(() => {
-        alert("STK Push sent! Please check your phone to enter your M-PESA PIN.");
-        btn.disabled = false;
-        btn.innerHTML = "Send Payment Prompt";
-    }, 2000);
-});
+    // Reset Button State
+    btn.disabled = false;
+    btn.innerHTML = "Send Payment Prompt";
+
+    // OPTIONAL: If using real polling backend or sandbox simulation to reveal content:
+    // revealUnlockedProtocol(sanitizedPhone, amountInput.value);
+
+}, 2000);
+
+/**
+ * Call this function ONLY after receiving a successful M-PESA callback (ResultCode: 0)
+ */
+function revealUnlockedProtocol(phone, amount) {
+    const successBanner = document.getElementById('protocol-unlocked-banner');
+    if (successBanner) {
+        successBanner.style.display = 'block';
+        successBanner.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Fire Conversion Events to GA4 & Google Ads
+    if (typeof gtag === 'function') {
+        gtag('event', 'purchase', {
+            'transaction_id': 'MPESA_' + Date.now(),
+            'value': amount,
+            'currency': 'KES'
+        });
+
+        gtag('event', 'conversion', {
+            'send_to': 'AW-18006354803',
+            'value': amount,
+            'currency': 'KES'
+        });
+    }
+}
 
     function plusSlides(n, no) { showSlides(slideIndex[no] += n, no); }
     function currentSlide(n, no) { showSlides(slideIndex[no] = n, no); }
