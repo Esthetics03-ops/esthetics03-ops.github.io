@@ -1,4 +1,4 @@
-## 🌿 The Esthetics Hub | Bio-Sync Enterprise v23.0
+## 🌿 The Esthetics Hub | Bio-Sync Enterprise v24.0
 
 [![Live Site Status](https://img.shields.io/website?url=https%3A%2F%2Festhetics03-ops.github.io&label=production%20site&logo=github)](https://esthetics03-ops.github.io)
 [![Lighthouse Audit](https://github.com/esthetics03-ops/esthetics03-ops.github.io/actions/workflows/bio-sync-orchestrator.yml/badge.svg)](https://github.com/esthetics03-ops/esthetics03-ops.github.io/actions)
