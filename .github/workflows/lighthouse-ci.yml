@@ -5,7 +5,7 @@ on:
     branches: ["main"]
   pull_request:
   schedule:
-    - cron: '0 0 * * *' # Keeps your "Bio-Sync" active daily
+    - cron: '0 0 * * *'
 
 permissions:
   contents: write
@@ -40,7 +40,6 @@ jobs:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CHROME_BIN: ${{ env.CHROME_BIN }}
         run: |
-          # Ensure LHCI uses a headless, no-sandbox Chrome when running in containers
           lhci autorun \
             --collect.url=https://esthetics03-ops.github.io \
             --collect.chromeFlags="--no-sandbox --headless --disable-gpu" \
