@@ -5,7 +5,6 @@ on:
     - cron: '0 * * * *' # Runs every hour
   workflow_dispatch: # Allows you to run it manually
 
-# FIX 1: Grant permissions to push code changes back to the repo
 permissions:
   contents: write
 
@@ -14,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -32,7 +31,6 @@ jobs:
           ADSENSE_TOKEN_DAT: ${{ secrets.ADSENSE_TOKEN_DAT }}
         run: python main.py
 
-      # FIX 2: Ensure git tracks the changes safely and use the built-in GITHUB_TOKEN for authentication
       - name: Commit and Push changes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
