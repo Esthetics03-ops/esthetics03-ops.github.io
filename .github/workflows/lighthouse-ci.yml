@@ -7,6 +7,9 @@ on:
   schedule:
     - cron: '0 0 * * *' # Keeps your "Bio-Sync" active daily
 
+permissions:
+  contents: write
+
 jobs:
   lhci:
     name: Lighthouse Audit
@@ -19,7 +22,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20 # Updated to LTS for better compatibility
+          node-version: 20
 
       - name: Install system dependencies (Chrome, libvips)
         run: |
