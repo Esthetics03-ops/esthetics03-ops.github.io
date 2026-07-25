@@ -1,49 +1,50 @@
-name: Automated AdSense Dashboard Sync
+name: update-adsense-dashboard
 
 on:
   schedule:
-    - cron: '30 0 * * *' # Runs daily at 00:30 UTC (offset by 30 mins from your payment tracker)
-  workflow_dispatch: # Allows you to manually trigger it via the Actions tab
+    - cron: '0 */6 * * *' # Runs every 6 hours
+  workflow_dispatch: # Allows manual pull
 
 permissions:
-  contents: write # Required to push the adsense_report.json file back to the repo
+  contents: write
 
 jobs:
-  sync-adsense:
+  fetch-metrics:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v4
-      with:
-        persist-credentials: true
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.10'
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
 
-    - name: Install Dependencies
-      run: |
-        pip install google-api-python-client google-auth
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install google-analytics-data requests
 
-    - name: Run AdSense Fetcher Script
-      env:
-        ADSENSE_REFRESH_TOKEN: ${{ secrets.ADSENSE_REFRESH_TOKEN }}
-        ADSENSE_CLIENT_ID: ${{ secrets.ADSENSE_CLIENT_ID }}
-        ADSENSE_CLIENT_SECRET: ${{ secrets.ADSENSE_CLIENT_SECRET }}
-      # Ensure path matches where you save your Python script (e.g., scripts/fetch_adsense.py)
-      run: python scripts/fetch_adsense.py
+      - name: Pull Live Metrics
+        env:
+          GOOGLE_CREDENTIALS_JSON: ${{ secrets.GOOGLE_CREDENTIALS_JSON }}
+          ADSENSE_TOKEN_DAT: ${{ secrets.ADSENSE_TOKEN_DAT }}
+          ADSENSE_ID: ${{ secrets.ADSENSE_ID }}
+        run: |
+          python -c "import os; print('Environment ready, executing metrics fetch script...')"
+          # Place your data pulling script execution here (e.g., python scripts/fetch_metrics.py)
 
-    - name: Commit and Push AdSense Data
-      run: |
-        git config --global user.name "Bio-Sync Automations"
-        git config --global user.email "gkutosi95@gmail.com"
-        
-        if [ -f "dashboard/adsense_report.json" ]; then
-          git add dashboard/adsense_report.json
-          git diff-index --quiet HEAD || git commit -m "sys-cron: auto-update adsense metrics [skip ci]"
-          git push
-        else
-          echo "Warning: dashboard/adsense_report.json was not found. Skipping push."
-        fi
+      - name: Commit Updated Metrics Data
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.name "Metrics Bot"
+          git config --global user.email "bot@bio-sync.live"
+          
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git add .
+            git commit -m "📊 Live Metrics Sync: $(date +'%Y-%m-%d %H:%M')"
+            git push
+          else
+            echo "No metric changes to commit."
+          fi
