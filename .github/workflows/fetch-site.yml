@@ -1,0 +1,27 @@
+name: Fetch Live Domain Content
+
+on:
+  workflow_dispatch: # Allows manual trigger from the GitHub Actions UI
+  schedule:
+    - cron: '0 12 * * *' # Optional: Automatically runs daily at 12:00 PM UTC
+
+jobs:
+  fetch-web-data:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Standard HTTPS / SSL Fetch
+      - name: Fetch Live Data over Secure HTTPS
+        run: |
+          # Fails the step if HTTP status is 4xx or 5xx (-f) and follows redirects (-L)
+          curl -f -L https://example.com -o response.json
+          
+      # Step 2: Debug and read the data (Optional)
+      - name: Print Response Content
+        run: cat response.json
+
+      # Step 3: Archive the fetched data as an artifact (Optional)
+      - name: Upload Fetched Data
+        uses: actions/checkout@v4
+        # Note: You can use actions/upload-artifact to save this file 
+        
