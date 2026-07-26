@@ -1,0 +1,46 @@
+name: Auto Update Revenue Dashboard
+
+# Run automatically on a schedule or whenever pushed to main
+on:
+  schedule:
+    # Triggers every day at 00:00 UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch: # Allows manual trigger from the GitHub Actions tab
+
+jobs:
+  refresh-dashboard:
+    runs-on: ubuntu-latest
+    
+    steps:
+    # Step 1: Clone the repository data into the runner environment
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    # Step 2: Set up dependencies 
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+        cache: 'pip' # Optional: Speeds up builds by caching packages
+
+    # Step 3: Install library requirements
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pandas stripe
+
+    # Step 4: Run the extraction and computation script
+    - name: Execute Revenue Pipeline
+      env:
+        STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+      run: python update_revenue.py
+
+    # Step 5: Commit and push the freshly calculated JSON data back into GitHub
+    - name: Commit Updated Data
+      run: |
+        git config --global user.name "GitHub Actions Bot"
+        git config --global user.email "actions@github.com"
+        git add data/revenue_summary.json
+        git diff-index --quiet HEAD || git commit -m "Automated update: Revenue Metrics $(date +'%Y-%m-%d')"
+        git push
+        
