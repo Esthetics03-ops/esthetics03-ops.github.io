@@ -1,0 +1,18 @@
+name: External Webhook Automation
+
+on:
+  repository_dispatch:
+    types: [external-build-trigger]
+
+jobs:
+  handle-webhook:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Process Custom Payload
+        run: |
+          echo "Triggered by: ${{ github.event.client_payload.sender }}"
+          echo "Environment: ${{ github.event.client_payload.env }}"
+          
