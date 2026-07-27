@@ -1,0 +1,13 @@
+name: Sync to Google Sheets
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  update_sheets:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Write to Sheet
+        uses: jasonetco/create-an-issue@v2 # Example action to parse details
+      - name: Update Google Sheets
+        uses: lowlighter/metrics@latest # Or a custom script using gsheet-action
