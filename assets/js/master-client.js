@@ -1,40 +1,40 @@
 /**
- * The Esthetics Hub - Automated Front-End Client Bridge
- * Automatically injects live event handlers into esthetics03-ops.github.io
+ * The Esthetics Hub - Master Client Connector (v24.0.0)
+ * Connected to Live Render Backend
  */
 
-const ENGINE_ENDPOINT = "https://YOUR-DEPLOYED-BACKEND-URL.vercel.app/api/sync-engine"; // Replace with your live Vercel/Netlify URL
+// Replace with your live Render service URL once provisioning completes
+const RENDER_BACKEND_URL = "https://your-service-name.onrender.com";
 
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("[Esthetics Hub] Initializing Automated Master Bridge...");
+  console.log("[Esthetics Hub] Initializing Live Master Client Bridge...");
   syncLiveTelemetry();
   bindPaymentEngine();
 });
 
 async function syncLiveTelemetry() {
   try {
-    const res = await fetch(`${ENGINE_ENDPOINT}?action=system_status`);
-    const data = await res.json();
-    console.log("[Master Hub Sync OK]:", data);
-  } catch (e) {
-    console.warn("[Telemetry] Operating in local sync fallback mode.");
+    const response = await fetch(`${RENDER_BACKEND_URL}/api/sync-engine?action=system_status`);
+    const data = await response.json();
+    console.log("[Master Hub Telemetry Connected]:", data);
+  } catch (err) {
+    console.warn("[Telemetry Notice] Operating in offline fallback mode:", err);
   }
 }
 
 function bindPaymentEngine() {
-  // Automatically locates your M-Pesa STK Push Submit button based on live DOM scan
   const buttons = document.querySelectorAll("button");
+  
   buttons.forEach(btn => {
     if (btn.textContent.includes("Send Payment Prompt")) {
       btn.addEventListener("click", async (e) => {
         e.preventDefault();
 
-        // Locate the phone input field dynamically
         const phoneInput = document.querySelector("input[type='text'], input[type='tel']");
         const phone = phoneInput ? phoneInput.value.trim() : "";
 
         if (!phone || phone.length < 9) {
-          alert("Please enter a valid M-Pesa phone number (e.g., 2547XXXXXXXX)");
+          alert("⚠️ Please enter a valid M-Pesa phone number (e.g., 2547XXXXXXXX)");
           return;
         }
 
@@ -43,20 +43,26 @@ function bindPaymentEngine() {
         btn.disabled = true;
 
         try {
-          const response = await fetch(ENGINE_ENDPOINT, {
+          const res = await fetch(`${RENDER_BACKEND_URL}/api/sync-engine`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ action: "trigger_stk", phone: phone, amount: "1000" })
+            body: JSON.stringify({ 
+              action: "trigger_stk", 
+              phone: phone, 
+              amount: "1000" 
+            })
           });
 
-          const result = await response.json();
+          const result = await res.json();
+          
           if (result.success) {
-            alert(`Success! ${result.message}\nRef: ${result.transactionId}`);
+            alert(`✨ Success! ${result.message}\nTransaction Reference: ${result.transactionId}`);
           } else {
-            alert(`Transaction Failed: ${result.error}`);
+            alert(`❌ Transaction Failed: ${result.error || "Unknown server error"}`);
           }
         } catch (err) {
-          alert("Network error communicating with the payment gateway.");
+          console.error("Payment Gateway Error:", err);
+          alert("🌐 Network error communicating with the MindSync Pay gateway.");
         } finally {
           btn.textContent = originalText;
           btn.disabled = false;
@@ -64,4 +70,4 @@ function bindPaymentEngine() {
       });
     }
   });
-            }
+      }
