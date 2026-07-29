@@ -1,68 +1,67 @@
 /**
- * The Esthetics Hub - Front-End Master Client Connector
- * Connects UI elements to the serverless backend engine.
+ * The Esthetics Hub - Automated Front-End Client Bridge
+ * Automatically injects live event handlers into esthetics03-ops.github.io
  */
 
-const BACKEND_ENDPOINT = "https://your-serverless-project.vercel.app/api/sync-engine"; // Update with your deployed URL
+const ENGINE_ENDPOINT = "https://YOUR-DEPLOYED-BACKEND-URL.vercel.app/api/sync-engine"; // Replace with your live Vercel/Netlify URL
 
 document.addEventListener("DOMContentLoaded", () => {
-  initSystemMetrics();
-  initMpesaHandler();
+  console.log("[Esthetics Hub] Initializing Automated Master Bridge...");
+  syncLiveTelemetry();
+  bindPaymentEngine();
 });
 
-// Fetch and display live system telemetry
-async function initSystemMetrics() {
+async function syncLiveTelemetry() {
   try {
-    const response = await fetch(`${BACKEND_ENDPOINT}?action=system_status`);
-    const data = await response.json();
-    console.log("Master Hub Sync Status:", data);
-  } catch (err) {
-    console.warn("Operating in offline telemetry mode:", err);
+    const res = await fetch(`${ENGINE_ENDPOINT}?action=system_status`);
+    const data = await res.json();
+    console.log("[Master Hub Sync OK]:", data);
+  } catch (e) {
+    console.warn("[Telemetry] Operating in local sync fallback mode.");
   }
 }
 
-// Wire up the M-Pesa STK Push Form
-function initMpesaHandler() {
-  const payButton = document.querySelector("button, input[type='submit']"); // Target your payment button
-  // Alternatively, target by a specific ID if you add id="stk-trigger" to your button
-  
-  const paymentSection = document.querySelector(".Bio-Sync Premium") || document.body;
+function bindPaymentEngine() {
+  // Automatically locates your M-Pesa STK Push Submit button based on live DOM scan
+  const buttons = document.querySelectorAll("button");
+  buttons.forEach(btn => {
+    if (btn.textContent.includes("Send Payment Prompt")) {
+      btn.addEventListener("click", async (e) => {
+        e.preventDefault();
 
-  // Listen for custom payment trigger clicks
-  document.addEventListener("click async", async (e) => {
-    if (e.target && e.target.textContent.includes("Send Payment Prompt")) {
-      e.preventDefault();
-      
-      const phoneInput = document.querySelector("input[type='text'], input[type='tel']");
-      const phone = phoneInput ? phoneInput.value : "";
-      const amount = "1000"; // Or grab dynamically from input
+        // Locate the phone input field dynamically
+        const phoneInput = document.querySelector("input[type='text'], input[type='tel']");
+        const phone = phoneInput ? phoneInput.value.trim() : "";
 
-      if (!phone) {
-        alert("Please enter a valid M-Pesa phone number (254...)");
-        return;
-      }
-
-      e.target.textContent = "Sending STK Push...";
-      
-      try {
-        const res = await fetch(BACKEND_ENDPOINT, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "trigger_stk", phone, amount })
-        });
-        
-        const result = await res.json();
-        if (result.success) {
-          alert(`STK Push sent successfully! Check your phone (${phone}). Transaction ID: ${result.transactionId}`);
-          e.target.textContent = "Send Payment Prompt";
-        } else {
-          alert(`Payment Error: ${result.error}`);
-          e.target.textContent = "Send Payment Prompt";
+        if (!phone || phone.length < 9) {
+          alert("Please enter a valid M-Pesa phone number (e.g., 2547XXXXXXXX)");
+          return;
         }
-      } catch (err) {
-        alert("Network connection error connecting to MindSync Pay gateway.");
-        e.target.textContent = "Send Payment Prompt";
-      }
+
+        const originalText = btn.textContent;
+        btn.textContent = "Connecting to MindSync Pay...";
+        btn.disabled = true;
+
+        try {
+          const response = await fetch(ENGINE_ENDPOINT, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: "trigger_stk", phone: phone, amount: "1000" })
+          });
+
+          const result = await response.json();
+          if (result.success) {
+            alert(`Success! ${result.message}\nRef: ${result.transactionId}`);
+          } else {
+            alert(`Transaction Failed: ${result.error}`);
+          }
+        } catch (err) {
+          alert("Network error communicating with the payment gateway.");
+        } finally {
+          btn.textContent = originalText;
+          btn.disabled = false;
+        }
+      });
     }
   });
-    }
+            }
