@@ -4,14 +4,13 @@
   "main": "server.js",
   "scripts": { 
     "start": "node server.js",
-    "fix-ads": "node fix-campaign.js"
+    "fix-ads": "node fix-campaign.js",
+    "optimize": "node optimize.js",
+    "deploy": "npm run optimize && git add . && git commit -m 'Optimize build and patch performance indicators' && git push origin main"
   },
   "dependencies": { 
     "@google-ads/google-ads-api": "^17.0.0",
+    "cors": "^2.8.5",
     "express": "^4.18.2" 
   }
-}
-"scripts": {
-  "optimize": "node optimize.js",
-  "deploy": "npm run optimize && git add . && git commit -m 'Optimize build and patch performance indicators' && git push origin main"
 }
