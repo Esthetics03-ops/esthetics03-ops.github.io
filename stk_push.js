@@ -38,12 +38,16 @@ async function initiateSTKPush(phoneNumber, amount) {
         }
 
         // 2. LOAD APPLICATION ASSETS & CREDENTIALS
-        const envMode        = process.env.MPESA_ENVIRONMENT || 'sandbox';
-        const consumerKey    = process.env.MPESA_CONSUMER_KEY || 'JCgz4EN1AoKaQdc3tVHsoDLWMM5x4EA9SRzhZiGkzHv7Z67nRhxdVVwDrJgWjV4T';
-        const consumerSecret = process.env.MPESA_CONSUMER_SECRET || 'JbNA9zgWA5uhOCLas4iSZmLzhusAT3dgWlK8Nj1hx5Gdux05';
-        const passkey        = process.env.MPESA_PASSKEY || 'bfb2727279d3497a163453a5752c3d9d6c8c655536e4bff1a95c1a6c7d28e624'; // Default Sandbox Passkey
-        const shortcode      = process.env.MPESA_SHORTCODE || '3421580'; // Default Sandbox Paybill
-        const callbackUrl    = process.env.MPESA_CALLBACK_URL || 'https://esthetics03-ops.github.io/v1/mpesa/callback';
+const envMode        = process.env.MPESA_ENVIRONMENT || 'sandbox';
+const consumerKey    = process.env.MPESA_CONSUMER_KEY || process.env.DARAJA_CONSUMER_KEY;
+const consumerSecret = process.env.MPESA_CONSUMER_SECRET || process.env.DARAJA_CONSUMER_SECRET;
+const passkey        = process.env.MPESA_PASSKEY || 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919'; // Standard Safaricom Sandbox Passkey
+const shortcode      = process.env.MPESA_SHORTCODE || '3421580'; // Standard Safaricom Sandbox Test Shortcode (PayBill)
+const callbackUrl    = process.env.MPESA_CALLBACK_URL || 'https://your-render-service-name.onrender.com/v1/mpesa/callback';
+
+const darajaBaseUrl  = envMode === 'production' 
+    ? 'https://api.safaricom.co.ke' 
+    : 'https://sandbox.safaricom.co.ke'; 
         
         // Set URLs explicitly based on environment mode selection
         const darajaAuthUrl = envMode === 'live'
