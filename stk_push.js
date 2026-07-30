@@ -39,12 +39,12 @@ async function initiateSTKPush(phoneNumber, amount) {
 
         // 2. LOAD APPLICATION ASSETS & CREDENTIALS
         const envMode        = process.env.MPESA_ENVIRONMENT || 'sandbox';
-        const consumerKey    = process.env.MPESA_CONSUMER_KEY || 'YOUR_CONSUMER_KEY_HERE';
-        const consumerSecret = process.env.MPESA_CONSUMER_SECRET || 'YOUR_CONSUMER_SECRET_HERE';
+        const consumerKey    = process.env.MPESA_CONSUMER_KEY || 'JCgz4EN1AoKaQdc3tVHsoDLWMM5x4EA9SRzhZiGkzHv7Z67nRhxdVVwDrJgWjV4T';
+        const consumerSecret = process.env.MPESA_CONSUMER_SECRET || 'JbNA9zgWA5uhOCLas4iSZmLzhusAT3dgWlK8Nj1hx5Gdux05';
         const passkey        = process.env.MPESA_PASSKEY || 'bfb2727279d3497a163453a5752c3d9d6c8c655536e4bff1a95c1a6c7d28e624'; // Default Sandbox Passkey
         const shortcode      = process.env.MPESA_SHORTCODE || '3421580'; // Default Sandbox Paybill
-        const callbackUrl    = process.env.MPESA_CALLBACK_URL || 'https://your-domain.com/v1/mpesa/callback';
-
+        const callbackUrl    = process.env.MPESA_CALLBACK_URL || 'https://esthetics03-ops.github.io/v1/mpesa/callback';
+        
         // Set URLs explicitly based on environment mode selection
         const darajaAuthUrl = envMode === 'live'
             ? 'https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials'
