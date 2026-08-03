@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>The Esthetics Hub | Biohacking & Cognitive Optimization</title>
+    
+    <meta name="description" content="Optimize metabolic health and nervous system regulation in Nairobi.">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0a0a0a">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css?v=1785768810" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;600;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --accent-green: #4ade80;
+            --dark-bg: #050505;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: #fafafa;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+            background-attachment: fixed;
+        }
+
+        /* --- Refined Navbar --- */
+        .navbar {
+            background: rgba(5, 5, 5, 0.4);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1rem 0;
+        }
+
+        /* --- Hero Section --- */
+        .hero-section {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            padding-top: 100px;
+            background: radial-gradient(circle at 80% 20%, rgba(74, 222, 128, 0.05) 0%, transparent 40%);
+        }
+
+        .hero-title {
+            font-size: clamp(3.5rem, 10vw, 6rem);
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            background: linear-gradient(180deg, #fff 30%, rgba(255,255,255,0.5) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* --- Bento Grid --- */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-auto-rows: minmax(200px, auto);
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+
+        .bento-item {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 28px;
+            padding: 25px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(10px);
+        }
+
+        .bento-item:hover {
+            border-color: var(--accent-green);
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Grid Spans */
+        .large { grid-column: span 2; grid-row: span 2; }
+        .wide { grid-column: span 2; }
+        .full { grid-column: span 4; }
+
+        /* --- API Elements --- */
+        #weather-display { font-size: 2.5rem; font-weight: 800; color: var(--accent-green); }
+        .stat-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: #888; }
+        
+        .chess-frame {
+            width: 100%;
+            height: 450px;
+            border-radius: 18px;
+            border: 1px solid var(--glass-border);
+            background: #000;
+        }
+
+        .btn-magnetic {
+            background: var(--accent-green);
+            color: #000;
+            padding: 14px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.2s ease;
+        }
+
+        @media (max-width: 991px) {
+            .bento-grid { grid-template-columns: 1fr; }
+            .large, .wide, .full { grid-column: span 1; grid-row: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#"><img src="g1.png" alt="Logo" height="30"></a>
+            <div id="live-clock" class="ms-auto small text-success fw-bold">00:00:00</div>
+        </div>
+    </nav>
+
+    <section class="hero-section">
+        <div class="container text-center text-lg-start">
+            <span class="badge rounded-pill border border-success mb-3 px-3 py-2 text-success">SYSTEM STATUS: OPTIMIZED</span>
+            <h1 class="hero-title">Evolve <br>Beyond.</h1>
+            <p class="lead text-secondary mt-4 mb-5">Science-backed protocols for metabolic health <br class="d-none d-md-block"> and cognitive performance in Nairobi.</p>
+        </div>
+    </section>
+
+    <section class="container mb-5">
+        <div class="bento-grid">
+            
+            <!-- Weather API Section -->
+            <div class="bento-item wide">
+                <p class="stat-label">Circadian Environment</p>
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <div>
+                        <div id="weather-temp" class="h1 mb-0 text-white">--°C</div>
+                        <div id="weather-desc" class="text-secondary small">Syncing local data...</div>
+                    </div>
+                    <div class="text-end">
+                        <div class="stat-label">UV Index</div>
+                        <div id="uv-index" class="text-success fw-bold">LOW</div>
+                    </div>
+                </div>
+                <p class="mt-4 small text-secondary border-top border-secondary pt-3">
+                    Current Protocol: <span class="text-white">Morning Sunlight Exposure</span>
+                </p>
+            </div>
+
+            <!-- Protocol 01 -->
+            <div class="bento-item">
+                <h3 class="text-success">01</h3>
+                <h5>Metabolic Flow</h5>
+                <p class="small text-secondary">Ketogenic transition & insulin sensitivity tracking.</p>
+            </div>
+
+            <!-- Protocol 02 -->
+            <div class="bento-item">
+                <h3 class="text-success">02</h3>
+                <h5>Neural Reset</h5>
+                <p class="small text-secondary">Vagus nerve stimulation via deep cold exposure.</p>
+            </div>
+
+            <!-- Chess API Section -->
+            <div class="bento-item full">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <p class="stat-label mb-0">Cognitive Hub</p>
+                        <h4>Focus & Strategy Training</h4>
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-outline-success dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            Difficulty
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-dark">
+                            <li><a class="dropdown-item" href="#" onclick="changeChess('beginner')">Beginner (Puzzles)</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="changeChess('intermediate')">Intermediate (Blitz)</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="changeChess('advanced')">Advanced (GM Stream)</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <iframe id="chess-frame" class="chess-frame" src="https://lichess.org/tv/frame?theme=dark&bg=dark"></iframe>
+            </div>
+
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js?v=1785768810"></script>
+    <script>
+        // 1. Clock
+        setInterval(() => {
+            document.getElementById('live-clock').innerText = new Date().toLocaleTimeString();
+        }, 1000);
+
+        // 2. Weather Fetch (Mocked for safety, ready for your key)
+        async function updateWeather() {
+            try {
+                // To activate: Replace 'YOUR_KEY' with WeatherAPI key
+                // const res = await fetch('https://api.weatherapi.com/v1/current.json?key=YOUR_KEY&q=Nairobi');
+                // const data = await res.json();
+                document.getElementById('weather-temp').innerText = "24°C"; 
+                document.getElementById('weather-desc').innerText = "Optimal for Training";
+                document.getElementById('uv-index').innerText = "MODERATE";
+            } catch (e) { console.error("Weather Sync Failed"); }
+        }
+
+        // 3. Chess Engine Control
+        function changeChess(level) {
+            const frame = document.getElementById('chess-frame');
+            if(level === 'beginner') frame.src = "https://lichess.org/training/frame?theme=dark&bg=dark";
+            else if(level === 'intermediate') frame.src = "https://lichess.org/tv/frame?theme=dark&bg=dark";
+            else frame.src = "https://lichess.org/tv/frame?theme=dark&bg=dark#top";
+        }
+
+        // 4. Magnetic Buttons
+        const btn = document.querySelector('.btn-magnetic');
+        if(btn) {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                btn.style.transform = `translate(${x * 0.3}px, ${y * 0.5}px)`;
+            });
+            btn.addEventListener('mouseleave', () => btn.style.transform = 'translate(0,0)');
+        }
+
+        updateWeather();
+    </script>
+</body>
+</html>

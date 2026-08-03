@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Human Fate & Longevity | The Esthetics Hub Research</title>
+    <meta name="description" content="2000-word deep dive into human survival, AGI, and longevity biotech. Take the Survival Risk Assessment.">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css?v=1785768810">
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1959507280210179" crossorigin="anonymous"></script>
+
+    <style>
+        :root {
+            --primary: #2d5a27;
+            --accent: #b58d3d;
+            --dark: #121212;
+            --light: #fdfdfd;
+            --glass: rgba(255, 255, 255, 0.98);
+            --card: #ffffff;
+            --text: #1a1a1a;
+            --border: #f0f0f0;
+        }
+
+        [data-theme="dark"] {
+            --primary: #4caf50;
+            --dark: #0a0a0a;
+            --light: #121212;
+            --glass: rgba(18, 18, 18, 0.98);
+            --card: #1e1e1e;
+            --text: #fdfdfd;
+            --border: #333;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--light); color: var(--text); line-height: 1.8; transition: 0.3s; }
+        
+        /* Navigation */
+        nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0.8rem 5%; background: var(--glass); backdrop-filter: blur(12px);
+            position: sticky; top: 0; z-index: 2000; border-bottom: 1px solid var(--border);
+        }
+        .logo { display: flex; align-items: center; text-decoration: none; cursor: pointer; }
+        .logo img { height: 40px; border-radius: 50%; margin-right: 12px; }
+        .logo span { color: var(--primary); font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; }
+
+        .search-container { flex-grow: 1; max-width: 350px; margin: 0 20px; position: relative; }
+        .search-container input { width: 100%; padding: 10px 40px; border-radius: 30px; border: 1px solid var(--border); background: var(--light); color: var(--text); }
+        .search-container i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--primary); }
+
+        .nav-links { display: flex; list-style: none; gap: 1.5rem; align-items: center; }
+        .nav-links a { text-decoration: none; color: var(--text); font-weight: 600; font-size: 0.85rem; cursor: pointer; }
+        .nav-links a.active { color: var(--primary); }
+
+        /* Sections */
+        .page { display: none; padding: 40px 0; animation: fadeIn 0.5s ease; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Hero */
+        .hero {
+            height: 50vh; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80') center/cover;
+            display: flex; align-items: center; justify-content: center; text-align: center; color: white; border-radius: 0 0 50px 50px;
+        }
+
+        .container { max-width: 1250px; margin: 0 auto; padding: 40px 5%; display: grid; grid-template-columns: 1fr; gap: 40px; }
+        @media (min-width: 1024px) { .container { grid-template-columns: 1fr 340px; } }
+
+        /* Typography */
+        article h2 { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--primary); margin: 2rem 0 1rem; }
+        .dropcap { float: left; font-size: 4.5rem; line-height: 0.8; font-weight: 800; padding-right: 12px; color: var(--primary); font-family: 'Playfair Display'; }
+
+        /* Quiz Widget */
+        .quiz-box { background: var(--primary); color: white; padding: 30px; border-radius: 25px; margin: 30px 0; }
+        .quiz-option { background: rgba(255,255,255,0.1); padding: 12px; border-radius: 10px; margin: 10px 0; cursor: pointer; transition: 0.2s; border: 1px solid transparent; }
+        .quiz-option:hover { background: rgba(255,255,255,0.2); border-color: var(--accent); }
+
+        /* Sidebar & Widgets */
+        .card { background: var(--card); padding: 25px; border-radius: 25px; border: 1px solid var(--border); margin-bottom: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
+        .btn { display: block; width: 100%; padding: 15px; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; text-align: center; text-decoration: none; transition: 0.3s; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-accent { background: var(--accent); color: white; }
+
+        /* Footer */
+        footer { background: var(--dark); color: white; padding: 60px 5% 30px; text-align: center; margin-top: 50px; }
+        .footer-nav a { color: var(--accent); margin: 0 10px; text-decoration: none; font-size: 0.9rem; }
+
+        @media (max-width: 768px) {
+            .nav-links, .search-container { display: none; }
+            .hero h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body data-theme="light">
+
+    <nav>
+        <a onclick="showPage('home')" class="logo">
+            <img src="g1.png" alt="Logo">
+            <span>The Esthetics Hub</span>
+        </a>
+        <div class="search-container">
+            <i class="bi bi-search"></i>
+            <input type="text" id="masterSearch" placeholder="Search research & quiz..." onkeyup="searchSite()">
+        </div>
+        <ul class="nav-links">
+            <li><a onclick="showPage('home')" id="n-home" class="active">Research</a></li>
+            <li><a onclick="showPage('quiz')" id="n-quiz">Survival Quiz</a></li>
+            <li><a onclick="showPage('contact')" id="n-contact">Contact</a></li>
+            <li><button onclick="toggleTheme()" style="background:none; border:none; cursor:pointer; color:var(--text); font-size:1.3rem;"><i class="bi bi-moon-stars"></i></button></li>
+        </ul>
+    </nav>
+
+    <section id="p-home" class="page active">
+        <header class="hero">
+            <div style="padding: 0 10%;">
+                <h1 style="font-family:'Playfair Display'; font-size: 3.5rem;">What's the Fate of Humans?</h1>
+                <p style="letter-spacing: 2px; text-transform: uppercase; font-weight: 600; color: var(--accent);">2026 Existential Research Report</p>
+            </div>
+        </header>
+
+        <div class="container">
+            <main id="content">
+                <article class="searchable">
+                    <h2>I. The Biological Tipping Point</h2>
+                    <p><span class="dropcap">T</span>he fate of humanity is no longer a matter of natural selection, but of technological direction. As we move deeper into the 21st century, the boundary between "Organic" and "Synthetic" is blurring. According to recent longevity research, cellular senescence—the process by which cells stop dividing—is being successfully reversed in laboratory settings. This suggests that the first humans to live to 150 are already among us.</p>
+                    
+                    <div style="background:var(--border); padding:20px; border-radius:15px; margin:30px 0; text-align:center;">
+                        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1959507280210179" data-ad-format="auto"></ins>
+                    </div>
+
+                    <h2>II. The Intelligence Explosion</h2>
+                    <p>Artificial General Intelligence (AGI) represents a "Great Filter" for human civilization. Our survival depends on the Alignment Problem: ensuring that a machine a million times smarter than a human shares our core values. If we succeed, we unlock a post-scarcity era. If we fail, the biological era of Earth may reach a swift conclusion.</p>
+                    
+                    <h2>III. Planetary Stewardship</h2>
+                    <p>The UN Sustainable Development goals outline a path to 2030, but our research looks to 2100. We project that "Vertical Farming" and "Carbon Capture" are the only two technologies capable of preventing a total resource collapse as the population hits 10 billion.</p>
+                </article>
+            </main>
+
+            <aside>
+                <div class="card">
+                    <h4>Bio-Sync Selections</h4>
+                    <p style="font-size:0.75rem; margin-bottom:15px; opacity:0.7;">OPTIMIZE YOUR SURVIVAL</p>
+                    <a href="https://www.amazon.com/s?tag=esthetics-hub-affiliate" rel="sponsored nofollow" class="btn btn-primary" style="margin-bottom:10px;">
+                        <i class="bi bi-ring"></i> Smart Trackers
+                    </a>
+                    <a href="https://thrivemarket.com/esthetics-hub-affiliate" rel="sponsored nofollow" class="btn btn-accent">
+                        <i class="bi bi-capsule"></i> Longevity Fuel
+                    </a>
+                </div>
+                <div class="card" style="background:var(--primary); color:white;">
+                    <h4 style="color:white;">Stay Enlightened</h4>
+                    <p style="font-size:0.85rem; margin:10px 0;">Get the full 2000-word PDF research paper.</p>
+                    <input type="email" placeholder="Email Address" style="width:100%; padding:10px; border-radius:8px; border:none; margin-bottom:10px;">
+                    <button class="btn btn-accent">Get Research PDF</button>
+                </div>
+            </aside>
+        </div>
+    </section>
+
+    <section id="p-quiz" class="page">
+        <div class="container" style="display:block; max-width:800px;">
+            <div class="quiz-box" id="quiz-container">
+                <h2 style="color:white; margin-bottom:10px;">Survival Risk Assessment</h2>
+                <p id="question-text">How many hours of deep sleep do you average per night?</p>
+                <div id="options-container">
+                    <div class="quiz-option" onclick="processQuiz(30)">7+ Hours (Optimal Resilience)</div>
+                    <div class="quiz-option" onclick="processQuiz(15)">5-6 Hours (Moderate Risk)</div>
+                    <div class="quiz-option" onclick="processQuiz(0)">Under 5 Hours (High Fragility)</div>
+                </div>
+            </div>
+            <div id="result-box" class="card" style="display:none; text-align:center;">
+                <h2 id="score-title">Your Resilience Score: 85%</h2>
+                <p id="score-text">You are well-positioned for the upcoming century. Focus on biological optimization.</p>
+                <button onclick="showPage('home')" class="btn btn-primary" style="margin-top:20px;">Return to Research</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="p-contact" class="page">
+        <div class="container">
+            <div class="card" id="form-wrap">
+                <h2>Contact Research Lead</h2>
+                <form id="contact-form" action="https://formspree.io/f/your-id" method="POST">
+                    <input type="text" name="name" placeholder="Name" required style="width:100%; padding:15px; margin-bottom:15px; border-radius:10px; border:1px solid var(--border); background:var(--light); color:var(--text);">
+                    <input type="email" name="email" placeholder="Email" required style="width:100%; padding:15px; margin-bottom:15px; border-radius:10px; border:1px solid var(--border); background:var(--light); color:var(--text);">
+                    <textarea name="message" rows="6" placeholder="Message" required style="width:100%; padding:15px; margin-bottom:15px; border-radius:10px; border:1px solid var(--border); background:var(--light); color:var(--text);"></textarea>
+                    <button type="submit" id="form-btn" class="btn btn-primary">Transmit Message</button>
+                </form>
+            </div>
+            <div class="card" id="thank-you" style="display:none; text-align:center;">
+                <i class="bi bi-broadcast-pin" style="font-size:4rem; color:var(--primary);"></i>
+                <h3>Transmission Received</h3>
+                <p>We will respond via secure channel within 24 hours.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-nav">
+            <a onclick="showPage('home')">Home</a> | 
+            <a onclick="showPage('quiz')">Quiz</a> | 
+            <a href="mailto:esthetics03@gmail.com">Security</a>
+        </div>
+        <p style="margin:20px 0;">&copy; <span id="year"></span> The Esthetics Hub | Nairobi, Kenya 🇰🇪</p>
+        <p style="font-size:0.7rem; opacity:0.5; max-width:800px; margin:0 auto;">Disclosure: To support our 2026 research initiatives, we earn commissions from qualifying affiliate purchases. This maintains our independent status.</p>
+    </footer>
+
+    <script>
+        // PAGE SWITCHER
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+            document.getElementById('p-' + id).classList.add('active');
+            document.getElementById('n-' + id).classList.add('active');
+            window.scrollTo(0,0);
+        }
+
+        // LIVE SEARCH
+        function searchSite() {
+            let filter = document.getElementById('masterSearch').value.toLowerCase();
+            let items = document.querySelectorAll('.searchable h2, .searchable p');
+            items.forEach(item => {
+                let text = item.innerText.toLowerCase();
+                item.style.display = text.includes(filter) ? "" : "none";
+                item.style.backgroundColor = (filter.length > 2 && text.includes(filter)) ? "rgba(181, 141, 61, 0.2)" : "transparent";
+            });
+        }
+
+        // THEME TOGGLE
+        function toggleTheme() {
+            const body = document.body;
+            const isDark = body.getAttribute('data-theme') === 'dark';
+            body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            document.querySelector('.bi-moon-stars, .bi-sun').className = isDark ? 'bi bi-moon-stars' : 'bi bi-sun';
+        }
+
+        // QUIZ LOGIC
+        let totalScore = 0;
+        function processQuiz(points) {
+            totalScore += points;
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('result-box').style.display = 'block';
+            document.getElementById('score-title').innerText = "Resilience Score: " + totalScore + "%";
+        }
+
+        // FORM
+        const f = document.getElementById("contact-form");
+        f.addEventListener("submit", async(e) => {
+            e.preventDefault();
+            const b = document.getElementById("form-btn");
+            b.disabled = true; b.innerText = "Transmitting...";
+            const r = await fetch(f.action, { method: 'POST', body: new FormData(f), headers: {'Accept': 'application/json'} });
+            if (r.ok) { document.getElementById("form-wrap").style.display = "none"; document.getElementById("thank-you").style.display = "block"; }
+        });
+
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+    </html>

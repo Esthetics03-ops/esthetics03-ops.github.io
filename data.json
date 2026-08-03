@@ -1,0 +1,26 @@
+"seoTracking": {
+    "targetKeywords": [
+        "Vagus Nerve Nairobi",
+        "Metabolic Biohacking Kenya",
+        "M-PESA Wellness Integration"
+    ],
+    "nextMilestone": 1000
+}
+
+{
+  "siteVersion": "18.5",
+  "lastUpdated": "2026-03-20",
+  "hero": {
+    "title": "The Bio-Sync Master Hub",
+    "ctaText": "Start Your Reset",
+    "ctaLink": "#protocols"
+  },
+  "adsAssets": [
+    { "type": "Sitelink", "text": "Vagus Reset Protocol", "link": "/vagus-reset" },
+    { "type": "Sitelink", "text": "M-PESA Integration", "link": "/payments" }
+  ],
+  "config": {
+    "mpesaBorder": "#4FB32A",
+    "glassmorphism": true
+  }
+}

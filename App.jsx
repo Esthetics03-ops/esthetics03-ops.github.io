@@ -1,0 +1,1 @@
+export default function App(){return <h1>Esthetics Tracker v2</h1>}

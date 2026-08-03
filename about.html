@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us | The Esthetics Hub — Live Better, Live Longer</title>
+  <meta name="description" content="Discover The Esthetics Hub — inspiring wellness, balance, and longevity through research-backed insights on holistic living." />
+  <link rel="icon" href="g1.png" type="image/png" />
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css?v=1785768810" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  
+  <script src="esthetics-structured-data-auto.js?v=1785768810" defer></script>
+  <script src="analytics.js?v=1785768810" defer></script>
+  <script src="https://unpkg.com/scrollreveal"></script>
+
+  <meta name="google-adsense-account" content="ca-pub-1959507280210179" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1959507280210179" crossorigin="anonymous"></script>
+
+  <style>
+    :root {
+      --primary: #4caf50;
+      --primary-dark: #388e3c;
+      --dark: #1a1a1a;
+      --light: #f4f7f6;
+      --white: #ffffff;
+      --glass: rgba(255, 255, 255, 0.9);
+      --shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--light);
+      color: var(--dark);
+      line-height: 1.7;
+    }
+
+    /* Modern Header Navigation */
+    .eh-header {
+      background: var(--white);
+      padding: 1rem 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+    }
+
+    .logo-wrap { display: flex; align-items: center; gap: 12px; }
+    .logo-wrap img { height: 45px; border-radius: 50%; }
+    .logo-wrap h1 { font-size: 1.2rem; color: var(--primary); font-weight: 700; }
+
+    .nav ul { display: flex; list-style: none; gap: 20px; }
+    .nav a { text-decoration: none; color: var(--dark); font-size: 0.9rem; font-weight: 600; transition: 0.3s; }
+    .nav a:hover, .nav a.active { color: var(--primary); }
+
+    /* Layout Sections */
+    .about-content { max-width: 900px; margin: 60px auto; padding: 0 20px; }
+    
+    section { 
+      background: var(--white); 
+      padding: 40px; 
+      border-radius: 20px; 
+      margin-bottom: 30px; 
+      box-shadow: var(--shadow);
+    }
+
+    .about-intro { text-align: center; background: transparent; box-shadow: none; }
+    .about-intro h2 { font-size: 2.5rem; color: var(--dark); margin-bottom: 10px; }
+    .subtitle { font-style: italic; color: var(--primary); font-size: 1.1rem; }
+
+    h3 { color: var(--primary); margin-bottom: 15px; font-size: 1.5rem; display: flex; align-items: center; gap: 10px; }
+
+    .focus-list { list-style: none; margin-top: 20px; }
+    .focus-list li { margin-bottom: 10px; padding-left: 30px; position: relative; }
+    .focus-list li::before { content: "✔"; position: absolute; left: 0; color: var(--primary); font-weight: bold; }
+
+    /* Subscribe Section */
+    .subscribe { text-align: center; background: var(--dark); color: white; }
+    .subscribe h3 { color: var(--primary); justify-content: center; }
+    .subscribe-form { display: flex; gap: 10px; margin-top: 25px; justify-content: center; }
+    .subscribe-form input { padding: 12px; border-radius: 8px; border: none; width: 60%; }
+    .btn-primary { background: var(--primary); color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+    .btn-primary:hover { background: var(--primary-dark); }
+
+    /* Social Icons */
+    .social-icons { display: flex; justify-content: center; gap: 20px; margin-top: 20px; }
+    .social-icons a { font-size: 1.5rem; color: var(--dark); transition: 0.3s; }
+    .social-icons a:hover { color: var(--primary); transform: translateY(-3px); }
+
+    /* Footer */
+    .footer { background: #000; color: white; padding: 50px 20px 20px; margin-top: 80px; }
+    .footer-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; }
+    .footer-bottom { border-top: 1px solid #333; margin-top: 40px; padding-top: 20px; text-align: center; font-size: 0.85rem; }
+    .footer-contact a { color: var(--primary); text-decoration: none; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .header-inner { flex-direction: column; gap: 15px; }
+      .nav ul { flex-wrap: wrap; justify-content: center; gap: 10px; }
+      .subscribe-form { flex-direction: column; }
+      .subscribe-form input { width: 100%; }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="eh-header">
+    <div class="header-inner">
+      <div class="logo-wrap">
+        <img src="g1.png" alt="The Esthetics Hub Logo" class="logo" />
+        <h1>The Esthetics Hub</h1>
+      </div>
+      <nav class="nav">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="posts.html">Blog</a></li>
+          <li><a href="https://your-affiliate-gallery.com" rel="sponsored nofollow">Gallery</a></li>
+          <li><a href="https://your-affiliate-videos.com" rel="sponsored nofollow">Videos</a></li>
+          <li><a href="pdfs/guides.pdf" target="_blank">PDFs</a></li>
+          <li><a href="about.html" class="active">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="about-content">
+    <section class="about-intro sr-item">
+      <h2>About Us</h2>
+      <p class="subtitle">Inspiring wellness, balance, and longevity through knowledge.</p>
+    </section>
+
+    <section class="about-story sr-item">
+      <h3>Our Story</h3>
+      <p>
+        The Esthetics Hub was created with one goal in mind: to empower people to live better and longer by sharing
+        research-backed insights on nutrition, mental health, and holistic living. What began as a simple passion
+        project has grown into a trusted source for wellness enthusiasts worldwide.
+      </p>
+    </section>
+
+    <section class="about-mission sr-item">
+      <h3>Our Mission</h3>
+      <p>
+        We aim to enlighten, educate, and motivate our readers to make positive lifestyle changes that last a lifetime.
+        By focusing on accessible, practical advice, we help our community move closer to their health and happiness
+        goals every day.
+      </p>
+    </section>
+
+    <section class="about-vision sr-item">
+      <h3>Our Vision</h3>
+      <p>
+        To become a global platform for holistic well-being – a place where people can learn, connect, and grow toward a healthier future.
+      </p>
+
+      <ul class="focus-list">
+        <li>Science-backed health and nutrition advice</li>
+        <li>Mindfulness and mental well-being practices</li>
+        <li>Inspiration for everyday living</li>
+      </ul>
+    </section>
+
+    <section class="subscribe sr-item">
+      <h3>Stay Connected</h3>
+      <p>Join our community to receive wellness tips, research insights, and lifestyle inspiration directly in your inbox.</p>
+      <form class="subscribe-form">
+        <input type="email" placeholder="Enter your email" required />
+        <button type="submit" class="btn-primary">Subscribe</button>
+      </form>
+    </section>
+
+    <section class="socials sr-item">
+      <h3>Follow Us</h3>
+      <div class="social-icons">
+        <a href="https://facebook.com/" class="facebook" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+        <a href="https://instagram.com/" class="instagram" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+        <a href="https://twitter.com/" class="twitter" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
+        <a href="mailto:esthetics03@gmail.com" class="email" aria-label="Email"><i class="bi bi-envelope"></i></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <h4>The Esthetics Hub</h4>
+        <p>Live better, live longer — one mindful choice at a time.</p>
+      </div>
+
+      <div class="footer-contact">
+        <p>
+          <i class="bi bi-envelope"></i> <a href="mailto:esthetics03@gmail.com">esthetics03@gmail.com</a><br />
+          <i class="bi bi-telephone"></i> <a href="tel:+254113379488">+254 113 379488</a>
+        </p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; <span id="year"></span> The Esthetics Hub. All Rights Reserved.</p>
+      <p style="font-size: 0.7rem; opacity: 0.5; margin-top: 10px;">Disclosure: Some links on this site are affiliate links which support our research at no extra cost to you.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Automatic Year Update
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Scroll Reveal Animation
+    ScrollReveal().reveal('.sr-item', {
+      distance: '40px',
+      duration: 800,
+      easing: 'ease-out',
+      origin: 'bottom',
+      interval: 150
+    });
+  </script>
+</body>
+  </html>

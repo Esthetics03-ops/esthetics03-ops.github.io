@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Metabolic Nutrition Protocol | The Esthetics Hub</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css?v=1785768810" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css?v=1785768810">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;800&family=Space+Grotesk:wght@500&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css?v=1785768810" rel="stylesheet">
+
+    <style>
+        :root { 
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --accent-gold: #c5a880; 
+            --deep-ocean: #0f172a;
+            --amazon-orange: #FF9900;
+        }
+
+        body { 
+            font-family: 'Outfit', sans-serif; 
+            color: white; 
+            background: #020617; 
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .protocol-header {
+            padding: 120px 0 60px;
+            background: linear-gradient(to bottom, rgba(2,6,23,0.1) 0%, #020617 100%),
+                        url('https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            transition: 0.3s;
+        }
+
+        .glass-card:hover { border-color: var(--accent-gold); }
+
+        .step-badge {
+            background: var(--accent-gold);
+            color: #000;
+            font-weight: 800;
+            padding: 6px 18px;
+            border-radius: 50px;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+        }
+
+        .metric-box {
+            border-left: 3px solid var(--accent-gold);
+            padding: 10px 20px;
+            background: rgba(197, 168, 128, 0.05);
+            border-radius: 0 15px 15px 0;
+            margin: 25px 0;
+        }
+
+        .tool-link {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 15px;
+            display: block;
+            text-decoration: none;
+            color: white;
+            transition: 0.3s;
+        }
+
+        .tool-link:hover {
+            background: rgba(255,153,0,0.1);
+            border-color: var(--amazon-orange);
+            transform: scale(1.02);
+        }
+
+        .calculator-pill {
+            background: #0f172a;
+            border: 1px solid #1e293b;
+            padding: 20px;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-dark fixed-top px-4" style="background: rgba(2,6,23,0.8); backdrop-filter: blur(15px); border-bottom: 1px solid var(--glass-border);">
+        <a class="navbar-brand fw-bold d-flex align-items-center" href="index.html">
+            <i class="bi bi-arrow-left-circle me-2 text-info"></i> HUB CENTRAL
+        </a>
+    </nav>
+
+    <header class="protocol-header text-center">
+        <div class="container" data-aos="zoom-in">
+            <span class="text-info fw-bold text-uppercase tracking-widest small">Metabolic Optimization</span>
+            <h1 class="display-3 fw-bold mt-2">Fueling <span style="color: var(--accent-gold);">Protocol</span></h1>
+            <p class="lead opacity-75 mx-auto mt-3" style="max-width: 650px;">A data-driven diagnostic for managing insulin sensitivity and mitochondrial efficiency.</p>
+        </div>
+    </header>
+
+    <main class="container py-5">
+        <div class="row g-5">
+            <div class="col-lg-8">
+                
+                <section class="glass-card" data-aos="fade-up">
+                    <span class="step-badge">Phase 01: Glycemic Control</span>
+                    <h2 class="fw-bold mb-4">Glucose Stabilization</h2>
+                    <p>Erratic blood sugar is the primary driver of brain fog and systemic inflammation. Our protocol focuses on "Glucose Flattening" rather than just calorie restriction.</p>
+                    
+                    <div class="metric-box">
+                        <h5 class="text-info"><i class="bi bi-activity me-2"></i>The Bio-Hack sequence:</h5>
+                        <ul class="list-unstyled mt-3">
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> <strong>Fiber Pacing:</strong> Eat fiber (salad/greens) 10 minutes before carbs.</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> <strong>The ACV Shield:</strong> Vinegar before meals reduces glucose spikes by 30%.</li>
+                            <li><i class="bi bi-check-circle-fill text-success me-2"></i> <strong>Kinetic Buffering:</strong> 10 mins of movement post-meal clears glucose via GLUT4.</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="glass-card" data-aos="fade-up">
+                    <span class="step-badge">Phase 02: Autophagy</span>
+                    <h2 class="fw-bold mb-4">Time-Restricted Feeding</h2>
+                    <p>Cellular cleanup (Autophagy) only occurs when insulin levels remain at baseline for extended periods.</p>
+                    <div class="row g-3 text-center mt-2">
+                        <div class="col-md-4">
+                            <div class="p-4 rounded-4 bg-dark border border-secondary">
+                                <h4 class="fw-bold text-info">16:8</h4>
+                                <p class="small mb-0 opacity-50">Circadian Alignment</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-4 rounded-4 bg-dark border border-info">
+                                <h4 class="fw-bold text-info">18:6</h4>
+                                <p class="small mb-0 opacity-50">Metabolic Flexibility</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-4 rounded-4 bg-dark border border-warning">
+                                <h4 class="fw-bold text-warning">OMAD</h4>
+                                <p class="small mb-0 opacity-50">Peak GH Release</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="glass-card" data-aos="fade-up">
+                    <h4 class="fw-bold mb-3">Diagnostic: Meal Impact</h4>
+                    <p class="small opacity-75">Select your primary meal goal to see the recommended supplement stack.</p>
+                    <div class="d-flex flex-wrap gap-2">
+                        <button class="btn btn-outline-info rounded-pill px-4" onclick="alert('Stack: Berberine + ACV + 15min Walk')">Fat Loss</button>
+                        <button class="btn btn-outline-info rounded-pill px-4" onclick="alert('Stack: Essential Aminos + Creatine + High Carb')">Muscle Hypertrophy</button>
+                        <button class="btn btn-outline-info rounded-pill px-4" onclick="alert('Stack: MCT Oil + Electrolytes + Low Carb')">Cognitive Focus</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-lg-4">
+                <div class="sticky-top" style="top: 100px;">
+                    <h5 class="fw-bold mb-4 text-uppercase tracking-widest small text-info">Recommended Bio-Tech</h5>
+                    
+                    <a href="https://amazon.com" target="_blank" class="tool-link mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="fs-2 text-warning me-3"><i class="bi bi-watch"></i></div>
+                            <div>
+                                <h6 class="mb-0 fw-bold">Continuous Monitor</h6>
+                                <p class="small mb-0 opacity-50">Real-time glucose tracking.</p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="https://amazon.com" target="_blank" class="tool-link mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="fs-2 text-warning me-3"><i class="bi bi-droplet-half"></i></div>
+                            <div>
+                                <h6 class="mb-0 fw-bold">Organic ACV Complex</h6>
+                                <p class="small mb-0 opacity-50">Spike-prevention capsules.</p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <div class="glass-card p-4 mt-4 text-center" style="background: linear-gradient(45deg, #0f172a, #1e293b);">
+                        <i class="bi bi-file-earmark-pdf fs-1 text-info mb-3 d-block"></i>
+                        <h6 class="fw-bold">Full Protocol PDF</h6>
+                        <p class="x-small opacity-75">Get the detailed 50-page metabolic blueprint for 2026.</p>
+                        <button class="btn btn-info w-100 rounded-pill fw-bold text-white mt-2" data-bs-toggle="modal" data-bs-target="#resetModal">Download Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="py-5 border-top border-secondary mt-5">
+        <div class="container text-center opacity-50 small">
+            <p>© 2026 The Esthetics Hub | <a href="disclaimer.html" class="text-white">Affiliate Disclosure</a></p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js?v=1785768810"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js?v=1785768810"></script>
+    <script>AOS.init({ duration: 800, once: true });</script>
+</body>
+</html>

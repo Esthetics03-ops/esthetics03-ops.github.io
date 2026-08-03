@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Status | The Esthetics Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
+            --accent: #00ff88;
+            --bg: #0a0a0c;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .dashboard {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 40px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 { font-weight: 600; font-size: 1.5rem; margin-bottom: 8px; }
+        p.subtitle { opacity: 0.6; font-size: 0.9rem; margin-bottom: 32px; }
+
+        .status-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 40px;
+            padding: 16px;
+            background: rgba(0, 255, 136, 0.1);
+            border-radius: 12px;
+            border: 1px solid rgba(0, 255, 136, 0.2);
+        }
+
+        .pulse-dot {
+            height: 12px;
+            width: 12px;
+            background-color: var(--accent);
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.7);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(0, 255, 136, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 255, 136, 0); }
+        }
+
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .metric-card {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+        }
+
+        .label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.5; margin-bottom: 8px; display: block; }
+        .value { font-size: 1.2rem; font-weight: 600; }
+
+        .footer-links {
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+        }
+
+        a { color: var(--accent); text-decoration: none; opacity: 0.8; transition: 0.3s; }
+        a:hover { opacity: 1; }
+    </style>
+</head>
+<body>
+
+<div class="dashboard">
+    <div class="status-header">
+        <span class="pulse-dot"></span>
+        <span style="font-weight: 600; color: var(--accent);">Bio-Sync Core Operational</span>
+    </div>
+
+    <h1>System Pulse</h1>
+    <p class="subtitle">Real-time telemetry for Esthetics Hub v18.0</p>
+
+    <div class="grid">
+        <div class="metric-card">
+            <span class="label">Last Archival</span>
+            <span id="sync-time" class="value">...</span>
+        </div>
+        <div class="metric-card">
+            <span class="label">Data Points</span>
+            <span id="data-count" class="value">...</span>
+        </div>
+        <div class="metric-card">
+            <span class="label">M-PESA Bridge</span>
+            <span class="value" style="color: #00ff88;">Active</span>
+        </div>
+        <div class="metric-card">
+            <span class="label">GCP Project</span>
+            <span class="value">Active</span>
+        </div>
+    </div>
+
+    <div class="footer-links">
+        <a href="https://github.com/esthetics03-ops/esthetics03-ops.github.io/actions">View Actions Log</a>
+        <span>Nairobi, Kenya</span>
+    </div>
+</div>
+
+<script>
+    async function fetchStatus() {
+        // Replace with your actual Spreadsheet ID and GID for the RawData tab
+        const SHEET_ID = 'YOUR_SHEET_ID_HERE'; 
+        const GID = '0'; 
+        const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${GID}`;
+
+        try {
+            const response = await fetch(url);
+            const text = await response.text();
+            const rows = text.split('\n');
+            
+            // Extract last sync date from the final row
+            const lastRow = rows[rows.length - 1].split(',');
+            document.getElementById('sync-time').innerText = lastRow[0] || 'N/A';
+            document.getElementById('data-count').innerText = rows.length - 1;
+        } catch (e) {
+            document.getElementById('sync-time').innerText = 'Offline';
+            console.error('Telemetry fetch failed:', e);
+        }
+    }
+
+    fetchStatus();
+    // Refresh pulse every 15 minutes
+    setInterval(fetchStatus, 900000);
+</script>
+
+</body>
+  </html>

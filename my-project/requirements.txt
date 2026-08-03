@@ -1,0 +1,2 @@
+# Python dependencies for drive sync
+# Add your required packages here

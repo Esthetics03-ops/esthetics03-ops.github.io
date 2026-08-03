@@ -1,0 +1,17 @@
+{
+  "success": true,
+  "status": "active",
+  "endpoint": "/monetisation",
+  "timestamp": "2026-05-22T13:31:42.002Z",
+  "currency": "USD",
+  "data": {
+    "adsense": 884.53,
+    "affiliate": 0.00,
+    "donations": 0.00,
+    "total": 884.53
+  },
+  "deployment_target": {
+    "host_origin": "https://esthetics03-ops.github.io",
+    "cors_handshake": "verified_200_ok"
+  }
+}

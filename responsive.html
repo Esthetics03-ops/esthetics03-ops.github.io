@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="images\g1.png" sizes="32x32" />
+ <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css?v=1785768810" />
+ <link rel="stylesheet" type="text/css" href="style.css?v=1785768810">
+ <script src="http://maps.googleapis.com/maps/api/js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js?v=1785768810"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css?v=1785768810" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js?v=1785768810"></script>	
+<script>
+function checkCookies() {
+    var text = "";
+    if (navigator.cookieEnabled == true) {
+        text = "Cookies are enabled.";
+    } else {
+        text = "Cookies are not enabled.";
+    }
+    document.getElementById("demo").innerHTML = text;
+}
+</script>
+ 
+<script>
+function initialize()
+{
+var mapOpt = {
+  center:new google.maps.LatLng(-1.223878,36.7698201),
+  zoom:5,
+  mapTypeId:google.maps.MapTypeId.ROADMAP
+  };
+var map=new google.maps.Map(document.getElementById("googleMap"),mapOpt);
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+<style>
+* {
+  box-sizing: border-box;
+}
+
+.menu {
+  float: left;
+  width: 20%;
+  text-align: center;
+}
+
+.menu a {
+  background-color: #e5e5e5;
+  padding: 8px;
+  margin-top: 7px;
+  display: block;
+  width: 100%;
+  color: black;
+}
+
+.main {
+  float: left;
+  width: 60%;
+  padding: 0 20px;
+}
+
+.right {
+  background-color: #e5e5e5;
+  float: left;
+  width: 20%;
+  padding: 15px;
+  margin-top: 7px;
+  text-align: center;
+}
+
+@media only screen and (max-width: 620px) {
+  /* For mobile phones: */
+  .menu, .main, .right {
+    width: 100%;
+  }
+}
+
+
+.item{
+ width:100%;
+  height: auto;
+  margin: 20px auto ;
+  padding: 10px ;
+  background: #000000;
+  text-align: center;
+  color: #FFF;
+  font-size: 3em;
+}
+
+</style>
+</head>
+<body onload="checkCookies()" style="font-family:Verdana;color:#aaaaaa;">
+
+<div style="background-color:#e5e5e5;padding:15px;text-align:center;">
+  <h1>Hello World</h1>
+</div>
+
+<div style="overflow:auto">
+  <div class="menu">
+    <a href="#">Link 1</a>
+    <a href="#">Link 2</a>
+    <a href="#">Link 3</a>
+    <a href="#">Link 4</a>
+  </div>
+  
+  
+  <!-- Whatsapp api -->
+  <script src="https://static.elfsight.com/platform/platform.js?v=1785768810" data-use-service-core defer></script>
+   <div class="elfsight-app-14c0f760-d660-41cf-a1be-095e6d8a241f w3-hide-small"  data-elfsight-app-lazy></div>
+ 
+ 
+ 
+  <!-- News api -->
+  
+  <script src="https://static.elfsight.com/platform/platform.js?v=1785768810" data-use-service-core defer></script>
+   <div class="elfsight-app-14c0f760-d660-41cf-a1be-095e6d8a241f w3-hide-small"  data-elfsight-app-lazy></div>
+ 
+ 
+  <div class="main">
+    <h2>The Esthetics Hub -Nairobi</h2>
+    <p>We Specialize In Delivering Cutting-Edge Web & Graphics Solutions With Style And Precision.</p>
+	<p>The World Needs To Be Created And We Are One Of Those Creators.</p>
+	<em>Let Us bring Your Vision To Life With Our Innovative Services.</em>
+	 <div class="item w3-center" data-aos="fade-up">1
+<script>
+        (function(d, s, id) {
+            if (d.getElementById(id)) {
+                if (window.__TOMORROW__) {
+                    window.__TOMORROW__.renderWidget();
+                }
+                return;
+            }
+            const fjs = d.getElementsByTagName(s)[0];
+            const js = d.createElement(s);
+            js.id = id;
+            js.src = "https://www.tomorrow.io/v1/widget/sdk/sdk.bundle.min.js";
+
+            fjs.parentNode.insertBefore(js, fjs);
+        })(document, 'script', 'tomorrow-sdk');
+        </script>
+
+        <div class="  w3-center  tomorrow"
+           data-location-id="064802"
+           data-language="EN"
+           data-unit-system="METRIC"
+           data-skin="light"
+           data-widget-type="aqiPollen"
+           style="padding-bottom:22px;position:relative;"
+        >
+         
+          <a
+            href="https://www.tomorrow.io/weather-api/"
+            rel="nofollow noopener noreferrer"
+            target="_blank"
+            style="position: absolute; bottom: 0; transform: translateX(-50%); left: 50%;"
+          >
+           
+            <img
+              alt="Powered by the Tomorrow.io Weather API"
+              src="https://weather-website-client.tomorrow.io/img/powered-by.svg"
+              width="250"
+              height="18"
+            />
+          </a>
+        </div>   
+	 </div>
+	 
+<div class="item" data-aos="fade-down">2
+     
+<div class="w3-container" id="googleMap" style=" background:red; width:100%;height:380px;"></div>
+
+</div>
+<div class="item" data-aos="fade-right">3</div>
+
+<div class="item" data-aos="fade-left">4
+<script>
+    $("#news_result_preview_83").JSONView({"status":"success","totalResults":197,"results":[{"article_id":"c9167d537f38906fbe37b1ccb21a3781","title":"The Dirty Truth Behind ‘Clean’ Energy: How The Green Revolution Perpetuates Global Inequality","link":"https:\/\/kashmirreader.com\/2025\/05\/06\/the-dirty-truth-behind-clean-energy-how-the-green-revolution-perpetuates-global-inequality\/","keywords":["opinion"],"creator":["Falak Aslam"],"description":"Electric cars, solar panels and rare earth mining—the hypocrisy of a ‘clean’ transition built on child labor and carbon-heavy extraction As the world rushes toward “green” solutions, an important question arises: Is going green truly clean? Behind the noble slogans of sustainability lies a darker reality — one of hidden environmental costs, humanitarian crises, and [...]","content":"The Dirty Truth Behind ‘Clean’ Energy: How The Green Revolution Perpetuates Global Inequality Electric cars, solar panels and rare earth mining—the hypocrisy of a ‘clean’ transition built on child labor and carbon-heavy extraction As the world rushes toward “green” solutions, an important question arises: Is going green truly clean? Behind the noble slogans of sustainability lies a darker reality — one of hidden environmental costs, humanitarian crises, and widening global inequalities. The question Is going green an ill-informed strategy, one that is formulated without evaluating its costs? should be explored whether the green revolution is genuinely eco-friendly or simply another capitalist strategy that benefits a privileged few while burdening the many. The environmental damage we battle today was largely fueled by the industrialisation of powerful nations. According to the Energy and Climate Intelligence Unit, the UK is the fifth-largest historical emitter of CO2. While it prides itself on the Climate Change Act of 2008 and its global climate leadership, its historic role in colonial deforestation, resource extraction, and emissions cannot be erased. Promoting green energy after causing environmental devastation appears paradoxical and hypocritical. Developed nations boosted their economies through unchecked exploitation, leaving developing nations to bear the brunt of the crisis. Today, these same powerful nations dominate the green technology market, controlling patents and imposing tariffs that restrict access for developing countries. In India, the solar energy sector faces hurdles like a 40% customs tariff on solar modules and a 25% tariff on solar cells, inflating costs and slowing renewable transitions. As dependency theorists like A.G. Frank and Raúl Prebisch have warned, the green shift continues the pattern of global inequality — the Global South remains a resource base, while the Global North profits. Beyond economic disparities, the human cost of green technologies is staggering. In the Democratic Republic of Congo, 40,000 children work in hazardous cobalt mines — cobalt being a key component of EV batteries. Miners suffer severe health problems, including toxic metal exposure leading to birth defects and reproductive issues. A 2024 report titled Beneath the Green reveals that 56% of women in mining areas have experienced significant gynaecological problems since industrial mining began. Despite the immense profits generated, little has been done to make mining safer or humane, exposing the brutal realities behind our “clean” technologies. The green revolution is far from environmentally pure. It is estimated that producing an electric vehicle results in up to 60% more carbon emissions upfront compared to a petrol or diesel car. This carbon comes from the mining and refining processes of these metals. Research shows that for every tonne of extracted lithium, 5 to 15 tonnes of carbon are produced. A significant amount of water is also lost during the refining process. Water is becoming increasingly toxic, with pollutants accumulating through biomagnification. The transportation of these raw materials to industries and the associated shipping processes contribute significantly to emissions. This is not a small problem but an invisible These hidden environmental costs, including emissions from transporting raw materials, are rarely addressed in mainstream narratives but are crucial to understanding the true impact of “green” industries. India aims to have 80 million EVs on its roads by 2030, signalling an ambitious green shift. Yet, the rush toward EVs raises critical questions. Why are traditional sustainable practices, such as public transport, non-motorised mobility, and biogas usage, being sidelined? Instead of truly sustainable development, India risks replicating the West’s extractive, environmentally destructive model. New initiatives like the Critical Mineral Mission and mining expansions under Indian Rare Earths Limited (IREL) show an alarming preference for extraction over conservation. The union budget 2024–25 has even launched the Critical Mineral Mission that aims to expand domestic production of rare earth metals, because, clearly, what India really needs is more extractive industries, not sustainability. Meanwhile, energy to power these EVs will still largely come from coal-fired plants, making the transition questionable in its overall ecological impact. Replacing fossil-fuel cars with electric cars is not enough. True sustainability demands a complete rethinking of our lifestyles and priorities. Norway offers a rare example: 96% of its electricity comes from clean hydropower, built thoughtfully at high altitudes to minimise methane emissions. Meanwhile, India and many developing nations continue to chase extraction-heavy models in the name of progress. It’s time to stop idolising the West for fashion and start taking inspiration from countries like Norway, which has transitioned to truly cleaner energy. 96% of all electricity in Norway is generated by hydropower. These hydropower plants are especially eco-friendly and are normally located at high altitudes with cold temperatures and very little vegetation, which minimises the release of toxic methane and carbon dioxide from stored water SDGs are close to becoming mere buzzwords, and going green is turning into just another viral trend. Sustainable Development Goals (SDGs) call for the promotion, transfer, dissemination, and diffusion of environmentally sound technologies to developing countries. However, despite declarations and commitments, there is no concrete action taken to facilitate the transfer of green technologies to the Global South, where it could have the most significant impact, showcasing the fundamental lack of political will. Technology has ventured too far into domains like AI and space exploration, but has achieved far less in areas where it should have made significant progress. The question is, if the Global North is so committed to the ideas of sustainable development and green technology, why doesn’t it make its innovations affordable and accessible? I wonder, do these innovations truly help, or do they only help the developed? Hence, technology alone cannot save us. Political will, public mobilisation, and simpler, conscious living are critical. Instead of idolising technological advancement that deepens inequalities, we must rebuild our societies around people and the planet, not profit. While innovations like EVs have a role to play, they cannot substitute the systemic change we urgently need. By choosing public transport, protecting biodiversity, reducing waste, restoring degraded land, and demanding justice, we can still turn the tide. The writer is pursuing an MA in Political Science at the University of Kashmir Falak Aslam [email protected]","pubDate":"2025-05-05 19:36:40","pubDateTZ":"UTC","image_url":null,"video_url":null,"source_id":"kashmirreader","source_name":null,"source_priority":1088812,"source_url":null,"source_icon":"https:\/\/i.bytvi.com\/domain_icons\/kashmirreader.jpg","language":"english","country":["india"],"category":["top"],"sentiment":"negative","sentiment_stats":{"positive":0.58,"neutral":0.42,"negative":99},"ai_tag":["renewable energy","energy"],"ai_region":null,"ai_org":null,"duplicate":false},{"article_id":"e4fcd7f1291d3489862d402c0b24d2a2","title":"Raj govt preparing to rename Mt Abu, ban liquor & non-veg","link":"https:\/\/timesofindia.indiatimes.com\/city\/jaipur\/raj-govt-preparing-to-rename-mt-abu-ban-liquor-non-veg\/articleshow\/120909497.cms","keywords":null,"creator":["Ajay Singh Ugras"],"description":null,"content":"Jaipur: Rajasthan govt is planning to change the name of its only hill station, Mt Abu. Protesting the move Monday, a total of 23 organisations in Mt Abu expressed strong opposition to the proposed renaming of the hill station to ‘Abu Raj Tirth', which was first discussed during a municipal meeting in Oct 2024. The controversy erupted following a letter from the Department of Local Self Governance to the Mount Abu municipal body, dated April 25, which sought input on the proposed name change. Official documents accessed by TOI showed that the department referenced earlier communications from the Chief Minister's Office, indicating that discussions about the renaming began as far back as Oct 2024. The department letter specifically cites a UO note from the deputy director (statistics) dated April 15, calling for the submission of factual comments on the proposal. Organisations protesting the renaming argued that the proposal lacks public consent and could shift Mount Abu's identity from a vibrant tourist destination to a religious pilgrimage site. The protesters claimed that a local MLA, supported by a minister, was pushing for a complete ban on the open consumption of meat and alcohol in Mount Abu, citing the area's ancient religious significance. Local stakeholders have expressed alarm that implementing such restrictions could further diminish the hill station's attractiveness to visitors. A stakeholder said, \"An MLA in the state assembly wishes to change the name without public consent. The Chief Minister is scheduled to visit Abu in the second or third week of May, and a decision might be taken then.\" Saurabh Gangadia, secretary of Mount Abu Hotel Association, said, \"If the govt changes the name of the hill station, tourism will collapse. It will lead to mass unemployment. After liquor and non-veg are prohibited, who will visit the hill station?\" Vikas Seth, president of the Nakki Lake Association, highlighted the misleading implications of branding Mount Abu as a pilgrimage centre, suggesting it would deter tourists who currently flock to the area. \"The proposed change to ‘Abu Raj Tirth' sends a misleading message, suggesting a shift from a tourist destination to a religious pilgrimage centre,\" Seth said. A town vending committee member added that declaring Mount Abu a pilgrimage site would impose numerous social and religious restrictions, which the current infrastructure is ill-equipped to support. \"Mount Abu is the most visited tourist destination across seven states in the region. Tourists travel great distances to visit it but may no longer wish to do so after a name change,\" he warned. Mount Abu's historical significance dates back to 1830, when the East India Company's Rajputana Agency leased the area from the Sirohi princely state. In 1845, it was officially designated as the summer headquarters of the Agency due to its pleasant climate, which led to the development of the hill station.","pubDate":"2025-05-05 19:13:43","pubDateTZ":"UTC","image_url":"https:\/\/static.toiimg.com\/thumb\/msid-120909496,imgsize-67772,width-400,height-225,resizemode-72\/Raj-govt-preparing-to-rename-Mt-Abu-ban-liquor-non-veg.jpg","video_url":null,"source_id":"toi","source_name":null,"source_priority":239,"source_url":null,"source_icon":"https:\/\/i.bytvi.com\/domain_icons\/toi.png","language":"english","country":["india"],"category":["top"],"sentiment":"negative","sentiment_stats":{"positive":0.53,"neutral":0.74,"negative":98.74},"ai_tag":["politics"],"ai_region":["jaipur,rajasthan,india,asia","mt abu","rajasthan,india,asia"],"ai_org":["raj"],"duplicate":false},{"article_id":"3079e8cd005d522b6dcca2310e37629a","title":"Man poses as Haryana CM’s OSD, asks official to remove power poles; arrested","link":"https:\/\/timesofindia.indiatimes.com\/city\/gurgaon\/man-poses-as-haryana-cms-osd-asks-official-to-remove-power-poles-arrested\/articleshow\/120909498.cms","keywords":null,"creator":null,"description":null,"content":"AIFF wants Jamil to take charge of India U-23 team, coach undecided Question mark over Manolo’s future with national team post June qualifier Field fires prompt evacuations as smoke fills homes at Caranzalem At Shirgao, goddess to return to temple without pomp 49 foreigners deported from Goa since Jan Light rainfall likely today & tomorrow 900 teachers undergo training to integrate tech in classroom Chhattisgarh CM Vishnu Deo Sai's chopper lands in village to check pulse of people, holds Chaupal under Peepal Tree From crisis to comeback: How Gujarat keeps its pride roaring Olive ridleys return to S Goa shores, lay 19k eggs Deputy CM Arun Sao leads dialogue on urban planning with Chhattisgarh mayors NHAI invites tenders for maintenance of Neelambur–Madukkarai Bypass Strategise to capture power in TN in 2026 assembly elections, Nadda tells BJP cadres Bengaluru apartments struggle with governance 'Will have to build next gurukuls in Karachi and Lahore': Yoga guru Ramdev predicts Pakistan's collapse 'CM should have gone to Murshidabad earlier': Bengal BJP leader Dilip Ghosh ahead of Mamata Banerjee's visit Coimbatore woman, aged 80, murdered by her grandson From steroid addiction to stopping medication docs bust asthma myths Laptop manufacturer, its Coimbatore dealer directed to give compensation to customer CM: Shirgao stampede reveals need to streamline processes to avoid tragedies Kashi of Konkan Reborn: Stone miracle rises at Fatorpa After Super Cup flops, Federation Cup set to replace Durand at start of next season After student deaths, BITS Goa to revamp syllabus to cut stress Building collapses in blast at high explosives manufacturing unit near Coimbatore TOI Impact: Authorities rush to repair Kalamna road pothole Farm incomes plunge 8x: Climate change stunting mango, cashew growth in Goa 10 ways to train your brain to do difficult tasks 10 reasons to have Kathal (Jackfruit) in summer 10 Bollywood movies people wish were converted into books Bollywood stars who turned failure into fame after a flop debut 10 delicious dishes introduced by Mughals to India How to know if your headache is due to high BP 10 most beautiful and colourful freshwater aquarium fish 8 most beautiful pink birds that colour the sky in beautiful hues 8 underrated European national parks with incredible wildlife sightings","pubDate":"2025-05-05 19:13:43","pubDateTZ":"UTC","image_url":"https:\/\/static.toiimg.com\/thumb\/msid-117516396,width-1070,height-580,imgsize-210528,resizemode-75,overlay-toi_sw,pt-32,y_pad-40\/photo.jpg","video_url":null,"source_id":"toi","source_name":null,"source_priority":239,"source_url":null,"source_icon":"https:\/\/i.bytvi.com\/domain_icons\/toi.png","language":"english","country":["india"],"category":["business"],"sentiment":"negative","sentiment_stats":{"positive":0.09,"neutral":0.17,"negative":99.74},"ai_tag":["cricket"],"ai_region":["india,asia"],"ai_org":["aiff","haryana cm’s osd"],"duplicate":false},{"article_id":"b468d3a0d7bd9cb5e9c25d95a883cbc3","title":"Woman found dead near Kisan Path","link":"https:\/\/timesofindia.indiatimes.com\/city\/lucknow\/woman-found-dead-near-kisan-path\/articleshow\/120909488.cms","keywords":null,"creator":null,"description":null,"content":"AIFF wants Jamil to take charge of India U-23 team, coach undecided Question mark over Manolo’s future with national team post June qualifier Field fires prompt evacuations as smoke fills homes at Caranzalem At Shirgao, goddess to return to temple without pomp 49 foreigners deported from Goa since Jan Light rainfall likely today & tomorrow 900 teachers undergo training to integrate tech in classroom Chhattisgarh CM Vishnu Deo Sai's chopper lands in village to check pulse of people, holds Chaupal under Peepal Tree From crisis to comeback: How Gujarat keeps its pride roaring Olive ridleys return to S Goa shores, lay 19k eggs Deputy CM Arun Sao leads dialogue on urban planning with Chhattisgarh mayors NHAI invites tenders for maintenance of Neelambur–Madukkarai Bypass Strategise to capture power in TN in 2026 assembly elections, Nadda tells BJP cadres Bengaluru apartments struggle with governance 'Will have to build next gurukuls in Karachi and Lahore': Yoga guru Ramdev predicts Pakistan's collapse 'CM should have gone to Murshidabad earlier': Bengal BJP leader Dilip Ghosh ahead of Mamata Banerjee's visit Coimbatore woman, aged 80, murdered by her grandson From steroid addiction to stopping medication docs bust asthma myths Laptop manufacturer, its Coimbatore dealer directed to give compensation to customer CM: Shirgao stampede reveals need to streamline processes to avoid tragedies Kashi of Konkan Reborn: Stone miracle rises at Fatorpa After Super Cup flops, Federation Cup set to replace Durand at start of next season After student deaths, BITS Goa to revamp syllabus to cut stress Building collapses in blast at high explosives manufacturing unit near Coimbatore TOI Impact: Authorities rush to repair Kalamna road pothole Farm incomes plunge 8x: Climate change stunting mango, cashew growth in Goa 10 ways to train your brain to do difficult tasks 10 reasons to have Kathal (Jackfruit) in summer 10 Bollywood movies people wish were converted into books Bollywood stars who turned failure into fame after a flop debut 10 delicious dishes introduced by Mughals to India How to know if your headache is due to high BP 10 most beautiful and colourful freshwater aquarium fish 8 most beautiful pink birds that colour the sky in beautiful hues 8 underrated European national parks with incredible wildlife sightings","pubDate":"2025-05-05 19:13:31","pubDateTZ":"UTC","image_url":"https:\/\/static.toiimg.com\/thumb\/msid-117515978,width-1070,height-580,imgsize-99969,resizemode-75,overlay-toi_sw,pt-32,y_pad-40\/photo.jpg","video_url":null,"source_id":"toi","source_name":null,"source_priority":239,"source_url":null,"source_icon":"https:\/\/i.bytvi.com\/domain_icons\/toi.png","language":"english","country":["india"],"category":["top"],"sentiment":"negative","sentiment_stats":{"positive":0.09,"neutral":0.12,"negative":99.79},"ai_tag":["cricket"],"ai_region":["india,asia","kisan path"],"ai_org":["aiff"],"duplicate":false},{"article_id":"23ec7248d972ed03ec9268e7213cf5fc","title":"From heat to hail: Rain, dust storm hit Vadodara","link":"https:\/\/timesofindia.indiatimes.com\/city\/vadodara\/from-heat-to-hail-rain-dust-storm-hit-vadodara\/articleshow\/120909379.cms","keywords":null,"creator":null,"description":null,"content":"Field fires prompt evacuations as smoke fills homes at Caranzalem At Shirgao, goddess to return to temple without pomp 49 foreigners deported from Goa since Jan Light rainfall likely today & tomorrow 900 teachers undergo training to integrate tech in classroom NHAI invites tenders for maintenance of Neelambur–Madukkarai Bypass Chhattisgarh CM Vishnu Deo Sai's chopper lands in village to check pulse of people, holds Chaupal under Peepal Tree From crisis to comeback: How Gujarat keeps its pride roaring Olive ridleys return to S Goa shores, lay 19k eggs Deputy CM Arun Sao leads dialogue on urban planning with Chhattisgarh mayors Bengaluru apartments struggle with governance 'Will have to build next gurukuls in Karachi and Lahore': Yoga guru Ramdev predicts Pakistan's collapse 'CM should have gone to Murshidabad earlier': Bengal BJP leader Dilip Ghosh ahead of Mamata Banerjee's visit Coimbatore woman, aged 80, murdered by her grandson From steroid addiction to stopping medication docs bust asthma myths Laptop manufacturer, its Coimbatore dealer directed to give compensation to customer Critically injured recovering, health dept steps up support CM: Shirgao stampede reveals need to streamline processes to avoid tragedies Kashi of Konkan Reborn: Stone miracle rises at Fatorpa Will send report to central govt on Shirgao tragedy: Governor After Super Cup flops, Federation Cup set to replace Durand at start of next season After student deaths, BITS Goa to revamp syllabus to cut stress Panel to lay thrust on animal rescue during accidents Building collapses in blast at high explosives manufacturing unit near Coimbatore TOI Impact: Authorities rush to repair Kalamna road pothole Focus on pedestrians this Road Safety Week Study carrying capacity of Nuvem: Locals Farm incomes plunge 8x: Climate change stunting mango, cashew growth in Goa 10 ways to train your brain to do difficult tasks 10 reasons to have Kathal (Jackfruit) in summer 10 Bollywood movies people wish were converted into books Bollywood stars who turned failure into fame after a flop debut 10 delicious dishes introduced by Mughals to India How to know if your headache is due to high BP 10 most beautiful and colourful freshwater aquarium fish 8 most beautiful pink birds that colour the sky in beautiful hues 8 underrated European national parks with incredible wildlife sightings","pubDate":"2025-05-05 19:07:25","pubDateTZ":"UTC","image_url":"https:\/\/static.toiimg.com\/thumb\/msid-120909407,width-1070,height-580,imgsize-7254,resizemode-75,overlay-toi_sw,pt-32,y_pad-40\/photo.jpg","video_url":null,"source_id":"toi","source_name":null,"source_priority":239,"source_url":null,"source_icon":"https:\/\/i.bytvi.com\/domain_icons\/toi.png","language":"english","country":["india"],"category":["health"],"sentiment":"negative","sentiment_stats":{"positive":0.17,"neutral":0.21,"negative":99.63},"ai_tag":["natural disasters"],"ai_region":["goa,india,asia","goa,albay,philippines,asia","caranzalem at shirgao","vadodara,gujarat,india,asia"],"ai_org":null,"duplicate":false},{"article_id":"9a89c18e85ab6b07dcf96d43d4bfc42b","title":"Corp to call meet on traders’ rehab","link":"https:\/\/timesofindia.indiatimes.com\/city\/thiruvananthapuram\/corp-to-call-meet-on-traders-rehab\/articleshow\/120909381.cms","keywords":null,"creator":null,"description":null,"content":"Field fires prompt evacuations as smoke fills homes at Caranzalem At Shirgao, goddess to return to temple without pomp 49 foreigners deported from Goa since Jan Light rainfall likely today & tomorrow 900 teachers undergo training to integrate tech in classroom NHAI invites tenders for maintenance of Neelambur–Madukkarai Bypass Chhattisgarh CM Vishnu Deo Sai's chopper lands in village to check pulse of people, holds Chaupal under Peepal Tree From crisis to comeback: How Gujarat keeps its pride roaring Olive ridleys return to S Goa shores, lay 19k eggs Deputy CM Arun Sao leads dialogue on urban planning with Chhattisgarh mayors Bengaluru apartments struggle with governance 'Will have to build next gurukuls in Karachi and Lahore': Yoga guru Ramdev predicts Pakistan's collapse 'CM should have gone to Murshidabad earlier': Bengal BJP leader Dilip Ghosh ahead of Mamata Banerjee's visit Coimbatore woman, aged 80, murdered by her grandson From steroid addiction to stopping medication docs bust asthma myths Laptop manufacturer, its Coimbatore dealer directed to give compensation to customer Critically injured recovering, health dept steps up support CM: Shirgao stampede reveals need to streamline processes to avoid tragedies Kashi of Konkan Reborn: Stone miracle rises at Fatorpa Will send report to central govt on Shirgao tragedy: Governor After Super Cup flops, Federation Cup set to replace Durand at start of next season After student deaths, BITS Goa to revamp syllabus to cut stress Panel to lay thrust on animal rescue during accidents Building collapses in blast at high explosives manufacturing unit near Coimbatore TOI Impact: Authorities rush to repair Kalamna road pothole Focus on pedestrians this Road Safety Week Study carrying capacity of Nuvem: Locals Farm incomes plunge 8x: Climate change stunting mango, cashew growth in Goa 10 ways to train your brain to do difficult tasks 10 reasons to have Kathal (Jackfruit) in summer 10 Bollywood movies people wish were converted into books Bollywood stars who turned failure into fame after a flop debut 10 delicious dishes introduced by Mughals to India How to know if your headache is due to high BP 10 most beautiful and colourful freshwater aquarium fish 8 most beautiful pink birds that colour the sky in beautiful hues 8 underrated European national parks with incredible wildlife sightings","pubDate":"2025-05-05 19:04:15","pubDateTZ":"UTC","image_url":"https:\/\/static.toiimg.com\/thumb\/msid-117593874,width-1070,height-580,imgsize-92503,resizemode-75,overlay-toi_sw,pt-32,y_pad-40\/photo.jpg","video_url":null,"source_id":"toi","source_name":null,"source_priority":239,"source_url":null,"source_icon":"https:\/\/i.bytvi.com\/domain_icons\/toi.png","language":"english","country":["india"],"category":["entertainment"],"sentiment":"negative","sentiment_stats":{"positive":0.13,"neutral":0.18,"negative":99.69},"ai_tag":["accidents"],"ai_region":["goa,india,asia","caranzalem at shirgao","goa,albay,philippines,asia"],"ai_org":null,"duplicate":false},{"article_id":"e5d2e495a6f6b71df84690cdefd4fe9a","title":"Bangladeshi mom to be deported, child to stay with Indian father","link":"https:\/\/timesofindia.indiatimes.com\/city\/vadodara\/bangladeshi-mom-to-be-deported-child-to-stay-with-indian-father\/articleshow\/120909380.cms","keywords":null,"creator":null,"description":null,"content":"Field fires prompt evacuations as smoke fills homes at Caranzalem At Shirgao, goddess to return to temple without pomp 49 foreigners deported from Goa since Jan Light rainfall likely today & tomorrow 900 teachers undergo training to integrate tech in classroom NHAI invites tenders for maintenance of Neelambur–Madukkarai Bypass Chhattisgarh CM Vishnu Deo Sai's chopper lands in village to check pulse of people, holds Chaupal under Peepal Tree From crisis to comeback: How Gujarat keeps its pride roaring Olive ridleys return to S Goa shores, lay 19k eggs Deputy CM Arun Sao leads dialogue on urban planning with Chhattisgarh mayors Bengaluru apartments struggle with governance 'Will have to build next gurukuls in Karachi and Lahore': Yoga guru Ramdev predicts Pakistan's collapse 'CM should have gone to Murshidabad earlier': Bengal BJP leader Dilip Ghosh ahead of Mamata Banerjee's visit Coimbatore woman, aged 80, murdered by her grandson From steroid addiction to stopping medication docs bust asthma myths Laptop manufacturer, its Coimbatore dealer directed to give compensation to customer Critically injured recovering, health dept steps up support CM: Shirgao stampede reveals need to streamline processes to avoid tragedies Kashi of Konkan Reborn: Stone miracle rises at Fatorpa Will send report to central govt on Shirgao tragedy: Governor After Super Cup flops, Federation Cup set to replace Durand at start of next season After student deaths, BITS Goa to revamp syllabus to cut stress Panel to lay thrust on animal rescue during accidents Building collapses in blast at high explosives manufacturing unit near Coimbatore TOI Impact: Authorities rush to repair Kalamna road pothole Focus on pedestrians this Road Safety Week Study carrying capacity of Nuvem: Locals Farm incomes plunge 8x: Climate change stunting mango, cashew growth in Goa 10 ways to train your brain to do difficult tasks 10 reasons to have Kathal (Jackfruit) in summer 10 Bollywood movies people wish were converted into books Bollywood stars who turned failure into fame after a flop debut 10 delicious dishes introduced by Mughals to India How to know if your headache is due to high BP 10 most beautiful and colourful freshwater aquarium fish 8 most beautiful pink birds that colour the sky in beautiful hues 8 underrated European national parks with incredible wildlife sightings","pubDate":"2025-05-05 19:04:15","pubDateTZ":"UTC","image_url":"https:\/\/static.toiimg.com\/thumb\/msid-117694054,width-1070,height-580,imgsize-100933,resizemode-75,overlay-toi_sw,pt-32,y_pad-40\/photo.jpg","video_url":null,"source_id":"toi","source_name":null,"source_priority":239,"source_url":null,"source_icon":"https:\/\/i.bytvi.com\/domain_icons\/toi.png","language":"english","country":["india"],"category":["health"],"sentiment":"negative","sentiment_stats":{"positive":0.11,"neutral":0.23,"negative":99.66},"ai_tag":["accidents"],"ai_region":["caranzalem at shirgao"],"ai_org":null,"duplicate":false},{"article_id":"da77d934754124aec0d1a3defd5ed684","title":"Pune man rents a\/c to park 13L conned from govt clerk, held","link":"https:\/\/timesofindia.indiatimes.com\/city\/mumbai\/pune-man-rents-a\/c-to-park-13l-conned-from-govt-clerk-held\/articleshow\/120909251.cms","keywords":null,"creator":["Mateen Hafeez"],"description":null,"content":"Mateen Hafeez, special correspondent at The Times of India in Mumbai, reports on terrorism, underworld, cybercrime and organized crime syndicates. He also writes about the jails in Maharashtra and focuses on human interest stories. He has covered the Ghatkopar bomb blast, Vile Parle bomb blast, Mulund train blast, train serial blasts in 2006, 26\/11 terror attacks and Pune's German Bakery bomb blast. He has a special interest in Urdu fiction written by Ibn-e-Safi. Read More Field fires prompt evacuations as smoke fills homes at Caranzalem At Shirgao, goddess to return to temple without pomp 49 foreigners deported from Goa since Jan Light rainfall likely today & tomorrow 900 teachers undergo training to integrate tech in classroom NHAI invites tenders for maintenance of Neelambur–Madukkarai Bypass Chhattisgarh CM Vishnu Deo Sai's chopper lands in village to check pulse of people, holds Chaupal under Peepal Tree From crisis to comeback: How Gujarat keeps its pride roaring Olive ridleys return to S Goa shores, lay 19k eggs Deputy CM Arun Sao leads dialogue on urban planning with Chhattisgarh mayors Bengaluru apartments struggle with governance 'Will have to build next gurukuls in Karachi and Lahore': Yoga guru Ramdev predicts Pakistan's collapse 'CM should have gone to Murshidabad earlier': Bengal BJP leader Dilip Ghosh ahead of Mamata Banerjee's visit Coimbatore woman, aged 80, murdered by her grandson From steroid addiction to stopping medication docs bust asthma myths Laptop manufacturer, its Coimbatore dealer directed to give compensation to customer Critically injured recovering, health dept steps up support CM: Shirgao stampede reveals need to streamline processes to avoid tragedies Kashi of Konkan Reborn: Stone miracle rises at Fatorpa Will send report to central govt on Shirgao tragedy: Governor After Super Cup flops, Federation Cup set to replace Durand at start of next season After student deaths, BITS Goa to revamp syllabus to cut stress Panel to lay thrust on animal rescue during accidents Building collapses in blast at high explosives manufacturing unit near Coimbatore TOI Impact: Authorities rush to repair Kalamna road pothole Focus on pedestrians this Road Safety Week Study carrying capacity of Nuvem: Locals Farm incomes plunge 8x: Climate change stunting mango, cashew growth in Goa 10 ways to train your brain to do difficult tasks 10 reasons to have Kathal (Jackfruit) in summer 10 Bollywood movies people wish were converted into books Bollywood stars who turned failure into fame after a flop debut 10 delicious dishes introduced by Mughals to India How to know if your headache is due to high BP 10 most beautiful and colourful freshwater aquarium fish 8 most beautiful pink birds that colour the sky in beautiful hues 8 underrated European national parks with incredible wildlife sightings","pubDate":"2025-05-05 18:58:14","pubDateTZ":"UTC","image_url":"https:\/\/static.toiimg.com\/thumb\/msid-120909303,width-1070,height-580,imgsize-49908,resizemode-75,overlay-toi_sw,pt-32,y_pad-40\/photo.jpg","video_url":null,"source_id":"toi","source_name":null,"source_priority":239,"source_url":null,"source_icon":"https:\/\/i.bytvi.com\/domain_icons\/toi.png","language":"english","country":["india"],"category":["entertainment"],"sentiment":"negative","sentiment_stats":{"positive":0.33,"neutral":16.24,"negative":83.43},"ai_tag":["crime"],"ai_region":["mumbai,maharashtra,india,asia","pune,maharashtra,india,asia"],"ai_org":["the times of india"],"duplicate":false},{"article_id":"540568c24ae16c4f8a3bdd1e5d1199e6","title":"Govt sets July deadline for Kanpur dam project","link":"https:\/\/timesofindia.indiatimes.com\/city\/bhubaneswar\/govt-sets-july-deadline-for-kanpur-dam-project\/articleshow\/120909225.cms","keywords":null,"creator":null,"description":null,"content":"Field fires prompt evacuations as smoke fills homes at Caranzalem At Shirgao, goddess to return to temple without pomp 49 foreigners deported from Goa since Jan Light rainfall likely today & tomorrow 900 teachers undergo training to integrate tech in classroom NHAI invites tenders for maintenance of Neelambur–Madukkarai Bypass Chhattisgarh CM Vishnu Deo Sai's chopper lands in village to check pulse of people, holds Chaupal under Peepal Tree From crisis to comeback: How Gujarat keeps its pride roaring Olive ridleys return to S Goa shores, lay 19k eggs Deputy CM Arun Sao leads dialogue on urban planning with Chhattisgarh mayors Bengaluru apartments struggle with governance 'Will have to build next gurukuls in Karachi and Lahore': Yoga guru Ramdev predicts Pakistan's collapse 'CM should have gone to Murshidabad earlier': Bengal BJP leader Dilip Ghosh ahead of Mamata Banerjee's visit Coimbatore woman, aged 80, murdered by her grandson From steroid addiction to stopping medication docs bust asthma myths Laptop manufacturer, its Coimbatore dealer directed to give compensation to customer Critically injured recovering, health dept steps up support CM: Shirgao stampede reveals need to streamline processes to avoid tragedies Kashi of Konkan Reborn: Stone miracle rises at Fatorpa Will send report to central govt on Shirgao tragedy: Governor After Super Cup flops, Federation Cup set to replace Durand at start of next season After student deaths, BITS Goa to revamp syllabus to cut stress Panel to lay thrust on animal rescue during accidents Building collapses in blast at high explosives manufacturing unit near Coimbatore TOI Impact: Authorities rush to repair Kalamna road pothole Focus on pedestrians this Road Safety Week Study carrying capacity of Nuvem: Locals Farm incomes plunge 8x: Climate change stunting mango, cashew growth in Goa 10 ways to train your brain to do difficult tasks 10 reasons to have Kathal (Jackfruit) in summer 10 Bollywood movies people wish were converted into books Bollywood stars who turned failure into fame after a flop debut 10 delicious dishes introduced by Mughals to India How to know if your headache is due to high BP 10 most beautiful and colourful freshwater aquarium fish 8 most beautiful pink birds that colour the sky in beautiful hues 8 underrated European national parks with incredible wildlife sightings","pubDate":"2025-05-05 18:52:24","pubDateTZ":"UTC","image_url":"https:\/\/static.toiimg.com\/thumb\/msid-120909223,width-1070,height-580,imgsize-92502,resizemode-75,overlay-toi_sw,pt-32,y_pad-40\/photo.jpg","video_url":null,"source_id":"toi","source_name":null,"source_priority":239,"source_url":null,"source_icon":"https:\/\/i.bytvi.com\/domain_icons\/toi.png","language":"english","country":["india"],"category":["top"],"sentiment":"negative","sentiment_stats":{"positive":0.13,"neutral":0.12,"negative":99.75},"ai_tag":["accidents"],"ai_region":["kanpur,uttar pradesh,india,asia","goa,india,asia","caranzalem at shirgao","goa,albay,philippines,asia"],"ai_org":null,"duplicate":false},{"article_id":"fe8f3640c7fef95845464e5a55348196","title":"AIFF wants Jamil to take charge of India U-23 team, coach undecided","link":"https:\/\/timesofindia.indiatimes.com\/city\/goa\/aiff-wants-jamil-to-take-charge-of-india-u-23-team-coach-undecided\/articleshow\/120909210.cms","keywords":null,"creator":null,"description":"AIFF wants Jamil to take charge of India U-23 team, coach undecided","content":"Field fires prompt evacuations as smoke fills homes at Caranzalem At Shirgao, goddess to return to temple without pomp 49 foreigners deported from Goa since Jan Light rainfall likely today & tomorrow 900 teachers undergo training to integrate tech in classroom NHAI invites tenders for maintenance of Neelambur–Madukkarai Bypass Chhattisgarh CM Vishnu Deo Sai's chopper lands in village to check pulse of people, holds Chaupal under Peepal Tree From crisis to comeback: How Gujarat keeps its pride roaring Olive ridleys return to S Goa shores, lay 19k eggs Deputy CM Arun Sao leads dialogue on urban planning with Chhattisgarh mayors Bengaluru apartments struggle with governance 'Will have to build next gurukuls in Karachi and Lahore': Yoga guru Ramdev predicts Pakistan's collapse 'CM should have gone to Murshidabad earlier': Bengal BJP leader Dilip Ghosh ahead of Mamata Banerjee's visit Coimbatore woman, aged 80, murdered by her grandson From steroid addiction to stopping medication docs bust asthma myths Laptop manufacturer, its Coimbatore dealer directed to give compensation to customer Critically injured recovering, health dept steps up support CM: Shirgao stampede reveals need to streamline processes to avoid tragedies Kashi of Konkan Reborn: Stone miracle rises at Fatorpa Will send report to central govt on Shirgao tragedy: Governor After Super Cup flops, Federation Cup set to replace Durand at start of next season After student deaths, BITS Goa to revamp syllabus to cut stress Panel to lay thrust on animal rescue during accidents Building collapses in blast at high explosives manufacturing unit near Coimbatore TOI Impact: Authorities rush to repair Kalamna road pothole Focus on pedestrians this Road Safety Week Study carrying capacity of Nuvem: Locals Farm incomes plunge 8x: Climate change stunting mango, cashew growth in Goa 10 ways to train your brain to do difficult tasks 10 reasons to have Kathal (Jackfruit) in summer 10 Bollywood movies people wish were converted into books Bollywood stars who turned failure into fame after a flop debut 10 delicious dishes introduced by Mughals to India How to know if your headache is due to high BP 10 most beautiful and colourful freshwater aquarium fish 8 most beautiful pink birds that colour the sky in beautiful hues 8 underrated European national parks with incredible wildlife sightings","pubDate":"2025-05-05 18:51:49","pubDateTZ":"UTC","image_url":"https:\/\/static.toiimg.com\/thumb\/msid-120909206,width-1070,height-580,imgsize-84420,resizemode-75,overlay-toi_sw,pt-32,y_pad-40\/photo.jpg","video_url":null,"source_id":"toi","source_name":null,"source_priority":239,"source_url":null,"source_icon":"https:\/\/i.bytvi.com\/domain_icons\/toi.png","language":"english","country":["india"],"category":["top"],"sentiment":"negative","sentiment_stats":{"positive":0.12,"neutral":0.24,"negative":99.64},"ai_tag":["cricket","accidents"],"ai_region":["india,asia","caranza"],"ai_org":["aiff"],"duplicate":false}],"nextPage":"1746471109945503417"}, { escape: false });
+    </script>
+</div>
+
+<div class="item" data-aos="zoom-in">5</div>
+ 
+    Hello, World!
+    <iframe src="https://fritz.chessbase.com" style="width:760px;height:480px"></iframe>
+    <br>
+    <iframe src="https://fritz.chessbase.com?pos=wKe3,Re4/bKd5" style="width:760px;height:480px"></iframe>
+    <br>
+    <iframe src="https://fritz.chessbase.com?fen=r1brnbk1/1p1n1ppp/p2p4/q1pPpPPP/4P1Q1/2N1BN2/PPP1B3/1K4RR w - - 0 1" style="width:760px;height:480px"></iframe>
+  
+
+
+<div class="item" data-aos="zoom-out">6</div>
+
+<div class="item" data-aos="slide-up">7</div>
+<div class="item" data-aos="flip-up">8</div>
+<div class="item" data-aos="flip-down">9</div>
+<div class="item" data-aos="flip-right">10</div>
+<div class="item" data-aos="flip-left">11</div>
+  
+  <script src="https://unpkg.com/aos@next/dist/aos.js?v=1785768810"></script>
+  <script>
+  AOS.init({
+  duration: 1200,
+})  
+  </script>
+  </div>
+
+  <div class="right">
+    <h2>About</h2>
+    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
+  </div>
+</div>
+
+<div style="background-color:#e5e5e5;text-align:center;padding:10px;margin-top:7px;">© copyright w3schools.com
+ <p>This Website was last modified:</p>
+  <p id="Demo"></p>
+  <p id="demo"></p>
+</div>
+
+<script>
+let text = document.lastModified;
+document.getElementById("Demo").innerHTML = text;
+</script>
+
+
+</body>
+</html>
+

@@ -1,0 +1,49 @@
+{
+  "articles": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "10 Nutrition Tips for a Healthier Life",
+      "author": { "@type": "Person", "name": "George Kutosi" },
+      "datePublished": "2025-11-08",
+      "image": "https://esthetics03-ops.github.io/images/nutrition-tips.webp",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Hezmil Wellness Blog",
+        "logo": { "@type": "ImageObject", "url": "https://esthetics03-ops.github.io/images/logo.webp" }
+      },
+      "description": "Improve your health with these 10 practical nutrition tips for daily life.",
+      "mainEntityOfPage": "https://esthetics03-ops.github.io/10-nutrition-tips-for-a-healthier-life.html"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Managing Stress for Mental Clarity",
+      "author": { "@type": "Person", "name": "George Kutosi" },
+      "datePublished": "2025-11-08",
+      "image": "https://esthetics03-ops.github.io/images/managing-stress.webp",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Hezmil Wellness Blog",
+        "logo": { "@type": "ImageObject", "url": "https://esthetics03-ops.github.io/images/logo.webp" }
+      },
+      "description": "Learn effective stress management techniques to achieve mental clarity and focus.",
+      "mainEntityOfPage": "https://esthetics03-ops.github.io/managing-stress-for-mental-clarity.html"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Holistic Living: Balance Mind, Body & Soul",
+      "author": { "@type": "Person", "name": "George Kutosi" },
+      "datePublished": "2025-11-08",
+      "image": "https://esthetics03-ops.github.io/images/holistic-living.webp",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Hezmil Wellness Blog",
+        "logo": { "@type": "ImageObject", "url": "https://esthetics03-ops.github.io/images/logo.webp" }
+      },
+      "description": "Discover holistic living principles to harmonize your mind, body, and soul for a healthier lifestyle.",
+      "mainEntityOfPage": "https://esthetics03-ops.github.io/holistic-living-balance-mind-body-soul.html"
+    }
+  ]
+}

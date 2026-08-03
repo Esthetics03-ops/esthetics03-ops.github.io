@@ -1,0 +1,49 @@
+# --- THE ESTHETICS HUB: MASTER SHIELD ---
+
+# 1. API & CREDENTIALS (CRITICAL - DO NOT CAPTURE)
+credentials.json
+token.json
+client_secret.json
+google_ads_config.yaml
+.env
+.env.local
+.env.*.local
+
+# 2. DATABASES & DATA (BIO-SYNC CACHE)
+*.db
+*.sqlite
+*.sqlite3
+/data/
+outputs/
+*.csv
+*.json_metadata
+
+# 3. PYTHON & ENVIRONMENT
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+
+# 4. LOGS & DIAGNOSTICS
+*.log
+google_sync_error.log
+analytics_fetch.log
+performance_audit.txt
+
+# 5. OS & IDE SPECIFICS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# 6. BUILD & TEMP
+dist/
+build/
+temp/
+tmp/
+*.bak

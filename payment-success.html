@@ -1,0 +1,43 @@
+---
+layout: page
+title: Payment Confirmed
+sitemap: false
+---
+
+<div style="text-align: center; padding: 40px 20px;">
+    <div style="font-size: 50px; color: #2ecc71; margin-bottom: 20px;">✓</div>
+    <h1 style="color: #2c3e50;">Payment Successful</h1>
+    <p style="font-size: 1.1em; color: #7f8c8d;">Thank you for investing in your metabolic health.</p>
+    
+    <div style="background: #f9f9f9; border-radius: 12px; padding: 25px; margin: 30px auto; max-width: 500px; border: 1px solid #eee;">
+        <h3 style="margin-top: 0;">What’s Next?</h3>
+        <ul style="text-align: left; line-height: 1.8; color: #34495e;">
+            <li><strong>M-PESA/NCBA:</strong> Your transaction is being logged.</li>
+            <li><strong>Protocol Access:</strong> You are being redirected to your dashboard.</li>
+            <li><strong>Email:</strong> A copy of your Bio-Sync Reset will be sent to your inbox.</li>
+        </ul>
+    </div>
+
+    <p id="redirect-msg" style="color: #95a5a6; font-style: italic;">
+        Redirecting you to the Protocol Lab in <span id="countdown">5</span> seconds...
+    </p>
+
+    <a href="/bio-sync-master" style="display: inline-block; background: #2c3e50; color: white; padding: 12px 30px; border-radius: 25px; text-decoration: none; font-weight: bold; margin-top: 20px;">
+        Access Protocol Now
+    </a>
+</div>
+
+<script>
+    // Automatic Redirect Script
+    let seconds = 5;
+    const countdownEl = document.getElementById('countdown');
+    
+    const interval = setInterval(() => {
+        seconds--;
+        countdownEl.innerText = seconds;
+        if (seconds <= 0) {
+            clearInterval(interval);
+            window.location.href = "/bio-sync-master"; // Change this to your actual protocol URL
+        }
+    }, 1000);
+  </script>

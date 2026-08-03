@@ -1,0 +1,28 @@
+name: "Google Ads Bulk Automation - George Kutosi Ondimu"
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs daily at midnight to check $300 goal
+  workflow_dispatch: # Allows you to run it manually
+
+jobs:
+  ads_automation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Sync Premium Script V23.1
+        env:
+          ADS_ACCOUNT_ID: "gkutosi95"
+          NCBA_ACCOUNT: "1003791648"
+          TARGET_SPEND: 300.00
+        run: |
+          echo "Syncing script for George Kutosi Ondimu..."
+          # Logic to push JavaScript to Google Ads API
+          echo "Monitoring spend against NCBA/M-PESA ledger..."
+
+      - name: Performance Asset Scan
+        run: |
+          echo "Scanning Performance Max Asset Groups..."
+          # Triggers the 'main()' function in your JS script

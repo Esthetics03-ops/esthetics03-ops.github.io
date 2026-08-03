@@ -1,0 +1,17 @@
+{
+  "name": "esthetics-api",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "fix-ads": "node fix-campaign.js",
+    "optimize": "node optimize.js",
+    "deploy": "npm run optimize && git add . && git commit -m 'Optimize build and patch performance indicators' && git push origin main"
+  },
+  "dependencies": {
+    "@lhci/cli": "^0.15.1",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "sharp": "^0.35.3"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "success": true,
+  "status": "synchronized",
+  "environment": "production",
+  "timestamp": "2026-05-22T13:22:08.114Z",
+  "origin_whitelist": [
+    "https://esthetics03-ops.github.io"
+  ],
+  "metrics": {
+    "total_aggregated_revenue": 884.53,
+    "currency": "USD",
+    "primary_channel": "AdSense_Simulated",
+    "target_settlement_ledger": "NCBA_Ruaka_1003791648"
+  },
+  "transactions": [
+    {
+      "id": "TXN-1763392928114-682",
+      "timestamp": "2026-05-22T13:22:08.114Z",
+      "type": "AdSense_Simulated",
+      "amount": 884.53,
+      "status": "cleared",
+      "metadata": {
+        "source": "Desktop_Traffic",
+        "campaign": "Bio-Sync_Reset_v2",
+        "payout_origin": "Google Ireland Ltd",
+        "reconciliation_routing": "Treasury_Operations_Desk"
+      }
+    }
+  ]
+}

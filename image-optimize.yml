@@ -1,0 +1,23 @@
+name: Image Optimization
+
+on:
+  push:
+    paths:
+      - '**.png'
+      - '**.jpg'
+      - '**.jpeg'
+
+jobs:
+  optimize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Optimize Images
+        uses: caliber-app/image-actions@master
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          # This will compress and convert images automatically
+          webp: true
+          avif: true

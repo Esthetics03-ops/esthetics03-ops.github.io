@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Nutrition Protocol 2026 | The Esthetics Hub</title>
+  
+  <meta name="description" content="Master your metabolism with our science-backed nutrition protocol. Includes interactive macro calculator and 7-day starter plan.">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=800">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css?v=1785768810">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css?v=1785768810" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #10b981;
+      --secondary: #3b82f6;
+      --dark-bg: #0f172a;
+      --light-bg: #f8fafc;
+      --glass-light: rgba(255, 255, 255, 0.8);
+      --glass-dark: rgba(15, 23, 42, 0.9);
+      --text-main: #1e293b;
+      --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Dark Mode Support */
+    body.dark-mode {
+      --light-bg: var(--dark-bg);
+      --text-main: #f8fafc;
+      --glass-light: var(--glass-dark);
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--light-bg);
+      color: var(--text-main);
+      transition: background 0.3s ease;
+      margin: 0;
+      overflow-x: hidden;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: var(--glass-light);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(128,128,128,0.2);
+      padding: 1rem 0;
+    }
+
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+    /* Modern Slider */
+    .slider-container {
+      position: relative;
+      width: 100%;
+      height: 550px;
+      overflow: hidden;
+      border-radius: 32px;
+      margin: 40px 0;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+    }
+
+    .slider {
+      display: flex;
+      height: 100%;
+      transition: var(--transition);
+      will-change: transform;
+    }
+
+    .slide { min-width: 100%; height: 100%; position: relative; }
+    .slide img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.9); }
+
+    .nav-btn {
+      background: var(--glass-light);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: var(--text-main);
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      transition: var(--transition);
+      pointer-events: auto;
+    }
+
+    .nav-btn:hover { background: var(--primary); color: white; transform: scale(1.1); }
+
+    /* Macro Calculator Card */
+    .calc-card {
+      background: var(--glass-light);
+      border: 1px solid rgba(128,128,128,0.1);
+      padding: 40px;
+      border-radius: 24px;
+      margin: 60px 0;
+      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+    }
+
+    .input-group { margin-bottom: 20px; }
+    input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      margin-top: 5px;
+      background: transparent;
+      color: inherit;
+    }
+
+    .bi-spin { 
+      display: inline-block; 
+      animation: float 3s ease-in-out infinite; 
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0); }
+      50% { transform: translateY(-10px) rotate(5deg); }
+    }
+
+    .tip-card {
+      background: var(--glass-light);
+      padding: 30px;
+      border-radius: 24px;
+      border: 1px solid rgba(128,128,128,0.1);
+      transition: var(--transition);
+    }
+
+    .tip-card:hover { transform: translateY(-12px); border-color: var(--primary); }
+
+    .affiliate-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--primary);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="wrap" style="display: flex; justify-content: space-between; align-items: center;">
+      <a href="#" style="font-weight: 800; text-decoration: none; color: var(--text-main); font-size: 1.5rem;">ESTHETICS HUB</a>
+      <div style="display: flex; align-items: center; gap: 20px;">
+        <button id="themeToggle" class="nav-btn" style="width: 40px; height: 40px; font-size: 1.2rem;" aria-label="Toggle Dark Mode">
+          <i class="bi bi-moon-stars"></i>
+        </button>
+        <nav>
+          <a href="#tips" style="text-decoration: none; color: var(--text-main); font-weight: 600;">Protocol</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    
+    <section class="slider-container" data-aos="zoom-in">
+      <div class="slider" id="mainSlider">
+        <div class="slide"><img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=1200" alt="Nutrition Slide 1" fetchpriority="high"></div>
+        <div class="slide"><img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1200" alt="Nutrition Slide 2" loading="lazy"></div>
+        <div class="slide"><img src="https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=1200" alt="Nutrition Slide 3" loading="lazy"></div>
+      </div>
+      <div style="position: absolute; top: 50%; width: 100%; display: flex; justify-content: space-between; padding: 0 30px; box-sizing: border-box; pointer-events: none;">
+        <button class="nav-btn" onclick="moveSlider(-1)"><i class="bi bi-arrow-left"></i></button>
+        <button class="nav-btn" onclick="moveSlider(1)"><i class="bi bi-arrow-right"></i></button>
+      </div>
+    </section>
+
+    <section data-aos="fade-up" style="text-align: center; margin: 80px 0;">
+      <h2 style="font-size: 2.5rem;">The Biological Engine</h2>
+      <p style="max-width: 700px; margin: 0 auto 40px; opacity: 0.8;">To master your physique, you must understand how your body converts macronutrients into cellular energy (ATP).</p>
+      
+    </section>
+
+    <section id="calculator" class="calc-card" data-aos="fade-up">
+      <h3><i class="bi bi-calculator"></i> Personalized Macro Guide</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+        <div class="input-group">
+          <label>Weight (kg)</label>
+          <input type="number" id="weight" placeholder="e.g. 75">
+        </div>
+        <div class="input-group">
+          <label>Goal</label>
+          <select id="goal" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #cbd5e1; background: transparent; color: inherit;">
+            <option value="1.6">Maintenance / Lean Build</option>
+            <option value="2.2">Aggressive Muscle Growth</option>
+          </select>
+        </div>
+      </div>
+      <button onclick="calculateMacros()" class="affiliate-link" style="border: none; cursor: pointer; width: 100%; justify-content: center;">Calculate Targets</button>
+      <div id="results" style="margin-top: 20px; font-weight: 800; color: var(--primary); text-align: center; font-size: 1.2rem;"></div>
+    </section>
+
+    <div class="tips-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin: 80px 0;">
+      <article class="tip-card" data-aos="fade-up">
+        <i class="bi bi-shield-check bi-spin" style="font-size: 2.5rem; color: var(--primary);"></i>
+        <h3>Micronutrient Density</h3>
+        <p>Phytochemicals in colored vegetables prevent oxidative stress.</p>
+        
+        <a href="https://www.iherb.com" class="affiliate-link" rel="sponsored">Shop iHerb <i class="bi bi-globe"></i></a>
+      </article>
+
+      <article class="tip-card" data-aos="fade-up" data-aos-delay="200">
+        <i class="bi bi-moisture bi-spin" style="font-size: 2.5rem; color: var(--secondary);"></i>
+        <h3>Hydration & Fascia</h3>
+        <p>Water isn't just for thirst; it keeps your connective tissue elastic.</p>
+        <a href="https://amzn.to/water" class="affiliate-link" rel="sponsored">Amazon Essentials <i class="bi bi-amazon"></i></a>
+      </article>
+    </div>
+
+    <section data-aos="zoom-in" style="margin: 100px 0;">
+      <h2 style="text-align: center;">Advanced Prep Strategy</h2>
+      <div style="position: relative; padding-bottom: 56.25%; height: 0; border-radius: 32px; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.2);">
+        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameborder="0" allowfullscreen></iframe>
+      </div>
+    </section>
+
+  </main>
+
+  <footer style="background: var(--dark-bg); color: white; padding: 80px 0; text-align: center;">
+    <div class="wrap">
+      <h2 style="color: var(--primary);">THE ESTHETICS HUB</h2>
+      <p style="opacity: 0.6;">Redefining Human Potential through Science and Esthetics.</p>
+      <div style="margin-top: 30px; display: flex; justify-content: center; gap: 25px; font-size: 1.5rem;">
+        <i class="bi bi-instagram"></i>
+        <i class="bi bi-twitter-x"></i>
+        <i class="bi bi-youtube"></i>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js?v=1785768810"></script>
+  <script>
+    AOS.init({ duration: 1000, once: true });
+
+    // Slider
+    let slideIdx = 0;
+    function moveSlider(n) {
+      const slider = document.getElementById('mainSlider');
+      slideIdx = (slideIdx + n + 3) % 3;
+      slider.style.transform = `translateX(-${slideIdx * 100}%)`;
+    }
+    setInterval(() => moveSlider(1), 6000);
+
+    // Dark Mode
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      const icon = document.querySelector('#themeToggle i');
+      icon.classList.toggle('bi-moon-stars');
+      icon.classList.toggle('bi-sun');
+    });
+
+    // Macro Logic
+    function calculateMacros() {
+      const weight = document.getElementById('weight').value;
+      const factor = document.getElementById('goal').value;
+      if(!weight) return alert("Please enter weight");
+      const protein = (weight * factor).toFixed(1);
+      document.getElementById('results').innerHTML = `Daily Target: ${protein}g Protein | ${(weight * 0.8).toFixed(1)}g Healthy Fats`;
+    }
+  </script>
+</body>
+  </html>

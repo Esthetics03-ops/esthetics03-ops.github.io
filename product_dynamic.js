@@ -1,0 +1,1 @@
+// JavaScript to update product JSON-LD dynamically

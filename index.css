@@ -1,0 +1,20 @@
+/* The Esthetics Hub - index.css */
+:root {
+  --primary-color: #4b6b46;
+  --accent-color: #c5a880;
+  --text-color: #333;
+  --bg-color: #fdfcf8;
+  --white: #fff;
+}
+body { margin: 0; font-family: 'Poppins', sans-serif; background: var(--bg-color); color: var(--text-color); }
+.navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 25px; background: var(--white); border-bottom: 2px solid var(--accent-color); position: sticky; top: 0; }
+.logo-section { display: flex; align-items: center; }
+.logo { width: 48px; height: 48px; border-radius: 50%; margin-right: 10px; }
+.menu { list-style: none; display: flex; margin: 0; padding: 0; }
+.menu li { margin: 0 10px; }
+.menu a { text-decoration: none; color: var(--primary-color); font-weight: 500; }
+.hero { text-align: center; background: linear-gradient(rgba(75,107,70,0.5), rgba(75,107,70,0.5)), url('g1.png') center/cover; color: var(--white); padding: 100px 20px; }
+.btn-primary { background: var(--accent-color); color: var(--white); padding: 12px 25px; border-radius: 30px; text-decoration: none; }
+.articles, .affiliate, .contact { padding: 60px 20px; text-align: center; }
+.footer { text-align: center; padding: 15px; background: var(--primary-color); color: var(--white); }
+@media (max-width: 768px) { .menu { display: none; flex-direction: column; } .menu.active { display: flex; } }
