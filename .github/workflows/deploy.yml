@@ -33,8 +33,14 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install dependencies
-        run: npm install sharp @lhci/cli --prefer-offline --no-audit
+      - name: Install tools in isolated directory
+        run: |
+          mkdir -p .local-tools
+          cd .local-tools
+          npm init -y
+          npm install --no-audit --prefer-offline sharp @lhci/cli --no-save
+          echo "PATH=$PWD/node_modules/.bin:\$PATH" >> $GITHUB_ENV
+          cd ..
 
       - name: Create Build Directory
         run: |
@@ -61,7 +67,7 @@ jobs:
               echo "Processing cache busting for: $FILE"
               
               # Step 1: Strip out any pre-existing query parameters on local paths
-              sed -i -E "s/((href|src)=\"([^\"]+)\.(css|js))\?[^\"]*\"/\1\"/g" "$FILE"
+              sed -i -E "s/((href|src)=\"([^\"]+)\.(css|js))\?[^"]*\"/\1\"/g" "$FILE"
               
               # Step 2: Inject the new timestamp query parameter to local assets (ignoring http/https remote files)
               sed -i -E "s/((href|src)=\")(?!http|https|\/\/)([^\"]+\.(css|js))\"/\1\3?v=$TIMESTAMP\"/g" "$FILE" 2>/dev/null || \
