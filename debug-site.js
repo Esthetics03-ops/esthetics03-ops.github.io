@@ -61,7 +61,16 @@ let externalImagesCount = 0;
 while ((match = imgRegex[exec](htmlContent)) !== null) {
     const src = match[1];
     if (src.startsWith('http://') || src.startsWith('https://')) {
-        if (!src.includes('github.io')) {
+        let isAllowedGithubHost = false;
+        try {
+            const parsedUrl = new URL(src);
+            const host = parsedUrl.hostname.toLowerCase();
+            isAllowedGithubHost = host === 'github.io' || host.endsWith('.github.io');
+        } catch (e) {
+            isAllowedGithubHost = false;
+        }
+
+        if (!isAllowedGithubHost) {
             console.warn(`  ⚠️ External Hotlink Found: <img src="${src}">`);
             externalImagesCount++;
             warningsFound++;
