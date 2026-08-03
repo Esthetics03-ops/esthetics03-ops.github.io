@@ -1,47 +1,11 @@
-name: Jekyll site CI
-
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
-# Grants the token permissions required to deploy to GitHub Pages
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout Code
-      uses: actions/checkout@v4
-
-    - name: Build the site in the jekyll/builder container
-      run: |
-        docker run \
-        -v ${{ github.workspace }}:/srv/jekyll \
-        -v ${{ github.workspace }}/_site:/srv/jekyll/_site \
-        jekyll/builder:latest /bin/bash -c "chmod -R 777 /srv/jekyll && jekyll build --future"
-
-    # ========================================================
-    # Added Deployment Steps to push files to GitHub Pages
-    # ========================================================
-    - name: Upload Pages Artifact
-      uses: actions/upload-pages-artifact@v3
-      with:
-        path: ./_site
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+- name: Build the site in the jekyll/builder container
+  run: |
+    docker run \
+      -v ${{ github.workspace }}:/srv/jekyll \
+      -v ${{ github.workspace }}/_site:/srv/jekyll/_site \
+      jekyll/builder:latest /bin/bash -lc "\
+        chmod -R 777 /srv/jekyll && \
+        cd /srv/jekyll && \
+        bundle install --jobs=4 --retry=3 && \
+        bundle exec jekyll build --future \
+      "
