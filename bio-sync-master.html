@@ -84,6 +84,7 @@
         .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 8px; }
         .dot-online { background: var(--kenya-green); box-shadow: 0 0 8px var(--kenya-green); }
         .dot-warning { background: #f59e0b; box-shadow: 0 0 8px #f59e0b; }
+        .dot-active { background: var(--kenya-green); box-shadow: 0 0 8px var(--kenya-green); }
 
         @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
     </style>
@@ -108,6 +109,13 @@
         <div style="text-align: right;">
             <div style="color: var(--primary); font-size: 0.7rem; font-weight: 800; letter-spacing: 1px;">● PREMIUM NODE ACTIVE</div>
             <div class="label" style="font-size: 0.6rem;">GKUTOSI95@GMAIL.COM</div>
+            <div style="margin-top:8px; font-size:0.75rem; color:#94a3b8;">
+                <span id="display-domain">-</span> • <span id="display-adsense">-</span>
+            </div>
+            <div style="margin-top:6px; display:flex; align-items:center; gap:8px;">
+                <span id="node-dot" class="dot dot-online"></span>
+                <span id="node-status">NODE-ACTIVE</span>
+            </div>
         </div>
     </header>
 
@@ -173,15 +181,28 @@
 <script>
     const jsConfetti = new JSConfetti();
 
-    // CONFIG - Plug in your Google Cloud API credentials and Target Spreadsheet ID
+    // CONFIG - Defaults and placeholders. Sensitive values should be provided via config.json (see config.example.json)
     const CONFIG = {
         SITE_DOMAIN: window.location.origin,                           // auto-detected domain
-        GOOGLE_API_KEY: 'AIzaSyDadhQvQJsezb0Jj8LkaA6NPHvZ6b3guuY',                  // <-- insert your Google Cloud API Key
-        GOOGLE_CLIENT_ID: '351002015975-2vqrggepkgohc9urhbbfbvqqsujjn5s3.apps.googleusercontent.com', // <-- insert your OAuth2 Client ID
-        SHEET_ID: '16BKFp_fLvbslNnoyKIzsmidxAfu2zUQ_',               // <-- linked Revenue Dashboard Sheet ID
+        GOOGLE_API_KEY: null,                                          // will be populated from config.json when available
+        GOOGLE_CLIENT_ID: null,                                        // will be populated from config.json when available
+        SHEET_ID: 'REPLACE_WITH_SHEET_ID',                             // replace or provide via config.json
         SHEET_RANGE: 'Sheet1!A1:Z100',                                 // range containing live telemetry
         POLL_INTERVAL_MS: 15000                                        // live pull interval (15 seconds)
     };
+
+    // Attempt to load local config.json and merge into CONFIG (non-blocking)
+    (async function loadLocalConfig(){
+        try {
+            const resp = await fetch('./config.json');
+            if (!resp.ok) throw new Error('no local config');
+            const local = await resp.json();
+            Object.assign(CONFIG, local);
+            console.log('CONFIG: local config.json loaded');
+        } catch (e) {
+            console.warn('CONFIG: no local config.json found or failed to load. Using placeholders.');
+        }
+    })();
 
     // Live Clock Logic
     setInterval(() => {
@@ -407,7 +428,7 @@ async function initializeDynamicEnvironment() {
         const config = await response.json();
         
         // Validate domain mapping
-        const isProduction = currentDomain.includes(config.domains.production);
+        const isProduction = config.domains && currentDomain.includes(config.domains.production);
         console.log("Environment Mode:", isProduction ? "PRODUCTION (Nairobi HQ Live)" : "DEVELOPMENT");
 
         // Dynamically inject IDs and Keys into the DOM / App State
@@ -419,18 +440,27 @@ async function initializeDynamicEnvironment() {
         };
 
         // Update UI elements dynamically with pulled IDs
-        document.getElementById('display-domain').innerText = currentDomain;
-        document.getElementById('display-adsense').innerText = config.adsenseId;
-        document.getElementById('node-status').innerText = `NODE-ACTIVE (${config.hq})`;
-        document.getElementById('node-status').className = 'dot-active';
+        const displayDomainEl = document.getElementById('display-domain');
+        const displayAdsenseEl = document.getElementById('display-adsense');
+        const nodeDotEl = document.getElementById('node-dot');
+        const nodeStatusEl = document.getElementById('node-status');
+
+        if (displayDomainEl) displayDomainEl.innerText = currentDomain;
+        if (displayAdsenseEl) displayAdsenseEl.innerText = config.adsenseId || '-';
+        if (nodeStatusEl) nodeStatusEl.innerText = `NODE-ACTIVE (${config.hq || '-'})`;
+        if (nodeDotEl) nodeDotEl.className = 'dot dot-online';
 
         // Trigger live metrics stream
-        fetchLiveMetrics(config.endpoints.metrics);
+        if (config.endpoints && config.endpoints.metrics) {
+            fetchLiveMetrics(config.endpoints.metrics);
+        }
 
     } catch (error) {
         console.error("Auto-Configuration Error:", error);
-        document.getElementById('node-status').innerText = "CONFIG SYNC FAILED";
-        document.getElementById('node-status').className = 'dot-warning';
+        const nodeDotEl = document.getElementById('node-dot');
+        const nodeStatusEl = document.getElementById('node-status');
+        if (nodeStatusEl) nodeStatusEl.innerText = "CONFIG SYNC FAILED";
+        if (nodeDotEl) nodeDotEl.className = 'dot dot-warning';
     }
 }
 
