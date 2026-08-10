@@ -58,7 +58,7 @@ const imgRegex = /<img[^>]+src=["']([^"']+)["']/g;
 let match;
 let externalImagesCount = 0;
 
-while ((match = imgRegex[exec](htmlContent)) !== null) {
+while ((match = imgRegex.exec(htmlContent)) !== null) {
     const src = match[1];
     if (src.startsWith('http://') || src.startsWith('https://')) {
         let isAllowedGithubHost = false;
