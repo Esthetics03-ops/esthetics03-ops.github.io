@@ -7,7 +7,7 @@
 exports.handler = async function(event, context) {
   try {
     // === Configuration (from environment when possible) ===
-    const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY || null; // leave null to use simulated metrics
+    const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY || null;
     const GA4_PROPERTIES = (process.env.GA4_PROPERTIES && process.env.GA4_PROPERTIES.split(",").map(p => p.trim()).filter(Boolean)) || ["G-QCX3G9KSPC","G-PSW1MY7HB4"];
     const ADSENSE_PUB_ID = process.env.ADSENSE_PUB_ID || "pub-1959507280210179";
     const AFFILIATE_ID = process.env.AFFILIATE_ID || "esthetics-hub-affiliate";
@@ -21,13 +21,16 @@ exports.handler = async function(event, context) {
     const forceRefresh = event && event.queryStringParameters && event.queryStringParameters.force === "true";
 
     if (!forceRefresh && global.__metricsCache.data && global.__metricsCache.expiresAt > now) {
+      // Mark as cached when served from cache
+      const cachedData = { ...global.__metricsCache.data, meta: { ...global.__metricsCache.data.meta, cached: true } };
       return {
         statusCode: 200,
-        body: JSON.stringify(global.__metricsCache.data),
+        body: JSON.stringify(cachedData),
         headers: {
           "Content-Type": "application/json",
           "Cache-Control": `max-age=${Math.max(TTL_SECONDS, 0)}`,
-          "Access-Control-Allow-Origin": "*"
+          "Access-Control-Allow-Origin": "*",
+          "X-Cached": "true"
         }
       };
     }
@@ -58,7 +61,8 @@ exports.handler = async function(event, context) {
         ga4_properties: GA4_PROPERTIES,
         adsense_pub_id: ADSENSE_PUB_ID ? "configured" : "not-configured",
         affiliate_id: AFFILIATE_ID ? "configured" : "not-configured",
-        cached: false
+        cached: false,
+        timestamp: new Date().toISOString()
       },
       ga4: {
         totalActiveUsers,
@@ -85,7 +89,8 @@ exports.handler = async function(event, context) {
       headers: {
         "Content-Type": "application/json",
         "Cache-Control": `max-age=${Math.max(TTL_SECONDS, 0)}`,
-        "Access-Control-Allow-Origin": "*"
+        "Access-Control-Allow-Origin": "*",
+        "X-Cached": "false"
       }
     };
 
