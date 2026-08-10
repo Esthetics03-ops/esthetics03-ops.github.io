@@ -1,69 +1,19 @@
-name: Auto Fix Broken Links
-
-on:
-  schedule:
-    - cron: '0 0 * * 1' # Runs every Monday at midnight
-  workflow_dispatch: # Allows manual trigger
-
-jobs:
-  link-checker:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      issues: write
-
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
-
-      # Step 1: Scan for broken links and output to a JSON file
-      - name: Scan Links
-        uses: lycheeverse/lychee-action@v2
-        id: lychee
-        with:
-          args: --format json --output-file lychee-out.json "README.md" "./docs/**/*.md"
-        continue-on-error: true
-
-      # Step 2: Run custom auto-remediation logic
-      - name: Programmatically Fix Broken Links
-        if: steps:lychee.outputs.exit_code != 0
-        run: |
-          if [ -f lychee-out.json ]; then
-            echo "Processing broken links..."
-            
-            # Read each broken URL from lychee's JSON output
-            jq -c '.failures[]' lychee-out.json | while read -r failure; do
-              # Extract the exact URL and the file it was found in
-              url=$(echo "$failure" | jq -r '.url')
-              file=$(echo "$failure" | jq -r '.file')
-              
-              echo "Found broken link: $url in $file"
-              
-              # Example 1: Force upgrade insecure HTTP links that timeout to HTTPS
-              if [[ "$url" == http://* ]]; then
-                new_url="${url/http:\/\//https:\/\/}"
-                sed -i "s|$url|$new_url|g" "$file"
-                echo "Upgraded to HTTPS: $new_url"
-                
-              # Example 2: Fallback to the Internet Archive Wayback Machine
-              else
-                wayback_url="https://archive.org"
-                sed -i "s|$url|$wayback_url|g" "$file"
-                echo "Replaced with Wayback Machine: $wayback_url"
-              fi
-            done
-          fi
-
-      # Step 3: Automatically commit changes back to the repository
-      - name: Commit and Push Fixes
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add .
-          if ! git diff --staged --quiet; then
-            git commit -m "chore: auto-fix broken links found during scheduled scan"
-            git push
-          else
-            echo "No fixable links were found or modified."
-          fi
-          
+- name: Cache
+  uses: actions/cache@v5.1.0
+  with:
+    # A list of files, directories, and wildcard patterns to cache and restore
+    path: 
+    # An explicit key for restoring and saving the cache
+    key: 
+    # An ordered multiline string listing the prefix-matched keys, that are used for restoring stale cache if no cache hit occurred for key. Note `cache-hit` returns false in this case.
+    restore-keys: # optional
+    # The chunk size used to split up large files during upload, in bytes
+    upload-chunk-size: # optional
+    # An optional boolean when enabled, allows windows runners to save or restore caches that can be restored or saved respectively on other platforms
+    enableCrossOsArchive: # optional, default is false
+    # Fail the workflow if cache entry is not found
+    fail-on-cache-miss: # optional, default is false
+    # Check if a cache entry exists for the given input(s) (key, restore-keys) without downloading the cache
+    lookup-only: # optional, default is false
+    # Run the post step to save the cache even if another step before fails
+    save-always: # optional, default is false

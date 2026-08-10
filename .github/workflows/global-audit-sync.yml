@@ -1,77 +1,19 @@
-name: Global System Audit & Sync
-
-on:
-  push:
-    branches: [main]
-  workflow_dispatch:
-
-permissions:
-  contents: write
-  pages: write
-  id-token: write
-
-jobs:
-  deep-scan:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Validate YAML Syntax
-        run: |
-          sudo apt-get update && sudo apt-get install -y yamllint
-          yamllint .github/workflows/*.yml || echo "Minor linting warnings noted, proceeding..."
-          if [ -f _config.yml ]; then yamllint _config.yml; fi
-
-      - name: Cross-Platform Path Check
-        run: |
-          echo "Verifying structural alignment..."
-          test -f _config.yml && echo "✓ Jekyll Config Found" || echo "Notice: _config.yml missing (using static HTML)"
-          test -d assets && echo "✓ Frontend Assets Found" || echo "Notice: assets directory missing"
-          if [ -f ads.txt ]; then
-            grep -q "pub-1959507280210179" ads.txt && echo "✓ AdSense ID Verified"
-          else
-            echo "Notice: ads.txt not found"
-          fi
-
-      - name: Sync Cloud Credentials Audit
-        run: |
-          if [ -z "${{ secrets.MPESA_CONSUMER_KEY }}" ]; then
-            echo "::warning :: M-PESA Backend Credentials Missing from Repository Secrets"
-          else
-            echo "✓ M-PESA Consumer Key Detected"
-          fi
-          if [ -z "${{ secrets.ADSENSE_ID }}" ]; then
-            echo "::warning :: AdSense Dashboard ID Missing from Repository Secrets"
-          else
-            echo "✓ AdSense ID Detected"
-          fi
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.2'
-          bundler-cache: true
-
-      - name: Verify Static Build & Jekyll Rendering
-        run: |
-          if [ -f Gemfile ]; then
-            bundle exec jekyll build
-          elif [ -f _config.yml ]; then
-            gem install jekyll bundler && jekyll build
-          else
-            echo "No Jekyll config detected; skipping static ruby compilation safely."
-          fi
-        env:
-          JEKYLL_ENV: production
-
-  redeploy-all:
-    needs: deep-scan
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Clear Cache and Force Sync
-        run: |
-          echo "Deep Scan Passed successfully. Repository state is clean and synchronized."
+- name: Cache
+  uses: actions/cache@v5.1.0
+  with:
+    # A list of files, directories, and wildcard patterns to cache and restore
+    path: 
+    # An explicit key for restoring and saving the cache
+    key: 
+    # An ordered multiline string listing the prefix-matched keys, that are used for restoring stale cache if no cache hit occurred for key. Note `cache-hit` returns false in this case.
+    restore-keys: # optional
+    # The chunk size used to split up large files during upload, in bytes
+    upload-chunk-size: # optional
+    # An optional boolean when enabled, allows windows runners to save or restore caches that can be restored or saved respectively on other platforms
+    enableCrossOsArchive: # optional, default is false
+    # Fail the workflow if cache entry is not found
+    fail-on-cache-miss: # optional, default is false
+    # Check if a cache entry exists for the given input(s) (key, restore-keys) without downloading the cache
+    lookup-only: # optional, default is false
+    # Run the post step to save the cache even if another step before fails
+    save-always: # optional, default is false

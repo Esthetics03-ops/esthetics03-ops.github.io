@@ -1,0 +1,53 @@
+name: Pull live site status
+
+on:
+  schedule:
+    - cron: '0 * * * *' # hourly
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  pull-status:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Pull live site status and commit if changed
+        env:
+          URL: https://esthetics03-ops.github.io
+        run: |
+          set -e
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          START=$(date +%s.%N)
+          # Fetch the page, follow redirects
+          HTTP_CODE=$(curl -s -L -o /tmp/resp_body -w "%{http_code}" "$URL" || echo 000)
+          END=$(date +%s.%N)
+          # Compute duration in seconds with millisecond precision
+          DURATION=$(python3 - <<PY
+import sys
+start=float(sys.argv[1]); end=float(sys.argv[2]); print(round(end-start,3))
+PY
+          $START $END)
+          CONTENT_SHA=$(sha256sum /tmp/resp_body | awk '{print $1}')
+          mkdir -p status
+          cat > status/live_status.json <<EOF
+{"timestamp":"$TIMESTAMP","url":"$URL","status_code":$HTTP_CODE,"response_time":$DURATION,"content_sha":"$CONTENT_SHA"}
+EOF
+
+          # If there are changes, commit and push
+          git add status/live_status.json
+          if git diff --cached --quiet; then
+            echo "No changes to live_status.json — nothing to commit."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: update live site status (automated)"
+          git push
