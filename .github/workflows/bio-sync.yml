@@ -1,41 +1,19 @@
-name: Bio-Sync Live API Update
-
-on:
-  schedule:
-    - cron: '0 * * * *' # Runs exactly every hour
-  workflow_dispatch:      # Allows you to click "Run" manually in GitHub Actions
-
-jobs:
-  sync:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write    # Required to push the updated config.json back to your site
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Setup Python 3.10
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-
-      - name: Install Dependencies
-        run: |
-          pip install google-analytics-data requests pandas openpyxl
-
-      - name: Execute Live Pull & Bank Audit
-        env:
-          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
-          GA4_PROPERTY_ID: "319520471"
-        run: |
-          python main.py
-          python monitor.py
-
-      - name: Commit and Push Actuals
-        run: |
-          git config --global user.name "Gemini-Bio-Sync"
-          git config --global user.email "bot@bio-sync.live"
-          git add config.json *.csv # Added *.csv to ensure your sheet data is saved
-          git commit -m "⚡ Live Audit: $(date +'%Y-%m-%d %H:%M:%S') [Actuals Sync]" || echo "No changes to commit"
-          git push
+- name: Cache
+  uses: actions/cache@v5.1.0
+  with:
+    # A list of files, directories, and wildcard patterns to cache and restore
+    path: 
+    # An explicit key for restoring and saving the cache
+    key: 
+    # An ordered multiline string listing the prefix-matched keys, that are used for restoring stale cache if no cache hit occurred for key. Note `cache-hit` returns false in this case.
+    restore-keys: # optional
+    # The chunk size used to split up large files during upload, in bytes
+    upload-chunk-size: # optional
+    # An optional boolean when enabled, allows windows runners to save or restore caches that can be restored or saved respectively on other platforms
+    enableCrossOsArchive: # optional, default is false
+    # Fail the workflow if cache entry is not found
+    fail-on-cache-miss: # optional, default is false
+    # Check if a cache entry exists for the given input(s) (key, restore-keys) without downloading the cache
+    lookup-only: # optional, default is false
+    # Run the post step to save the cache even if another step before fails
+    save-always: # optional, default is false

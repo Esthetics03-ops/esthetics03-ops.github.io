@@ -1,0 +1,96 @@
+name: Rerun failed jobs (one-off)
+
+on:
+  workflow_dispatch:
+    inputs:
+      days:
+        description: 'Only consider runs created within the last N days (0 = no limit)'
+        required: false
+        default: '7'
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  rerun_failed:
+    name: Find and rerun failed jobs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Rerun failed jobs for recent failed runs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DAYS: ${{ github.event.inputs.days }}
+        run: |
+          set -euo pipefail
+
+          OWNER="${GITHUB_REPOSITORY%/*}"
+          REPO="${GITHUB_REPOSITORY#*/}"
+          TOKEN="${GITHUB_TOKEN:-}"
+          if [ -z "$TOKEN" ]; then
+            echo "GITHUB_TOKEN not available"
+            exit 1
+          fi
+
+          # Convert DAYS to integer and compute since-date if needed
+          if [ -n "$DAYS" ] && [ "$DAYS" != "0" ]; then
+            echo "Filtering runs created within the last $DAYS days..."
+            SINCE_EPOCH=$(date -d "$DAYS days ago" +%s)
+          else
+            SINCE_EPOCH=0
+          fi
+
+          page=1
+          while :; do
+            echo "Fetching page $page of workflow runs..."
+            runs=$(curl -s -H "Authorization: token $TOKEN" -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/$OWNER/$REPO/actions/runs?per_page=100&page=$page")
+
+            # If there are no runs on this page, break
+            count_on_page=$(echo "$runs" | jq '.workflow_runs | length')
+            if [ "$count_on_page" -eq 0 ]; then
+              break
+            fi
+
+            # Iterate over runs that concluded with "failure"
+            echo "$runs" | jq -c '.workflow_runs[] | select(.conclusion=="failure")' | while read -r run; do
+              run_id=$(echo "$run" | jq -r '.id')
+              created_at=$(echo "$run" | jq -r '.created_at')
+              created_epoch=$(date -d "$created_at" +%s)
+
+              if [ "$SINCE_EPOCH" -ne 0 ] && [ "$created_epoch" -lt "$SINCE_EPOCH" ]; then
+                echo "Skipping run $run_id (created at $created_at) - older than filter"
+                continue
+              fi
+
+              echo "Attempting to rerun failed jobs for run $run_id (created at $created_at)..."
+              http_code=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
+                -H "Authorization: token $TOKEN" -H "Accept: application/vnd.github+json" \
+                "https://api.github.com/repos/$OWNER/$REPO/actions/runs/$run_id/rerun-failed-jobs")
+
+              if [ "$http_code" -eq 201 ] || [ "$http_code" -eq 202 ] || [ "$http_code" -eq 204 ]; then
+                echo "Triggered rerun-failed-jobs for run $run_id (HTTP $http_code)."
+              elif [ "$http_code" -eq 422 ]; then
+                echo "No failed jobs for run $run_id or rerun-failed-jobs not supported; triggering full rerun..."
+                curl -s -X POST -H "Authorization: token $TOKEN" -H "Accept: application/vnd.github+json" \
+                  "https://api.github.com/repos/$OWNER/$REPO/actions/runs/$run_id/rerun" >/dev/null
+                echo "Triggered full rerun for run $run_id."
+              else
+                echo "Unexpected HTTP $http_code for run $run_id. Response body:"
+                curl -s -X POST -H "Authorization: token $TOKEN" -H "Accept: application/vnd.github+json" \
+                  "https://api.github.com/repos/$OWNER/$REPO/actions/runs/$run_id/rerun-failed-jobs" || true
+              fi
+            done
+
+            total_count=$(echo "$runs" | jq '.total_count')
+            if [ "$total_count" -le $((page * 100)) ]; then
+              break
+            fi
+            page=$((page+1))
+          done
+
+          echo "Done."
+```*](#)

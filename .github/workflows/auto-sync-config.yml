@@ -1,0 +1,42 @@
+name: Auto-Sync Domain & Metrics State
+
+on:
+  schedule:
+    - cron: '0 */6 * * *' # Runs every 6 hours automatically
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync-state:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Generate Dynamic Config State
+        run: |
+          node -e '
+            const fs = require("fs");
+            const data = {
+              lastSynced: new Date().toISOString(),
+              targetDomain: "esthetics03-ops.github.io",
+              adsenseId: process.env.ADSENSE_ID || "pub-1959507280210179"
+            };
+            fs.writeFileSync("config.json", JSON.stringify(data, null, 2));
+          '
+        env:
+          ADSENSE_ID: ${{ secrets.ADSENSE_ID }}
+
+      - name: Commit and Push Dynamic Updates
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add config.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore: auto-update dynamic site configuration and ID bindings [skip ci]" && git push origin main)
