@@ -11,7 +11,7 @@ python-telegram-bot>=22.6.0
 
 # --- M-PESA Bridge & Serverless Core ---
 functions-framework==3.*
-requests==2.31.0
+requests==2.33.0
 
 # --- Legacy Support (Corrected) ---
 oauth2client>=4.1.3
