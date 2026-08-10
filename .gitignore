@@ -28,22 +28,32 @@ venv/
 .venv/
 pip-log.txt
 
-# 4. LOGS & DIAGNOSTICS
+# 4. NODE & NPM
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+coverage/
+
+# 5. LOGS & DIAGNOSTICS
 *.log
 google_sync_error.log
 analytics_fetch.log
 performance_audit.txt
 
-# 5. OS & IDE SPECIFICS
+# 6. OS & IDE SPECIFICS
 .DS_Store
 Thumbs.db
 .vscode/
 .idea/
 *.swp
+*.swo
+*~
 
-# 6. BUILD & TEMP
+# 7. BUILD & TEMP
 dist/
 build/
 temp/
 tmp/
 *.bak
+.nyc_output/
