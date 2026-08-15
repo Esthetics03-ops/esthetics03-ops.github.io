@@ -1,262 +1,439 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Esthetics Hub | AI Command</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <style>
-        :root {
-            --bg: #020617; --card: #0f172a; --primary: #10b981; --accent: #8b5cf6;
-            --text: #f8fafc; --dim: #64748b; --border: #1e293b; --danger: #ef4444;
-            --transit: #fbbf24;
-        }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; overflow-x: hidden; }
-        
-        /* Auth Gate */
-        #gate { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(20px); }
-        .gate-box { background: var(--card); padding: 40px; border-radius: 24px; border: 1px solid var(--border); text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
-        
-        /* Dashboard Layout */
-        .container { max-width: 1400px; margin: 0 auto; padding: 25px; display: none; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-        .card { background: var(--card); border: 1px solid var(--border); padding: 24px; border-radius: 20px; transition: 0.3s; position: relative; }
-        .card:hover { border-color: var(--accent); }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Esthetics Hub | AI Command</title>
+  <meta name="description" content="Revenue dashboard for Esthetics Hub — live AdSense, visitors, reconciliation terminal, and growth forecast." />
+  <link rel="canonical" href="https://esthetics03-ops.github.io/revenue-dashboard.html" />
+  <meta property="og:title" content="Esthetics Hub | AI Command" />
+  <meta property="og:description" content="Live revenue dashboard with AI terminal and reconciliation." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
 
-        .val { font-size: 2.5rem; font-weight: 800; margin: 10px 0; letter-spacing: -1px; font-variant-numeric: tabular-nums; }
-        .label { font-size: 0.7rem; color: var(--dim); text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; }
-        
-        /* Gemini Terminal */
-        .ai-terminal { background: #000; border-radius: 15px; padding: 20px; margin-top: 20px; border-left: 4px solid var(--accent); }
-        .ai-output { height: 120px; overflow-y: auto; font-size: 0.85rem; color: #cbd5e1; margin-bottom: 10px; font-family: 'Courier New', monospace; scroll-behavior: smooth; }
-        .ai-input { background: transparent; border: none; color: var(--primary); width: 100%; font-family: 'Courier New', monospace; outline: none; }
-        
-        /* Status Pills */
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        td { padding: 15px 0; border-top: 1px solid var(--border); font-size: 0.85rem; }
-        .status { padding: 4px 10px; border-radius: 6px; font-size: 0.65rem; font-weight: 900; text-transform: uppercase; }
-        
-        .status-paid { background: rgba(16,185,129,0.1); color: var(--primary); }
-        .status-transit { background: rgba(251,191,36,0.1); color: var(--transit); border: 1px solid var(--transit); animation: pulse-yellow 2s infinite; }
-        .status-active { background: rgba(139,92,246,0.1); color: var(--accent); }
+  <!-- Fonts & icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
 
-        .pulse { height: 8px; width: 8px; background: var(--primary); border-radius: 50%; display: inline-block; margin-right: 5px; animation: blink 1.5s infinite; }
-        
-        @keyframes blink { 50% { opacity: 0.2; } }
-        @keyframes pulse-yellow { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
-    </style>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+
+  <style>
+    :root {
+      --bg: #020617; --card: #0f172a; --primary: #10b981; --accent: #8b5cf6;
+      --text: #f8fafc; --dim: #64748b; --border: #1e293b; --danger: #ef4444;
+      --transit: #fbbf24;
+      --focus: 0 0 0 3px rgba(139,92,246,0.18);
+    }
+    html,body { height:100%; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: var(--bg); color: var(--text); margin:0; overflow-x:hidden;
+    }
+
+    /* Gate */
+    #gate { position: fixed; inset: 0; background: rgba(2,6,23,0.95); z-index:1000; display:flex; align-items:center; justify-content:center; backdrop-filter: blur(8px); }
+    .gate-box { background: var(--card); padding: 28px; border-radius:18px; border:1px solid var(--border); text-align:center; width:320px; box-shadow: 0 18px 40px -12px rgba(0,0,0,0.6); }
+    .gate-box input[type="password"] { background:#000; border:1px solid var(--border); color:#fff; padding:12px; border-radius:12px; width:100px; text-align:center; font-size:1.25rem; margin:12px 0; }
+    .gate-box button { display:block; width:100%; background:var(--accent); color:#fff; border:none; padding:12px; border-radius:10px; font-weight:800; cursor:pointer; }
+
+    /* Layout */
+    .container { max-width:1400px; margin:0 auto; padding:28px; display:none; }
+    header { display:flex; justify-content:space-between; align-items:center; margin-bottom:36px; gap:12px; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:20px; }
+    .card { background:var(--card); border:1px solid var(--border); padding:20px; border-radius:14px; position:relative; transition:0.2s; }
+    .card:hover { border-color:var(--accent); }
+    .label { font-size:0.7rem; color:var(--dim); text-transform:uppercase; letter-spacing:1.2px; font-weight:700; }
+    .val { font-size:2.25rem; font-weight:800; margin:10px 0; letter-spacing:-0.5px; font-variant-numeric:tabular-nums; }
+
+    /* AI terminal */
+    .ai-terminal { background:#000; border-radius:12px; padding:14px; margin-top:14px; border-left:4px solid var(--accent); }
+    .ai-output { height:120px; overflow-y:auto; font-size:0.85rem; color:#cbd5e1; margin-bottom:8px; font-family: 'Courier New', monospace; scroll-behavior:smooth; }
+    .ai-input { background:transparent; border:none; color:var(--primary); width:100%; font-family:'Courier New', monospace; outline:none; padding:6px 0; }
+    .ai-output div.cmd { color:var(--accent); margin-top:6px; }
+    .ai-output div.ai-response { color:var(--primary); margin-bottom:10px; }
+    .ai-output div.error { color:var(--danger); }
+
+    /* status pills */
+    table { width:100%; border-collapse:collapse; margin-top:14px; font-size:0.9rem; }
+    td, th { padding:10px 0; border-top:1px solid var(--border); text-align:left; }
+    .status { padding:4px 8px; border-radius:6px; font-size:0.65rem; font-weight:900; text-transform:uppercase; display:inline-block; }
+    .status-paid { background: rgba(16,185,129,0.1); color: var(--primary); }
+    .status-transit { background: rgba(251,191,36,0.1); color: var(--transit); border:1px solid var(--transit); }
+    .status-active { background: rgba(139,92,246,0.1); color: var(--accent); }
+
+    .pulse { height:9px; width:9px; background:var(--primary); border-radius:50%; display:inline-block; margin-right:6px; animation: blink 1.5s infinite; vertical-align:middle; }
+    @keyframes blink { 50% { opacity:0.2; } }
+
+    /* focus */
+    :focus { outline:none; }
+    button:focus, input:focus, [role="button"]:focus { box-shadow: var(--focus); border-radius:6px; }
+
+    /* responsive tweaks */
+    @media (max-width:640px) {
+      .container { padding:16px; }
+      header { flex-direction:column; align-items:flex-start; gap:8px; }
+    }
+
+    /* visually hidden (for labels if needed) */
+    .sr-only { position:absolute; left:-10000px; top:auto; width:1px; height:1px; overflow:hidden; }
+  </style>
 </head>
 <body>
+  <div id="gate" aria-modal="true" role="dialog" aria-labelledby="gate-title">
+    <div class="gate-box" role="document">
+      <i class="bi bi-cpu" style="font-size:2.5rem; color:var(--accent);" aria-hidden="true"></i>
+      <h2 id="gate-title" style="margin:14px 0;">Initialize Gemini Hub</h2>
 
-    <div id="gate">
-        <div class="gate-box">
-            <i class="bi bi-cpu" style="font-size: 3rem; color: var(--accent);"></i>
-            <h2 style="margin: 20px 0;">Initialize Gemini Hub</h2>
-            <input type="password" id="pin" placeholder="••••" style="background:#000; border:1px solid var(--border); color:#fff; padding:15px; border-radius:12px; width:100px; text-align:center; font-size:1.5rem; margin-bottom:20px;">
-            <button onclick="unlock()" style="display:block; width:100%; background:var(--accent); color:#fff; border:none; padding:15px; border-radius:12px; font-weight:800; cursor:pointer;">DECRYPT & SYNC</button>
-        </div>
+      <label for="pin" class="sr-only">Access PIN</label>
+      <input type="password" id="pin" placeholder="••••" aria-label="Access PIN" />
+      <button id="unlock-btn">DECRYPT &amp; SYNC</button>
+      <p style="margin-top:12px; color:var(--dim); font-size:0.85rem;">Demo authentication — replace with server-side auth for production.</p>
     </div>
+  </div>
 
-    <div class="container" id="dash">
-        <header style="display:flex; justify-content:space-between; align-items:center; margin-bottom:40px;">
-            <div>
-                <h1 style="margin:0; font-size:1.5rem;">BIO-SYNC <span style="color:var(--accent)">MASTER</span></h1>
-                <div id="sync-indicator" style="font-size:0.7rem; color:var(--dim)"><span class="pulse" id="health-pulse"></span> SYSTEM STATUS: <span id="health-text">SYNCING...</span></div>
-            </div>
-            <div style="text-align:right">
-                <div class="label">Session Uptime</div>
-                <div id="timer" style="font-family:monospace; color:var(--primary)">00:00</div>
-            </div>
-        </header>
+  <main class="container" id="dash" role="main" aria-labelledby="main-title">
+    <header>
+      <div>
+        <h1 id="main-title" style="margin:0; font-size:1.25rem;">BIO-SYNC <span style="color:var(--accent)">MASTER</span></h1>
+        <div id="sync-indicator" style="font-size:0.75rem; color:var(--dim); margin-top:6px;">
+          <span class="pulse" id="health-pulse" aria-hidden="true"></span>
+          <span class="sr-only">System status:</span>
+          SYSTEM STATUS: <span id="health-text">SYNCING...</span>
+        </div>
+      </div>
 
-        <div class="grid">
-            <div class="card">
-                <div class="label">Actual Live Visitors</div>
-                <div id="stat-active" class="val">--</div>
-                <small style="color:var(--primary)"><i class="bi bi-shield-check"></i> Verified GA4 Property</small>
-            </div>
-            <div class="card">
-                <div class="label">Live AdSense Today</div>
-                <div id="stat-adsense" class="val">$0.00</div>
-                <div style="height:4px; background:#1e293b; border-radius:2px; margin-top:10px;">
-                    <div id="progress-bar" style="height:100%; width:0%; background:var(--accent); transition:1.5s cubic-bezier(0.4, 0, 0.2, 1);"></div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="label">Account Balance (Gross)</div>
-                <div id="stat-total-gross" class="val">$0.00</div>
-                <small id="payout-status" style="color:var(--dim)">Target: $100.00 Threshold</small>
-            </div>
+      <div style="text-align:right">
+        <div class="label">Session Uptime</div>
+        <div id="timer" style="font-family:monospace; color:var(--primary)">00:00</div>
+      </div>
+    </header>
+
+    <section class="grid" aria-label="Top metrics">
+      <div class="card" role="region" aria-labelledby="live-visitors-label">
+        <div id="live-visitors-label" class="label">Actual Live Visitors</div>
+        <div id="stat-active" class="val" aria-live="polite" aria-atomic="true">--</div>
+        <small style="color:var(--primary)"><i class="bi bi-shield-check" aria-hidden="true"></i> Verified GA4 Property</small>
+      </div>
+
+      <div class="card" role="region" aria-labelledby="adsense-label">
+        <div id="adsense-label" class="label">Live AdSense Today</div>
+        <div id="stat-adsense" class="val" aria-live="polite" aria-atomic="true">$0.00</div>
+        <div style="height:6px; background:#1e293b; border-radius:3px; margin-top:10px;">
+          <div id="progress-bar" style="height:100%; width:0%; background:var(--accent); transition:1.2s ease;"></div>
+        </div>
+      </div>
+
+      <div class="card" role="region" aria-labelledby="balance-label">
+        <div id="balance-label" class="label">Account Balance (Gross)</div>
+        <div id="stat-total-gross" class="val">$0.00</div>
+        <small id="payout-status" style="color:var(--dim)">Target: $100.00 Threshold</small>
+      </div>
+    </section>
+
+    <section class="grid" style="grid-template-columns:2fr 1fr; margin-top:20px;">
+      <div class="card" role="region" aria-labelledby="terminal-label">
+        <div id="terminal-label" class="label">Gemini AI Command Terminal</div>
+
+        <div class="ai-terminal" aria-hidden="false" aria-live="polite">
+          <div id="ai-output" class="ai-output" role="log" aria-live="polite" aria-atomic="false">System initialized. Awaiting API Handshake...</div>
+
+          <div style="display:flex; align-items:center; gap:10px; border-top:1px solid #222; padding-top:10px;">
+            <span style="color:var(--accent)" aria-hidden="true">gemini@bio-sync:~$</span>
+            <input type="text" id="cmd" class="ai-input" placeholder="Type 'analyze' or 'reconcile'..." autocomplete="off" />
+          </div>
         </div>
 
-        <div class="grid" style="grid-template-columns: 2fr 1fr; margin-top:20px;">
-            <div class="card">
-                <div class="label">Gemini AI Command Terminal</div>
-                <div class="ai-terminal">
-                    <div id="ai-output" class="ai-output">System initialized. Awaiting API Handshake...</div>
-                    <div style="display:flex; align-items:center; gap:10px; border-top:1px solid #222; padding-top:10px;">
-                        <span style="color:var(--accent)">gemini@bio-sync:~$</span>
-                        <input type="text" id="cmd" class="ai-input" placeholder="Type 'analyze' or 'reconcile'..." autocomplete="off" onkeydown="if(event.key==='Enter') runAI()">
-                    </div>
-                </div>
-                
-                <table id="recon-table">
-                    <thead><tr style="color:var(--dim); font-size:0.6rem; text-align:left;"><th>SOURCE</th><th>MONTH</th><th>REVENUE</th><th>BANK STATUS</th></tr></thead>
-                    <tbody id="recon-body"></tbody>
-                </table>
-            </div>
+        <table aria-label="Reconciliation history">
+          <thead>
+            <tr style="color:var(--dim); font-size:0.7rem; text-align:left;">
+              <th>SOURCE</th><th>MONTH</th><th>REVENUE</th><th>BANK STATUS</th>
+            </tr>
+          </thead>
+          <tbody id="recon-body"></tbody>
+        </table>
+      </div>
 
-            <div class="card">
-                <div class="label">Growth Forecast</div>
-                <div style="height: 220px; margin-top:20px;"><canvas id="chart"></canvas></div>
-                <div style="margin-top:20px; padding-top:20px; border-top: 1px solid var(--border);">
-                    <div class="label" style="margin-bottom:10px;">Publisher Identity</div>
-                    <div style="font-size:0.75rem; font-family:monospace; color:var(--accent)">ID: pub-1959507280210179</div>
-                    <div style="font-size:0.75rem; font-family:monospace; color:var(--dim)">GA4: 319520471</div>
-                </div>
-            </div>
+      <div class="card" role="region" aria-labelledby="forecast-label">
+        <div id="forecast-label" class="label">Growth Forecast</div>
+        <div style="height:220px; margin-top:18px;"><canvas id="chart" aria-label="Revenue forecast chart"></canvas></div>
+
+        <div style="margin-top:16px; padding-top:16px; border-top:1px solid var(--border);">
+          <div class="label" style="margin-bottom:8px;">Publisher Identity</div>
+          <div style="font-size:0.75rem; font-family:monospace; color:var(--accent)" id="pub-id">ID: pub-1959507280210179</div>
+          <div style="font-size:0.75rem; font-family:monospace; color:var(--dim)" id="ga4-id">GA4: 319520471</div>
         </div>
-    </div>
+      </div>
+    </section>
+  </main>
 
-<script>
-    let chart;
+  <noscript style="color:#fff; background:#111; padding:12px; display:block; text-align:center;">
+    JavaScript is required for this dashboard to function. Please enable JavaScript.
+  </noscript>
+
+  <script>
+    // ===== Runtime state & config =====
+    let chart = null;
     let dashboardData = null;
+    let syncIntervalId = null;
+
+    // Demo-only client PIN. DO NOT use for production auth.
     const PIN = "1234";
+    const SYNC_INTERVAL_MS = 60000;
+    const DEFAULT_ADSENSE_TARGET = 100;
 
-    function unlock() {
-        if(document.getElementById('pin').value === PIN) {
-            document.getElementById('gate').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('gate').style.display = 'none';
-                document.getElementById('dash').style.display = 'block';
-                startLiveSync();
-            }, 500);
-        } else { alert("Invalid Access Key"); }
+    // --- Helpers ---
+    function safeText(node, text) {
+      if (!node) return;
+      node.textContent = text == null ? '' : String(text);
     }
 
-    async function startLiveSync() {
-        try {
-            const response = await fetch(`./config.json?cache=${Date.now()}`);
-            dashboardData = await response.json();
-
-            // 1. Update Core Stats
-            dashboardData.trackers.forEach(t => {
-                const el = document.getElementById(t.id);
-                if(el) {
-                    if(t.id === 'stat-active') el.innerText = t.value;
-                    else el.innerText = `$${t.value.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
-                }
-            });
-
-            // 2. Dynamic Progress Bar (Threshold logic)
-            const adsense = dashboardData.trackers.find(t => t.id === 'stat-adsense').value;
-            const progress = (adsense / 100) * 100;
-            document.getElementById('progress-bar').style.width = Math.min(progress, 100) + '%';
-
-            // 3. Payout Logic
-            const today = new Date();
-            const daysTo21 = 21 - today.getDate();
-            const payoutText = daysTo21 > 0 ? `${daysTo21} Days to Bank Release` : "Processing Cycle Active";
-            document.getElementById('payout-status').innerText = payoutText;
-
-            // 4. Status Table Reconciler
-            const reconBody = document.getElementById('recon-body');
-            reconBody.innerHTML = dashboardData.history.slice().reverse().map(item => `
-                <tr>
-                    <td><b>AdSense</b></td>
-                    <td>${item.month}</td>
-                    <td style="font-weight:700;">$${item.revenue.toFixed(2)}</td>
-                    <td><span class="status status-${item.status.toLowerCase()}">${item.status}</span></td>
-                </tr>
-            `).join('');
-
-            // 5. System Health
-            document.getElementById('health-text').innerText = "LIVE (SYNCED)";
-            document.getElementById('health-pulse').style.background = "var(--primary)";
-
-            if (!chart) initChart(dashboardData.chartData);
-            else updateChart(dashboardData.chartData);
-
-        } catch (e) {
-            document.getElementById('ai-output').innerText = "❌ ERROR: config.json sync failed. Check API connectivity.";
-            document.getElementById('health-text').innerText = "OFFLINE";
-            document.getElementById('health-pulse').style.background = "var(--danger)";
-        }
+    function safeAppendOutput(container, text, cls) {
+      if (!container) return;
+      const el = document.createElement('div');
+      if (cls) el.className = cls;
+      el.textContent = text;
+      container.appendChild(el);
+      container.scrollTop = container.scrollHeight;
     }
 
-    function runAI() {
-        const input = document.getElementById('cmd');
-        const output = document.getElementById('ai-output');
-        const cmd = input.value.toLowerCase();
-        
-        output.innerHTML += `<div style="color:var(--accent); margin-top:5px;">> ${input.value}</div>`;
-        
+    function formatCurrency(value) {
+      const n = Number(value);
+      if (!isFinite(n)) return '--';
+      return '$' + n.toLocaleString(undefined, { minimumFractionDigits: 2 });
+    }
+
+    // Focus helpers
+    function focusCommandInput() {
+      const cmd = document.getElementById('cmd');
+      if (cmd) cmd.focus();
+    }
+
+    // ===== Unlock / Gate =====
+    async function unlockHandler() {
+      const input = document.getElementById('pin');
+      if (!input) return;
+      if (input.value === PIN) {
+        // Hide gate
+        const gate = document.getElementById('gate');
+        gate.style.opacity = '0';
         setTimeout(() => {
-            let response = "";
-            if(cmd.includes('analyze')) {
-                const jan = dashboardData.history.find(h => h.month.includes('January'));
-                response = `Gemini: Analysis complete. January is at $${jan.revenue}. Projecting $1,280.00 by month-end based on current traffic volatility.`;
-            } else if(cmd.includes('reconcile')) {
-                const transit = dashboardData.history.filter(h => h.status === 'TRANSIT');
-                response = `Gemini: ${transit.length} month(s) currently in TRANSIT. Total pending release: $${transit.reduce((a, b) => a + b.revenue, 0).toFixed(2)}. Next bank wire window: Jan 21st.`;
-            } else if(cmd.includes('clear')) {
-                output.innerHTML = "Terminal cleared."; return;
-            } else {
-                response = "Gemini: Command recognized. Handshake verified with Google Property 319520471. System is nominal.";
-            }
-            output.innerHTML += `<div style="color:var(--primary); margin-bottom:10px;">${response}</div>`;
-            output.scrollTop = output.scrollHeight;
-        }, 600);
-        
-        input.value = '';
+          gate.style.display = 'none';
+          document.getElementById('dash').style.display = 'block';
+          // Start sync only after unlock
+          startLiveSync();
+          if (syncIntervalId) clearInterval(syncIntervalId);
+          syncIntervalId = setInterval(startLiveSync, SYNC_INTERVAL_MS);
+          focusCommandInput();
+        }, 300);
+      } else {
+        alert('Invalid Access Key');
+        input.focus();
+      }
     }
 
-    function initChart(cd) {
-        const ctx = document.getElementById('chart').getContext('2d');
-        chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: cd.labels,
-                datasets: [{ 
-                    data: cd.points, 
-                    borderColor: '#8b5cf6', 
-                    borderWidth: 3,
-                    pointBackgroundColor: '#8b5cf6',
-                    tension: 0.4, 
-                    fill: true, 
-                    backgroundColor: 'rgba(139,92,246,0.1)' 
-                }]
-            },
-            options: { 
-                responsive: true, 
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } }, 
-                scales: { 
-                    y: { display: false }, 
-                    x: { grid: { display: false }, ticks: { color: '#64748b', font: { size: 10 } } } 
-                } 
-            }
+    document.getElementById('unlock-btn').addEventListener('click', unlockHandler);
+    document.getElementById('pin').addEventListener('keydown', function(e){
+      if (e.key === 'Enter') unlockHandler();
+    });
+
+    // ===== Data sync & UI update =====
+    async function startLiveSync() {
+      try {
+        const res = await fetch(`./config.json?cache=${Date.now()}`, { cache: 'no-store' });
+        if (!res.ok) throw new Error('Fetch failed: ' + res.status);
+        const data = await res.json();
+        dashboardData = data || {};
+
+        // trackers
+        const trackers = Array.isArray(dashboardData.trackers) ? dashboardData.trackers : [];
+        trackers.forEach(t => {
+          if (!t || !t.id) return;
+          const el = document.getElementById(t.id);
+          if (!el) return;
+          if (t.id === 'stat-active') safeText(el, t.value !== undefined ? String(t.value) : '--');
+          else safeText(el, isFinite(Number(t.value)) ? formatCurrency(Number(t.value)) : (t.value ?? '--'));
         });
+
+        // progress bar
+        const adsenseObj = trackers.find(tt => tt.id === 'stat-adsense') || {};
+        const adsense = Number(adsenseObj.value) || 0;
+        const adsenseTarget = Number(dashboardData.adsenseTarget) || DEFAULT_ADSENSE_TARGET;
+        const progress = adsenseTarget > 0 ? Math.min((adsense / adsenseTarget) * 100, 100) : 0;
+        const progressBar = document.getElementById('progress-bar');
+        if (progressBar) progressBar.style.width = progress + '%';
+
+        // payout status
+        const today = new Date();
+        const daysTo21 = 21 - today.getDate();
+        const payoutText = daysTo21 > 0 ? `${daysTo21} Days to Bank Release` : "Processing Cycle Active";
+        safeText(document.getElementById('payout-status'), payoutText);
+
+        // reconciliation table
+        const reconBody = document.getElementById('recon-body');
+        if (reconBody) {
+          const history = Array.isArray(dashboardData.history) ? dashboardData.history : [];
+          reconBody.innerHTML = '';
+          for (let i = history.length - 1; i >= 0; i--) {
+            const item = history[i] || {};
+            const tr = document.createElement('tr');
+
+            const tdSource = document.createElement('td');
+            tdSource.innerHTML = '<b>AdSense</b>';
+            tr.appendChild(tdSource);
+
+            const tdMonth = document.createElement('td');
+            safeText(tdMonth, item.month ?? '');
+            tr.appendChild(tdMonth);
+
+            const tdRevenue = document.createElement('td');
+            tdRevenue.style.fontWeight = '700';
+            safeText(tdRevenue, item.revenue !== undefined ? formatCurrency(item.revenue) : '--');
+            tr.appendChild(tdRevenue);
+
+            const tdStatus = document.createElement('td');
+            const span = document.createElement('span');
+            const rawStatus = (item.status || '').toString();
+            const normalized = rawStatus.toLowerCase().replace(/\s+/g, '-');
+            span.className = `status status-${normalized}`;
+            safeText(span, rawStatus || '');
+            tdStatus.appendChild(span);
+            tr.appendChild(tdStatus);
+
+            reconBody.appendChild(tr);
+          }
+        }
+
+        // health
+        safeText(document.getElementById('health-text'), 'LIVE (SYNCED)');
+        const healthPulse = document.getElementById('health-pulse');
+        if (healthPulse) healthPulse.style.background = 'var(--primary)';
+
+        // chart
+        const cd = dashboardData.chartData;
+        if (cd && Array.isArray(cd.labels) && Array.isArray(cd.points)) {
+          if (!chart) initChart(cd);
+          else updateChart(cd);
+        }
+
+        // publisher metadata
+        if (dashboardData.pubId) safeText(document.getElementById('pub-id'), 'ID: ' + dashboardData.pubId);
+        if (dashboardData.ga4Id) safeText(document.getElementById('ga4-id'), 'GA4: ' + dashboardData.ga4Id);
+      } catch (err) {
+        const out = document.getElementById('ai-output');
+        if (out) {
+          out.innerHTML = '';
+          safeAppendOutput(out, '❌ ERROR: config.json sync failed. Check API connectivity.', 'error');
+          safeAppendOutput(out, String(err), 'error');
+        }
+        safeText(document.getElementById('health-text'), 'OFFLINE');
+        const healthPulse = document.getElementById('health-pulse');
+        if (healthPulse) healthPulse.style.background = 'var(--danger)';
+      }
+    }
+
+    // ===== Terminal interactions =====
+    function runAI() {
+      const input = document.getElementById('cmd');
+      const output = document.getElementById('ai-output');
+      if (!input || !output) return;
+      const raw = (input.value || '').trim();
+      if (!raw) return;
+      safeAppendOutput(output, `> ${raw}`, 'cmd');
+
+      setTimeout(() => {
+        if (!dashboardData) {
+          safeAppendOutput(output, 'No synced data available. Please wait for successful sync.', 'error');
+          input.value = '';
+          return;
+        }
+
+        const history = Array.isArray(dashboardData.history) ? dashboardData.history : [];
+        let response = '';
+        try {
+          const cmd = raw.toLowerCase();
+          if (cmd.includes('analyze')) {
+            const jan = history.find(h => h.month && h.month.toLowerCase().includes('january'));
+            if (jan && jan.revenue !== undefined) {
+              response = `Gemini: Analysis complete. January is at ${formatCurrency(jan.revenue)}. Projecting $1,280.00 by month-end based on current traffic volatility.`;
+            } else {
+              response = 'Gemini: Analysis incomplete — January data not found.';
+            }
+          } else if (cmd.includes('reconcile')) {
+            const transit = history.filter(h => (h.status || '').toString().toLowerCase().includes('transit'));
+            const pending = transit.reduce((a,b) => a + (Number(b.revenue) || 0), 0);
+            response = `Gemini: ${transit.length} month(s) in TRANSIT. Pending release: ${formatCurrency(pending)}. Next bank wire window: Jan 21st.`;
+          } else if (cmd.includes('clear')) {
+            output.innerHTML = 'Terminal cleared.';
+            input.value = '';
+            return;
+          } else {
+            response = `Gemini: Command recognized. Handshake verified with Google Property ${dashboardData.ga4Id || 'unknown'}. System nominal.`;
+          }
+        } catch (e) {
+          response = 'Gemini: Error running command — ' + String(e);
+        }
+        safeAppendOutput(output, response, 'ai-response');
+        input.value = '';
+      }, 500);
+    }
+
+    document.getElementById('cmd').addEventListener('keydown', (e) => { if (e.key === 'Enter') runAI(); });
+
+    // ===== Chart helpers =====
+    function initChart(cd) {
+      if (typeof Chart === 'undefined') return;
+      const ctx = document.getElementById('chart').getContext('2d');
+      chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: cd.labels,
+          datasets: [{
+            data: cd.points,
+            borderColor: '#8b5cf6',
+            borderWidth: 3,
+            pointBackgroundColor: '#8b5cf6',
+            tension: 0.35,
+            fill: true,
+            backgroundColor: 'rgba(139,92,246,0.08)'
+          }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { display: false },
+            x: { grid: { display: false }, ticks: { color: '#64748b', font: { size: 10 } } }
+          }
+        }
+      });
     }
 
     function updateChart(cd) {
-        chart.data.labels = cd.labels;
-        chart.data.datasets[0].data = cd.points;
-        chart.update();
+      if (!chart) return;
+      chart.data.labels = cd.labels;
+      chart.data.datasets[0].data = cd.points;
+      chart.update();
     }
 
-    // Session Timer
+    // ===== Session timer =====
     let sec = 0;
     setInterval(() => {
-        sec++;
-        let m = Math.floor(sec/60);
-        let s = sec%60;
-        document.getElementById('timer').innerText = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+      sec++;
+      const m = Math.floor(sec / 60), s = sec % 60;
+      const el = document.getElementById('timer');
+      if (el) el.innerText = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
     }, 1000);
-    
-    // Auto-Sync Data every 60 seconds
-    setInterval(startLiveSync, 60000);
-</script>
+
+    // Expose debug helpers in console
+    window.__dbg = {
+      startLiveSync,
+      getDashboardData: () => dashboardData,
+      stopSync: () => { if (syncIntervalId) { clearInterval(syncIntervalId); syncIntervalId = null; } }
+    };
+
+    // Optionally start sync automatically for public dashboards:
+    // startLiveSync(); syncIntervalId = setInterval(startLiveSync, SYNC_INTERVAL_MS);
+  </script>
 </body>
-            </html>
+</html>
