@@ -4,8 +4,8 @@
   "description": "Esthetics API server with optimization and campaign management",
   "main": "server.js",
   "engines": {
-    "node": ">=14.0.0",
-    "npm": ">=6.0.0"
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
   },
   "scripts": {
     "start": "node server.js",
@@ -19,7 +19,8 @@
     "format:check": "prettier --check .",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "ci": "npm run format:check && npm run lint && npm test && npm run optimize"
   },
   "dependencies": {
     "cors": "^2.8.5",
