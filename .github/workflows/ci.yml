@@ -1,69 +1,42 @@
-name: Site Performance & Deploy
+steps:
+  - name: Checkout repository
+    uses: actions/checkout@v4
 
-on:
-  push:
-    branches:
-      - main
+  - name: Use Node.js 18.x
+    uses: actions/setup-node@v4
+    with:
+      node-version: '18'
+      cache: 'npm'
 
-permissions:
-  contents: write
-  pages: write
-  id-token: write
+  - name: Install dependencies (if package.json exists)
+    run: |
+      if [ -f package.json ]; then
+        npm ci --prefer-offline --no-audit --progress=false
+      else
+        echo "No package.json found — skipping npm install"
+      fi
 
-jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
-    
-    steps:
-      # 1️⃣ Checkout repository (v4 Upgrade for performance)
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+  - name: Run lint (if defined)
+    run: |
+      if [ -f package.json ]; then
+        npm run lint --if-present
+      else
+        echo "No package.json found — skipping lint"
+      fi
 
-      # 2️⃣ Setup Node.js (v4 for LTS compatibility)
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20 # Upgraded to Node 20 for faster sharp processing
+  - name: Run tests (if defined)
+    run: |
+      if [ -f package.json ]; then
+        npm test --if-present --silent
+      else
+        echo "No package.json found — skipping tests"
+      fi
 
-      # 3️⃣ Enterprise Node Verification
-      - name: Verify Bio-Sync Node
-        run: |
-          echo "Verifying Cloud Project: amiable-crane-465217-j9"
-          echo "Status: 0% Error Rate Handshake Initialized"
-          echo "Region: Africa/Nairobi"
-
-      # 4️⃣ Install dependencies (Clean Install)
-      - name: Install dependencies
-        run: npm install sharp @lhci/cli --prefer-offline --no-audit
-
-      # 5️⃣ Optimization Engine (Images & Sitemap)
-      - name: Run Optimization Scripts
-        run: |
-          node scripts/convert-images.js || echo "Notice: scripts/convert-images.js not found, skipping..."
-          node scripts/generate-sitemap.js || echo "Notice: scripts/generate-sitemap.js not found, skipping..."
-
-      # 6️⃣ Cache-busting for CSS/JS
-      - name: Asset Cache Busting
-        run: |
-          TIMESTAMP=$(date +%s)
-          # Specifically targets local assets to avoid breaking external CDN links
-          for FILE in *.html; do
-            sed -i -E "s/(href|src)=\"([^\"]+\.(css|js))\"/\1=\"\2?v=$TIMESTAMP\"/g" "$FILE"
-          done
-          echo "Cache busting complete. Version: $TIMESTAMP"
-
-      # 7️⃣ Lighthouse Performance Test (Scoped to Enterprise Hub)
-      - name: Lighthouse Performance Audit
-        run: |
-          lhci autorun --upload.target=temporary-public-storage --config=lighthouserc.js || echo "Audit complete with warnings."
-
-      # 8️⃣ Deploy to GitHub Pages (Upgraded to v4 Actions)
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: .
-          publish_branch: gh-pages
-          commit_message: "🚀 Bio-Sync Enterprise v23.0 [Skip CI]"
+  - name: Run npm audit (best-effort)
+    continue-on-error: true
+    run: |
+      if [ -f package.json ]; then
+        npm audit --audit-level=high || true
+      else
+        echo "No package.json found — skipping audit"
+      fi
