@@ -5,11 +5,11 @@
   "health": {
     "status": "ONLINE",
     "statusCode": 200,
-    "checkedAt": "2026-08-20T00:41:54.704Z"
+    "checkedAt": "2026-08-20T06:29:50.105Z"
   },
   "metricsSource": {
     "spreadsheetId": "16BKFp_fLvbslNnoyKIzsmidxAfu2zUQ_",
     "rows": null
   },
-  "lastSynced": "2026-08-20T00:41:54.704Z"
+  "lastSynced": "2026-08-20T06:29:50.106Z"
 }
