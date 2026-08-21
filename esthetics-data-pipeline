@@ -1,0 +1,10 @@
+.
+├── .github/
+│   └── workflows/
+│       └── data_pipeline.yml  # The trigger file
+├── src/
+│   ├── gbp_ingest.py          # Script to fetch GBP data
+│   ├── sheets_ingest.py       # Script to fetch Spreadsheet data
+│   └── main.py                # Orchestrator to load into BigQuery
+├── requirements.txt           # Dependencies (google-cloud-bigquery, pandas, etc.)
+└── .env.example               # Template for your secrets
