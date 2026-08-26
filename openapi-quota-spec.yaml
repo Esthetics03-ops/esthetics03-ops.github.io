@@ -1,0 +1,47 @@
+swagger: "2.0"
+info:
+  title: "Monetized Customer API"
+  description: "API with tiered rate limits and consumption metrics"
+  version: "1.0.0"
+host: "api.endpoints.amiable-crane-465217-j9.cloud.goog"
+schemes:
+  - "https"
+produces:
+  - "application/json"
+
+# Quota metric and limit definition
+x-google-management:
+  metrics:
+    - name: "custom-api.endpoints.amiable-crane-465217-j9.cloud.goog/standard_tier_requests"
+      displayName: "Standard Tier API Requests"
+      valueType: "INT64"
+      metricKind: "DELTA"
+  quota:
+    limits:
+      - name: "standard-tier-limit"
+        metric: "custom-api.endpoints.amiable-crane-465217-j9.cloud.goog/standard_tier_requests"
+        unit: "1/min/{project}"
+        values:
+          STANDARD: 1000 # 1,000 calls per minute per consumer project
+
+paths:
+  /v1/data:
+    get:
+      summary: "Fetch monetized dataset"
+      operationId: "getData"
+      security:
+        - api_key: []
+      x-google-quota:
+        metricCosts:
+          "custom-api.endpoints.amiable-crane-465217-j9.cloud.goog/standard_tier_requests": 1
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            type: "object"
+
+securityDefinitions:
+  api_key:
+    type: "apiKey"
+    name: "key"
+    in: "query"
