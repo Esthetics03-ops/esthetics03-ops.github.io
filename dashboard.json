@@ -1,0 +1,134 @@
+{
+  "displayName": "Production Website - Live Performance & Health",
+  "gridLayout": {
+    "columns": "2",
+    "widgets": [
+      {
+        "title": "HTTP Request Volume (by Response Code)",
+        "xyChart": {
+          "dataSets": [
+            {
+              "timeSeriesQuery": {
+                "timeSeriesFilter": {
+                  "filter": "metric.type=\"loadbalancing.googleapis.com/https/request_count\" resource.type=\"https_lb_rule\"",
+                  "aggregation": {
+                    "alignmentPeriod": "60s",
+                    "perSeriesAligner": "ALIGN_RATE",
+                    "crossSeriesReducer": "REDUCE_SUM",
+                    "groupByFields": ["metric.label.response_code_class"]
+                  }
+                }
+              },
+              "plotType": "STACKED_BAR"
+            }
+          ]
+        }
+      },
+      {
+        "title": "Response Latency - p95 & p99 (ms)",
+        "xyChart": {
+          "dataSets": [
+            {
+              "timeSeriesQuery": {
+                "timeSeriesFilter": {
+                  "filter": "metric.type=\"loadbalancing.googleapis.com/https/total_latencies\" resource.type=\"https_lb_rule\"",
+                  "aggregation": {
+                    "alignmentPeriod": "60s",
+                    "perSeriesAligner": "ALIGN_PERCENTILE_95",
+                    "crossSeriesReducer": "REDUCE_NONE"
+                  }
+                }
+              },
+              "plotType": "LINE",
+              "legendTemplate": "p95 Latency"
+            },
+            {
+              "timeSeriesQuery": {
+                "timeSeriesFilter": {
+                  "filter": "metric.type=\"loadbalancing.googleapis.com/https/total_latencies\" resource.type=\"https_lb_rule\"",
+                  "aggregation": {
+                    "alignmentPeriod": "60s",
+                    "perSeriesAligner": "ALIGN_PERCENTILE_99",
+                    "crossSeriesReducer": "REDUCE_NONE"
+                  }
+                }
+              },
+              "plotType": "LINE",
+              "legendTemplate": "p99 Latency"
+            }
+          ]
+        }
+      },
+      {
+        "title": "Compute CPU & Memory Utilization",
+        "xyChart": {
+          "dataSets": [
+            {
+              "timeSeriesQuery": {
+                "timeSeriesFilter": {
+                  "filter": "metric.type=\"compute.googleapis.com/instance/cpu/utilization\" resource.type=\"gce_instance\"",
+                  "aggregation": {
+                    "alignmentPeriod": "60s",
+                    "perSeriesAligner": "ALIGN_MEAN",
+                    "crossSeriesReducer": "REDUCE_MEAN"
+                  }
+                }
+              },
+              "plotType": "LINE",
+              "legendTemplate": "Avg CPU Utilization"
+            },
+            {
+              "timeSeriesQuery": {
+                "timeSeriesFilter": {
+                  "filter": "metric.type=\"agent.googleapis.com/memory/percent_used\" resource.type=\"gce_instance\"",
+                  "aggregation": {
+                    "alignmentPeriod": "60s",
+                    "perSeriesAligner": "ALIGN_MEAN",
+                    "crossSeriesReducer": "REDUCE_MEAN"
+                  }
+                }
+              },
+              "plotType": "LINE",
+              "legendTemplate": "Avg Memory Used (%)"
+            }
+          ]
+        }
+      },
+      {
+        "title": "HTTP 4xx & 5xx Error Rates",
+        "xyChart": {
+          "dataSets": [
+            {
+              "timeSeriesQuery": {
+                "timeSeriesFilter": {
+                  "filter": "metric.type=\"loadbalancing.googleapis.com/https/request_count\" resource.type=\"https_lb_rule\" metric.label.response_code_class=\"500\"",
+                  "aggregation": {
+                    "alignmentPeriod": "60s",
+                    "perSeriesAligner": "ALIGN_RATE",
+                    "crossSeriesReducer": "REDUCE_SUM"
+                  }
+                }
+              },
+              "plotType": "LINE",
+              "legendTemplate": "5xx Errors/sec"
+            },
+            {
+              "timeSeriesQuery": {
+                "timeSeriesFilter": {
+                  "filter": "metric.type=\"loadbalancing.googleapis.com/https/request_count\" resource.type=\"https_lb_rule\" metric.label.response_code_class=\"400\"",
+                  "aggregation": {
+                    "alignmentPeriod": "60s",
+                    "perSeriesAligner": "ALIGN_RATE",
+                    "crossSeriesReducer": "REDUCE_SUM"
+                  }
+                }
+              },
+              "plotType": "LINE",
+              "legendTemplate": "4xx Client Errors/sec"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
