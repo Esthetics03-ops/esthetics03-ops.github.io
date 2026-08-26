@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Quota async="false" continueOnError="false" enabled="true" name="Enforce-Monetization-Quota">
+    <DisplayName>Enforce Monetization Quota</DisplayName>
+    <!-- Dynamic quota assigned per developer app rate plan -->
+    <Interval ref="verifyapikey.VerifyAPIKey.apiproduct.developer.quota.interval">1</Interval>
+    <TimeUnit ref="verifyapikey.VerifyAPIKey.apiproduct.developer.quota.timeunit">minute</TimeUnit>
+    <Allow count="1000" countRef="verifyapikey.VerifyAPIKey.apiproduct.developer.quota.limit"/>
+    <Distributed>true</Distributed>
+    <Synchronous>true</Synchronous>
+</Quota>
