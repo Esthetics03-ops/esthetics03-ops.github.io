@@ -1,0 +1,55 @@
+name: Repository Policy Enforcement & Deep Scan
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  schedule:
+    - cron: '0 4 * * *' # Daily automated policy audit
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  policy-audit:
+    name: Scan Website Essentials & Policies
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Verify Essential Files & Configuration Policies
+        run: |
+          echo "[Policy Audit] Scanning repository essentials..."
+          
+          # Check for config.json presence and dynamic variables
+          if [ ! -f "config.json" ]; then
+            echo "[Policy Error] Missing required master configuration: config.json"
+            exit 1
+          else
+            echo "[Policy Pass] config.json found."
+          fi
+
+          # Check for live dashboard tracking references
+          if grep -q "pub-1959507280210179" config.json || grep -q "pub-1959507280210179" revenue-dashboard.html; then
+            echo "[Policy Pass] AdSense publisher node correctly mapped."
+          else
+            echo "[Policy Warning] AdSense publisher ID missing or unmapped in core assets."
+          fi
+
+          # Verify GA4 property binding policy
+          if grep -q "G-QCX3G9KSPC" config.json || grep -q "G-QCX3G9KSPC" revenue-dashboard.html; then
+            echo "[Policy Pass] GA4 primary tracking node verified."
+          else
+            echo "[Policy Warning] GA4 telemetry properties not detected."
+          fi
+
+          echo "[Policy Success] All structural website essentials checked against policy standards."
