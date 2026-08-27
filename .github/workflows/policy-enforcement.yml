@@ -39,17 +39,27 @@ jobs:
           fi
 
           # Check for live dashboard tracking references
-          if grep -q "pub-1959507280210179" config.json || grep -q "pub-1959507280210179" revenue-dashboard.html; then
+          if grep -q "pub-1959507280210179" config.json; then
             echo "[Policy Pass] AdSense publisher node correctly mapped."
           else
             echo "[Policy Warning] AdSense publisher ID missing or unmapped in core assets."
           fi
 
           # Verify GA4 property binding policy
-          if grep -q "G-QCX3G9KSPC" config.json || grep -q "G-QCX3G9KSPC" revenue-dashboard.html; then
+          if grep -q "G-QCX3G9KSPC" config.json; then
             echo "[Policy Pass] GA4 primary tracking node verified."
           else
             echo "[Policy Warning] GA4 telemetry properties not detected."
           fi
 
           echo "[Policy Success] All structural website essentials checked against policy standards."
+
+      - name: Notify on Failure or Success
+        if: always()
+        run: |
+          if [ "${{ job.status }}" == "failure" ]; then
+            echo "[Alert] Policy audit failed! Check repository logs and secrets configuration."
+            # Insert custom webhook alert call here if using Discord/Slack/Email webhooks
+          else
+            echo "[Alert] Policy audit completed successfully with zero security blocks."
+          fi
