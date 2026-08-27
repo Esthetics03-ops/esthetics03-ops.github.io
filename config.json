@@ -1,5 +1,17 @@
 {
-  "lastSynced": "2026-08-27T08:39:51.305Z",
-  "targetDomain": "esthetics03-ops.github.io",
-  "adsenseId": "pub-1959507280210179"
+  "PROJECT_METADATA": {
+    "node_id": "Esthetics-Ops-v23.1",
+    "hq": "Nairobi, KE",
+    "domain": "https://esthetics03-ops.github.io"
+  },
+  "DATA_ARCHITECT": {
+    "spreadsheet_id": "\16BKFp_fLvbslNnoyKIzsmidxAfu2zUQ_",
+    "adsense_publisher": "\pub-1959507280210179",
+    "ga4_properties": ["G-QCX3G9KSPC", "G-PSW1MY7HB4", "G-8T7GHCP436"]
+  },
+  "metrics": {
+    "search_console_clicks": 478,
+    "revenue_velocity": "458.50",
+    "timestamp": "2026--08-27T23:18:39Z"
+  }
 }
