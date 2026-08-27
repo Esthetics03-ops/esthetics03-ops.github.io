@@ -1,0 +1,61 @@
+name: Fully Autonomous Live Domain Sync
+
+on:
+  schedule:
+    - cron: '0 */6 * * *' # Runs automatically every 6 hours
+  workflow_dispatch: # Allows instant manual triggers from your GitHub Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+    autonomous-sync:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout Repository
+          uses: actions/checkout@v4
+
+        - name: Set up Node.js
+          uses: actions/setup-node@v4
+          with:
+            node-version: '20'
+
+        - name: Fetch and Compile Dynamic Configuration
+          run: |
+            echo "[Autonomous Engine] Querying live domain state from https://esthetics03-ops.github.io..."
+            
+            # Attempt to pull live config or fallback to dynamic generation template
+            HTTP_CODE=$(curl -s -o remote_config.json -w "%{http_code}" https://esthetics03-ops.github.io/config.json || echo "000")
+            
+            if [ "$HTTP_CODE" -eq 200 ]; then
+              echo "[Success] Live runtime configuration successfully fetched from remote domain."
+              cp remote_config.json config.json
+            else
+              echo "[Notice] Remote config endpoint returned status $HTTP_CODE. Generating synchronized baseline payload..."
+              cat << EOF > config.json
+              {
+                "PROJECT_METADATA": {
+                  "node_id": "Esthetics-Ops-v23.1",
+                  "hq": "Nairobi, KE",
+                  "admin": "George K. Ondimu",
+                  "domain": "https://esthetics03-ops.github.io"
+                },
+                "DATA_ARCHITECT": {
+                  "spreadsheet_id": "16BKFp_fLvbslNnoyKIzsmidxAfu2zUQ_",
+                  "adsense_publisher": "pub-1959507280210179",
+                  "ga4_properties": ["G-QCX3G9KSPC", "G-PSW1MY7HB4", "G-8T7GHCP436"]
+                },
+                "metrics": {
+                  "autonomous_sync_active": true,
+                  "last_updated": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+                }
+              }
+              EOF
+            fi
+
+        - name: Commit and Push Autonomous Updates
+          run: |
+            git config --global user.name "github-actions[bot]"
+            git config --global user.email "github-actions[bot]@users.noreply.github.com"
+            git add config.json
+            git diff --quiet && git diff --staged --quiet || (git commit -m "chore: autonomous live domain configuration sync [skip ci]" && git push origin main)
