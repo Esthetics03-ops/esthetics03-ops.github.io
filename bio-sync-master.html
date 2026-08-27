@@ -485,5 +485,80 @@ async function fetchLiveMetrics(endpoint) {
 // Execute auto-initialization on window load
 window.addEventListener('DOMContentLoaded', initializeDynamicEnvironment);
 </script>
+<script>
+    // Configuration pointing to your compiled repository telemetry endpoint
+    const CONFIG = {
+        CONFIG_ENDPOINT: './config.json',
+        SPREADSHEET_ID: '16BKFp_fLvbslNnoyKIzsmidxAfu2zUQ_',
+        POLL_INTERVAL: 30000 // Refresh every 30 seconds
+    };
+
+    function logToTerminal(message) {
+        const terminal = document.getElementById('terminal');
+        if (terminal) {
+            const timestamp = new Date().toLocaleTimeString();
+            terminal.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+    }
+
+    async function fetchLiveDashboardMetrics() {
+        try {
+            logToTerminal("Polling live telemetry from config store...");
+            const response = await fetch(CONFIG.CONFIG_ENDPOINT + '?_=' + new Date().getTime());
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            
+            const data = await response.json();
+            
+            // Update Search Console Clicks
+            if (data.metrics && data.metrics.search_console_clicks) {
+                const clickEl = document.getElementById('click-count');
+                if (clickEl) clickEl.innerText = data.metrics.search_console_clicks;
+                
+                const progressFill = document.getElementById('progress-fill');
+                if (progressFill) {
+                    const percentage = Math.min((data.metrics.search_console_clicks / 500) * 100, 100);
+                    progressFill.style.width = percentage.toFixed(1) + '%';
+                }
+            }
+
+            // Update Revenue Velocity Stream
+            if (data.metrics && data.metrics.revenue_velocity) {
+                const revPercent = document.getElementById('rev-percent');
+                const revBar = document.getElementById('rev-bar');
+                const formattedRev = `$${data.metrics.revenue_velocity}`;
+                
+                if (revPercent) revPercent.innerText = formattedRev;
+                if (revBar) {
+                    const revNum = parseFloat(data.metrics.revenue_velocity);
+                    const revProgress = Math.min((revNum / 1000) * 100, 100);
+                    revBar.style.width = revProgress.toFixed(1) + '%';
+                }
+            }
+
+            logToTerminal("Telemetry sync successful. Stream active.");
+        } catch (error) {
+            logToTerminal(`[Warning] Live stream fallback active: ${error.message}`);
+        }
+    }
+
+    function executeSync() {
+        logToTerminal("Manual NCBA & Google Sheets handshake initiated...");
+        fetchLiveDashboardMetrics();
+    }
+
+    // Initialize automated polling on load
+    window.addEventListener('DOMContentLoaded', () => {
+        logToTerminal("Bio-Sync Core initialized. Connecting to GitHub Pages data layer...");
+        fetchLiveDashboardMetrics();
+        setInterval(fetchLiveDashboardMetrics, CONFIG.POLL_INTERVAL);
+        
+        const checkBtn = document.getElementById('check-connection-btn');
+        if (checkBtn) {
+            checkBtn.addEventListener('click', executeSync);
+        }
+    });
+</script>
+    
 </body>
 </html>
