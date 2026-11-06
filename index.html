@@ -53,7 +53,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
-  <!-- Consent Mode v2 (must be before gtag) -->
+  <!-- Consent Mode v2 -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
@@ -78,105 +78,238 @@
   </script>
 
   <!-- Google AdSense (single instance) -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1959507280210179"
-     crossorigin="anonymous"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1959507280210179" crossorigin="anonymous"></script>
 
   <!-- Structured Data: Organization -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "The Esthetics Hub",
-    "url": "https://esthetics03-ops.github.io/",
-    "logo": "https://esthetics03-ops.github.io/g1.png",
-    "email": "esthetics03@gmail.com",
-    "telephone": "+254113379488",
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Nairobi",
-      "addressRegion": "Ruaka",
-      "addressCountry": "KE"
-    },
-    "founder": {
-      "@type": "Person",
-      "name": "George Kutosi Ondimu"
-    },
-    "sameAs": [
-      "https://www.facebook.com/esthetics_hub",
-      "https://www.instagram.com/esthetics_hub",
-      "https://www.youtube.com/@esthetics_hub",
-      "https://chat.whatsapp.com/BmBFZe4Xu7g73QBstg256C"
-    ],
-    "description": "Science-backed protocols for metabolic health, nervous system regulation, and biohacking in Nairobi, Kenya."
-  }
+  {"@context":"https://schema.org","@type":"Organization","name":"The Esthetics Hub","url":"https://esthetics03-ops.github.io/","logo":"https://esthetics03-ops.github.io/g1.png","email":"esthetics03@gmail.com","telephone":"+254113379488","address":{"@type":"PostalAddress","addressLocality":"Nairobi","addressRegion":"Ruaka","addressCountry":"KE"},"founder":{"@type":"Person","name":"George Kutosi Ondimu"},"sameAs":["https://www.facebook.com/esthetics_hub","https://www.instagram.com/esthetics_hub","https://www.youtube.com/@esthetics_hub","https://chat.whatsapp.com/BmBFZe4Xu7g73QBstg256C"],"description":"Science-backed protocols for metabolic health, nervous system regulation, and biohacking in Nairobi, Kenya."}
+  </script>
+
+  <!-- Structured Data: ProfessionalService -->
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"ProfessionalService","name":"The Esthetics Hub","image":"https://esthetics03-ops.github.io/g1.png","@id":"https://esthetics03-ops.github.io","url":"https://esthetics03-ops.github.io","telephone":"+254113379488","email":"esthetics03@gmail.com","address":{"@type":"PostalAddress","streetAddress":"Nairobi HQ","addressLocality":"Nairobi","addressCountry":"KE"},"geo":{"@type":"GeoCoordinates","latitude":-1.2921,"longitude":36.8219},"description":"Science-backed protocols for metabolic health, nervous system regulation, and biohacking in Nairobi.","paymentAccepted":"M-PESA, PayPal, Stripe, Cash","currenciesAccepted":"KES, USD","priceRange":"$$","founder":{"@type":"Person","name":"George Kutosi Ondimu"},"hasOfferCatalog":{"@type":"OfferCatalog","name":"Wellness Protocols","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Vagus Reset Protocol"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Bio-Sync Metabolic Reset"}}]}}
+  </script>
+
+  <!-- Structured Data: HowTo Vagus Reset -->
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"HowTo","name":"The Vagus Nerve Reset: 3-Minute Protocol","description":"A science-backed sequence to regulate your nervous system and reduce stress instantly using deep breathing and ocular shifts.","totalTime":"PT3M","estimatedCost":{"@type":"MonetaryAmount","currency":"USD","value":"0"},"supply":[{"@type":"HowToSupply","name":"Quiet Space"}],"tool":[{"@type":"HowToTool","name":"Breathwork Timer (Optional)"}],"step":[{"@type":"HowToStep","name":"Find a Neutral Position","text":"Sit or lie down in a comfortable position with your spine straight."},{"@type":"HowToStep","name":"The Ocular Shift","text":"Keep your head facing forward. Shift your eyes as far to the right as possible without turning your head. Hold until you feel a physical release (a sigh, yawn, or swallow)."},{"@type":"HowToStep","name":"Box Breathing Cycles","text":"Inhale for 4 seconds, hold for 4, exhale for 4, and hold empty for 4. Repeat 3 times to signal safety to the brain."}],"publisher":{"@type":"Organization","name":"The Esthetics Hub","logo":"https://esthetics03-ops.github.io/g1.png"}}
+  </script>
+
+  <!-- Structured Data: WebSite -->
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebSite","url":"https://esthetics03-ops.github.io","name":"The Esthetics Hub","potentialAction":{"@type":"SearchAction","target":"https://esthetics03-ops.github.io/?q={search_term_string}","query-input":"required name=search_term_string"}}
   </script>
 
   <style>
-    :root {
-      --glass-bg: rgba(255, 255, 255, 0.08);
-      --glass-border: rgba(255, 255, 255, 0.15);
-      --accent-gold: #c5a880;
-      --deep-ocean: #0f172a;
-      --mpesa-green: #48b04b;
-    }
+    :root { --glass-bg: rgba(255,255,255,0.08); --glass-border: rgba(255,255,255,0.15); --accent-gold: #c5a880; --deep-ocean: #0f172a; --mpesa-green: #48b04b; }
     * { box-sizing: border-box; }
-    html, body { max-width: 100vw; overflow-x: hidden; scroll-behavior: smooth; }
+    html, body { max-width: 100vw; overflow-x: hidden; scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
     body { font-family: 'Outfit', system-ui, sans-serif; color: #fff; background-color: var(--deep-ocean); margin: 0; }
     #video-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -100; object-fit: cover; filter: brightness(0.22) contrast(1.1); }
-    .navbar { background: rgba(15, 23, 42, 0.85) !important; backdrop-filter: blur(16px); border-bottom: 1px solid var(--glass-border); }
-    .btn-started { background: var(--accent-gold) !important; color: var(--deep-ocean) !important; font-weight: 700; }
-    .glass-panel { background: var(--glass-bg); backdrop-filter: blur(22px); border: 1px solid var(--glass-border); border-radius: 24px; padding: 1.75rem; transition: 0.35s; height: 100%; }
+    .super-top-bar { background: #080c14; min-height: 38px; border-bottom: 1px solid var(--glass-border); display: flex; align-items: center; padding: 6px 0; }
+    .top-bar-item { font-size: 0.75rem; color: rgba(255,255,255,0.6); transition: color 0.3s; }
+    .top-bar-item:hover { color: var(--accent-gold); }
+    .social-link-icon { font-size: 1.05rem; transition: all 0.3s; display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 8px; background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.9) !important; text-decoration: none; }
+    .social-link-icon:hover { transform: scale(1.12) translateY(-2px); background: rgba(255,255,255,0.12); }
+    .navbar { transition: all 0.35s ease; background: rgba(15,23,42,0.85) !important; backdrop-filter: blur(16px); border-bottom: 1px solid var(--glass-border); padding: 0.75rem 0; }
+    .navbar.scrolled { padding: 0.5rem 0; background: rgba(15,23,42,0.95) !important; box-shadow: 0 4px 24px rgba(0,0,0,0.35); }
+    .navbar-nav .nav-link { color: #e2e8f0 !important; font-weight: 500; transition: color 0.25s; padding: 0.5rem 1rem !important; }
+    .navbar-nav .nav-link:hover, .navbar-nav .nav-link.active { color: var(--accent-gold) !important; }
+    .navbar-nav .nav-link.active::after { content: ''; display: block; background: var(--accent-gold); width: 28px; height: 3px; border-radius: 10px; margin: 4px auto 0; }
+    .btn-started { background: var(--accent-gold) !important; color: var(--deep-ocean) !important; border: none; font-weight: 700; transition: all 0.3s; }
+    .btn-started:hover { transform: translateY(-2px); box-shadow: 0 0 20px rgba(197,168,128,0.4); filter: brightness(1.08); }
+    .dropdown-menu { background: rgba(15,23,42,0.97) !important; backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1) !important; border-radius: 14px !important; padding: 8px !important; }
+    .dropdown-item { color: #cbd5e1 !important; border-radius: 8px !important; padding: 8px 14px; }
+    .dropdown-item:hover { background: rgba(197,168,128,0.15) !important; color: var(--accent-gold) !important; }
+    .glass-panel { background: var(--glass-bg); backdrop-filter: blur(22px); border: 1px solid var(--glass-border); border-radius: 24px; padding: 1.75rem; transition: all 0.35s ease; height: 100%; }
     .glass-panel:hover { border-color: var(--accent-gold); transform: translateY(-6px); }
-    .mpesa-btn { background-color: var(--mpesa-green); border: none; padding: 12px 28px; border-radius: 12px; font-weight: 700; color: #fff; }
-    .mpesa-btn:hover { background-color: #3d943f; color: #fff; }
-    .modal-content { background: rgba(15, 23, 42, 0.97); border: 1px solid var(--glass-border); border-radius: 22px; color: #fff; }
+    .hero-title { font-weight: 800; letter-spacing: -0.02em; }
+    .hero-title span { color: var(--accent-gold); }
+    .mpesa-btn { background-color: var(--mpesa-green); border: none; padding: 12px 28px; border-radius: 12px; font-weight: 700; color: #fff; transition: all 0.3s; }
+    .mpesa-btn:hover { background-color: #3d943f; transform: scale(1.04); color: #fff; }
+    .modal-content { background: rgba(15,23,42,0.97); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 22px; color: #fff; }
+    .modal-backdrop { backdrop-filter: blur(4px); background-color: rgba(0,0,0,0.7) !important; }
+    .slideshow-container { max-width: 1000px; position: relative; margin: 0 auto; border-radius: 24px; overflow: hidden; border: 1px solid var(--glass-border); box-shadow: 0 20px 50px rgba(0,0,0,0.45); }
+    .mySlides { display: none; }
+    .fade-anim { animation: fadeEffect 0.9s ease-in-out; }
+    @keyframes fadeEffect { from { opacity: 0.35; } to { opacity: 1; } }
+    .dot { cursor: pointer; height: 9px; width: 9px; margin: 0 5px; background-color: #334155; border-radius: 50%; display: inline-block; transition: background 0.3s, width 0.3s; }
+    .dot.active { background-color: var(--accent-gold); width: 24px; border-radius: 10px; }
+    .logo-ticker { overflow: hidden; padding: 18px 0; background: #fff; white-space: nowrap; border-top: 1px solid #eee; border-bottom: 1px solid #eee; }
+    .logo-track { display: flex; width: max-content; animation: scroll 28s linear infinite; }
+    .logo-item { width: 180px; display: flex; align-items: center; justify-content: center; padding: 0 28px; flex-shrink: 0; }
+    .brand-logo { height: 32px; width: auto; opacity: 0.85; transition: opacity 0.3s; }
+    .logo-item:hover .brand-logo { opacity: 1; }
+    @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
     .ad-slot { min-height: 250px; display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 1.5rem 0; }
     .ad-label { font-size: 0.6rem; color: rgba(255,255,255,0.25); letter-spacing: 0.08em; margin-top: 6px; text-transform: uppercase; }
-    .affiliate-disclosure { font-size: 0.85rem; background: rgba(255,255,255,0.06); border-left: 3px solid var(--accent-gold); padding: 12px 16px; border-radius: 0 10px 10px 0; }
-    #cookieBox { position: fixed; bottom: 0; left: 0; width: 100%; padding: 10px 16px; background: #0a0e16; color: #fff; text-align: center; z-index: 10000; border-top: 1px solid var(--glass-border); }
-    .text-gold { color: var(--accent-gold) !important; }
+    .affiliate-disclosure { font-size: 0.85rem; line-height: 1.45; background: rgba(255,255,255,0.06); border-left: 3px solid var(--accent-gold); padding: 12px 16px; border-radius: 0 10px 10px 0; }
+    .mobile-action-bar { display: none; }
     @media (max-width: 991.98px) {
-      .mobile-action-bar { position: fixed; bottom: 14px; left: 50%; transform: translateX(-50%); width: 92%; max-width: 440px; background: rgba(15,23,42,0.96); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 50px; display: flex; justify-content: space-around; align-items: center; padding: 8px 6px; z-index: 9990; }
-      .mobile-action-item { color: #fff; text-decoration: none; text-align: center; font-size: 0.62rem; display: flex; flex-direction: column; align-items: center; }
+      .mobile-action-bar { position: fixed; bottom: 14px; left: 50%; transform: translateX(-50%); width: 92%; max-width: 440px; background: rgba(15,23,42,0.96); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 50px; display: flex; justify-content: space-around; align-items: center; padding: 8px 6px; z-index: 9990; box-shadow: 0 10px 30px rgba(0,0,0,0.55); }
+      .mobile-action-item { color: #fff; text-decoration: none; text-align: center; font-size: 0.62rem; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+      .mobile-action-item i { font-size: 1.15rem; }
       .mobile-action-center { background: var(--accent-gold); width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-top: -28px; border: 4px solid var(--deep-ocean); color: var(--deep-ocean) !important; }
+      .mobile-action-center i { font-size: 1.25rem; color: var(--deep-ocean); }
     }
+    #cookieBox { position: fixed; bottom: 0; left: 0; width: 100%; padding: 10px 16px; background: #0a0e16; color: #fff; text-align: center; z-index: 10000; border-top: 1px solid var(--glass-border); font-size: 0.9rem; }
+    #exitPopup { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 10001; display: none; align-items: center; justify-content: center; padding: 20px; }
+    .popup-content { background: #fff; color: #111; padding: 36px; border-radius: 24px; max-width: 460px; width: 100%; text-align: center; position: relative; }
+    .btn-popup { background: var(--deep-ocean); color: #fff; border-radius: 50px; padding: 12px 28px; border: none; width: 100%; font-weight: 600; }
+    footer a { transition: color 0.2s; }
+    footer a:hover { color: var(--accent-gold) !important; }
+    .text-gold { color: var(--accent-gold) !important; }
   </style>
 </head>
 <body>
+
   <video autoplay muted loop playsinline id="video-bg" poster="g1.png">
     <source src="00248=17573=17571=16911.mp4" type="video/mp4">
   </video>
 
-  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+  <div id="payment-success" class="container" style="display:none; background:#e8f5e9; border:1px solid #4caf50; padding:16px 20px; border-radius:12px; margin:16px auto; max-width:720px; text-align:center;">
+    <h3 style="color:#2e7d32; margin:0 0 6px;">Protocol Unlocked</h3>
+    <p style="margin:0; color:#1b5e20;">Thank you for your payment. Your wellness guide is now available.</p>
+  </div>
+
+  <!-- Super Top Bar -->
+  <div class="super-top-bar d-none d-lg-block">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center gap-4">
+          <span class="top-bar-item"><i class="bi bi-geo-alt-fill text-info me-1"></i> Nairobi HQ, Kenya</span>
+          <a href="mailto:esthetics03@gmail.com" class="top-bar-item text-decoration-none"><i class="bi bi-envelope-fill text-info me-1"></i> esthetics03@gmail.com</a>
+        </div>
+        <div class="d-flex gap-2">
+          <a href="https://facebook.com/esthetics_hub" class="social-link-icon" target="_blank" rel="noopener" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+          <a href="https://instagram.com/esthetics_hub" class="social-link-icon" target="_blank" rel="noopener" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+          <a href="https://youtube.com/@esthetics_hub" class="social-link-icon" target="_blank" rel="noopener" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
+          <a href="https://chat.whatsapp.com/BmBFZe4Xu7g73QBstg256C" class="social-link-icon" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="bi bi-whatsapp"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top" id="mainNav">
     <div class="container">
       <a href="index.html" class="navbar-brand d-flex align-items-center text-decoration-none">
         <img src="g1.png" alt="The Esthetics Hub Logo" width="48" height="48" class="rounded-3 me-2" loading="eager">
         <div class="d-none d-sm-block">
-          <div class="fw-bold text-white" style="font-size:1.05rem;">The Esthetics Hub</div>
+          <div class="fw-bold text-white" style="font-size:1.05rem; line-height:1.1;">The Esthetics Hub</div>
           <div class="text-gold" style="font-size:0.62rem; letter-spacing:1px; text-transform:uppercase;">Holistic Living • 2026</div>
         </div>
       </a>
-      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
+      <div class="d-flex align-items-center order-lg-last ms-auto me-2">
+        <button class="btn btn-sm rounded-pill px-3 py-1" style="background:rgba(255,255,255,0.1); border:1px solid var(--glass-border); color:#cbd5e1;" data-bs-toggle="modal" data-bs-target="#searchModal">
+          <i class="bi bi-stars text-info"></i> <span class="d-none d-md-inline ms-1 small">MindSync AI</span>
+        </button>
+      </div>
+      <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navContent" aria-controls="navContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navContent">
-        <ul class="navbar-nav ms-auto align-items-lg-center">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
           <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
           <li class="nav-item"><a class="nav-link" href="nutrition.html">Nutrition</a></li>
           <li class="nav-item"><a class="nav-link" href="sleep-tech.html">Sleep</a></li>
-          <li class="nav-item"><a class="btn btn-started rounded-pill px-4 fw-bold btn-sm" href="posts.html">Get Started</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Insights</a>
+            <ul class="dropdown-menu dropdown-menu-dark">
+              <li><h6 class="dropdown-header text-info">Featured</h6></li>
+              <li><a class="dropdown-item" href="biohacking-longevity-2025.html">Biohacking 2026</a></li>
+              <li><a class="dropdown-item" href="Travel-wellness.html">Wellness Travel</a></li>
+              <li><a class="dropdown-item" href="vagus-reset.html">Vagus Reset</a></li>
+            </ul>
+          </li>
+          <li class="nav-item ms-lg-2"><a class="btn btn-started rounded-pill px-4 fw-bold btn-sm shadow-sm" href="posts.html">Get Started</a></li>
         </ul>
       </div>
     </div>
   </nav>
 
+  <!-- Hero + Slideshow -->
   <header class="py-5 text-center">
-    <div class="container py-4">
-      <h1 class="display-3 fw-bold mb-3">Live <span class="text-gold">Better.</span></h1>
+    <div class="container py-4" data-aos="zoom-in">
+      <h1 class="display-3 hero-title mb-3">Live <span>Better.</span></h1>
       <p class="lead opacity-75 mx-auto mb-4" style="max-width:720px;">Science-backed protocols for metabolic health, nervous system regulation, and peak performance in Nairobi.</p>
       <button class="btn mpesa-btn" data-bs-toggle="modal" data-bs-target="#paymentModal"><i class="bi bi-phone-vibrate me-2"></i>Unlock Full Protocol</button>
     </div>
+    <div class="slideshow-container mt-4">
+      <div class="mySlides fade-anim">
+        <div style="background: linear-gradient(rgba(15,23,42,0.45), rgba(15,23,42,0.45)), url('https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&q=80&w=1200') center/cover; height: 360px; display:flex; align-items:center; justify-content:center;">
+          <h2 class="text-white display-5 fw-bold mb-0">Optimize Your Core</h2>
+        </div>
+      </div>
+      <div class="mySlides fade-anim">
+        <div style="background: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url('https://images.unsplash.com/photo-1620712943543-bcc4638ef7b6?auto=format&fit=crop&q=80&w=1200') center/cover; height: 360px; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+          <h2 class="text-white fw-bold mb-1">The AI Revolution</h2>
+          <p class="text-white-50 mb-0">Predictive Biomarkers for 2026</p>
+        </div>
+      </div>
+      <div class="mySlides fade-anim">
+        <div style="background: #0f172a; height: 360px; display:flex; align-items:center; justify-content:center; gap:1.5rem; flex-wrap:wrap; padding:1rem;">
+          <div class="p-4 rounded-4 bg-white text-center" style="min-width:140px;">
+            <i id="weather-icon" class="bi bi-cloud-sun fs-1 text-info"></i>
+            <div id="temp-val" class="fs-3 fw-bold mt-2 text-dark">--°C</div>
+            <div class="small text-muted fw-semibold">Nairobi Bio-Climate</div>
+          </div>
+          <div class="p-4 rounded-4 bg-white text-center" style="min-width:140px;">
+            <i class="bi bi-clock fs-1" style="color:var(--accent-gold);"></i>
+            <div id="time-val" class="fs-4 fw-bold mt-2 text-dark">--:--:--</div>
+            <div class="small text-muted fw-semibold">Local Time (EAT)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mt-3">
+      <span class="dot active" onclick="currentSlide(1)" aria-label="Slide 1"></span>
+      <span class="dot" onclick="currentSlide(2)" aria-label="Slide 2"></span>
+      <span class="dot" onclick="currentSlide(3)" aria-label="Slide 3"></span>
+    </div>
   </header>
+
+  <!-- Payment Modal -->
+  <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content p-4 shadow-lg">
+        <div class="text-center mb-3">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/1/15/M-PESA_LOGO-01.svg" alt="M-PESA" style="height:36px;" class="mb-2" loading="lazy">
+          <h4 class="fw-bold" id="paymentModalLabel">Bio-Sync Premium</h4>
+          <p class="text-white-50 small mb-0">Enter your number to receive an STK Push prompt</p>
+        </div>
+        <form id="mpesa-form">
+          <div class="mb-3">
+            <label for="phone" class="form-label small text-muted">Phone Number (254...)</label>
+            <input type="tel" id="phone" name="phone" class="form-control bg-dark border-secondary text-white" placeholder="254712345678" required autocomplete="tel">
+          </div>
+          <div class="mb-4">
+            <label for="amount" class="form-label small text-muted">Amount (KES)</label>
+            <input type="text" id="amount" name="amount" class="form-control bg-dark border-secondary text-white" value="1,500" readonly>
+          </div>
+          <button type="submit" class="btn mpesa-btn w-100" id="pay-btn"><span id="btn-text">Send Payment Prompt</span></button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Logo Ticker -->
+  <div class="logo-ticker" aria-hidden="true">
+    <div class="logo-track">
+      <div class="logo-item"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon" class="brand-logo" loading="lazy"></div>
+      <div class="logo-item"><img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Stripe_Logo%2C_revised_2016.svg" alt="Stripe" class="brand-logo" loading="lazy"></div>
+      <div class="logo-item"><img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google" class="brand-logo" loading="lazy"></div>
+      <div class="logo-item"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg" alt="Nike" class="brand-logo" style="height:24px;" loading="lazy"></div>
+      <div class="logo-item"><img src="https://upload.wikimedia.org/wikipedia/commons/b/be/Booking.com_logo.svg" alt="Booking.com" class="brand-logo" loading="lazy"></div>
+      <div class="logo-item"><img src="https://www.safaricom.co.ke/images/main.png" alt="Safaricom" class="brand-logo" loading="lazy"></div>
+      <div class="logo-item"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="" class="brand-logo" loading="lazy"></div>
+      <div class="logo-item"><img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Stripe_Logo%2C_revised_2016.svg" alt="" class="brand-logo" loading="lazy"></div>
+      <div class="logo-item"><img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="" class="brand-logo" loading="lazy"></div>
+      <div class="logo-item"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg" alt="" class="brand-logo" style="height:24px;" loading="lazy"></div>
+      <div class="logo-item"><img src="https://upload.wikimedia.org/wikipedia/commons/b/be/Booking.com_logo.svg" alt="" class="brand-logo" loading="lazy"></div>
+      <div class="logo-item"><img src="https://www.safaricom.co.ke/images/main.png" alt="" class="brand-logo" loading="lazy"></div>
+    </div>
+  </div>
 
   <!-- Ad Slot 1 -->
   <div class="container ad-slot">
@@ -185,8 +318,9 @@
     <div class="ad-label">Advertisement</div>
   </div>
 
+  <!-- 14-Day Bio-Sync Reset -->
   <section class="container py-5">
-    <div class="glass-panel text-center mx-auto" style="max-width:780px;">
+    <div class="glass-panel text-center mx-auto" style="max-width:780px;" data-aos="fade-up">
       <h2 class="fw-bold mb-3 text-info">The 14-Day Bio-Sync Reset</h2>
       <p class="mb-0 opacity-75">Get daily rituals for sleep, fasting, and focus delivered to your inbox.</p>
       <form action="https://formspree.io/f/esthetics03" method="POST" class="row g-2 justify-content-center mt-4" id="leadForm">
@@ -196,28 +330,65 @@
     </div>
   </section>
 
-  <section class="container py-4">
+  <!-- Protocol Cards -->
+  <section id="articles" class="container py-4">
     <div class="row g-4">
-      <div class="col-md-4"><div class="glass-panel text-center">
-        <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=600" class="img-fluid rounded-4 mb-3" alt="Metabolism" loading="lazy">
-        <h4 class="fw-bold text-info">Metabolism</h4>
-        <p class="small opacity-75">Optimizing energy pathways through nutrient timing and glucose monitoring.</p>
-        <a href="nutrition-guide.html" class="btn btn-outline-light btn-sm rounded-pill mt-2">View Protocol</a>
-      </div></div>
-      <div class="col-md-4"><div class="glass-panel text-center">
-        <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=600" class="img-fluid rounded-4 mb-3" alt="Vagus Reset" loading="lazy">
-        <h4 class="fw-bold text-info">Vagus Reset</h4>
-        <p class="small opacity-75">Scientifically proven breathwork to regulate your nervous system in minutes.</p>
-        <a href="stress-management.html" class="btn btn-outline-light btn-sm rounded-pill mt-2">View Protocol</a>
-      </div></div>
-      <div class="col-md-4"><div class="glass-panel text-center">
-        <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=600" class="img-fluid rounded-4 mb-3" alt="Sleep Lab" loading="lazy">
-        <h4 class="fw-bold text-info">Sleep Lab</h4>
-        <p class="small opacity-75">Hacking your circadian rhythm for peak cognitive recovery and repair.</p>
-        <a href="sleep-tech.html" class="btn btn-outline-light btn-sm rounded-pill mt-2">View Protocol</a>
-      </div></div>
+      <div class="col-md-4" data-aos="fade-up">
+        <div class="glass-panel text-center">
+          <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=600" class="img-fluid rounded-4 mb-3" alt="Metabolism protocol" loading="lazy" width="600" height="400">
+          <h4 class="fw-bold text-info">Metabolism</h4>
+          <p class="small opacity-75">Optimizing energy pathways through nutrient timing and glucose monitoring.</p>
+          <a href="nutrition-guide.html" class="btn btn-outline-light btn-sm rounded-pill mt-2">View Protocol</a>
+        </div>
+      </div>
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="80">
+        <div class="glass-panel text-center">
+          <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=600" class="img-fluid rounded-4 mb-3" alt="Vagus Reset" loading="lazy" width="600" height="400">
+          <h4 class="fw-bold text-info">Vagus Reset</h4>
+          <p class="small opacity-75">Scientifically proven breathwork to regulate your nervous system in minutes.</p>
+          <a href="stress-management.html" class="btn btn-outline-light btn-sm rounded-pill mt-2">View Protocol</a>
+        </div>
+      </div>
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="160">
+        <div class="glass-panel text-center">
+          <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=600" class="img-fluid rounded-4 mb-3" alt="Sleep Lab" loading="lazy" width="600" height="400">
+          <h4 class="fw-bold text-info">Sleep Lab</h4>
+          <p class="small opacity-75">Hacking your circadian rhythm for peak cognitive recovery and repair.</p>
+          <a href="sleep-tech.html" class="btn btn-outline-light btn-sm rounded-pill mt-2">View Protocol</a>
+        </div>
+      </div>
     </div>
   </section>
+
+  <!-- Shop / Affiliate -->
+  <section id="shop" class="container py-5">
+    <div class="row g-4">
+      <div class="col-md-6" data-aos="fade-right">
+        <div class="glass-panel text-center">
+          <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600" class="img-fluid rounded-4 mb-3" alt="Nike performance gear" loading="lazy" width="600" height="400">
+          <h3 class="fw-bold">Elite Performance</h3>
+          <p class="opacity-75">Upgrade your training gear with high-performance Nike activewear.</p>
+          <a href="https://www.nike.com/" target="_blank" rel="noopener sponsored" class="btn btn-light w-100 py-3 mt-2 shadow fw-bold">Shop Nike Official</a>
+        </div>
+      </div>
+      <div class="col-md-6" data-aos="fade-left">
+        <div class="glass-panel text-center">
+          <img src="https://images.unsplash.com/photo-1540553016722-983e48a2cd10?auto=format&fit=crop&w=1200" class="img-fluid rounded-4 mb-3" alt="Wellness retreat" loading="lazy" width="600" height="400">
+          <h3 class="fw-bold">Wellness Escapes</h3>
+          <p class="opacity-75">Book transformative retreats at curated spa destinations globally.</p>
+          <a href="https://www.booking.com/flexsearch.html?aid=2311235" target="_blank" rel="noopener sponsored" class="btn btn-info w-100 py-3 mt-2 text-white fw-bold shadow">Find a Retreat</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container mb-4">
+    <div class="affiliate-disclosure">
+      <i class="bi bi-info-circle-fill me-1"></i>
+      <strong>Transparency Note:</strong> Our research is independent. To support our work, we may earn a small commission from products purchased through our links—at no additional cost to you.
+      <a href="affiliate-disclosure.html" class="text-decoration-underline text-secondary ms-1">Learn how we vet our protocols.</a>
+    </div>
+  </div>
 
   <!-- Ad Slot 2 -->
   <div class="container ad-slot">
@@ -226,13 +397,7 @@
     <div class="ad-label">Advertisement</div>
   </div>
 
-  <div class="container mb-4">
-    <div class="affiliate-disclosure">
-      <strong>Transparency Note:</strong> Our research is independent. We may earn a small commission from products purchased through our links—at no additional cost to you.
-      <a href="affiliate-disclosure.html" class="text-decoration-underline text-secondary ms-1">Learn more</a>
-    </div>
-  </div>
-
+  <!-- Footer -->
   <footer class="py-5 mt-4" style="background:rgba(0,0,0,0.5); border-top:1px solid var(--glass-border);">
     <div class="container">
       <div class="row g-4">
@@ -245,82 +410,223 @@
         <div class="col-md-4">
           <h5 class="fw-bold mb-3">Quick Links</h5>
           <ul class="list-unstyled">
-            <li><a href="about.html" class="text-white-50 text-decoration-none">About Us</a></li>
-            <li><a href="privacy.html" class="text-white-50 text-decoration-none">Privacy Policy</a></li>
-            <li><a href="terms.html" class="text-white-50 text-decoration-none">Terms of Service</a></li>
-            <li><a href="contact.html" class="text-white-50 text-decoration-none">Contact</a></li>
+            <li class="mb-1"><a href="about.html" class="text-white-50 text-decoration-none">About Us</a></li>
+            <li class="mb-1"><a href="privacy.html" class="text-white-50 text-decoration-none">Privacy Policy</a></li>
+            <li class="mb-1"><a href="terms.html" class="text-white-50 text-decoration-none">Terms of Service</a></li>
+            <li class="mb-1"><a href="affiliate-disclosure.html" class="text-white-50 text-decoration-none">Affiliate Disclaimer</a></li>
+            <li class="mb-1"><a href="contact.html" class="text-white-50 text-decoration-none">Contact</a></li>
           </ul>
         </div>
         <div class="col-md-4">
-          <h5 class="fw-bold mb-3">Research</h5>
+          <h5 class="fw-bold mb-3">Research & Protocols</h5>
           <ul class="list-unstyled">
-            <li><a href="vagus-reset.html" class="text-white-50 text-decoration-none">Vagus Reset</a></li>
-            <li><a href="biohacking-longevity-2025.html" class="text-white-50 text-decoration-none">Longevity 2026</a></li>
-            <li><a href="sleep-tech.html" class="text-white-50 text-decoration-none">Sleep Tech</a></li>
-            <li><a href="posts.html" class="text-white-50 text-decoration-none">Protocols</a></li>
+            <li class="mb-1"><a href="vagus-reset.html" class="text-white-50 text-decoration-none">Vagus Reset</a></li>
+            <li class="mb-1"><a href="biohacking-longevity-2025.html" class="text-white-50 text-decoration-none">Longevity 2026</a></li>
+            <li class="mb-1"><a href="sleep-tech-oura.html" class="text-white-50 text-decoration-none">Sleep Tech Review</a></li>
+            <li class="mb-1"><a href="bio-sync-chrononutrition.html" class="text-white-50 text-decoration-none">Bio-Sync Timing</a></li>
+            <li class="mb-1"><a href="natural-remedies.html" class="text-white-50 text-decoration-none">Natural Remedies</a></li>
+            <li class="mb-1"><a href="posts.html" class="text-white-50 text-decoration-none">The Fate of Humanity</a></li>
           </ul>
+        </div>
+      </div>
+      <div class="row mt-4">
+        <div class="col-md-6">
+          <h6 class="fw-bold mb-2">Accepted Payments</h6>
+          <div class="d-flex gap-3 align-items-center">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/M-PESA.png" alt="M-Pesa" style="height:32px;" loading="lazy">
+            <img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_111x69.jpg" alt="PayPal" style="height:28px;" loading="lazy">
+          </div>
+        </div>
+        <div class="col-md-6 text-md-end mt-3 mt-md-0">
+          <div class="d-flex justify-content-md-end gap-3">
+            <a href="https://facebook.com/esthetics_hub" class="text-white fs-4" target="_blank" rel="noopener" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+            <a href="https://instagram.com/esthetics_hub" class="text-white fs-4" target="_blank" rel="noopener" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+            <a href="https://youtube.com/@esthetics_hub" class="text-white fs-4" target="_blank" rel="noopener" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
+          </div>
         </div>
       </div>
       <hr class="my-4 opacity-25">
       <div class="text-center opacity-60 small">
         <p class="mb-1">© <span id="year"></span> The Esthetics Hub. All rights reserved.</p>
+        <p class="mb-1"><a href="/disclaimer.html" class="text-white-50 text-decoration-none">Medical Disclaimer</a> · <a href="/privacy-policy.html" class="text-white-50 text-decoration-none">Privacy Policy</a> · <a href="cookies.html" class="text-white-50 text-decoration-none">Cookie Policy</a></p>
         <p class="mb-0">🌿 Holistic Wellness · Nairobi 🇰🇪 · #MentalWellnessKE</p>
+        <p class="mt-2 mb-0" style="font-size:0.75rem; opacity:0.7;">© 2026 George Kutosi Ondimu. Location: Ruaka, Nairobi, Kenya</p>
       </div>
     </div>
   </footer>
 
   <div id="cookieBox">This site uses cookies for analytics and ads. <button onclick="document.getElementById('cookieBox').style.display='none'" class="btn btn-sm btn-info ms-2">Okay</button></div>
 
-  <!-- Payment Modal -->
-  <div class="modal fade" id="paymentModal" tabindex="-1" aria-hidden="true">
+  <!-- Exit Intent Popup -->
+  <div id="exitPopup" role="dialog" aria-modal="true" aria-labelledby="exitTitle">
+    <div class="popup-content shadow-lg">
+      <button type="button" onclick="closePopup()" style="position:absolute; top:12px; right:18px; background:none; border:none; font-size:24px; cursor:pointer; line-height:1;" aria-label="Close">×</button>
+      <h2 id="exitTitle">Don't Miss Out!</h2>
+      <p>Get our 2026 Wellness Travel Checklist free.</p>
+      <form id="popupForm">
+        <input type="email" class="form-control mb-3 rounded-pill" placeholder="Enter email" required>
+        <button type="submit" class="btn btn-popup">Send Me the Checklist</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MindSync AI Search Modal -->
+  <div class="modal fade" id="searchModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content p-4">
-        <div class="text-center mb-3">
-          <h4 class="fw-bold">Bio-Sync Premium</h4>
-          <p class="text-white-50 small">Enter your number for M-PESA STK Push</p>
+      <div class="modal-content border-0 shadow-lg" style="background:rgba(15,23,42,0.98); border-radius:24px; backdrop-filter:blur(20px);">
+        <div class="modal-body p-4">
+          <div class="d-flex align-items-center mb-3 bg-white bg-opacity-10 rounded-pill px-3 py-2 border border-info border-opacity-25">
+            <i class="bi bi-stars text-info me-2 fs-5"></i>
+            <input type="text" id="aiInput" class="form-control bg-transparent border-0 text-white shadow-none p-0" placeholder="Ask MindSync AI..." oninput="runMindSync()" autocomplete="off" aria-label="Search protocols">
+            <button type="button" class="btn-close btn-close-white ms-2" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div id="aiOutput" class="text-start" style="min-height:140px;"></div>
         </div>
-        <form id="mpesa-form">
-          <div class="mb-3">
-            <label for="phone" class="form-label small">Phone (254...)</label>
-            <input type="tel" id="phone" class="form-control bg-dark border-secondary text-white" placeholder="254712345678" required>
-          </div>
-          <div class="mb-4">
-            <label for="amount" class="form-label small">Amount (KES)</label>
-            <input type="text" id="amount" class="form-control bg-dark border-secondary text-white" value="1,500" readonly>
-          </div>
-          <button type="submit" class="btn mpesa-btn w-100" id="pay-btn">Send Payment Prompt</button>
-        </form>
       </div>
     </div>
   </div>
 
-  <div class="mobile-action-bar d-lg-none">
+  <!-- Mobile Action Bar -->
+  <div class="mobile-action-bar">
     <a href="index.html" class="mobile-action-item"><i class="bi bi-house-door"></i><span>Home</span></a>
-    <a href="nutrition.html" class="mobile-action-item"><i class="bi bi-apple"></i><span>Diet</span></a>
-    <a href="posts.html" class="mobile-action-item mobile-action-center"><i class="bi bi-stars"></i></a>
-    <a href="https://chat.whatsapp.com/BmBFZe4Xu7g73QBstg256C" class="mobile-action-item" target="_blank"><i class="bi bi-whatsapp"></i><span>Chat</span></a>
+    <a href="holistic-nutrition.html" class="mobile-action-item"><i class="bi bi-apple"></i><span>Diet</span></a>
+    <a href="#" class="mobile-action-item mobile-action-center" data-bs-toggle="modal" data-bs-target="#searchModal" aria-label="MindSync AI"><i class="bi bi-stars"></i></a>
+    <a href="https://chat.whatsapp.com/BmBFZe4Xu7g73QBstg256C" class="mobile-action-item" target="_blank" rel="noopener"><i class="bi bi-whatsapp"></i><span>Chat</span></a>
     <a href="posts.html" class="mobile-action-item"><i class="bi bi-journal-text"></i><span>Protocol</span></a>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
+    if (typeof AOS !== 'undefined') AOS.init({ duration: 900, once: true, offset: 40 });
+
+    const nav = document.getElementById('mainNav');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 40) nav.classList.add('scrolled');
+      else nav.classList.remove('scrolled');
+    }, { passive: true });
+
+    let slideIndex = 1;
+    showSlides(slideIndex);
+    setInterval(() => plusSlides(1), 6500);
+    function plusSlides(n) { showSlides(slideIndex += n); }
+    function currentSlide(n) { showSlides(slideIndex = n); }
+    function showSlides(n) {
+      const slides = document.getElementsByClassName('mySlides');
+      const dots = document.getElementsByClassName('dot');
+      if (n > slides.length) slideIndex = 1;
+      if (n < 1) slideIndex = slides.length;
+      for (let i = 0; i < slides.length; i++) slides[i].style.display = 'none';
+      for (let i = 0; i < dots.length; i++) dots[i].classList.remove('active');
+      slides[slideIndex - 1].style.display = 'block';
+      if (dots[slideIndex - 1]) dots[slideIndex - 1].classList.add('active');
+    }
+
+    function startLiveClock() {
+      const el = document.getElementById('time-val');
+      function tick() {
+        el.textContent = new Date().toLocaleTimeString('en-GB', { timeZone: 'Africa/Nairobi', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      }
+      tick(); setInterval(tick, 1000);
+    }
+    startLiveClock();
+
+    async function fetchLiveWeather() {
+      const tempEl = document.getElementById('temp-val');
+      const iconEl = document.getElementById('weather-icon');
+      try {
+        const res = await fetch('https://api.openweathermap.org/data/2.5/weather?lat=-1.2921&lon=36.8219&units=metric&appid=07331b0af5d56a31ed98a6a3298f8cbc');
+        if (!res.ok) throw new Error('Weather unavailable');
+        const data = await res.json();
+        tempEl.textContent = Math.round(data.main.temp) + '°C';
+        const code = data.weather[0].id;
+        if (code >= 200 && code < 600) iconEl.className = 'bi bi-cloud-rain-heavy fs-1 text-primary';
+        else if (code >= 801) iconEl.className = 'bi bi-cloud-sun fs-1 text-info';
+        else iconEl.className = 'bi bi-sun fs-1 text-warning';
+      } catch (e) { tempEl.innerHTML = '<span class="small text-danger">Offline</span>'; }
+    }
+    fetchLiveWeather();
+    setInterval(fetchLiveWeather, 600000);
+
     document.getElementById('mpesa-form').addEventListener('submit', function(e) {
       e.preventDefault();
-      var phone = document.getElementById('phone').value.trim().replace(/[\s\-+]/g, '');
+      const btn = document.getElementById('pay-btn');
+      let phone = document.getElementById('phone').value.trim().replace(/[\s\-+]/g, '');
       if (phone.startsWith('0')) phone = '254' + phone.slice(1);
-      if (phone.length !== 12 || !/^254/.test(phone)) { alert('Enter a valid Safaricom number'); return; }
-      var btn = document.getElementById('pay-btn');
-      btn.disabled = true; btn.textContent = 'Processing...';
-      if (typeof gtag === 'function') gtag('event', 'begin_checkout', { currency: 'KES', value: 1500 });
-      setTimeout(function() {
-        alert('STK Push sent to ' + phone + '. Enter your M-PESA PIN.');
-        btn.disabled = false; btn.textContent = 'Send Payment Prompt';
+      if (phone.length !== 12 || !/^254/.test(phone)) { alert('Please enter a valid Safaricom number (e.g. 0712345678 or 254712345678)'); return; }
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> Processing...';
+      if (typeof gtag === 'function') gtag('event', 'begin_checkout', { currency: 'KES', value: 1500, payment_type: 'M-PESA STK Push' });
+      setTimeout(() => {
+        alert('STK Push sent! Check your phone (' + phone + ') and enter your M-PESA PIN.');
+        btn.disabled = false;
+        btn.innerHTML = 'Send Payment Prompt';
       }, 1800);
     });
+
     document.getElementById('leadForm').addEventListener('submit', function() {
       if (typeof gtag === 'function') gtag('event', 'generate_lead', { currency: 'KES', value: 1 });
     });
+
+    document.addEventListener('mouseleave', function(e) {
+      if (e.clientY < 0 && !localStorage.getItem('exitPopupShown')) {
+        document.getElementById('exitPopup').style.display = 'flex';
+        localStorage.setItem('exitPopupShown', '1');
+      }
+    });
+    function closePopup() { document.getElementById('exitPopup').style.display = 'none'; }
+    document.getElementById('popupForm').addEventListener('submit', function(e) {
+      e.preventDefault(); closePopup(); alert('Checklist on its way! Check your inbox.');
+    });
+
+    if (window.location.hash === '#success') {
+      const banner = document.getElementById('payment-success');
+      if (banner) { banner.style.display = 'block'; banner.scrollIntoView({ behavior: 'smooth' }); }
+      if (typeof gtag === 'function') {
+        gtag('event', 'purchase', { transaction_id: 'MPESA_' + Date.now(), value: 1500, currency: 'KES', items: [{ item_id: 'bio_sync_2026', item_name: 'Bio-Sync Reset Protocol 2026' }] });
+        gtag('event', 'conversion', { send_to: 'AW-18006354803', value: 1500, currency: 'KES' });
+      }
+    }
+
+    const hubDB = [
+      { t: '14-Day Bio-Sync Reset', l: '#leadForm', tag: 'signup challenge rituals email daily' },
+      { t: 'Metabolic Nutrition Protocol', l: 'nutrition-guide.html', tag: 'fasting diet glucose metabolism food' },
+      { t: 'Vagus Nerve Reset', l: 'stress-management.html', tag: 'stress breathing mental breathwork anxiety' },
+      { t: 'Deep Sleep Lab', l: 'sleep-tech.html', tag: 'sleep recovery circadian biohack insomnia' },
+      { t: 'Bio-Sync Chrononutrition', l: 'bio-sync-chrononutrition.html', tag: 'timing biological clock energy' },
+      { t: 'Biohacking Longevity 2026', l: 'biohacking-longevity-2025.html', tag: 'aging health lifespan science' },
+      { t: 'Wellness Travel & Retreats', l: 'Travel-wellness.html', tag: 'vacation spa travel' },
+      { t: 'Natural Remedies Index', l: 'natural-remedies.html', tag: 'herbs healing holistic' },
+      { t: 'Nike Elite Performance', l: 'https://www.nike.com/', tag: 'shoes training gear gym' },
+      { t: 'Wellness Retreat Booking', l: 'https://www.booking.com/flexsearch.html?aid=2311235', tag: 'hotel spa booking' },
+      { t: 'Contact Support', l: 'contact.html', tag: 'help email nairobi' },
+      { t: 'About The Esthetics Hub', l: 'about.html', tag: 'team mission wellness' },
+      { t: 'Privacy Policy', l: 'privacy.html', tag: 'data security' }
+    ];
+    const trending = ['Sleep', 'Fasting', 'Longevity', 'Stress', 'Nike'];
+
+    function runMindSync() {
+      const input = document.getElementById('aiInput').value.toLowerCase().trim();
+      const out = document.getElementById('aiOutput');
+      if (input.length === 0) {
+        let html = '<p class="small text-secondary mb-2">Trending:</p><div class="d-flex flex-wrap gap-2">';
+        trending.forEach(t => { html += `<span class="badge rounded-pill bg-info bg-opacity-10 text-info p-2 px-3" style="cursor:pointer" onclick="document.getElementById('aiInput').value='${t}';runMindSync()">${t}</span>`; });
+        html += '</div>'; out.innerHTML = html; return;
+      }
+      if (input.length < 2) return;
+      const results = hubDB.filter(item => item.t.toLowerCase().includes(input) || item.tag.toLowerCase().includes(input));
+      if (results.length) {
+        out.innerHTML = results.map(item => `<a href="${item.l}" class="d-block p-3 mb-2 bg-white bg-opacity-10 rounded-3 text-info text-decoration-none"><div class="d-flex justify-content-between align-items-center"><div><strong class="d-block text-white">${item.t}</strong><span class="small opacity-50" style="font-size:0.7rem;">${item.l.startsWith('http') ? 'PARTNER' : 'PROTOCOL'}</span></div><i class="bi bi-chevron-right"></i></div></a>`).join('');
+      } else {
+        out.innerHTML = `<div class="text-center py-3 opacity-50"><p class="mb-0">No protocols found for "${input}"</p></div>`;
+      }
+    }
+    document.getElementById('searchModal').addEventListener('shown.bs.modal', runMindSync);
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => { navigator.serviceWorker.register('/sw.js').catch(() => {}); });
+    }
   </script>
 </body>
 </html>
