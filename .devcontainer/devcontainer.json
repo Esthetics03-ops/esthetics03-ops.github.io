@@ -1,1 +1,45 @@
-"ghcr.io/postfinance/devcontainer-features/dotnet:1": {}
+{
+  "name": "The Esthetics Hub",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20"
+    },
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.12"
+    },
+    "ghcr.io/postfinance/devcontainer-features/dotnet:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "ms-python.python",
+        "ms-dotnettools.csharp",
+        "yzhang.markdown-all-in-one"
+      ],
+      "settings": {
+        "editor.formatOnSave": true,
+        "files.trimTrailingWhitespace": true,
+        "files.insertFinalNewline": true
+      }
+    },
+    "codespaces": {
+      "openFiles": [
+        "index.html",
+        "The Esthetics Hub Nairobi — Luxury Wellness & Booking Portal.html"
+      ]
+    }
+  },
+  "forwardPorts": [],
+  "portsAttributes": {},
+  "remoteUser": "vscode",
+  "updateContentCommand": "if [ -f package-lock.json ]; then npm ci; elif [ -f package.json ]; then npm install; else echo 'No Node package manifest; skipping npm dependency installation.'; fi",
+  "postCreateCommand": "python -m json.tool .devcontainer/devcontainer.json >/dev/null && echo 'Dev container configuration is valid.'",
+  "hostRequirements": {
+    "cpus": 2,
+    "memory": "4gb",
+    "storage": "16gb"
+  }
+}

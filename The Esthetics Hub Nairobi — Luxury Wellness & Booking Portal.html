@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Esthetics Hub Nairobi | Luxury Skincare, Lashes & Aesthetics</title>
+    <meta name="description" content="Bespoke facials, clinical skincare, lash extensions, and luxury waxing in Nairobi. Book your appointment online at The Esthetics Hub Nairobi.">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Cormorant Garamond & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Subtle Luxury Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        cream: {
+                            50: '#FDFBF7',
+                            100: '#F8F4EC',
+                            200: '#EFE8DA',
+                            300: '#E2D5BE',
+                        },
+                        gold: {
+                            400: '#C9A96E',
+                            500: '#B59254',
+                            600: '#9A783E',
+                        },
+                        taupe: {
+                            600: '#6D645B',
+                            700: '#544D46',
+                            800: '#3D3732',
+                        },
+                        charcoal: '#24201D',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-cream-50 text-charcoal font-sans antialiased selection:bg-gold-400/30 selection:text-charcoal">
+
+    <!-- Toast Notification Banner (Replaces alert()) -->
+    <div id="toast-notification" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none max-w-sm w-full px-4 sm:px-0">
+        <div class="bg-charcoal text-cream-50 px-5 py-4 rounded-2xl shadow-2xl border border-gold-400/30 flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-gold-500/20 text-gold-400 flex items-center justify-center flex-shrink-0">
+                <i class="fa-solid fa-check text-sm"></i>
+            </div>
+            <p id="toast-message" class="text-sm font-medium leading-snug">Notification message</p>
+        </div>
+    </div>
+
+    <!-- Header & Navigation -->
+    <header class="sticky top-0 z-40 bg-cream-50/90 backdrop-blur-md border-b border-cream-200 transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Brand Logo -->
+                <a href="#" class="flex items-center gap-3 group">
+                    <div class="w-10 h-10 rounded-full bg-cream-200 border border-gold-400/50 flex items-center justify-center text-gold-600 transition-transform duration-300 group-hover:scale-105">
+                        <span class="font-serif text-xl font-semibold tracking-tight">EH</span>
+                    </div>
+                    <div>
+                        <span class="block font-serif text-xl sm:text-2xl font-semibold tracking-tight text-charcoal leading-none">
+                            The Esthetics Hub
+                        </span>
+                        <span class="block text-[10px] uppercase tracking-[0.25em] text-gold-600 font-semibold mt-1">
+                            Nairobi • Kenya
+                        </span>
+                    </div>
+                </a>
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-taupe-700">
+                    <a href="#services" class="hover:text-gold-600 transition-colors py-2">Treatments & Menu</a>
+                    <a href="#about" class="hover:text-gold-600 transition-colors py-2">Our Philosophy</a>
+                    <a href="#book" class="hover:text-gold-600 transition-colors py-2">Book Appointment</a>
+                </nav>
+
+                <!-- CTA & Mobile Toggle -->
+                <div class="flex items-center gap-3">
+                    <a href="#book" class="inline-flex items-center justify-center px-5 py-2.5 rounded-full bg-charcoal text-cream-50 text-sm font-medium hover:bg-gold-600 transition-all duration-300 shadow-sm">
+                        Book Now
+                    </a>
+                    <button id="mobile-menu-btn" aria-label="Toggle Menu" class="md:hidden p-2.5 rounded-xl text-charcoal hover:bg-cream-200/70 transition-colors">
+                        <i class="fa-solid fa-bars text-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Dropdown Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-cream-50 border-b border-cream-200 px-4 pt-2 pb-6 space-y-2">
+            <a href="#services" class="mobile-nav-link block px-4 py-3 rounded-xl text-base font-medium text-charcoal hover:bg-cream-200/60">Treatments & Menu</a>
+            <a href="#about" class="mobile-nav-link block px-4 py-3 rounded-xl text-base font-medium text-charcoal hover:bg-cream-200/60">Our Philosophy</a>
+            <a href="#book" class="mobile-nav-link block px-4 py-3 rounded-xl text-base font-medium text-gold-600 bg-cream-100">Book Appointment</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden pt-12 pb-20 sm:pt-20 sm:pb-28 lg:pt-24 lg:pb-32">
+        <!-- Subtle Decorative Background Glow -->
+        <div class="absolute top-0 right-0 -translate-y-12 translate-x-1/4 w-96 h-96 rounded-full bg-gold-400/10 blur-3xl pointer-events-none"></div>
+        <div class="absolute bottom-0 left-0 translate-y-12 -translate-x-1/4 w-96 h-96 rounded-full bg-cream-300/40 blur-3xl pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+                <!-- Left Copy -->
+                <div class="lg:col-span-7 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cream-200/80 border border-gold-400/30 text-taupe-800 text-xs font-semibold uppercase tracking-widest mb-6">
+                        <span class="w-1.5 h-1.5 rounded-full bg-gold-500"></span>
+                        Nairobi’s Premier Clinical & Holistic Esthetics Studio
+                    </div>
+                    
+                    <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl xl:text-[64px] font-medium text-charcoal leading-[1.1] tracking-tight mb-6">
+                        Elevate Your Natural <span class="italic text-gold-600">Radiance</span> in Nairobi
+                    </h1>
+                    
+                    <p class="text-base sm:text-lg text-taupe-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed mb-8 font-normal">
+                        Experience bespoke corrective skincare, luminous facials, precision lash artistry, and gentle waxing tailored for melanin-rich and all skin types in a tranquil sanctuary.
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                        <a href="#book" class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-full bg-charcoal text-cream-50 text-sm font-semibold tracking-wide hover:bg-gold-600 transition-all duration-300 shadow-lg shadow-charcoal/10">
+                            <span>Reserve Your Session</span>
+                            <i class="fa-solid fa-arrow-right text-xs"></i>
+                        </a>
+                        <a href="#services" class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 rounded-full bg-cream-100 text-charcoal border border-cream-300 text-sm font-semibold hover:bg-cream-200 transition-all duration-300">
+                            Explore Treatment Menu
+                        </a>
+                    </div>
+
+                    <!-- Trust Indicators -->
+                    <div class="mt-10 pt-8 border-t border-cream-200 grid grid-cols-3 gap-4 max-w-lg mx-auto lg:mx-0">
+                        <div>
+                            <p class="font-serif text-2xl sm:text-3xl font-semibold text-charcoal">5.0 ★</p>
+                            <p class="text-xs text-taupe-600 mt-0.5">Client Satisfaction</p>
+                        </div>
+                        <div>
+                            <p class="font-serif text-2xl sm:text-3xl font-semibold text-charcoal">100%</p>
+                            <p class="text-xs text-taupe-600 mt-0.5">Bespoke Protocols</p>
+                        </div>
+                        <div>
+                            <p class="font-serif text-2xl sm:text-3xl font-semibold text-charcoal">Mon–Sat</p>
+                            <p class="text-xs text-taupe-600 mt-0.5">9:00 AM – 6:30 PM</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Editorial Visual Card -->
+                <div class="lg:col-span-5">
+                    <div class="relative rounded-3xl overflow-hidden bg-cream-200 border border-cream-300/80 shadow-xl aspect-[4/5] max-w-md mx-auto">
+                        <img 
+                            src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=80" 
+                            alt="Luxury Facial Treatment at The Esthetics Hub Nairobi" 
+                            onerror="this.onerror=null;this.src='https://placehold.co/800x1000/EFE8DA/3D3732?text=The+Esthetics+Hub+Nairobi';"
+                            class="w-full h-full object-cover object-center"
+                        >
+                        <div class="absolute inset-0 bg-gradient-to-t from-charcoal/70 via-charcoal/10 to-transparent"></div>
+                        
+                        <!-- Floating Editorial Badge -->
+                        <div class="absolute bottom-5 left-5 right-5 bg-cream-50/95 backdrop-blur-md p-5 rounded-2xl border border-cream-200 shadow-lg">
+                            <div class="flex items-start justify-between gap-4">
+                                <div>
+                                    <span class="text-[11px] font-semibold uppercase tracking-widest text-gold-600">Most Requested</span>
+                                    <h3 class="font-serif text-xl font-semibold text-charcoal mt-0.5">Signature Glass-Skin Facial</h3>
+                                    <p class="text-xs text-taupe-600 mt-1">Deep hydration, enzyme exfoliation & LED therapy</p>
+                                </div>
+                                <span class="px-3 py-1 rounded-full bg-cream-200 text-charcoal text-xs font-semibold whitespace-nowrap">
+                                    KES 6,500
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Philosophy / About Strip -->
+    <section id="about" class="py-16 bg-cream-100 border-y border-cream-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
+                <div class="flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-cream-50 border border-gold-400/40 flex items-center justify-center text-gold-600 flex-shrink-0">
+                        <i class="fa-solid fa-spa text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-serif text-xl font-semibold text-charcoal">Clinical Meets Holistic</h3>
+                        <p class="text-sm text-taupe-600 mt-1.5 leading-relaxed">
+                            Evidence-based active formulations paired with restorative lymphatic massage for visible, lasting luminosity.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-cream-50 border border-gold-400/40 flex items-center justify-center text-gold-600 flex-shrink-0">
+                        <i class="fa-solid fa-wand-magic-sparkles text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-serif text-xl font-semibold text-charcoal">Melanin-Safe Expertise</h3>
+                        <p class="text-sm text-taupe-600 mt-1.5 leading-relaxed">
+                            Every peel, microneedling depth, and resurfacing protocol is calibrated specifically for skin of color without hyperpigmentation risk.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-cream-50 border border-gold-400/40 flex items-center justify-center text-gold-600 flex-shrink-0">
+                        <i class="fa-regular fa-calendar-check text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-serif text-xl font-semibold text-charcoal">Seamless Re-Booking</h3>
+                        <p class="text-sm text-taupe-600 mt-1.5 leading-relaxed">
+                            Instant online scheduling with WhatsApp & Messenger concierge confirmation and tailored post-care follow-ups.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Menu Section -->
+    <section id="services" class="py-20 sm:py-28">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Section Header -->
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <span class="text-xs font-semibold uppercase tracking-[0.25em] text-gold-600">Curated Menu</span>
+                <h2 class="font-serif text-3xl sm:text-5xl font-medium text-charcoal mt-2 mb-4">
+                    Bespoke Treatments & Pricing
+                </h2>
+                <p class="text-sm sm:text-base text-taupe-600 leading-relaxed">
+                    Select any treatment below to automatically pre-fill your appointment request. All sessions include a complimentary 10-minute skin consultation.
+                </p>
+            </div>
+
+            <!-- Category Filter Pills -->
+            <div id="category-filters" class="flex flex-wrap items-center justify-center gap-2.5 mb-12">
+                <button data-filter="all" class="filter-btn active px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold bg-charcoal text-cream-50 transition-all">
+                    All Treatments
+                </button>
+                <button data-filter="facials" class="filter-btn px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold bg-cream-100 text-taupe-700 hover:bg-cream-200 transition-all">
+                    Facials & Skin Therapy
+                </button>
+                <button data-filter="advanced" class="filter-btn px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold bg-cream-100 text-taupe-700 hover:bg-cream-200 transition-all">
+                    Clinical Resurfacing
+                </button>
+                <button data-filter="lashes" class="filter-btn px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold bg-cream-100 text-taupe-700 hover:bg-cream-200 transition-all">
+                    Lashes & Brows
+                </button>
+                <button data-filter="waxing" class="filter-btn px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold bg-cream-100 text-taupe-700 hover:bg-cream-200 transition-all">
+                    Luxury Waxing
+                </button>
+            </div>
+
+            <!-- Services Grid (Populated via JS for single source of truth with booking dropdown) -->
+            <div id="services-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                <!-- Service cards rendered here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Appointment Booking Portal -->
+    <section id="book" class="py-20 sm:py-28 bg-cream-100 border-t border-cream-200 relative">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <span class="text-xs font-semibold uppercase tracking-[0.25em] text-gold-600">Online Reservations</span>
+                <h2 class="font-serif text-3xl sm:text-5xl font-medium text-charcoal mt-2 mb-4">
+                    Book Your Appointment
+                </h2>
+                <p class="text-sm sm:text-base text-taupe-600">
+                    Reserve your preferred date and time slot in seconds. Receive instant confirmation via WhatsApp or Messenger.
+                </p>
+            </div>
+
+            <!-- Booking Card Container -->
+            <div class="bg-cream-50 rounded-3xl border border-cream-300/90 shadow-xl overflow-hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-12">
+                    
+                    <!-- Left Info Sidebar -->
+                    <div class="lg:col-span-4 bg-charcoal text-cream-50 p-8 sm:p-10 flex flex-col justify-between">
+                        <div>
+                            <span class="inline-block px-3 py-1 rounded-full bg-gold-500/20 text-gold-400 text-[11px] font-semibold uppercase tracking-widest mb-4">
+                                Concierge Desk
+                            </span>
+                            <h3 class="font-serif text-2xl sm:text-3xl font-medium leading-snug mb-4">
+                                Preparing for Your Visit
+                            </h3>
+                            <p class="text-sm text-cream-200/80 leading-relaxed mb-8">
+                                Please arrive 10 minutes prior to your scheduled session to enjoy a complimentary herbal infusion and skin analysis.
+                            </p>
+
+                            <ul class="space-y-4 text-sm text-cream-100">
+                                <li class="flex items-start gap-3">
+                                    <i class="fa-solid fa-location-dot text-gold-400 mt-1"></i>
+                                    <span>Nairobi, Kenya<br><span class="text-xs text-cream-300/70">Exact suite pin sent upon confirmation</span></span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i class="fa-regular fa-clock text-gold-400 mt-1"></i>
+                                    <span>Mon – Sat: 9:00 AM – 6:30 PM<br><span class="text-xs text-cream-300/70">Closed on Sundays</span></span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i class="fa-solid fa-rotate text-gold-400 mt-1"></i>
+                                    <span>Recommended Re-Booking<br><span class="text-xs text-cream-300/70">Every 2–4 weeks for optimal results</span></span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="mt-10 pt-6 border-t border-cream-50/15">
+                            <p class="text-xs text-cream-300/75 mb-3">Need immediate assistance?</p>
+                            <div class="flex flex-wrap gap-2">
+                                <a href="https://m.me/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-cream-50/10 hover:bg-cream-50/20 text-xs font-medium text-cream-50 transition-colors">
+                                    <i class="fa-brands fa-facebook-messenger text-gold-400"></i>
+                                    Messenger
+                                </a>
+                                <a href="https://wa.me/254700000000" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-cream-50/10 hover:bg-cream-50/20 text-xs font-medium text-cream-50 transition-colors">
+                                    <i class="fa-brands fa-whatsapp text-gold-400"></i>
+                                    WhatsApp
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Interactive Form OR Confirmation View -->
+                    <div class="lg:col-span-8 p-6 sm:p-10">
+                        
+                        <!-- BOOKING FORM -->
+                        <form id="booking-form" class="space-y-6">
+                            <!-- Selected Treatment -->
+                            <div>
+                                <label for="service-select" class="block text-xs font-semibold uppercase tracking-wider text-taupe-700 mb-2">
+                                    Select Treatment *
+                                </label>
+                                <div class="relative">
+                                    <select id="service-select" name="service" required class="w-full appearance-none rounded-2xl bg-cream-100 border border-cream-300 px-4 py-3.5 pr-10 text-sm font-medium text-charcoal focus:outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-500/20 transition-all">
+                                        <!-- Options populated dynamically -->
+                                    </select>
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-taupe-600">
+                                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Personal Details Grid -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                <div>
+                                    <label for="client-name" class="block text-xs font-semibold uppercase tracking-wider text-taupe-700 mb-2">
+                                        Full Name *
+                                    </label>
+                                    <input type="text" id="client-name" name="name" required placeholder="e.g. Kutosi Wanjiku" class="w-full rounded-2xl bg-cream-100 border border-cream-300 px-4 py-3.5 text-sm text-charcoal placeholder:text-taupe-600/50 focus:outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-500/20 transition-all">
+                                </div>
+                                <div>
+                                    <label for="client-phone" class="block text-xs font-semibold uppercase tracking-wider text-taupe-700 mb-2">
+                                        Phone / WhatsApp Number *
+                                    </label>
+                                    <input type="tel" id="client-phone" name="phone" required placeholder="+254 712 345 678" class="w-full rounded-2xl bg-cream-100 border border-cream-300 px-4 py-3.5 text-sm text-charcoal placeholder:text-taupe-600/50 focus:outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-500/20 transition-all">
+                                </div>
+                            </div>
+
+                            <!-- Email & Date Grid -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                <div>
+                                    <label for="client-email" class="block text-xs font-semibold uppercase tracking-wider text-taupe-700 mb-2">
+                                        Email Address *
+                                    </label>
+                                    <input type="email" id="client-email" name="email" required placeholder="you@example.com" class="w-full rounded-2xl bg-cream-100 border border-cream-300 px-4 py-3.5 text-sm text-charcoal placeholder:text-taupe-600/50 focus:outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-500/20 transition-all">
+                                </div>
+                                <div>
+                                    <label for="booking-date" class="block text-xs font-semibold uppercase tracking-wider text-taupe-700 mb-2">
+                                        Preferred Date *
+                                    </label>
+                                    <input type="date" id="booking-date" name="date" required class="w-full rounded-2xl bg-cream-100 border border-cream-300 px-4 py-3.5 text-sm text-charcoal focus:outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-500/20 transition-all">
+                                </div>
+                            </div>
+
+                            <!-- Interactive Time Slot Pills -->
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-taupe-700 mb-2.5">
+                                    Preferred Time Slot (EAT) *
+                                </label>
+                                <input type="hidden" id="booking-time" name="time" value="11:00 AM" required>
+                                <div id="time-slots-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5">
+                                    <button type="button" data-time="9:00 AM" class="time-slot-btn py-2.5 px-3 rounded-xl border border-cream-300 bg-cream-100 text-xs font-semibold text-charcoal hover:border-gold-500 transition-all">
+                                        9:00 AM
+                                    </button>
+                                    <button type="button" data-time="11:00 AM" class="time-slot-btn active py-2.5 px-3 rounded-xl border border-charcoal bg-charcoal text-xs font-semibold text-cream-50 transition-all">
+                                        11:00 AM
+                                    </button>
+                                    <button type="button" data-time="1:30 PM" class="time-slot-btn py-2.5 px-3 rounded-xl border border-cream-300 bg-cream-100 text-xs font-semibold text-charcoal hover:border-gold-500 transition-all">
+                                        1:30 PM
+                                    </button>
+                                    <button type="button" data-time="3:30 PM" class="time-slot-btn py-2.5 px-3 rounded-xl border border-cream-300 bg-cream-100 text-xs font-semibold text-charcoal hover:border-gold-500 transition-all">
+                                        3:30 PM
+                                    </button>
+                                    <button type="button" data-time="5:00 PM" class="time-slot-btn py-2.5 px-3 rounded-xl border border-cream-300 bg-cream-100 text-xs font-semibold text-charcoal hover:border-gold-500 transition-all">
+                                        5:00 PM
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Notes / Skin Goals -->
+                            <div>
+                                <label for="client-notes" class="block text-xs font-semibold uppercase tracking-wider text-taupe-700 mb-2">
+                                    Skin Goals, Allergies or Special Requests (Optional)
+                                </label>
+                                <textarea id="client-notes" name="notes" rows="3" placeholder="Tell us about your skin concerns (e.g., hyperpigmentation, hydration, lash curl preference) or if this is a follow-up visit..." class="w-full rounded-2xl bg-cream-100 border border-cream-300 px-4 py-3 text-sm text-charcoal placeholder:text-taupe-600/50 focus:outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-500/20 transition-all"></textarea>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button type="submit" class="w-full py-4 px-6 rounded-full bg-charcoal text-cream-50 font-semibold text-sm tracking-wide hover:bg-gold-600 transition-all duration-300 shadow-lg shadow-charcoal/10 flex items-center justify-center gap-2.5">
+                                <span>Generate Booking Confirmation</span>
+                                <i class="fa-solid fa-sparkles text-gold-400"></i>
+                            </button>
+                        </form>
+
+                        <!-- CONFIRMATION SUMMARY VIEW (Hidden until submitted) -->
+                        <div id="confirmation-view" class="hidden space-y-6">
+                            <div class="flex items-center justify-between border-b border-cream-200 pb-5">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 rounded-full bg-emerald-900/10 text-emerald-800 flex items-center justify-center">
+                                        <i class="fa-solid fa-check text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <span class="text-xs font-semibold uppercase tracking-widest text-gold-600">Booking Reserved</span>
+                                        <h3 class="font-serif text-2xl sm:text-3xl font-semibold text-charcoal">We Look Forward to Seeing You</h3>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <span class="block text-[11px] uppercase tracking-wider text-taupe-600">Reference ID</span>
+                                    <span id="conf-ref-id" class="inline-block font-mono text-sm font-bold text-charcoal bg-cream-200 px-3 py-1 rounded-lg mt-0.5">EHN-0000</span>
+                                </div>
+                            </div>
+
+                            <!-- Summary Details Card -->
+                            <div class="bg-cream-100 rounded-2xl p-5 sm:p-6 border border-cream-200 space-y-3 text-sm">
+                                <div class="flex justify-between py-1.5 border-b border-cream-200/80">
+                                    <span class="text-taupe-600">Client Name</span>
+                                    <span id="conf-name" class="font-semibold text-charcoal text-right"></span>
+                                </div>
+                                <div class="flex justify-between py-1.5 border-b border-cream-200/80">
+                                    <span class="text-taupe-600">Treatment</span>
+                                    <span id="conf-service" class="font-semibold text-charcoal text-right"></span>
+                                </div>
+                                <div class="flex justify-between py-1.5 border-b border-cream-200/80">
+                                    <span class="text-taupe-600">Date & Time</span>
+                                    <span id="conf-datetime" class="font-semibold text-gold-600 text-right"></span>
+                                </div>
+                                <div class="flex justify-between py-1.5 border-b border-cream-200/80">
+                                    <span class="text-taupe-600">Contact Phone</span>
+                                    <span id="conf-phone" class="font-medium text-charcoal text-right"></span>
+                                </div>
+                                <div id="conf-notes-row" class="flex justify-between py-1.5">
+                                    <span class="text-taupe-600">Notes</span>
+                                    <span id="conf-notes" class="font-medium text-taupe-800 text-right max-w-xs"></span>
+                                </div>
+                            </div>
+
+                            <!-- One-Click Instant Concierge Dispatch -->
+                            <div class="space-y-3">
+                                <p class="text-xs font-semibold uppercase tracking-wider text-taupe-700 text-center">
+                                    Complete Your Instant Concierge Check-In
+                                </p>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <a id="whatsapp-confirm-btn" href="#" target="_blank" rel="noopener noreferrer" class="py-3.5 px-5 rounded-2xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-semibold text-sm flex items-center justify-center gap-2.5 shadow-sm transition-all">
+                                        <i class="fa-brands fa-whatsapp text-lg"></i>
+                                        <span>Confirm via WhatsApp</span>
+                                    </a>
+                                    <a id="messenger-confirm-btn" href="#" target="_blank" rel="noopener noreferrer" class="py-3.5 px-5 rounded-2xl bg-[#0084FF] hover:bg-[#0073e6] text-white font-semibold text-sm flex items-center justify-center gap-2.5 shadow-sm transition-all">
+                                        <i class="fa-brands fa-facebook-messenger text-lg"></i>
+                                        <span>Send via Messenger</span>
+                                    </a>
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                                    <button type="button" id="download-ics-btn" class="py-3 px-4 rounded-2xl bg-cream-200 hover:bg-cream-300 text-charcoal font-semibold text-xs flex items-center justify-center gap-2 transition-all">
+                                        <i class="fa-regular fa-calendar-plus text-gold-600"></i>
+                                        <span>Add to Calendar (.ics)</span>
+                                    </button>
+                                    <button type="button" id="book-another-btn" class="py-3 px-4 rounded-2xl border border-cream-300 hover:bg-cream-100 text-taupe-700 font-semibold text-xs flex items-center justify-center gap-2 transition-all">
+                                        <i class="fa-solid fa-arrow-left"></i>
+                                        <span>Modify or Book Another</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer & Campaign Booking Link Utility -->
+    <footer class="bg-charcoal text-cream-200 pt-16 pb-12 border-t border-taupe-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-cream-50/10">
+                <!-- Brand Column -->
+                <div class="md:col-span-5 space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-full bg-cream-50/10 border border-gold-400/40 flex items-center justify-center text-gold-400">
+                            <span class="font-serif text-lg font-semibold">EH</span>
+                        </div>
+                        <span class="font-serif text-2xl font-semibold text-cream-50">The Esthetics Hub Nairobi</span>
+                    </div>
+                    <p class="text-sm text-cream-300/75 leading-relaxed max-w-sm">
+                        A sanctuary dedicated to skin health, radiant confidence, and unhurried luxury in Nairobi.
+                    </p>
+                    <div class="flex items-center gap-3 pt-2">
+                        <a href="https://m.me/" target="_blank" rel="noopener noreferrer" aria-label="Messenger" class="w-10 h-10 rounded-full bg-cream-50/10 hover:bg-gold-500 hover:text-charcoal flex items-center justify-center transition-colors">
+                            <i class="fa-brands fa-facebook-messenger"></i>
+                        </a>
+                        <a href="https://wa.me/254700000000" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" class="w-10 h-10 rounded-full bg-cream-50/10 hover:bg-gold-500 hover:text-charcoal flex items-center justify-center transition-colors">
+                            <i class="fa-brands fa-whatsapp"></i>
+                        </a>
+                        <a href="#book" aria-label="Book Appointment" class="w-10 h-10 rounded-full bg-cream-50/10 hover:bg-gold-500 hover:text-charcoal flex items-center justify-center transition-colors">
+                            <i class="fa-regular fa-calendar"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Hours & Location -->
+                <div class="md:col-span-3 space-y-3 text-sm">
+                    <h4 class="font-serif text-lg font-semibold text-cream-50">Studio Hours</h4>
+                    <p class="text-cream-300/80">Monday – Saturday<br><span class="text-gold-400 font-medium">9:00 AM – 6:30 PM</span></p>
+                    <p class="text-cream-300/60 text-xs pt-1">Nairobi, Kenya • By Appointment</p>
+                </div>
+
+                <!-- Automated Campaign & Direct URL Utility -->
+                <div class="md:col-span-4 space-y-3">
+                    <h4 class="font-serif text-lg font-semibold text-cream-50">Direct Booking Link</h4>
+                    <p class="text-xs text-cream-300/75 leading-relaxed">
+                        Share this direct reservation link in your automated Messenger follow-ups, Instagram bio, or WhatsApp broadcasts:
+                    </p>
+                    <div class="flex items-center gap-2 bg-cream-50/10 p-2 rounded-2xl border border-cream-50/15">
+                        <input id="direct-booking-url" type="text" readonly value="https://esthetics03-ops.github.io/#book" class="bg-transparent text-xs text-gold-400 font-mono w-full px-2 focus:outline-none">
+                        <button type="button" id="copy-url-btn" class="px-3.5 py-2 rounded-xl bg-gold-500 hover:bg-gold-400 text-charcoal font-semibold text-xs whitespace-nowrap transition-colors flex items-center gap-1.5">
+                            <i class="fa-regular fa-copy"></i>
+                            <span>Copy URL</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-cream-300/60">
+                <p>&copy; <span id="current-year"></span> The Esthetics Hub Nairobi. All rights reserved.</p>
+                <div class="flex items-center gap-6">
+                    <a href="#services" class="hover:text-cream-50 transition-colors">Treatments</a>
+                    <a href="#about" class="hover:text-cream-50 transition-colors">Philosophy</a>
+                    <a href="#book" class="hover:text-cream-50 transition-colors">Book Now</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Application Logic -->
+    <script>
+        // Master Treatment Catalog (Single Source of Truth)
+        const TREATMENTS = [
+            {
+                id: 'signature-hydrating-facial',
+                category: 'facials',
+                categoryLabel: 'Facials & Skin Therapy',
+                name: 'Signature Hydrating Glass-Skin Facial',
+                duration: '60 Mins',
+                price: 'KES 6,500',
+                badge: 'Most Popular',
+                description: 'Deep double cleanse, gentle papaya enzyme exfoliation, ultrasonic extractions, hyaluronic infusion, and restorative LED light therapy.'
+            },
+            {
+                id: 'chemical-peel-glow',
+                category: 'advanced',
+                categoryLabel: 'Clinical Resurfacing',
+                name: 'Chemical Peel & Radiance Renewal',
+                duration: '45 Mins',
+                price: 'KES 8,500',
+                badge: 'Corrective',
+                description: 'Melanin-safe mandelic & lactic acid resurfacing designed to fade dark spots, smooth uneven texture, and brighten dull complexion.'
+            },
+            {
+                id: 'dermaplaning-microneedling',
+                category: 'advanced',
+                categoryLabel: 'Clinical Resurfacing',
+                name: 'Dermaplaning & Collagen Microneedling',
+                duration: '75 Mins',
+                price: 'KES 12,000',
+                badge: 'Clinical',
+                description: 'Precision vellus hair and dead-skin removal followed by sterile collagen induction therapy to refine pores and acne scarring.'
+            },
+            {
+                id: 'classic-hybrid-lashes',
+                category: 'lashes',
+                categoryLabel: 'Lashes & Brows',
+                name: 'Classic & Hybrid Lash Extensions',
+                duration: '120 Mins',
+                price: 'KES 5,500',
+                badge: '2–3 Wk Refill',
+                description: 'Custom-mapped featherlight silk lashes tailored to your eye shape for effortless everyday elegance or soft wispy volume.'
+            },
+            {
+                id: 'brow-lamination-tint',
+                category: 'lashes',
+                categoryLabel: 'Lashes & Brows',
+                name: 'Sculpted Brow Lamination & Hybrid Tint',
+                duration: '50 Mins',
+                price: 'KES 4,000',
+                badge: 'Defining',
+                description: 'Keratin brow restructuring, precision mapping, gentle waxing, and long-wear skin-staining tint for fuller, lifted arches.'
+            },
+            {
+                id: 'luxury-waxing',
+                category: 'waxing',
+                categoryLabel: 'Luxury Waxing',
+                name: 'Full Body / Brazilian & Facial Luxury Wax',
+                duration: '45–60 Mins',
+                price: 'KES 4,500',
+                badge: 'Sensitive Skin',
+                description: 'Ultra-gentle low-temperature European hard wax formulated for sensitive skin, finished with soothing aloe and ingrown-preventing serum.'
+            }
+        ];
+
+        // State Variables
+        let activeBookingRecord = null;
+
+        // DOM Elements
+        const servicesGrid = document.getElementById('services-grid');
+        const serviceSelect = document.getElementById('service-select');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const timeSlotBtns = document.querySelectorAll('.time-slot-btn');
+        const bookingTimeInput = document.getElementById('booking-time');
+        const bookingDateInput = document.getElementById('booking-date');
+        const bookingForm = document.getElementById('booking-form');
+        const confirmationView = document.getElementById('confirmation-view');
+
+        // Helper: Show Toast Notification
+        function showToast(message) {
+            const toast = document.getElementById('toast-notification');
+            const toastMsg = document.getElementById('toast-message');
+            toastMsg.textContent = message;
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-24', 'opacity-0');
+            }, 3500);
+        }
+
+        // Render Service Cards
+        function renderServices(filterCategory = 'all') {
+            servicesGrid.innerHTML = '';
+            const filtered = filterCategory === 'all' 
+                ? TREATMENTS 
+                : TREATMENTS.filter(t => t.category === filterCategory);
+
+            filtered.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'group bg-cream-100/70 hover:bg-cream-50 rounded-3xl p-6 sm:p-7 border border-cream-200 hover:border-gold-400/60 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between';
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-4">
+                            <span class="text-[11px] font-semibold uppercase tracking-widest text-gold-600">
+                                ${item.categoryLabel}
+                            </span>
+                            <span class="px-2.5 py-1 rounded-full bg-cream-200/80 text-taupe-800 text-[11px] font-medium">
+                                ${item.badge}
+                            </span>
+                        </div>
+                        <h3 class="font-serif text-2xl font-semibold text-charcoal group-hover:text-gold-600 transition-colors leading-snug mb-2">
+                            ${item.name}
+                        </h3>
+                        <p class="text-sm text-taupe-600 leading-relaxed mb-6">
+                            ${item.description}
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-cream-200 flex items-center justify-between gap-4">
+                        <div>
+                            <span class="block font-serif text-xl font-bold text-charcoal">${item.price}</span>
+                            <span class="block text-xs text-taupe-600"><i class="fa-regular fa-clock mr-1 text-gold-600"></i>${item.duration}</span>
+                        </div>
+                        <button type="button" data-service-id="${item.id}" class="select-service-btn px-4 py-2.5 rounded-full bg-charcoal text-cream-50 group-hover:bg-gold-600 text-xs font-semibold tracking-wide transition-all flex items-center gap-1.5">
+                            <span>Select to Book</span>
+                            <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </button>
+                    </div>
+                `;
+                servicesGrid.appendChild(card);
+            });
+
+            // Attach click listeners to "Select to Book" buttons
+            document.querySelectorAll('.select-service-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const serviceId = e.currentTarget.getAttribute('data-service-id');
+                    serviceSelect.value = serviceId;
+
+                    // Ensure form view is active if user had previously submitted
+                    confirmationView.classList.add('hidden');
+                    bookingForm.classList.remove('hidden');
+
+                    const bookSection = document.getElementById('book');
+                    bookSection.scrollIntoView({ behavior: 'smooth' });
+
+                    const selectedObj = TREATMENTS.find(t => t.id === serviceId);
+                    if (selectedObj) {
+                        showToast(`Selected: ${selectedObj.name}`);
+                    }
+                });
+            });
+        }
+
+        // Populate Booking Dropdown
+        function populateServiceDropdown() {
+            serviceSelect.innerHTML = '';
+            TREATMENTS.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item.id;
+                option.textContent = `${item.name} — ${item.price} (${item.duration})`;
+                serviceSelect.appendChild(option);
+            });
+        }
+
+        // Set Default Future Date (Tomorrow)
+        function initializeDatePicker() {
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            // Skip Sunday if tomorrow is Sunday
+            if (tomorrow.getDay() === 0) {
+                tomorrow.setDate(tomorrow.getDate() + 1);
+            }
+            const yyyy = tomorrow.getFullYear();
+            const mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
+            const dd = String(tomorrow.getDate()).padStart(2, '0');
+            const formatted = `${yyyy}-${mm}-${dd}`;
+
+            bookingDateInput.min = formatted;
+            bookingDateInput.value = formatted;
+        }
+
+        // Format Date for Human Display
+        function formatReadableDate(dateStr) {
+            if (!dateStr) return '';
+            const [year, month, day] = dateStr.split('-').map(Number);
+            const dateObj = new Date(year, month - 1, day);
+            return dateObj.toLocaleDateString('en-KE', {
+                weekday: 'short',
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+        }
+
+        // Generate .ics Calendar File Download
+        function downloadICSFile(booking) {
+            try {
+                const [year, month, day] = booking.rawDate.split('-').map(Number);
+                // Parse time slot (e.g., "11:00 AM" or "1:30 PM")
+                const [timePart, modifier] = booking.time.split(' ');
+                let [hours, minutes] = timePart.split(':').map(Number);
+                if (modifier === 'PM' && hours !== 12) hours += 12;
+                if (modifier === 'AM' && hours === 12) hours = 0;
+
+                const startDate = new Date(year, month - 1, day, hours, minutes, 0);
+                const endDate = new Date(startDate.getTime() + 60 * 60 * 1000); // Default 1 hr block
+
+                const pad = (n) => String(n).padStart(2, '0');
+                const formatICSDate = (d) => {
+                    return `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}00`;
+                };
+
+                const icsContent = [
+                    'BEGIN:VCALENDAR',
+                    'VERSION:2.0',
+                    'PRODID:-//The Esthetics Hub Nairobi//Booking Portal//EN',
+                    'BEGIN:VEVENT',
+                    `UID:${booking.refId}@esthetics03-ops.github.io`,
+                    `DTSTAMP:${formatICSDate(new Date())}`,
+                    `DTSTART:${formatICSDate(startDate)}`,
+                    `DTEND:${formatICSDate(endDate)}`,
+                    `SUMMARY:${booking.serviceName} - The Esthetics Hub Nairobi`,
+                    `DESCRIPTION:Booking Ref: ${booking.refId}\\nClient: ${booking.name}\\nTreatment: ${booking.serviceName} (${booking.price})\\nPortal: https://esthetics03-ops.github.io/#book`,
+                    'LOCATION:The Esthetics Hub Nairobi, Nairobi, Kenya',
+                    'END:VEVENT',
+                    'END:VCALENDAR'
+                ].join('\r\n');
+
+                const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', `Esthetics-Hub-Nairobi-${booking.refId}.ics`);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+                showToast('Calendar invite (.ics) downloaded!');
+            } catch (err) {
+                showToast('Could not generate calendar file.');
+            }
+        }
+
+        // Event Listeners Setup
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+
+            populateServiceDropdown();
+            renderServices('all');
+            initializeDatePicker();
+
+            // Check URL hash or query param for pre-selected service (e.g. ?service=chemical-peel-glow#book)
+            const urlParams = new URLSearchParams(window.location.search);
+            const preselectedService = urlParams.get('service');
+            if (preselectedService && TREATMENTS.some(t => t.id === preselectedService)) {
+                serviceSelect.value = preselectedService;
+            }
+
+            // Category Filter Buttons
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => {
+                        b.classList.remove('active', 'bg-charcoal', 'text-cream-50');
+                        b.classList.add('bg-cream-100', 'text-taupe-700');
+                    });
+                    btn.classList.add('active', 'bg-charcoal', 'text-cream-50');
+                    btn.classList.remove('bg-cream-100', 'text-taupe-700');
+                    renderServices(btn.getAttribute('data-filter'));
+                });
+            });
+
+            // Time Slot Selection Buttons
+            timeSlotBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    timeSlotBtns.forEach(b => {
+                        b.classList.remove('active', 'border-charcoal', 'bg-charcoal', 'text-cream-50');
+                        b.classList.add('border-cream-300', 'bg-cream-100', 'text-charcoal');
+                    });
+                    btn.classList.add('active', 'border-charcoal', 'bg-charcoal', 'text-cream-50');
+                    btn.classList.remove('border-cream-300', 'bg-cream-100', 'text-charcoal');
+                    bookingTimeInput.value = btn.getAttribute('data-time');
+                });
+            });
+
+            // Mobile Menu Toggle
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            document.querySelectorAll('.mobile-nav-link').forEach(link => {
+                link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+            });
+
+            // Booking Form Submission
+            bookingForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const selectedTreatment = TREATMENTS.find(t => t.id === serviceSelect.value) || TREATMENTS[0];
+                const name = document.getElementById('client-name').value.trim();
+                const phone = document.getElementById('client-phone').value.trim();
+                const email = document.getElementById('client-email').value.trim();
+                const rawDate = bookingDateInput.value;
+                const readableDate = formatReadableDate(rawDate);
+                const time = bookingTimeInput.value;
+                const notes = document.getElementById('client-notes').value.trim();
+
+                // Generate Unique Reference ID (EHN-XXXX)
+                const randomDigits = Math.floor(1000 + Math.random() * 9000);
+                const refId = `EHN-${randomDigits}`;
+
+                activeBookingRecord = {
+                    refId,
+                    name,
+                    phone,
+                    email,
+                    rawDate,
+                    readableDate,
+                    time,
+                    notes,
+                    serviceName: selectedTreatment.name,
+                    price: selectedTreatment.price
+                };
+
+                // Populate Confirmation Summary
+                document.getElementById('conf-ref-id').textContent = refId;
+                document.getElementById('conf-name').textContent = name;
+                document.getElementById('conf-service').textContent = `${selectedTreatment.name} (${selectedTreatment.price})`;
+                document.getElementById('conf-datetime').textContent = `${readableDate} at ${time}`;
+                document.getElementById('conf-phone').textContent = phone;
+
+                const notesRow = document.getElementById('conf-notes-row');
+                if (notes) {
+                    notesRow.classList.remove('hidden');
+                    document.getElementById('conf-notes').textContent = notes;
+                } else {
+                    notesRow.classList.add('hidden');
+                }
+
+                // Build Pre-Populated Concierge Message
+                const conciergeMessage = encodeURIComponent(
+                    `Hello The Esthetics Hub Nairobi! ✨ I would like to confirm my appointment:\n\n` +
+                    `• Ref ID: ${refId}\n` +
+                    `• Name: ${name}\n` +
+                    `• Treatment: ${selectedTreatment.name} (${selectedTreatment.price})\n` +
+                    `• Date & Time: ${readableDate} at ${time}\n` +
+                    (notes ? `• Skin Notes: ${notes}\n` : '') +
+                    `\nBooked via https://esthetics03-ops.github.io/#book`
+                );
+
+                // Configure WhatsApp & Messenger Links
+                document.getElementById('whatsapp-confirm-btn').href = `https://wa.me/254700000000?text=${conciergeMessage}`;
+                document.getElementById('messenger-confirm-btn').href = `https://m.me/?text=${conciergeMessage}`;
+
+                // Swap Views
+                bookingForm.classList.add('hidden');
+                confirmationView.classList.remove('hidden');
+                showToast(`Booking ${refId} generated!`);
+            });
+
+            // Download .ics Calendar Invite
+            document.getElementById('download-ics-btn').addEventListener('click', () => {
+                if (activeBookingRecord) {
+                    downloadICSFile(activeBookingRecord);
+                }
+            });
+
+            // Book Another / Modify Button
+            document.getElementById('book-another-btn').addEventListener('click', () => {
+                confirmationView.classList.add('hidden');
+                bookingForm.classList.remove('hidden');
+            });
+
+            // Copy Direct Booking URL Utility (Fallback-safe execCommand)
+            document.getElementById('copy-url-btn').addEventListener('click', () => {
+                const urlInput = document.getElementById('direct-booking-url');
+                urlInput.select();
+                urlInput.setSelectionRange(0, 99999);
+                try {
+                    document.execCommand('copy');
+                    showToast('Copied https://esthetics03-ops.github.io/#book to clipboard!');
+                } catch (err) {
+                    showToast('Link ready: https://esthetics03-ops.github.io/#book');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
